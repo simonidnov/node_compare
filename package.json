@@ -1,0 +1,31 @@
+{
+  "name": "node_compare",
+  "version": "1.0.0",
+  "description": "node file compare pull and push research",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonidnov/node_compare.git"
+  },
+  "keywords": [
+    "compare",
+    "files",
+    "pull",
+    "request",
+    "local",
+    "changes",
+    "nodejs"
+  ],
+  "author": "simon delamarre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simonidnov/node_compare/issues"
+  },
+  "homepage": "https://github.com/simonidnov/node_compare#readme",
+  "dependencies": {
+    "diff": "^3.4.0"
+  }
+}
