@@ -26,6 +26,9 @@
   },
   "homepage": "https://github.com/simonidnov/node_compare#readme",
   "dependencies": {
-    "diff": "^3.4.0"
+    "colors": "^1.1.2",
+    "diff": "^3.4.0",
+    "dir-compare": "^1.4.0",
+    "express-generator": "^4.15.5"
   }
 }
