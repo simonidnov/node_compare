@@ -2,6 +2,18 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(name='viewport' content ='width=device-width, initial-scale=1, user-scalable=no')
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content ='IE=edge')
+    link(rel='stylesheet', href='/stylesheets/style.min.css')
+    link(rel='stylesheet', href='/public/fonts/dist/idkids-icons.css')
+    if(css)
+        each val in css
+            link(rel='stylesheet', href=val)
   body
     block content
+    script(src="/node_modules/jquery/dist/jquery.min.js")
+    if(js)
+        each val in js
+            script(src=val)
+            

@@ -7,11 +7,30 @@
   },
   "dependencies": {
     "body-parser": "~1.18.2",
+    "childprocess": "^2.0.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "email-validator": "^1.1.1",
     "express": "~4.15.5",
+    "install": "^0.10.2",
+    "jquery": "^3.2.1",
+    "jsonwebtoken": "^8.1.0",
+    "mongoose": "^4.13.5",
     "morgan": "~1.9.0",
+    "node-localstorage": "^1.3.0",
+    "node-machine-id": "^1.1.9",
+    "npm": "^5.5.1",
     "pug": "2.0.0-beta11",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "sha1": "^1.1.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-consolidate": "^0.2.0",
+    "gulp-iconfont": "^9.0.2",
+    "gulp-iconfont-css": "^2.1.0",
+    "gulp-webfont": "0.0.1-3",
+    "webfont": "^7.1.4",
+    "webfonts-generator": "^0.4.0"
   }
 }

@@ -1,0 +1,310 @@
+@font-face {
+	font-family: "idkids-icons";
+	src: url('idkids-icons.eot');
+	src: url('idkids-icons.eot?#iefix') format('eot'),
+		url('idkids-icons.woff2') format('woff2'),
+		url('idkids-icons.woff') format('woff'),
+		url('idkids-icons.ttf') format('truetype'),
+		url('idkids-icons.svg#idkids-icons') format('svg');
+}
+
+.icon:before {
+	font-family: "idkids-icons";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	/* speak: none; only necessary if not using the private unicode range (firstGlyph option) */
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.icon-account:before {
+	content: "\E001";
+}
+
+.icon-basket:before {
+	content: "\E002";
+}
+
+.icon-boy:before {
+	content: "\E003";
+}
+
+.icon-check:before {
+	content: "\E004";
+}
+
+.icon-cloud:before {
+	content: "\E005";
+}
+
+.icon-cross:before {
+	content: "\E006";
+}
+
+.icon-delivery:before {
+	content: "\E007";
+}
+
+.icon-desktop:before {
+	content: "\E008";
+}
+
+.icon-down:before {
+	content: "\E009";
+}
+
+.icon-email:before {
+	content: "\E00A";
+}
+
+.icon-facebook:before {
+	content: "\E00B";
+}
+
+.icon-form_check:before {
+	content: "\E00C";
+}
+
+.icon-form_cross:before {
+	content: "\E00D";
+}
+
+.icon-girl:before {
+	content: "\E00E";
+}
+
+.icon-group:before {
+	content: "\E00F";
+}
+
+.icon-hamburger:before {
+	content: "\E010";
+}
+
+.icon-hanger:before {
+	content: "\E011";
+}
+
+.icon-heading:before {
+	content: "\E012";
+}
+
+.icon-heart:before {
+	content: "\E013";
+}
+
+.icon-heart_filed:before {
+	content: "\E014";
+}
+
+.icon-house:before {
+	content: "\E015";
+}
+
+.icon-icon_bubble:before {
+	content: "\E016";
+}
+
+.icon-icon_idkids:before {
+	content: "\E017";
+}
+
+.icon-icon_jacadi:before {
+	content: "\E018";
+}
+
+.icon-icon_joybox:before {
+	content: "\E019";
+}
+
+.icon-icon_joyvox:before {
+	content: "\E01A";
+}
+
+.icon-icon_njoy:before {
+	content: "\E01B";
+}
+
+.icon-icon_obaibi:before {
+	content: "\E01C";
+}
+
+.icon-icon_okaidi:before {
+	content: "\E01D";
+}
+
+.icon-icon_oxybul:before {
+	content: "\E01E";
+}
+
+.icon-icon_rclv:before {
+	content: "\E01F";
+}
+
+.icon-iframe:before {
+	content: "\E020";
+}
+
+.icon-instagram:before {
+	content: "\E021";
+}
+
+.icon-less:before {
+	content: "\E022";
+}
+
+.icon-list:before {
+	content: "\E023";
+}
+
+.icon-logo_bubble:before {
+	content: "\E024";
+}
+
+.icon-logo_idkidscommunity:before {
+	content: "\E025";
+}
+
+.icon-logo_idkidscommunity_sbrame:before {
+	content: "\E026";
+}
+
+.icon-logo_jacadi:before {
+	content: "\E027";
+}
+
+.icon-logo_joybox:before {
+	content: "\E028";
+}
+
+.icon-logo_njoy:before {
+	content: "\E029";
+}
+
+.icon-logo_obaibi:before {
+	content: "\E02A";
+}
+
+.icon-logo_okaidi:before {
+	content: "\E02B";
+}
+
+.icon-logo_oxybul:before {
+	content: "\E02C";
+}
+
+.icon-logo_rclv:before {
+	content: "\E02D";
+}
+
+.icon-map:before {
+	content: "\E02E";
+}
+
+.icon-marker:before {
+	content: "\E02F";
+}
+
+.icon-mobile:before {
+	content: "\E030";
+}
+
+.icon-more:before {
+	content: "\E031";
+}
+
+.icon-newsletter:before {
+	content: "\E032";
+}
+
+.icon-next:before {
+	content: "\E033";
+}
+
+.icon-padlock:before {
+	content: "\E034";
+}
+
+.icon-paragraph:before {
+	content: "\E035";
+}
+
+.icon-pencil:before {
+	content: "\E036";
+}
+
+.icon-phone:before {
+	content: "\E037";
+}
+
+.icon-picture:before {
+	content: "\E038";
+}
+
+.icon-pinterest:before {
+	content: "\E039";
+}
+
+.icon-postalbox:before {
+	content: "\E03A";
+}
+
+.icon-prev:before {
+	content: "\E03B";
+}
+
+.icon-quote:before {
+	content: "\E03C";
+}
+
+.icon-random:before {
+	content: "\E03D";
+}
+
+.icon-search:before {
+	content: "\E03E";
+}
+
+.icon-star:before {
+	content: "\E03F";
+}
+
+.icon-star_filed:before {
+	content: "\E040";
+}
+
+.icon-tablette:before {
+	content: "\E041";
+}
+
+.icon-text:before {
+	content: "\E042";
+}
+
+.icon-trash:before {
+	content: "\E043";
+}
+
+.icon-twitter:before {
+	content: "\E044";
+}
+
+.icon-up:before {
+	content: "\E045";
+}
+
+.icon-video:before {
+	content: "\E046";
+}
+
+.icon-write:before {
+	content: "\E047";
+}
+
+.icon-youtube:before {
+	content: "\E048";
+}

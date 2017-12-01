@@ -1,0 +1,14 @@
+block content
+    footer.auth_footer
+        select.select_lang
+            each l in lang
+                option(value=l.locale) #{l.label}
+        nav.footer_nav
+            ul
+                a(href="/help")
+                    li= "Aide"
+                a(href="/confidentialite")
+                    li= "Confidentialité"
+                a(href="/cgu")
+                    li= "Conditions d'utilisation"
+            

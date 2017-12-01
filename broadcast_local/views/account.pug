@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    script.
+        console.log('user ', typeof idkids_user);
+        if(typeof idkids_user !== "undefined"){
+            var idkids_user = JSON.parse(idkids_user);
+        }else{
+            var idkids_user = "";
+        }
+    h1= title
+    p Welcome to #{title}
+    p= idkids_user

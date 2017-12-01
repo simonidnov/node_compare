@@ -1,0 +1,7 @@
+.icon{
+    background-position: center center;
+    background-size: contain;
+}
+.icon.facebook{
+    background-image:url(../../images/assets/facebook.svg);
+}
