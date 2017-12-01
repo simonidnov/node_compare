@@ -1,3 +1,10 @@
 .account{
     
 }
+.fidelity_card{
+    
+}
+.fidelity_card canvas{
+    max-width: 100px;
+    max-height:100px;
+}

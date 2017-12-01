@@ -13,16 +13,17 @@ const db = require('mongoose'),
           lastName    : {type:'string'},
           token       : {type:'string'},
           secret      : {type:'string'},
+          qrcode      : {type:'Object'},
           birthDate   : {type:'Date'},
           civility    : {type:'string', enum:['undefined', 'male', 'female'], defaults :'undefined'},
           address     : {type:'Array'},
-          members     : {type:'Array'},
           relations   : {type:'Array'},
           tags        : {type:'Object'},
           devices     : {type:'Object'},
           members     : {type:'Object'},
           termAccept  : {type:'Boolean'},
           newsletter  : {type:'Boolean'},
+          rights      : {type:'Object'},
           newsletter_services : {type:'Object'},
           validated   : {type:'Boolean'},
           created     : {type:'Date', default: Date.now},
@@ -163,9 +164,9 @@ module.exports.login = function(datas, callback) {
                                             callback({"status":"error", "code":err.code, "error":err, "message":err.message});
                                         }else{
                                             var return_datas = JSON.parse(JSON.stringify(users[0]));
-                                            delete return_datas.password;
-                                            delete return_datas.relations;
-                                            delete return_datas.address;
+                                            //delete return_datas.password;
+                                            //delete return_datas.relations;
+                                            //delete return_datas.address;
                                             return_datas.current_device = datas.device_uid;
                                             callback({"status":"success", "idkids_user":return_datas});
                                         }
@@ -203,8 +204,12 @@ module.exports.register = function(datas, callback) {
             email   : datas.body.subscribe_email,
             password: sha1(datas.body.subscribe_password),
             pseudo  : datas.body.pseudo,
-            secret  : jwt.sign({}, config.secret, {}),
-            termAccept : true
+            secret  : jwt.sign({}, config.secrets.global.secret, {}),
+            termAccept : true,
+            rights  : {
+                "type":'RWU',
+                "authorizations":['me']
+            }
         }
     new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret);
     new_user_datas.device = [{
@@ -247,7 +252,7 @@ module.exports.register = function(datas, callback) {
     new_user = new User(new_user_datas);
     new_user.save(function(err){
         if(err) callback({"status":"error", "code":err.code , "duplicated_value":err.message.split('{ : "')[1].replace('" }', ''), "error":err});
-        else callback({"status":"success", "infos":new_user});
+        else callback({"status":"success", "user":new_user_datas});
         //db.close();
     });
     //callback(new_user);

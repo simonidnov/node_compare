@@ -1,13 +1,102 @@
 extends layout
 
 block content
-    script.
-        console.log('user ', typeof idkids_user);
-        if(typeof idkids_user !== "undefined"){
-            var idkids_user = JSON.parse(idkids_user);
-        }else{
-            var idkids_user = "";
-        }
-    h1= title
-    p Welcome to #{title}
-    p= idkids_user
+    header.header
+        div
+            div.logo.idkids
+        nav.short_cuts
+            ul
+                li#widgets
+                    ul
+                        li.icon.okaidi= "Okaidi"
+                        li.icon.obaibi= "Obaibi"
+                        li.icon.jacadi= "Jacadi"
+                        li.icon.oxybul= "Oxybul"
+                        li.icon.rclv= "Rigolo comme la vie"
+                        li.icon.njoy= "N'joy"
+                        li.icon.bubble= "Bubble"
+                        li.icon.joyvox= "Joyvox"
+                li#notifications
+                li#account_infos
+        nav.hor_nav
+            ul
+                li(data-for="settings")= "Mon panier"
+                li(data-for="settings")= "Mes commandes"
+                li(data-for="settings")= "Mes services"
+                li(data-for="settings")= "Ma carte de fidélité"
+                li.selected(data-for="public")= "Mon profil"
+                li(data-for="private")= "Mes informations"
+    div.container.with_head
+        div.row#public
+            div.col.col-md-8
+                div.formular#public_datas
+                    hr
+                    br
+                    h1 Mon profil
+                    form.form_content
+                        p Informations de votre profil public
+                        div.avatar
+                            div.preview
+                        div.form-group.material_input
+                            input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="4", data-erromessage=lang[locale].keys.pseudo_error)
+                            label(for='pseudo') !{lang[locale].keys.pseudo_holder}
+                        div.form-group.material_input
+                            input#birth_date.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birth_date' required="required", value=user.birth_date, data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01')
+                            label(for='birth_date') !{lang[locale].keys.birth_date_holder}
+                        hr
+                        p Je souhaites que les données suivantes soient visible publiquement
+                        div.form-group
+                            input#public_locale.form-control(type='checkbox', name='public_locale', checked="checked")
+                            label(for="public_locale") Ma ville, ma région et mon pays <b>(votre adresses postale exacte ne sera pas visible)</b>
+                        div.form-group
+                            input#public_kids.form-control(type='checkbox', name='public_kids', checked="checked")
+                            label(for="public_kids") Pseudo et l'âge de mes enfants
+                        div.form-group
+                            input#public_gamification.form-control(type='checkbox', name='public_gamification', checked="checked")
+                            label(for="public_gamification") Partager mes badges et succès
+                        div.form-group
+                            input#public_created.form-control(type='checkbox', name='public_created', checked="checked")
+                            label(for="public_created") Date d'inscrition et ancienneté
+                        div.form-group
+                            input#public_interest.form-control(type='checkbox', name='public_interest', checked="checked")
+                            label(for="public_interest") !{lang[locale].keys.public_interest_check}
+                        button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.save_cta
+            div.col.col-md-4
+                div.formular#public_datas
+                    hr
+                    br
+                    h1 Ma famille
+                    form.form_content
+                        p Présentez-nous votre famille pour bénéficier de <a href="/family">conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
+                        hr.separator
+                        div#child
+                            div.form-group.material_input
+                                input#child_first_name.form-control(type='text', placeholder=lang[locale].keys.child_first_name_holder, name='child_first_name', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_name_error)
+                                label(for='child_first_name') !{lang[locale].keys.child_first_name_holder}
+                            div.form-group.material_input
+                                input#child_first_birth_date.form-control(type='date', placeholder=lang[locale].keys.child_first_birth_date_holder, name='child_first_birth_date', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_birth_date_error)
+                                label(for='child_first_birth_date') !{lang[locale].keys.child_first_birth_date_holder}
+                        button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.add_kid_cta
+                div.formular#public_datas
+                    hr
+                    br
+                    h1 Ma carte de fidélité
+                    form.form_content
+                        p Demandez votre carte de <a href="/fidelity_card">fidélité pour profiter des avantages</a> de nos marques et services
+                        button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.fidelity_card_cta
+                        
+                            
+                            
+        div.row#private
+            h1= title
+            p Welcome
+        div.row#settings
+            h1= title
+            p Welcome
+        p= JSON.stringify(user)
+        
+        div.row.fidelity_card
+            div.col-md-3
+                canvas#canvas(width="50" height="50")
+            div.col-md-4
+                p Obtenez 8€ de cadeau pour chaque anniversaire de vos enfants !

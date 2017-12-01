@@ -12,7 +12,20 @@ const express = require('express'),
     auth = require('./routes/auth'),
     account = require('./routes/account');
 
+let session = require("express-session");
+
 app = module.exports = express();
+
+app.use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        httpOnly: false,
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

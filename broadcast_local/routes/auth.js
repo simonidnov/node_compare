@@ -14,8 +14,6 @@ var express = require('express'),
 auth.get('/', function(req, res, next) {
         req.query.device_uid = device_uid; 
         Auth_controller.login(req.query, function(e){
-            console.log("callback log ::::::::::::", e);
-            
             var datas = { 
                 title: 'Mon compte', 
                 datas: req.query, 
@@ -32,20 +30,35 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.user !== "undefined"){
-                res.redirect(307, 'auth/account'+req.path);
-                /*datas.user = e.user;
-                response.writeHead(307, {
-                  'Location': 'auth/account'
-                });
-                response.end();*/
+                req.session.Auth = e.user;
+                res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
             res.render('auth/login', datas);
         });
     })
     .post('/login', function(req, res, next) {
         Auth_controller.register(req, function(e){
-            console.log(e);
-            res.send('login post params');
+            //res.send('login post params');
+            if(typeof e.user !== "undefined"){
+                req.session.Auth = e.user;
+                res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+            }
+            var datas = {
+                title: 'Mon compte', 
+                datas: req.query, 
+                locale:language_helper.getlocale(),
+                lang:lang, 
+                uri_params : uri_helper.get_params(req),
+                response:e,
+                js:[
+                    '/public/javascripts/login.js',
+                    '/public/javascripts/components/formular.js'
+                ], css:[
+                    '/public/stylesheets/components/formular.css',
+                    '/public/stylesheets/auth.css',
+                ]
+            };
+            res.render('auth/login', datas);
         });
     })
     .put('/login', function(req, res, next) {
@@ -61,7 +74,6 @@ auth.get('/', function(req, res, next) {
     .get('/:form_name/*', function(req, res, next) {
         req.query.device_uid = device_uid; 
         Auth_controller.login(req.query, function(e){
-            console.log("callback log ::::::::::::", e);
             var datas = { 
                 title: 'Mon compte', 
                 datas: req.query, 
@@ -79,19 +91,8 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                /* UNCOMMENT TO STOCK SERRVER SIDE STORAGE */
-                if (typeof localStorage === "undefined" || localStorage === null) {
-                    var LocalStorage = require('node-localstorage').LocalStorage;
-                    localStorage = new LocalStorage('./idkids');
-                }
-                localStorage.setItem('idkids_user_infos', JSON.stringify(e.idkids_user));
-                
-                res.redirect(307, '/account');
-                /*datas.user = e.user;
-                response.writeHead(307, {
-                  'Location': 'auth/account'
-                });
-                response.end();*/
+                req.session.Auth = e.idkids_user;
+                res.redirect(307, '/account?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device);
             }
             res.render('auth/login', datas);
             

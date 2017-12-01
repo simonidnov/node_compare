@@ -11,6 +11,8 @@
             "login_tab_1":"Me connecter",
             "login_tab_2":"Créer un compte",
             "login_cta":"Me connecter",
+            "birth_date_holder":"Entrez votre date de naissance",
+            "birth_date_error":"Vous devez indiquer une date de naissance",
             "pseudo_holder":"Choisissez un pseudo",
             "pseudo_error":"Votre pseudo est trop court, 5 charactères minimum.",
             "retype_password_holder":"Retapez votre mot de passe",
@@ -49,7 +51,15 @@
             "use_another_account":"Utiliser un autre compte",
             "use_another_account_message":"créer un nouvel utilisateur",
             "user_not_found":"Utilisateur introuvable, veuillez vérifier votre email",
-            "wrong_pawword":"Vous avez entré un mauvais mot de passe"
+            "wrong_pawword":"Vous avez entré un mauvais mot de passe",
+            "save_cta":"Enregistrer",
+            "public_interest_check":"Partager mes centres d'intêrets",
+            "child_first_name_holder":"Prénom de votre enfant",
+            "child_first_name_error":"Humm... ce prénom semble un peu court...",
+            "child_first_birth_date_holder":"Entrez sa date de naissance",
+            "child_first_birth_date_error":"humm... êtes-vous sûre ?",
+            "add_kid_cta":"Ajouter un enfant",
+            "fidelity_card_cta":"Je découvre le programme fidélité"
         }
     }
 }
