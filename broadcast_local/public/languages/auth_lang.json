@@ -59,7 +59,26 @@
             "child_first_birth_date_holder":"Entrez sa date de naissance",
             "child_first_birth_date_error":"humm... êtes-vous sûre ?",
             "add_kid_cta":"Ajouter un enfant",
-            "fidelity_card_cta":"Je découvre le programme fidélité"
+            "fidelity_card_cta":"Je découvre le programme fidélité",
+            "firstName_holder":"Prénom *",
+            "lastName_holder":"Nom *",
+            "gender_male":"Homme",
+            "gender_female":"Femme",
+            "phone_holder":"Numéro de téléphone",
+            "mobile_holder":"Numéro de téléphone mobile",
+            "addressLabel_holder":"Intitulé de l'adresse *",
+            "addressFirstName_holder":"Prénom * (nominatif sur la boîte postale)",
+            "addressLastName_holder":"Nom * (nominatif sur la boîte postale)",
+            "addess_holder":"Adresse, numéro et voie *",
+            "addressMore_holder":"Complément d'adresse * (Appartement, étage, escalier...)",
+            "city_holder":"Ville *",
+            "postalCode_holder":"Code postal *",
+            "addressCountry_holder":"Pays *",
+            "addressMobile_holder":"Numéro de téléphone fixe ou mobile du résident.",
+            "saveAddress_cta":"Ajouter cette adresse",
+            "input_need_message":"les champs comportant un * sont obligatoirs",
+            "address_form_title":"Ajouter une adresse",
+            "address_form_message":"Remplissez le formulaire ci-dessous pour ajouter votre première adresse, vous pouvez ajouter plusieurs adresses de livraison."
         }
     }
 }

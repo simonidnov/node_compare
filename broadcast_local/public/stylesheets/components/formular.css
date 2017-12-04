@@ -128,6 +128,11 @@
     -moz-border-radius: 100%;
     -webkit-border-radius: 100%;
     border-radius: 100%;
+    overflow: hidden;
+}
+.formular .avatar .preview img{
+    width:100%;
+    height:auto;
 }
 
 /* input check */
@@ -374,6 +379,15 @@ input:-webkit-autofill {
     -o-transition: all .2s ease-in;
     transition: all .2s ease-in;
 }
+.formular .material_input input[disabled]{
+    color:#818181;
+    background-color:#F0F0F0;
+    background-image: url(../../images/assets/padlock.svg);
+    background-repeat: no-repeat;
+    background-size:32px 32px;
+    background-position: right center;
+}
+.formular .material_input input[disabled] + label,
 .formular .material_input input[type="date"] + label,
 .formular .material_input input:focus + label,
 .formular .material_input input:valid + label,
@@ -386,7 +400,69 @@ input:-webkit-autofill {
 .formular input:invalidli:has(> .material_input):after {
     background:coral;
 }
-
+/* --------- RADIO -------------- */
+.radio_list{
+    padding:0;
+    display: inline-flex;
+}
+.radio_list input[type="radio"]{
+    width:24px;
+    height:24px;
+    cursor: pointer;
+    position: relative;
+}
+.radio_list input[type="radio"]:before{
+    position: absolute;
+    width:24px;
+    height:24px;
+    background-color:#CCC;
+    content:'';
+    position: absolute;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+}
+.radio_list input[type="radio"]:after{
+    content:'';
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin:auto;
+    background:#FFF;
+    width:10px;
+    height:10px;
+    z-index: 9;
+    background-size: cover;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    -webkit-transition: all .2s ease-in;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+.radio_list input[type="radio"]:checked:before{
+    background:lightseagreen;
+}
+.radio_list input[type="radio"]:checked:after{
+    width:20px;
+    height:20px;
+    background-image: url(../../images/assets/form_check.svg);
+}
+.radio_list input[type="radio"] + label{
+    line-height: 24px;
+    font-size: 18px;
+    color:#818181;
+    cursor: pointer;
+    padding:10px;
+    padding-top:4px;
+    padding-right:10px;
+}
+.radio_list input[type="radio"]:checked + label{
+    color:#333;
+}
 
 /* --------- CHECKBOX ----------- */
 .formular input[type="checkbox"]{
@@ -462,10 +538,12 @@ input:-webkit-autofill {
     margin-left:0px;
     font-size: 17px;
     cursor: pointer;
+    text-decoration: none;
     outline:none !important;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    display: table;
     -webkit-transition: all .2s ease-in;
     -moz-transition: all .2s ease-in;
     -o-transition: all .2s ease-in;

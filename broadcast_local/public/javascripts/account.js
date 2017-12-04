@@ -6,6 +6,7 @@ var account = {
     user : null,
     sdk  : null,
     init : function(){
+        $('.hor_nav').animate( { scrollLeft: $('.hor_nav li.selected').position().left + $('.hor_nav').scrollLeft() - 50 }, 500 );
         this.sdk = new idkids_jssdk(
             {
                 "secret":"000-000-000",
@@ -38,9 +39,43 @@ var account = {
                 console.log('success!');
             });
         });
-        this.sdk.createAuthbutton("account_infos", function(){
-            
+        $('[data-action]').off('click').on('click', function(e){
+            e.preventDefault();
+            var action = $(this).attr('data-action');
+            switch(action){
+                case 'page_reload':
+                    window.history.pushState({"pageTitle":$(this).attr('title')},"", account.add_params($(this).attr('href')));
+                    account.navigate();
+                    break;
+                default:
+                    console.log('default ', action);
+                    break;
+            }
         });
+        window.addEventListener('popstate', this.navigate);
+    },
+    navigate : function(){
+        var params = this.parse_url(window.location.pathname);
+        $('[data-for]').removeClass('selected');
+        $('[data-for="'+params.account+'"]').addClass('selected');
+        $.each($('[data-for]'), function(index, page){
+            $('#'+$(this).attr('data-for')).css('display', 'none');
+        });
+        $('#'+params.account).css('display', 'block');
+        $('.hor_nav').animate( { scrollLeft: $('.hor_nav li.selected').position().left + $('.hor_nav').scrollLeft() - 50 }, 500 );
+
+    },
+    parse_url : function(url){
+        var uri_params = [],
+            uri_array  = url.split('/');
+        for(var i=1; i<uri_array.length; i+=2){
+            uri_params.push({});
+            uri_params[uri_array[i]] = uri_array[i+1];
+        }
+        return uri_params;
+    },
+    add_params : function(href){
+        return href;
     }
 }
 var idkids_jssdk = function(options, callback){

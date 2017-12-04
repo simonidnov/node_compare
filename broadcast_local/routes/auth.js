@@ -41,7 +41,7 @@ auth.get('/', function(req, res, next) {
             //res.send('login post params');
             if(typeof e.user !== "undefined"){
                 req.session.Auth = e.user;
-                res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
             var datas = {
                 title: 'Mon compte', 

@@ -5,12 +5,16 @@ const db = require('mongoose'),
       validator = require("email-validator"),
       config = require('../config/config'),
       os = require('os'),
+      gravatar = require('gravatar'),
       user_datas = {
           email       : {type:'string', unique: true},
           password    : {type:'string'},
           pseudo      : {type:'string'},
           firstName   : {type:'string'},
+          avatar      : {type:'string'},
           lastName    : {type:'string'},
+          phone       : {type:'string'},
+          mobile      : {type:'string'},
           token       : {type:'string'},
           secret      : {type:'string'},
           qrcode      : {type:'Object'},
@@ -46,7 +50,6 @@ module.exports.login = function(datas, callback) {
         if(validator.validate(datas.email)){
             /* REQUEST UPDATED USER */
             User.find({email: datas.email, password: sha1(datas.password)}, function (err, users) {
-                
                 if (err){
                     callback({"status":"error", "code":err.code, "error":err, "message":err.message});
                 }else{
@@ -140,6 +143,11 @@ module.exports.login = function(datas, callback) {
                     );
                     
                     /* UPDATE */
+                    if(users[0].avatar === "" || users[0].avatar == null){
+                        var avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
+                    }else{
+                        var avatar = users[0].avatar;
+                    }
                     User.update(
                         {
                             _id: users[0]._id 
@@ -147,7 +155,8 @@ module.exports.login = function(datas, callback) {
                         {
                             $set:{
                                 token : new_token,
-                                updated : Date.now()
+                                updated : Date.now(),
+                                avatar : avatar
                             }
                         }, 
                         function(err, user){
@@ -216,9 +225,15 @@ module.exports.register = function(datas, callback) {
         uid     : datas.body.device_uid,
         arch    : os.arch(),
         name    : os.hostname(),
-        token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret)
+        token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret),
+        avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://')
     }];
-    
+    console.log('---------------- new_user_datas avatar ------------------------ ');
+    console.log('---------------- new_user_datas------------------------ ');
+    console.log(new_user_datas.avatar);
+    console.log(gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://'));
+    console.log('---------------- new_user_datas------------------------ ');
+    console.log('---------------- new_user_datas------------------------ ');
     //network : os.networkInterfaces(),
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
