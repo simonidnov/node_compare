@@ -34,7 +34,7 @@ const db = require('mongoose'),
           updated     : {type:'Date', default: Date.now}
       };
 
-if(db.connection.readyState === 0){
+if(db.connection.readyState === 0){ 
     db.connect(config.database.users, {useMongoClient: true});
 }
 const userSchemas = new db.Schema(user_datas),
@@ -228,12 +228,6 @@ module.exports.register = function(datas, callback) {
         token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret),
         avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://')
     }];
-    console.log('---------------- new_user_datas avatar ------------------------ ');
-    console.log('---------------- new_user_datas------------------------ ');
-    console.log(new_user_datas.avatar);
-    console.log(gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://'));
-    console.log('---------------- new_user_datas------------------------ ');
-    console.log('---------------- new_user_datas------------------------ ');
     //network : os.networkInterfaces(),
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
@@ -283,6 +277,9 @@ module.exports.update = function(datas) {
     /* UPDATE token, updated then free user session and storage */
     return datas;
 };
+module.exports.check_user = function(){
+    return true;
+}
 
 
 /* SPECIAL REQUEST SCHEMA SAMPLE CODE */

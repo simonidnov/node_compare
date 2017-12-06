@@ -102,35 +102,40 @@ block content
                         div.avatar
                             div.preview
                                 img(src=user.avatar)
+                        div.form_group.radio_list
+                            input#male(type="radio" name="gender" required='required')
+                            label(for='male')= lang[locale].keys.gender_male
+                            input#female(type="radio" name="gender")
+                            label(for='female')= lang[locale].keys.gender_female
                         div.form-group.material_input
                             input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="4", data-erromessage=lang[locale].keys.pseudo_error)
                             label(for='pseudo') !{lang[locale].keys.pseudo_holder}
                         div.form-group.material_input
-                            input#birth_date.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birth_date' required="required", value=user.birth_date, data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01')
+                            input#birth_date.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birth_date' required="required", value=user.birth_date, data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01' data-minage="16")
                             label(for='birth_date') !{lang[locale].keys.birth_date_holder}
                         hr
                         p Je souhaites que les données suivantes soient visible publiquement
-                        div.form-group
+                        div.form-group.inline
                             input#public_locale.form-control(type='checkbox', name='public_locale', checked="checked")
                             label(for="public_locale") Ma ville, ma région et mon pays <b>(votre adresses postale exacte ne sera pas visible)</b>
-                        div.form-group
+                        div.form-group.inline
                             input#public_kids.form-control(type='checkbox', name='public_kids', checked="checked")
                             label(for="public_kids") Pseudo et l'âge de mes enfants
-                        div.form-group
+                        div.form-group.inline
                             input#public_gamification.form-control(type='checkbox', name='public_gamification', checked="checked")
                             label(for="public_gamification") Partager mes badges et succès
-                        div.form-group
+                        div.form-group.inline
                             input#public_created.form-control(type='checkbox', name='public_created', checked="checked")
                             label(for="public_created") Date d'inscrition et ancienneté
-                        div.form-group
+                        div.form-group.inline
                             input#public_interest.form-control(type='checkbox', name='public_interest', checked="checked")
                             label(for="public_interest") !{lang[locale].keys.public_interest_check}
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
             div.col.col-md-4
-                div.formular#public_datas
+                div.formular#add_kid
                     hr
                     br
-                    h1 Mes enfants
+                    h1 Ma famille
                     form.form_content(method="put" action='/auth/profile/')
                         p Présentez-nous votre famille pour bénéficier de <a href="/family">conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
                         hr.separator
@@ -142,7 +147,7 @@ block content
                                 input#child_first_birth_date.form-control(type='date', placeholder=lang[locale].keys.child_first_birth_date_holder, name='child_first_birth_date', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_birth_date_error)
                                 label(for='child_first_birth_date') !{lang[locale].keys.child_first_birth_date_holder}
                         button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.add_kid_cta
-                div.formular#public_datas
+                div.formular
                     hr
                     br
                     h1 Ma carte de fidélité
@@ -158,11 +163,6 @@ block content
                     form.form_content(method="put" action='/auth/profile/')
                         p Vos données sont strictement confidentielles
                         hr
-                        div.form_group.radio_list
-                            input#male(type="radio" name="gender")
-                            label(for='male')= lang[locale].keys.gender_male
-                            input#female(type="radio" name="gender")
-                            label(for='female')= lang[locale].keys.gender_female
                         div.form-group.material_input
                             input#email.form-control(disabled="true" type='email', placeholder=lang[locale].keys.email_holder, name='pseudo', required="required", value=user.email, minlength="4", data-erromessage=lang[locale].keys.email_error)
                             label(for='email') !{lang[locale].keys.email_holder}
@@ -220,6 +220,10 @@ block content
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.saveAddress_cta
                         p= lang[locale].keys.input_need_message
+                        div.form-group.material_input
+                            textarea#more_datas(placeholder="précisions pour la livraison." name="more_datas")
+                            label(for='more_datas') Précisions sur la livraison
+                            
                     
             div.col.col-md-4
         div.row#basket(style= page === "basket" ? "display:block" : "display:none")

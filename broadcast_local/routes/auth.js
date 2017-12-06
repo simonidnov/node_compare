@@ -14,7 +14,7 @@ var express = require('express'),
 auth.get('/', function(req, res, next) {
         req.query.device_uid = device_uid; 
         Auth_controller.login(req.query, function(e){
-            var datas = { 
+            var datas = {
                 title: 'Mon compte', 
                 datas: req.query, 
                 locale:language_helper.getlocale(),
@@ -92,7 +92,7 @@ auth.get('/', function(req, res, next) {
             };
             if(typeof e.idkids_user !== "undefined"){
                 req.session.Auth = e.idkids_user;
-                res.redirect(307, '/account?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device);
+                res.redirect(307, '/account?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device+'&idkids-secret='+e.idkids_user.secret);
             }
             res.render('auth/login', datas);
             

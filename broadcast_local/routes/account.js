@@ -7,7 +7,7 @@ var express = require('express'),
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.redirect(307, '/account/profile');
+    res.redirect(307, '/account/profile'+req.url.replace('/',''));
 });
 router.get('/:page', function(req, res, next) {
     console.log('account session  ', req.session.Auth);
@@ -22,6 +22,7 @@ router.get('/:page', function(req, res, next) {
         page:req.params.page,
         js:[
             '/public/javascripts/account.js',
+            '/public/javascripts/components/formular.js',
             '/node_modules/qrcode/build/qrcode.min.js'
         ], css:[
             '/public/stylesheets/account.css',

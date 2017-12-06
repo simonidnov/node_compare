@@ -29,14 +29,17 @@ var account = {
                 console.log(response, params);
             }
         );
-        this.sdk.init(function(status){
-            console.log('init status ', status);
-        });
-        this.sdk.getLoginStatus(function(status){
-            console.log("getLoginStatus ::: ", status);
-            QRCode.toCanvas(document.getElementById('canvas'), status.id, function (error) {
-                if (error) console.error(error)
-                console.log('success!');
+        var self = this;
+        self.sdk.init(function(status){
+            console.log('init status :::::: ', status);
+            self.sdk.isLogged(function(status){
+                //QRCode.toCanvas(document.getElementById('canvas'), status._id, function (error) {
+                //    if (error) console.error(error)
+                //    console.log('QRCode success!');
+                //});
+                self.sdk.api.get('/me', {}, function(e){
+                    console.log('/me :::: ', e);
+                });
             });
         });
         $('[data-action]').off('click').on('click', function(e){
@@ -52,7 +55,19 @@ var account = {
                     break;
             }
         });
+        this.create_forms();
         window.addEventListener('popstate', this.navigate);
+    },
+    create_forms : function(){
+        this.public_form = new formular("#public_datas", function(e){
+            //console.log(e);
+        }).init();
+        this.public_form = new formular("#add_kid", function(e){
+            //console.log(e);
+        }).init();
+        this.private_form = new formular('#private_datas', function(e){
+            //console.log(e);
+        }).init();
     },
     navigate : function(){
         var params = this.parse_url(window.location.pathname);
@@ -63,7 +78,6 @@ var account = {
         });
         $('#'+params.account).css('display', 'block');
         $('.hor_nav').animate( { scrollLeft: $('.hor_nav li.selected').position().left + $('.hor_nav').scrollLeft() - 50 }, 500 );
-
     },
     parse_url : function(url){
         var uri_params = [],
@@ -78,6 +92,10 @@ var account = {
         return href;
     }
 }
+
+
+/* ------------ SDK ALONE TEST ----------- */
+
 var idkids_jssdk = function(options, callback){
     this.options = options;
     this.callback = callback;
@@ -86,17 +104,32 @@ var idkids_jssdk = function(options, callback){
         user : null,
         options:null,
         get : function(request, params, callback) {
-            this.save_account();
-            callback(request, params);
+            this.call('GET', request, params, callback);
         },
         post : function(request, params, callback) {
-            
+            this.call('POST', request, params, callback);
         },
         put : function(request, params, callback) {
-            
+            this.call('PUT', request, params, callback);
         },
         delete : function(request, params, callback) {
-            
+            this.call('DELETE', request, params, callback);
+        },
+        call : function(type, request, params, callback){
+            params = this.add_params(params);
+            console.log('call ', type, request, params, callback);
+            jQuery.ajax(request, {
+                method: type,
+                contentType: 'application/json',
+                data: params
+            })
+            .done(function(e) {
+                callback(e);
+            })
+            .fail(function() {
+            })
+            .always(function() {
+            });
         },
         get_user_status : function(){
             this.set_user();
@@ -109,32 +142,49 @@ var idkids_jssdk = function(options, callback){
         get_params : function(){
             
         },
-        add_params : function(){
-            var datas = this.options;
-            datas.from_origin   = window.location.origin;
-            datas.user_token    = this.user.token;
-            datas.user_id       = this.user._id;
-            datas.user_secret   = this.user.secret;
-            datas.user_device   = this.user.current_device;
-            return datas;
+        add_params : function(params){
+            params.options = this.options;
+            params.options.from_origin   = window.location.origin;
+            if(this.user){
+                console.log("this.user ::: ", this.user);
+                params.options.user_token    = this.user.token;
+                params.options.user_id       = this.user._id;
+                params.options.user_secret   = this.user.secret;
+                params.options.user_device   = this.user.current_device;
+            }
+            return params;
         },
         reset_user : function(callback){
-            var url = new URL(window.location.href);
-            var c = url.searchParams.get("idkids-token");
+            var url = new URL(window.location.href),
+                c = url.searchParams.get("idkids-token");
             if(c !== null){
                 var jeton = {
                     "token":url.searchParams.get("idkids-token"),
-                    "id":url.searchParams.get("idkids-id"),
+                    "_id":url.searchParams.get("idkids-id"),
+                    "secret":url.searchParams.get("idkids-secret"),
                     "device":url.searchParams.get("idkids-device")
                 };
-                window.localStorage.setItem('idkids_local_user', JSON.stringify(jeton));
+                this.store('idkids_local_user', jeton);
+                
                 this.set_user();
                 callback(jeton);
+                window.location.href =window.location.pathname;
+                //window.location.reload(window.location.pathname+'/');
             }
         },
         set_user : function(){
+            this.getStore('idkids_local_user');
+        },
+        store:function(key, datas){
             try {
-                this.user = JSON.parse(window.localStorage.getItem('idkids_local_user'));
+                window.localStorage.setItem(key, JSON.stringify(datas));
+            } catch(e) {
+                console.log("error ::: ", e); // error in the above string (in this case, yes)!
+            }
+        },
+        getStore:function(key){
+            try {
+                this.user = JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
                 console.log("error ::: ", e); // error in the above string (in this case, yes)!
             }
@@ -142,17 +192,19 @@ var idkids_jssdk = function(options, callback){
     };
     this.api.options = options;
     this.init = function(callback){
-        if(document.getElementById('idkids-dsk') === null){ var sdkel = document.createElement('div'); sdkel.id = 'idkids-dsk';}else{return true};
+        //var sdkel;
+        //if(document.getElementById('idkids-dsk') === null){ return false; }
         /* TODO REQUEST SECRET FROM SERVER URL THEN RETURN INITED OR NOT IDENTIFIED */
         
         /* TODO ON STARTUP GET URL PARAMS THEN SET DEFAULT USER ID NEEDED THEN REDIRECT ONLY IF WEBSITE IS IDENTIFIED SERVER SIDE */
         this.api.reset_user(function(datas){
             console.log('reset user ', datas);
         });
-        callback({status:"inited"});
-        this.inited = true;
+        this.api.get('/me/from', {}, function(e){
+            callback(e);
+        });
     }
-    this.getLoginStatus = function(callback){
+    this.isLogged = function(callback){
         callback(this.api.get_user_status());
     }
     this.createAuthbutton = function(target, callback){

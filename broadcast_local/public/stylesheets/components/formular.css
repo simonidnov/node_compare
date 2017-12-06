@@ -74,6 +74,12 @@
     text-align: left;
     box-sizing: border-box;
 }
+.formular .form-group.inline{
+    display: inline-flex;
+}
+.formular .form-group.inline label{
+    padding-left:20px;
+}
 .formular .phantom_input{
     display: none;
 }
@@ -317,7 +323,7 @@
     background:lightseagreen;
 }
 
-.formular .material_input input{
+.formular .material_input input, .formular .material_input textarea{
     width:100%;
     line-height: 25px;
     font-size: 14px;
@@ -328,7 +334,12 @@
     position: relative;
     padding:10px;
 }
-.formular .material_input input:after{
+.formular .material_input textarea{
+    resize: vertical;
+    min-height: 50px;
+}
+
+.formular .material_input input:after, .formular .material_input textarea:after{
     /*content:'';
     position: absolute;
     height:2px;
@@ -379,7 +390,8 @@ input:-webkit-autofill {
     -o-transition: all .2s ease-in;
     transition: all .2s ease-in;
 }
-.formular .material_input input[disabled]{
+.formular .material_input input[disabled], 
+.formular .material_input textarea[disabled]{
     color:#818181;
     background-color:#F0F0F0;
     background-image: url(../../images/assets/padlock.svg);
@@ -391,6 +403,9 @@ input:-webkit-autofill {
 .formular .material_input input[type="date"] + label,
 .formular .material_input input:focus + label,
 .formular .material_input input:valid + label,
+.formular .material_input textarea[disabled] + label,
+.formular .material_input textarea:focus + label,
+.formular .material_input textarea:valid + label,
 .formular .material_input.notempty label,
 .formular .material_input.invalid label{
     top:0px;
@@ -688,3 +703,125 @@ input:-webkit-autofill {
    color: rgba(0,0,0,0);
 }
 
+
+
+
+.calendar{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,.6);
+    z-index: 999;
+}
+.calendar .content{
+    width:280px;
+    max-width: 100%;
+    height:330px;
+    max-height: 100%;
+    background:#FFF;
+    position: absolute;
+    padding:10px;
+    -moz-box-shadow: 2px 3px 25px -5px #656565;
+    -webkit-box-shadow: 2px 3px 25px -5px #656565;
+    -o-box-shadow: 2px 3px 25px -5px #656565;
+    box-shadow: 2px 3px 25px -5px #656565;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=146, Strength=25);
+}
+.calendar .content .top_header{
+    height:38px;
+    width:100%;
+    line-height: 28px;
+    text-align: center;
+    border-bottom:1px solid #E3E3E3;
+}
+.calendar .content .bottom_footer{
+    height:34x;
+    width:100%;
+    border-top:1px solid #E3E3E3;
+}
+.calendar .content .choices{
+    height:236px;
+    width:100%;
+    display: inline-flex;
+    position: relative;
+}
+.calendar .content .days{
+    width:20%;
+    text-align: left;
+}
+.calendar .content .months{
+    width:50%;
+}
+.calendar .content .years{
+    width:30%;
+}
+.calendar .content .selector{
+    width:100%;
+    height:38px;
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    margin:auto;
+    border-top:4px solid lightseagreen;
+    border-bottom:4px solid lightseagreen;
+    z-index: 9;
+}
+.calendar .content .wrapper{
+    margin:0;
+    padding:0;
+    height:236px;
+    background:#F9F9F9;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style:none;
+    overflow:-moz-scrollbars-none;
+}
+.calendar .content .wrapper::-webkit-scrollbar{width:0px}
+.calendar .content .wrapper ul{
+    margin:0;
+    padding:0;
+    padding-top:100px;
+    padding-bottom:100px;
+}
+.calendar .content ul::-webkit-scrollbar { 
+    display: none; 
+    -webkit-overflow-scrolling: touch;
+}
+.calendar .content ul li{
+    margin:0;
+    padding:0;
+    list-style: none;
+    padding-left:10px;
+    font-size: 17px;
+    line-height: 40px;
+    height:40px;
+    text-align: center;
+    color:#818181;
+    position: relative;
+    cursor: pointer;
+}
+.calendar .content .months ul li{
+    text-align: left;
+}
+.calendar .content ul li:after{
+    width:100%;
+    height:1px;
+    position: absolute;
+    left:0;
+    bottom:0;
+    content:'';
+    border-bottom:1px solid #E3E3E3;
+}
+.calendar .content ul li.selected{
+    color:#000;
+    background:#d1f1ef;
+    color:lightseagreen;
+}
+.calendar .content ul li.disabled{
+    background:#F0F0F0;
+    color:#CCC;
+}

@@ -18,6 +18,11 @@ function formular(target, callback){
             }
         });
         $(target).find('.material_input input').off('focus').on('focus', function(){
+            if($(this).attr('type') === "date"){
+                var cal = new datepicker($(this), function(e){
+                    console.log(e);
+                });
+            }
             $(this).parent().addClass('focused');
             self.callback({"status":"focus", value:$(this)});
         });
@@ -74,19 +79,27 @@ function formular(target, callback){
             return;
         }else{
             var type = target.attr('type');
-            if(type == "email"){
-                if(this.validateEmail(target.val())){
-                    target.parent().addClass('valid');
-                    target.parent().removeClass('invalid');
-                    target.parent().find('.input_error').remove();
-                }else{
-                    target.parent().addClass('invalid');
-                    target.parent().removeClass('valid');
-                    if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0){
-                        target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+            switch(type){
+                case "email":
+                    if(this.validateEmail(target.val())){
+                        target.parent().addClass('valid');
+                        target.parent().removeClass('invalid');
+                        target.parent().find('.input_error').remove();
+                    }else{
+                        target.parent().addClass('invalid');
+                        target.parent().removeClass('valid');
+                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0){
+                            target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+                        }
                     }
-                }
-                return;
+                    return;
+                    break;
+                case "date":
+                    target.parent().addClass('valid');
+                    return;
+                    break;
+                case "radio":
+                    break;
             }
             target.parent().addClass('notempty');
             if(typeof target.attr('data-regex') !== "undefined"){
@@ -173,16 +186,16 @@ function formular(target, callback){
                    if($(this).attr('type') === "checkbox"){
                         if(!$(this).is(':checked')){
                             $('[data-checkboxrelative="'+$(this).attr('id')+'"]').css('display', 'none');
-                            console.log(target_form.attr('id'), " invalid ", $(this));
                             valid = false;
                         }else{
                             $('[data-checkboxrelative="'+$(this).attr('id')+'"]').css('display', 'block');
                         }
+                    }else if($(this).attr('type') === "radio"){
+                    
                     }else{
                         if(!$(this).parent().hasClass('valid')){
-                            console.log(target_form.attr('id'), " invalid ", $(this));
                             valid = false;
-                        }      
+                        }
                     }
                 }
             });
@@ -196,8 +209,127 @@ function formular(target, callback){
         });
     };
     this.validateEmail = function(email){
-        console.log('validateEmail ::: ', this.email_tester.test(email));
         if(this.email_tester.test(email)) return true;
         else return false;
+    }
+}
+
+function datepicker(target, callback){
+    this.years = [];
+    this.month = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    this.days = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    target.append();
+    $('#idkids_calendar').remove();
+    //$('html, body').scrollTop(target.offset().top + 30);
+    
+    $('body').append('<div id="idkids_calendar" class="calendar"><div class="content"><div class="top_header">'+$('label[for="'+target.attr('id')+'"]').html()+'</div><div class="choices"><div class="selector"></div><div class="wrapper days"><ul class=""></ul></div><div class="wrapper months"><ul class=""></ul></div><div class="wrapper years"><ul class=""></ul></div></div><div class="bottom_footer"><div class="btn btn-lg btn-success" id="validate_and_close_calendar">Valider</div></div></div></div>');
+    
+    $('.calendar .content').css({"left":target.offset().left, "top":target.offset().top - $('html, body').scrollTop() + 40, "width":target.width()});
+    if(parseInt($('.calendar .content').css('top').replace('px', '')) + $('.calendar .content').outerHeight() > window.innerHeight){
+        $('.calendar .content').css('top', window.innerHeight - $('.calendar .content').outerHeight());
+    }
+    $('body').css('overflow', 'hidden');
+    var n = 0,
+        self = this,
+        max = 2018,
+        min = 1890;
+    
+    if(target.attr('min')){
+        min =  new Date(target.attr('min')).getFullYear();
+    }
+    if(target.attr('max')){
+        max =  new Date(target.attr('max')).getFullYear();
+    }
+    
+    for(var i=max; i>min; i--){
+        $('.calendar .years ul').append('<li data-index="'+n+'" data-value="'+i+'" class="'+((n == 0)? "selected" : "")+'">'+i+'</li>');
+        n++;
+    }
+    for(var i=0; i<this.month.length; i++){
+        $('.calendar .months ul').append('<li data-index="'+i+'" data-value="'+(((i+1)<10)? "0"+(i+1) : (i+1))+'" class="'+((i == 0)? "selected" : "")+'">'+this.month[i]+'</li>');
+    }
+    for(var i=1; i<32; i++){
+        $('.calendar .days ul').append('<li data-index="'+(i-1)+'" data-value="'+((i<10)? "0"+i : i)+'" class="'+((i == 1)? "selected" : "")+'">'+((i<10)? "0"+i : i)+'</li>');
+    }
+    
+    if(target.val() !== ""){
+        var defaultdate = new Date(target.val()),
+            year = defaultdate.getFullYear(),
+            month = defaultdate.getMonth(),
+            day = defaultdate.getDate(),
+            yearid = $('.calendar .wrapper.years [data-value="'+year+'"]').attr('data-index');
+        $('.calendar .wrapper.days').scrollTop((day-1)*40);
+        $('.calendar .wrapper.months').scrollTop(month*40);
+        $('.calendar .wrapper.years').scrollTop(yearid*40);
+        
+    }
+    $.fn.scrollEnd = function(callback, timeout) {          
+      $(this).scroll(function(){
+        var $this = $(this);
+        if ($this.data('scrollTimeout')) {
+          clearTimeout($this.data('scrollTimeout'));
+        }
+        $this.data('scrollTimeout', setTimeout(callback,timeout));
+      });
+    };
+    
+    $('.calendar .wrapper.days').scrollEnd(function(e){
+        var target = $('.calendar .wrapper.days'),
+            num = Math.round(target.scrollTop()/40),
+            scrollto = num * 40;
+        target.find('li').removeClass('selected');
+        target.find('li').eq(num).addClass('selected');
+        target.animate({
+            scrollTop: scrollto
+        }, 200);
+        self.setDate();
+    }, 500);
+    $('.calendar .wrapper.months').scrollEnd(function(e){
+         var target = $('.calendar .wrapper.months'),
+            num = Math.round(target.scrollTop()/40),
+            scrollto = num * 40;
+        target.find('li').removeClass('selected');
+        target.find('li').eq(num).addClass('selected');
+        target.animate({
+            scrollTop: scrollto
+        }, 200);
+        self.setDate();
+    }, 500);
+    $('.calendar .wrapper.years').scrollEnd(function(e){
+        var target = $('.calendar .wrapper.years'),
+            num = Math.round(target.scrollTop()/40),
+            scrollto = num * 40;
+        target.find('li').removeClass('selected');
+        target.find('li').eq(num).addClass('selected');
+        target.animate({
+            scrollTop: scrollto
+        }, 200);
+        self.setDate();
+    }, 500);
+    $('.calendar .wrapper li').off("click").on('click', function(){
+        $(this).parent().parent().animate({
+            scrollTop: ($(this).attr('data-index')*40)
+        }, 200);
+    });
+    $('#validate_and_close_calendar').off('click').on('click', function(){
+        self.setDate();
+        $('#idkids_calendar').remove();
+        $('body').css('overflow', 'scroll');
+    });
+    this.setDate = function(){
+        var day = $('.calendar .wrapper.days .selected').attr('data-value'),
+            month = $('.calendar .wrapper.months .selected').attr('data-value'),
+            year = $('.calendar .wrapper.years .selected').attr('data-value');
+        console.log(self.days[parseInt(month)-1]);
+        if(self.days[parseInt(month)-1] === 30){
+            $('.calendar .wrapper.days li').eq(30).addClass('disabled');
+            $('.calendar .wrapper.days li').eq(29).removeClass('disabled');
+        }else if(self.days[parseInt(month)-1] === 29){
+            $('.calendar .wrapper.days li').eq(29).addClass('disabled');
+            $('.calendar .wrapper.days li').eq(30).addClass('disabled');
+        }else{
+            $('.calendar .wrapper.days li').removeClass('disabled');
+        }
+        target.val(year+'-'+month+'-'+day);
     }
 }
