@@ -2,6 +2,6 @@
 .DS_Store*
 node_modules/
 broadcast_local/node_modules/
-broadcast_local/ssh/
+broadcast_local/ssh/*
 authentication/
 test-sails/
