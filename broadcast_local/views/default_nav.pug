@@ -1,0 +1,13 @@
+block navigation
+    nav.hor_nav
+        ul
+            a(href="/shopping" data-navigate="page_reload")
+                li(class= page === "shopping" ? "selected" : "" data-for="shopping")= "Shopping"
+            a(href="/conseils" data-navigate="page_reload")
+                li(class= page === "conseils" ? "selected" : "" data-for="conseils")= "Conseils"
+            a(href="/kids-mag" data-navigate="page_reload")
+                li(class= page === "kids-mag" ? "selected" : "" data-for="kids-mag")= "Kids Mag"
+            a(href="/collection" data-navigate="page_reload")
+                li(class= page === "collection" ? "selected" : "" data-for="collection")= "Nouvelle Collection"
+            a(href="/outlet" data-navigate="page_reload")
+                li(class= page === "outlet" ? "selected" : "" data-for="outlet")= "Outlet"

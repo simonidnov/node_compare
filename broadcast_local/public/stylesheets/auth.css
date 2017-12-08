@@ -26,6 +26,7 @@ h1{
     height:64px;
     background: #FFF;
     border-radius: 100%;
+    background-size: cover;
 }
 .auth .account_list .avatar.notset{
     text-align: center;

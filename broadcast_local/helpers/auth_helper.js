@@ -1,5 +1,8 @@
 const db = require('mongoose'),
-      config = require('../config/config');
+      config = require('../config/config'),
+      Auth_model = require('../models/auth_model'),
+      machineId = require('node-machine-id'),
+      device_uid = machineId.machineIdSync({original: true});
 
 
 
@@ -13,26 +16,36 @@ module.exports = {
         }
         return true;
     },
-    validate_user:function(req, host) {
+    validate_user:function(req, host, callback) {
         /* check user id */
         if(typeof req.options.user_id === "undefined"){
-            return false;
+            callback({status:401, "message":"UNAUTHARISED need valid user ID"});
         }
         /* check user device */
         if(typeof req.options.user_secret === "undefined"){
-            return false;
+            callback({status:401, "message":"UNAUTHARISED need valid user secret"});
         }
         /* check user token */
         if(typeof req.options.user_token === "undefined"){
-            return false;
+            callback({status:401, "message":"UNAUTHARISED need valid user token"});
         }
         /* match user token + device */
         db.connect(config.database.users, {useMongoClient: true});
-        
-        //var Auth_model = require('../models/auth_model');
-        //Auth_model.check_user(req);
-        
-            //db.close();
-        return true;
+        req.options.device_uid = device_uid;
+        Auth_model.check_user(req, function(e){
+            callback(e);
+        });
+    },
+    validate_session:function(req, callback){
+        if(typeof req.session.Auth === "undefined"){
+            callback({status:401, "message":"UNAUTHAURIZED"});
+        }else{
+            callback({status:200, "message":"UNAUTHAURIZED"});
+        }
+    },
+    check_session:function(req, user_id, callback){
+        console.log('-------------------------------- RESET SESSION --------------------------------------------- ', user_id);
+        console.log('-------------------------------- user_id --------------------------------------------- ', user_id);
+        Auth_model.reset_session(req, user_id, callback);
     }
 }

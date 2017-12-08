@@ -8,14 +8,40 @@ function formular(target, callback){
     };
     this.setListeners = function(){
         var self = this;
-        $('[data-action]').on("click", function(e){
+        $(target).find('[data-file]').off('change').on('change', function(e){
+            var input = this,
+                input_id = $(this).attr("id");
+            var formData = new FormData();
+            formData.append('avatar', $(this)[0].files[0]);
+            $.ajax({
+                url: '/media',  //Server script to process data
+                type: 'POST',
+                method : 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                //Ajax events
+                success: function(response){
+                    console.log(target);
+                    $(target).find('[for="'+input_id+'"] img').attr('src', "/"+response.path);
+                    console.log("input to replace ::::: ", $(target).find('#'+input_id.replace('_file', '')));
+                    $(target).find('#'+input_id.replace('_file', '')).val("/"+response.path);
+                }
+            });
+        });
+        $(target).find('[data-action]').off("click").on("click", function(e){
+            e.preventDefault();
             var action = $(this).attr('data-action');
             switch(action){
                 case 'switch_tab':
                     break;
+                case 'submit':
+                    break;
                 default:
                     break;
             }
+            self.callback({"status":"hitted", "action":action});
+            return false;
         });
         $(target).find('.material_input input').off('focus').on('focus', function(){
             if($(this).attr('type') === "date"){
@@ -27,7 +53,8 @@ function formular(target, callback){
             self.callback({"status":"focus", value:$(this)});
         });
         $(target).find('.material_input input').off('blur').on('blur', function(){
-            self.checkInputs();
+            self.inputCheck($(this));
+            //self.checkInputs();
             $(this).parent().removeClass('focused');
             self.callback({"status":"blur", value:$(this)});
         });
@@ -45,7 +72,7 @@ function formular(target, callback){
                     $('#'+$(this).attr('data-tab')).css('display', 'block');
                     $('[data-tab="'+$(this).attr('data-tab')+'"]').addClass('selected');
                 }else{
-                    $('#'+$(this).attr('data-tab')).css('display', 'none'); 
+                    $('#'+$(this).attr('data-tab')).css('display', 'none');
                     $('[data-tab="'+$(this).attr('data-tab')+'"]').removeClass('selected');
                 }
             });
@@ -54,7 +81,7 @@ function formular(target, callback){
     };
     this.checkInputs = function(){
         var self = this;
-        $.each($('.material_input input'), function(index, input){
+        $.each($(target).find('.material_input input'), function(index, input){
             self.inputCheck($(this));
             //var type=$(this).attr('type');
         });
@@ -92,13 +119,19 @@ function formular(target, callback){
                             target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
                         }
                     }
+                    self.validform();
                     return;
                     break;
                 case "date":
                     target.parent().addClass('valid');
+                    self.validform();
                     return;
                     break;
                 case "radio":
+                    self.validform();
+                    break;
+                case "checkbox":
+                    self.validform();
                     break;
             }
             target.parent().addClass('notempty');
@@ -169,9 +202,9 @@ function formular(target, callback){
                 }else{
                     target.parent().addClass('valid');
                     target.parent().removeClass('invalid');
-                }    
+                }
             }else{
-                target.parent().removeClass('valid');
+                target.parent().addClass('valid');
                 target.parent().removeClass('invalid');
             }
         }
@@ -191,19 +224,20 @@ function formular(target, callback){
                             $('[data-checkboxrelative="'+$(this).attr('id')+'"]').css('display', 'block');
                         }
                     }else if($(this).attr('type') === "radio"){
-                    
+
                     }else{
-                        if(!$(this).parent().hasClass('valid')){
+                        if(!$(this).parent().hasClass('valid') && $(this).attr('required')){
+                            console.log('ca bloque ici ', $(this), " ---- ", $(this).attr('required'));
                             valid = false;
                         }
                     }
                 }
             });
             if(valid){
-                target_form.find('button[type="submit"]').removeClass('btn-disabled');
+                target_form.find('button[type="submit"], [data-action="submit"]').removeClass('btn-disabled');
                 callback({form:target_form.attr('id'), status:"validated"});
             }else{
-                target_form.find('button[type="submit"]').addClass('btn-disabled');
+                target_form.find('button[type="submit"], [data-action="submit"]').addClass('btn-disabled');
                 callback({form:target_form.attr('id'), status:"invalid"});
             }
         });
@@ -221,9 +255,9 @@ function datepicker(target, callback){
     target.append();
     $('#idkids_calendar').remove();
     //$('html, body').scrollTop(target.offset().top + 30);
-    
+
     $('body').append('<div id="idkids_calendar" class="calendar"><div class="content"><div class="top_header">'+$('label[for="'+target.attr('id')+'"]').html()+'</div><div class="choices"><div class="selector"></div><div class="wrapper days"><ul class=""></ul></div><div class="wrapper months"><ul class=""></ul></div><div class="wrapper years"><ul class=""></ul></div></div><div class="bottom_footer"><div class="btn btn-lg btn-success" id="validate_and_close_calendar">Valider</div></div></div></div>');
-    
+
     $('.calendar .content').css({"left":target.offset().left, "top":target.offset().top - $('html, body').scrollTop() + 40, "width":target.width()});
     if(parseInt($('.calendar .content').css('top').replace('px', '')) + $('.calendar .content').outerHeight() > window.innerHeight){
         $('.calendar .content').css('top', window.innerHeight - $('.calendar .content').outerHeight());
@@ -233,14 +267,14 @@ function datepicker(target, callback){
         self = this,
         max = 2018,
         min = 1890;
-    
+
     if(target.attr('min')){
         min =  new Date(target.attr('min')).getFullYear();
     }
     if(target.attr('max')){
         max =  new Date(target.attr('max')).getFullYear();
     }
-    
+
     for(var i=max; i>min; i--){
         $('.calendar .years ul').append('<li data-index="'+n+'" data-value="'+i+'" class="'+((n == 0)? "selected" : "")+'">'+i+'</li>');
         n++;
@@ -251,7 +285,7 @@ function datepicker(target, callback){
     for(var i=1; i<32; i++){
         $('.calendar .days ul').append('<li data-index="'+(i-1)+'" data-value="'+((i<10)? "0"+i : i)+'" class="'+((i == 1)? "selected" : "")+'">'+((i<10)? "0"+i : i)+'</li>');
     }
-    
+
     if(target.val() !== ""){
         var defaultdate = new Date(target.val()),
             year = defaultdate.getFullYear(),
@@ -261,9 +295,9 @@ function datepicker(target, callback){
         $('.calendar .wrapper.days').scrollTop((day-1)*40);
         $('.calendar .wrapper.months').scrollTop(month*40);
         $('.calendar .wrapper.years').scrollTop(yearid*40);
-        
+
     }
-    $.fn.scrollEnd = function(callback, timeout) {          
+    $.fn.scrollEnd = function(callback, timeout) {
       $(this).scroll(function(){
         var $this = $(this);
         if ($this.data('scrollTimeout')) {
@@ -272,7 +306,7 @@ function datepicker(target, callback){
         $this.data('scrollTimeout', setTimeout(callback,timeout));
       });
     };
-    
+
     $('.calendar .wrapper.days').scrollEnd(function(e){
         var target = $('.calendar .wrapper.days'),
             num = Math.round(target.scrollTop()/40),
@@ -331,5 +365,6 @@ function datepicker(target, callback){
             $('.calendar .wrapper.days li').removeClass('disabled');
         }
         target.val(year+'-'+month+'-'+day);
+        target.blur();
     }
 }

@@ -1,34 +1,76 @@
 var express = require('express'),
-    router = express.Router(),
-    Auth_controller = require('../controllers/auth_controller'),
+    _ = require('underscore'),
+    account = express.Router(),
+    Auth_model = require('../models/auth_model'),
+    Auth_helper = require('../helpers/auth_helper'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.redirect(307, '/account/profile'+req.url.replace('/',''));
-});
-router.get('/:page', function(req, res, next) {
-    console.log('account session  ', req.session.Auth);
-    if(typeof req.session.Auth === "undefined"){
-        res.redirect(307, '/auth');
-    }
-    res.render('account', {
-        title: 'User Account',
-        user : req.session.Auth,
-        locale:language_helper.getlocale(),
-        lang:lang, 
-        page:req.params.page,
-        js:[
-            '/public/javascripts/account.js',
-            '/public/javascripts/components/formular.js',
-            '/node_modules/qrcode/build/qrcode.min.js'
-        ], css:[
-            '/public/stylesheets/account.css',
-            '/public/stylesheets/components/formular.css'
-        ]
+account.use(function(req, res, next){
+    //ACCEPT CORS
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    //SET OUTPUT FORMAT
+    //res.setHeader('Content-Type', 'application/json');
+    // TODO : VALIDATE SESSION USER
+    Auth_helper.validate_session(req, function(e){
+        if(e.status === 200){
+            next();
+        }else{
+            res.redirect(301, '/auth');
+        }
     });
 });
+/* GET home page. */
+account
+    .get('/', function(req, res, next) {
+        res.redirect(307, '/account/profile'+req.url.replace('/',''));
+    })
+    .get('/:page', function(req, res, next) {
+        res.render('account', {
+            title: 'User Account',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:req.params.page,
+            js:[
+                '/public/javascripts/account.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/account.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+    })
+    .get('/:page/:member_id', function(req, res, next){
+        res.render('account', {
+            title: 'User Account',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:req.params.page,
+            member_infos:_.where(req.session.Auth.members, {_id:req.params.member_id})[0],
+            js:[
+                '/public/javascripts/account.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/account.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+    })
+    .post('/profile', function(req, res, next) {
+        Auth_model.update(req, req.session.Auth._id, req.body, function(e){
+            if(e.status === 200){
+                res.redirect(301, '/account/'+req.url.replace('/',''));
+            }else{
+                res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
+            }
+        });
+    });
 
-module.exports = router;
+module.exports = account;

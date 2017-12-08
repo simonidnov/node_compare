@@ -9,13 +9,19 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     index = require('./routes/index'),
     users = require('./routes/users'),
+    media = require('./routes/media'),
+    templating = require('./routes/templating'),
     auth = require('./routes/auth'),
     me = require('./routes/me'),
+    address = require('./routes/address'),
     account = require('./routes/account');
 
 let session = require("express-session");
 
 app = module.exports = express();
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(session({
     secret: "secret",
@@ -43,11 +49,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
 app.use('/users', users);
 app.use('/auth', auth);
 app.use('/me', me);
+app.use('/media', media);
 app.use('/account', account);
+app.use('/address', address);
+app.use('/templating', templating);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

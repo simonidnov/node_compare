@@ -13,7 +13,7 @@ var express = require('express'),
 /* GET home page. */
 auth.get('/', function(req, res, next) {
         req.query.device_uid = device_uid; 
-        Auth_controller.login(req.query, function(e){
+        Auth_controller.login(req, req.query, function(e){
             var datas = {
                 title: 'Mon compte', 
                 datas: req.query, 
@@ -29,8 +29,8 @@ auth.get('/', function(req, res, next) {
                     '/public/stylesheets/auth.css',
                 ]
             };
+            //datas.user_session = req.session.Auth;
             if(typeof e.user !== "undefined"){
-                req.session.Auth = e.user;
                 res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
             res.render('auth/login', datas);
@@ -38,9 +38,7 @@ auth.get('/', function(req, res, next) {
     })
     .post('/login', function(req, res, next) {
         Auth_controller.register(req, function(e){
-            //res.send('login post params');
             if(typeof e.user !== "undefined"){
-                req.session.Auth = e.user;
                 res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
             var datas = {
@@ -73,9 +71,9 @@ auth.get('/', function(req, res, next) {
     })
     .get('/:form_name/*', function(req, res, next) {
         req.query.device_uid = device_uid; 
-        Auth_controller.login(req.query, function(e){
+        Auth_controller.login(req, req.query, function(e){
             var datas = { 
-                title: 'Mon compte', 
+                title: 'Mon compte',
                 datas: req.query, 
                 response:e, 
                 locale:language_helper.getlocale(), 
@@ -91,8 +89,7 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                req.session.Auth = e.idkids_user;
-                res.redirect(307, '/account?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device+'&idkids-secret='+e.idkids_user.secret);
+                res.redirect(307, '/account?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
             }
             res.render('auth/login', datas);
             

@@ -2,110 +2,204 @@
 
 var express = require('express'),
     me = express.Router(),
-    Auth_controller = require('../controllers/auth_controller'),
     language_helper = require('../helpers/languages_helper'),
-    uri_helper = require('../helpers/uri_helper'),
-    auth_helper = require('../helpers/auth_helper'),
-    lang = require('../public/languages/auth_lang'),
-    machineId = require('node-machine-id'),
-    device_uid = machineId.machineIdSync({original: true});
-
+    uri_helper      = require('../helpers/uri_helper'),
+    auth_helper     = require('../helpers/auth_helper'),
+    lang            = require('../public/languages/auth_lang'),
+    machineId       = require('node-machine-id'),
+    device_uid      = machineId.machineIdSync({original: true}),
+    Auth_model      = require('../models/auth_model'),
+    Members_model   = require('../models/members_model'),
+    Address_model   = require('../models/address_model');
 
 me.use(function(req, res, next) {
     //ACCEPT CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     res.setHeader('Content-Type', 'application/json');
-    if(!auth_helper.validate_from(req.query, req.get('host'))){
-        res.status(401).send({ message: "your server was not authorised", request:req.query, host:req.get('host'), is_ok:req.query.options.from_origin.indexOf(req.get('host'))});
+    
+    var dataCheck = req.query;
+    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+        dataCheck = req.body;
     }
-    // TODO : Check if request is not only ME/FROM
-    console.log('-----------------------');
-    console.log("req.query :: ", req);
-    console.log("req.query URL :: ", req.url);
-    console.log("req.query pathname :: ", req.pathname);
-    console.log("req.query :: ", req.get('Url'));
-    console.log('-----------------------');
-    // TODO : indexof not suffisant reason... check real request
+    
+    if(!auth_helper.validate_from(dataCheck, req.get('host'))){
+        res.status(401).send({ message: "your server was not authorised", request:dataCheck, host:req.get('host'), is_ok:dataCheck.options.from_origin.indexOf(req.get('host'))});
+    }
+    // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
     if(req.url.indexOf('/from') === -1){
-        if(!auth_helper.validate_user(req.query, req.get('host'))){
-            res.status(401).send({ message: "the user token was not up to date", request:req.query, host:req.get('host')});
-        }
+        auth_helper.validate_user(dataCheck, req.get('host'), function(response){
+            if(response.status === 200){
+                if(typeof response.updated_token !== "undefined"){
+                    req.query.updated_token = response.updated_token;
+                }
+                next();
+            }else{
+                res.status(401).send({ message: "the user token was not up to date", request:dataCheck, host:req.get('host')});
+            }
+        });
+    }else{
+        next();
     }
-    next();
 });
 
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 me.get('/', function(req, res, next) {
-        //console.log("req.get('Origin') :::: ",req.get('origin'));
-        //console.log("req.get('host') :::: ",req.get('host'));
-        res.send({ message: "me get", request:req.query, host:req.get('host')});
+        Auth_model.getPublicProfile(req.query.options.user_id, function(e){
+            e.updated_token = req.query.updated_token;
+            res.status(e.status).send(e);
+        });
     })
     .post('/', function(req, res, next) {
-        res.send({ message: "me post", request:req.query});
+        res.send({ message: "me post is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .put('/', function(req, res, next) {
-        res.send({ message: "me put", request:req.query});
+        res.send({ message: "me put is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .delete('/', function(req, res, next) {
-        res.send({ message: "me delete", request:req.query});
+        res.send({ message: "me delete is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
     })
     /* ------------ MEMBERS MANAGMENT ------------ */
     .get('/members', function(req, res, next) {
-        res.send({ message: "members get", request:req.query});
+        Members_model.get(req.query.options.user_id, null, function(e){
+            e.updated_token = req.query.updated_token;
+            res.status(e.status).send(e);
+        });
     })
     .post('/members', function(req, res, next) {
-        res.send({ message: "members post", request:req.query});
+        Members_model.create(req.body.options.user_id, req.body, function(e){
+            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
+            auth_helper.check_session(req, req.body.options.user_id, function(){
+                e.updated_token = req.query.updated_token;
+                res.status(e.status).send(e); 
+            });
+        });
     })
     .put('/members', function(req, res, next) {
-        res.send({ message: "members put", request:req.query});
+        Members_model.update(req.body.options.user_id, req.body.member_id, req.body, function(e){
+            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
+            auth_helper.check_session(req, req.body.options.user_id, function(){
+                e.updated_token = req.query.updated_token;
+                res.status(e.status).send(e); 
+            });
+        });
     })
     .delete('/members', function(req, res, next) {
-        res.send({ message: "members delete", request:req.query});
+        Members_model.delete(req.body.options.user_id, req.body.member_id, function(e){
+            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
+            auth_helper.check_session(req, req.body.options.user_id, function(){
+                e.updated_token = req.query.updated_token;
+                res.status(e.status).send(e); 
+            });
+        });
+    })
+    /* ------------ ORDERS MANAGMENT ----------- */
+    .get('/friends', function(req, res, next) {
+        res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .post('/friends', function(req, res, next) {
+        res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .put('/friends', function(req, res, next) {
+        res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .delete('/friends', function(req, res, next) {
+        res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
     })
     /* ------------ ADRESS MANAGMENT ------------- */
     .get('/address', function(req, res, next) {
-        res.send({ message: "address get", request:req.query});
+        Address_model.get(req.query.options.user_id, null, function(e){
+            e.updated_token = req.query.updated_token;
+            res.status(e.status).send(e);
+        });
     })
     .post('/address', function(req, res, next) {
-        res.send({ message: "address post", request:req.query});
+        Address_model.create(req.body.options.user_id, req.body, function(e){
+            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
+            auth_helper.check_session(req, req.body.options.user_id, function(){
+                e.updated_token = req.query.updated_token;
+                res.status(e.status).send(e); 
+            });
+        });
     })
     .put('/address', function(req, res, next) {
-        res.send({ message: "address put", request:req.query});
+        Address_model.update(req.body.options.user_id, req.body.address_id, req.body, function(e){
+            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
+            auth_helper.check_session(req, req.body.options.user_id, function(){
+                e.updated_token = req.query.updated_token;
+                res.status(e.status).send(e); 
+            });
+        });
     })
     .delete('/address', function(req, res, next) {
-        res.send({ message: "address delete", request:req.query});
+        Address_model.delete(req.body.options.user_id, req.body.address_id, function(e){
+            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
+            auth_helper.check_session(req, req.body.options.user_id, function(){
+                e.updated_token = req.query.updated_token;
+                res.status(e.status).send(e); 
+            });
+        });
     })
     /* ------------ SERVICES MANAGMENT ----------- */
     .get('/services', function(req, res, next) {
-        res.send({ message: "services get", request:req.query});
+        Auth_model.getServices(req.query.options.user_id, function(e){
+            e.updated_token = req.query.updated_token;
+            res.status(e.status).send(e);
+        });
     })
     .post('/services', function(req, res, next) {
-        res.send({ message: "services post", request:req.query});
+        res.send({ message: "services post is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .put('/services', function(req, res, next) {
-        res.send({ message: "services put", request:req.query});
+        res.send({ message: "services put is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .delete('/services', function(req, res, next) {
-        res.send({ message: "services delete", request:req.query});
+        res.send({ message: "services delete is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
     })
-    /* ------------ SERVICES MANAGMENT ----------- */
+    /* ------------ BASKET MANAGMENT ----------- */
     .get('/basket', function(req, res, next) {
-        res.send({ message: "basket get", request:req.query});
+        res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .post('/basket', function(req, res, next) {
-        res.send({ message: "basket post", request:req.query});
+        res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .put('/basket', function(req, res, next) {
-        res.send({ message: "basket put", request:req.query});
+        res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
     })
     .delete('/basket', function(req, res, next) {
-        res.send({ message: "basket delete", request:req.query});
+        res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    /* ------------ ORDERS MANAGMENT ----------- */
+    .get('/orders', function(req, res, next) {
+        res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .post('/orders', function(req, res, next) {
+        res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .put('/orders', function(req, res, next) {
+        res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .delete('/orders', function(req, res, next) {
+        res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    /* ------------ notifications MANAGMENT ----------- */
+    .get('/notifications', function(req, res, next) {
+        res.send({ message: "notifications get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .post('/notifications', function(req, res, next) {
+        res.send({ message: "notifications post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .put('/notifications', function(req, res, next) {
+        res.send({ message: "notifications put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+    })
+    .delete('/notifications', function(req, res, next) {
+        res.send({ message: "notifications delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
     })
     /* ------------ FROM VALIDATION ----------- */
     .get('/from', function(req, res, next) {
-        res.send({ message: "website authorised", request:req.query});
-    })
+        res.send({ message: "website authorised", updated_token:req.query.updated_token, host:req.get('host')});
+    });
 module.exports = me;

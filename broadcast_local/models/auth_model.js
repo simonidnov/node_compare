@@ -3,13 +3,15 @@ const db = require('mongoose'),
       sha1 = require('sha1'),
       jwt = require('jsonwebtoken'),
       validator = require("email-validator"),
+      Members_model = require('../models/members_model'),
+      Address_model = require('../models/address_model'),
       config = require('../config/config'),
       os = require('os'),
       gravatar = require('gravatar'),
       user_datas = {
           email       : {type:'string', unique: true},
           password    : {type:'string'},
-          pseudo      : {type:'string'},
+          pseudo      : {type:'string', unique: true},
           firstName   : {type:'string'},
           avatar      : {type:'string'},
           lastName    : {type:'string'},
@@ -19,20 +21,24 @@ const db = require('mongoose'),
           secret      : {type:'string'},
           qrcode      : {type:'Object'},
           birthDate   : {type:'Date'},
-          civility    : {type:'string', enum:['undefined', 'male', 'female'], defaults :'undefined'},
+          gender      : {type:'string', enum:['undefined', 'male', 'female'], defaults :'undefined'},
           address     : {type:'Array'},
+          friends     : {type:'Array'},
           relations   : {type:'Array'},
           tags        : {type:'Object'},
           devices     : {type:'Object'},
-          members     : {type:'Object'},
           termAccept  : {type:'Boolean'},
           newsletter  : {type:'Boolean'},
           rights      : {type:'Object'},
           newsletter_services : {type:'Object'},
           validated   : {type:'Boolean'},
           created     : {type:'Date', default: Date.now},
-          updated     : {type:'Date', default: Date.now}
-      };
+          updated     : {type:'Date', default: Date.now},
+          public_locale : {type:'Boolean'},
+          public_profile : {type:'Object'}
+      },
+      machineId = require('node-machine-id'),
+      device_uid = machineId.machineIdSync({original: true});
 
 if(db.connection.readyState === 0){ 
     db.connect(config.database.users, {useMongoClient: true});
@@ -45,7 +51,8 @@ module.exports = {
     attributes: user_datas
 };
 // check user login then return user_infos
-module.exports.login = function(datas, callback) {
+module.exports.login = function(req, datas, callback) {
+    var self = this;
     if(datas.password){
         if(validator.validate(datas.email)){
             /* REQUEST UPDATED USER */
@@ -106,7 +113,7 @@ module.exports.login = function(datas, callback) {
                                 //console.log('new_device FIND success device result ', device);
                                 if(device.length === 0){
                                     //console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
-                                    /* ON AJOUTE UN DeVICE INCONNU SUr l'UTILISATEUR */
+                                    /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
                                     User.update(
                                         { _id: users[0]._id },
                                         { 
@@ -134,7 +141,7 @@ module.exports.login = function(datas, callback) {
                                         function(err, infos){
                                             if(err) console.log('update device token error ', err);
                                             else console.log('update device token success ', infos);
-                                        } , // CALLBACK
+                                        }, // CALLBACK
                                         true //SAIS PAS POURQUOI
                                     );
                                 }
@@ -163,24 +170,9 @@ module.exports.login = function(datas, callback) {
                             if (err){
                                 callback({"status":"error", "code":err.code, "error":err, "message":err.message});
                             }else{
-                                //console.log('DELETE PASSWORD update success ', user);
-                                User.find(
-                                    {
-                                        _id: users[0]._id
-                                    }, 
-                                    function(err, users){
-                                        if (err){
-                                            callback({"status":"error", "code":err.code, "error":err, "message":err.message});
-                                        }else{
-                                            var return_datas = JSON.parse(JSON.stringify(users[0]));
-                                            //delete return_datas.password;
-                                            //delete return_datas.relations;
-                                            //delete return_datas.address;
-                                            return_datas.current_device = datas.device_uid;
-                                            callback({"status":"success", "idkids_user":return_datas});
-                                        }
-                                    }
-                                );
+                                self.reset_session(req, users[0]._id, function(infos){
+                                    callback({status:200, "message":"User updated", "idkids_user":infos});
+                                });
                             }
                         }
                     );
@@ -229,6 +221,7 @@ module.exports.register = function(datas, callback) {
         avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://')
     }];
     //network : os.networkInterfaces(),
+    /* TODO CHECK ARRAY SEND FORM DATA */
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
         new_user_datas.newsletter_services = {};
@@ -259,8 +252,8 @@ module.exports.register = function(datas, callback) {
     }
     
     new_user = new User(new_user_datas);
-    new_user.save(function(err){
-        if(err) callback({"status":"error", "code":err.code , "duplicated_value":err.message.split('{ : "')[1].replace('" }', ''), "error":err});
+    new_user.save(function(err){  
+        if(err) callback({"status":"error", "message":err});
         else callback({"status":"success", "user":new_user_datas});
         //db.close();
     });
@@ -273,19 +266,169 @@ module.exports.unregister = function(datas) {
     return datas;
 };
 // check user login then return user_infos
-module.exports.update = function(datas) {
+module.exports.update = function(req, user_id, datas, callback) {
+    var self = this;
     /* UPDATE token, updated then free user session and storage */
-    return datas;
+    datas.updated = Date.now();
+    if(typeof datas.birthDate !== "undefined"){
+        datas.birthDate = datas.birthDate;
+    }
+    console.log("USER UPDATE --------------------- ");
+    console.log("USER UPDATE --------------------- ");
+    console.log("USER UPDATE --------------------- ");
+    
+    console.log(datas)
+    
+    console.log("USER UPDATE --------------------- ");
+    console.log("USER UPDATE --------------------- ");
+    console.log("USER UPDATE --------------------- ");
+    //User.findOne({ _id: 'bourne' }, function (err, doc){
+    User.update(
+        {
+            _id:user_id
+        }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+        {
+            $set : datas
+        }, // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
+        function(err, infos){
+            if(err){
+                callback({status:401, "message":"Impossible de mettre à jour le token WHY ?", "datas":err});
+            } else {
+                /* TODO RESET SESSION USER FUNCTION */
+                self.reset_session(req, user_id, function(){
+                    callback({status:200, "message":"User updated", "datas":infos});
+                });   
+            }
+        } , // CALLBACK
+        true //SAIS PAS POURQUOI
+    );
 };
-module.exports.check_user = function(){
-    return true;
+module.exports.check_user = function(req, callback){
+    var new_device  = {
+            uid     : req.options.device_uid,
+            arch    : os.arch(),
+            name    : os.hostname()
+        },
+        new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret);
+    
+    new_device.token = new_token;
+    
+    //console.log('users[0]._id ', users[0]._id);
+    /* check if device exist */
+    User.find(
+        {
+            _id:req.options.user_id, 
+            secret : req.options.user_secret,
+            devices:{ 
+                $elemMatch : {
+                    uid:req.options.device_uid,
+                    token:req.options.user_token
+                }
+            }
+        },
+        function(err, user) {
+            if(err){
+                callback({status:401, "message":"user token device doesn't match", "datas":err});
+            }else{
+                /* ON MET A JOUR LE TOKEN */
+                User.update(
+                    {
+                        id:req.options.user_id, 
+                        devices: {
+                            $elemMatch: {
+                                uid:req.options.device_uid
+                            }
+                        }
+                    }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+                    {
+                        $set : {
+                            token : new_token,
+                            updated : Date.now()
+                        }
+                    } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
+                    function(err, infos){
+                        if(err) callback({status:401, "message":"Impossible de mettre à jour le token WHY ?", "datas":err});
+                        else callback({status:200, "message":"User auth success", "datas":user, "updated_token":new_token});
+                    } , // CALLBACK
+                    true //SAIS PAS POURQUOI
+                );
+            }
+        }
+    );
 }
-
-
-/* SPECIAL REQUEST SCHEMA SAMPLE CODE */
-user_datas.getFullName = function(){
-    return this.firstName + ' ' + this.lastName;
+module.exports.reset_session = function(req, user_id, callback){
+    User.findOne(
+        {
+            _id: user_id
+        }, 
+        function(err, user){
+            if (err){
+                callback({"status":401, "code":err.code, "error":err, "message":err.message});
+            }else{
+                user_infos = JSON.parse(JSON.stringify(user));
+                user_infos.current_device = device_uid;
+                Members_model.get(user_id, null, function(e){
+                    user_infos.members = e.datas;
+                    Address_model.get(user_id, null, function(e){
+                        user_infos.address = e.datas;
+                        req.session.Auth = user_infos;
+                        callback({status:200, "message":"Session Updated", "datas":user_infos});    
+                    });                
+                });
+            }
+        }
+    );
+}
+module.exports.getPublicProfile = function(_id, callback){
+    this.getFullUser(_id, function(e){
+        if(e.status === 200){
+            var public_profile = {
+                "_id" : e.datas._id,
+                "pseudo"  : e.datas.pseudo,
+                "email"   : e.datas.email,
+                "avatar"  : e.datas.avatar,
+                "created" : e.datas.created,
+                "updated" : e.datas.updated
+            };
+            callback({status:e.status, message:e.message, datas:public_profile});
+            
+        }else{
+            callback(e);
+        }
+    });
+}
+module.exports.getServices = function(_id, callback){
+    this.getFullUser(_id, function(e){
+        if(e.status === 200){
+            var public_services = {
+                is_newsletter : e.datas.is_newsletter,
+                newsletter_services : e.datas.newsletter_services
+            }  
+            callback({status:e.status, message:e.message, datas:e.datas.public_services});
+            
+        }else{
+            callback(e);
+        }
+    });
+}
+module.exports.getFullUser = function(_id, callback){
+    User.findOne(
+        {
+            _id:_id
+        },
+        function(err, user) {
+            if(err){
+                callback({status:401, "message":"This is no way to peace -> peace is the way. UNAUTHORIZED", "datas":err});
+            }else{
+                Members_model.get(_id, null, function(e){
+                    user['members'] = e.datas;
+                    callback({status:200, "message":"success me", "datas":user});
+                });
+            }
+        }
+    );
 };
+/* SPECIAL REQUEST SCHEMA SAMPLE CODE */
 user_datas.getAge = function(){
     return this.birthDate;
 };

@@ -1,0 +1,17 @@
+block navigation
+    nav.hor_nav
+        ul
+            a(href="/account/basket" data-navigate="page_reload")
+                li(class= page === "basket" ? "selected" : "" data-for="basket")= "Mon panier"
+            a(href="/account/orders" data-navigate="page_reload")
+                li(class= page === "orders" ? "selected" : "" data-for="orders")= "Mes commandes"
+            a(href="/account/services" data-navigate="page_reload")
+                li(class= page === "services" ? "selected" : "" data-for="services")= "Mes services"
+            a(href="/account/fidelity" data-navigate="page_reload")
+                li(class= page === "fidelity" ? "selected" : "" data-for="fidelity")= "Ma carte de fidélité"
+            a(href="/account/account" data-navigate="page_reload")
+                li(class= page === "account" ? "selected" : "" data-for="account")= "Mon compte"
+            a(href="/account/profile" data-navigate="page_reload")
+                li(class= page === "profile" ? "selected" : "" data-for="profile")= "Mon profil"
+            a(href="/account/informations" data-navigate="page_reload")
+                li(class= page === "informations" ? "selected" : "" data-for="informations")= "Mes informations"

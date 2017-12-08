@@ -19,13 +19,14 @@ block content
                 div#account_selection(class=typeof form === "undefined" ? "displayblock" : "displaynone")
                     h1 !{lang[locale].keys.account_picker_title}
                     ul.account_list.option_list
-                        a(href="/auth/login/email/sdelamarre@idnovant.fr" title="Me connecter" data-action="page_reload")
-                            li
-                                div.avatar.notset SD
-                                div.option_infos
-                                    div.label= "Simon Delamarre"
-                                    div.email= "sdelamarre@idnovant.fr"
-                                    div.status !{lang[locale].keys.account_status_not_logged}
+                        if(typeof user_session !== "undefined")
+                            a(href="/account/account/" title="Accéder à mon compte")
+                                li(data-userid=user_session._id)
+                                    img.avatar(src=user_session.avatar)
+                                    div.option_infos
+                                        div.label= user_session.pseudo
+                                        div.email= user_session.email
+                                        div.status connected
                         a(href="/auth/subscribe/" title="Me connecter" data-action="page_reload")
                             li.other
                                 img.avatar(src="/public/images/assets/account.svg")

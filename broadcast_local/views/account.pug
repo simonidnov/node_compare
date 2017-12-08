@@ -1,95 +1,6 @@
-extends layout
+extends account_header
 
 block content
-    header.header
-        div
-            div.logo.idkids
-        nav.short_cuts
-            ul
-                li#widgets.widgets
-                    div.icon.icon-widgets.idkids-icons.lg
-                    div.subnav
-                        ul
-                            a(href="https://okaidi.fr")
-                                li
-                                    div.icon.okaidi
-                                    span Okaidi
-                            a(href="https://obaibi.fr")
-                                li
-                                    div.icon.obaibi
-                                    span Obaibi
-                            a(href="https://jacadi.fr")
-                                li
-                                    div.icon.jacadi
-                                    span Jacadi
-                            a(href="https://oxybul.fr")
-                                li
-                                    div.icon.oxybul
-                                    span Oxybul
-                            a(href="https://rigolocommelavie.fr")
-                                li
-                                    div.icon.rclv
-                                    span Rigolo comme la vie
-                            a(href="https://njoy.fr")
-                                li
-                                    div.icon.njoy
-                                    span N'joy
-                            a(href="https://bubblemag.fr")
-                                li
-                                    div.icon.bubble
-                                    span Bubble
-                            a(href="https://joyvox.fr")
-                                li
-                                    div.icon.joyvox
-                                    span Joyvox
-                li#notifications
-                    div.icon.icon-notifications.idkids-icons.lg
-                    div.subnav
-                        ul
-                            li
-                                div.icon.idkids-icons.icon-basket
-                                span Mon panier (0)
-                            li
-                                div.icon.idkids-icons.icon-delivery
-                                span Mes livraisons (0)
-                            li
-                                div.icon.idkids-icons.icon-email
-                                span Mes messages (0)
-                li#account_taskbar
-                    div#account_infos
-                        if(user.avatar)
-                            div.avatar.sm
-                                img(src=user.avatar)
-                        else
-                            div.icon.icon-account_1.idkids-icons.lg
-                    div.subnav.account
-                        div.account_infos
-                            div.avatar
-                                img(src=user.avatar)
-                            div.infos
-                                div.label= user.pseudo
-                                div.email= user.email
-                                a(href="/account/profile").btn.btn-success Mon compte
-                        div.other_accounts
-                        div.options
-                            a.btn.btn-default.btn-sm(href="/auth") Ajouter un compte
-                            a.btn.btn-default.btn-sm(href="/logout") Déconnexion
-        nav.hor_nav
-            ul
-                a(href="/account/basket" data-action="page_reload")
-                    li(class= page === "basket" ? "selected" : "" data-for="basket")= "Mon panier"
-                a(href="/account/orders" data-action="page_reload")
-                    li(class= page === "orders" ? "selected" : "" data-for="orders")= "Mes commandes"
-                a(href="/account/services" data-action="page_reload")
-                    li(class= page === "services" ? "selected" : "" data-for="services")= "Mes services"
-                a(href="/account/fidelity" data-action="page_reload")
-                    li(class= page === "fidelity" ? "selected" : "" data-for="fidelity")= "Ma carte de fidélité"
-                a(href="/account/account" data-action="page_reload")
-                    li(class= page === "account" ? "selected" : "" data-for="account")= "Mon compte"
-                a(href="/account/profile" data-action="page_reload")
-                    li(class= page === "profile" ? "selected" : "" data-for="profile")= "Mon profil"
-                a(href="/account/informations" data-action="page_reload")
-                    li(class= page === "informations" ? "selected" : "" data-for="informations")= "Mes informations"
     div.container.with_head
         div.row#profile(style= page === "profile" ? "display:block" : "display:none")
             div.col.col-md-8
@@ -97,72 +8,49 @@ block content
                     hr
                     br
                     h1 Mon profil
-                    form.form_content(method="put" action='/auth/profile/')
+                    form.form_content(method="POST" action='/account/profile/')
                         p Informations de votre profil public
-                        div.avatar
+                        input#avatar_file(type="file" name="avatar_file" data-file="avatar" accept="image/*")
+                        label.avatar(for="avatar_file")
                             div.preview
-                                img(src=user.avatar)
-                        div.form_group.radio_list
-                            input#male(type="radio" name="gender" required='required')
-                            label(for='male')= lang[locale].keys.gender_male
-                            input#female(type="radio" name="gender")
-                            label(for='female')= lang[locale].keys.gender_female
+                                img(src=user.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                        input#avatar(type="text" name="avatar")
                         div.form-group.material_input
                             input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="4", data-erromessage=lang[locale].keys.pseudo_error)
                             label(for='pseudo') !{lang[locale].keys.pseudo_holder}
                         div.form-group.material_input
-                            input#birth_date.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birth_date' required="required", value=user.birth_date, data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01' data-minage="16")
-                            label(for='birth_date') !{lang[locale].keys.birth_date_holder}
+                            input#birthDate.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birthDate' required="required", value=(new Date(user.birthDate).getFullYear()+"-"+((new Date(user.birthDate).getMonth() < 10) ? "0"+(new Date(user.birthDate).getMonth()+1) : (new Date(user.birthDate).getMonth()+1))+"-"+new Date(user.birthDate).getDate()), data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01' data-minage="16")
+                            label(for='birthDate') !{lang[locale].keys.birth_date_holder}
                         hr
                         p Je souhaites que les données suivantes soient visible publiquement
                         div.form-group.inline
-                            input#public_locale.form-control(type='checkbox', name='public_locale', checked="checked")
+                            input#public_locale.form-control(type='checkbox' name='public_profile' value='public_locale' checked=((user.public_profile.indexOf('public_locale') === -1)? false : true))
                             label(for="public_locale") Ma ville, ma région et mon pays <b>(votre adresses postale exacte ne sera pas visible)</b>
                         div.form-group.inline
-                            input#public_kids.form-control(type='checkbox', name='public_kids', checked="checked")
+                            input#public_kids.form-control(type='checkbox' name='public_profile' value='public_kids' checked=((user.public_profile.indexOf('public_kids') === -1)? false : true))
                             label(for="public_kids") Pseudo et l'âge de mes enfants
                         div.form-group.inline
-                            input#public_gamification.form-control(type='checkbox', name='public_gamification', checked="checked")
+                            input#public_gamification.form-control(type='checkbox' name='public_profile' value='public_gamification' checked=((user.public_profile.indexOf('public_gamification') === -1)? false : true))
                             label(for="public_gamification") Partager mes badges et succès
                         div.form-group.inline
-                            input#public_created.form-control(type='checkbox', name='public_created', checked="checked")
+                            input#public_created.form-control(type='checkbox' name='public_profile' value='public_created' checked=((user.public_profile.indexOf('public_created') === -1)? false : true))
                             label(for="public_created") Date d'inscrition et ancienneté
                         div.form-group.inline
-                            input#public_interest.form-control(type='checkbox', name='public_interest', checked="checked")
+                            input#public_interest.form-control(type='checkbox' name='public_profile' value='public_interest' checked=((user.public_profile.indexOf('public_interest') === -1)? false : true))
                             label(for="public_interest") !{lang[locale].keys.public_interest_check}
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
-            div.col.col-md-4
-                div.formular#add_kid
-                    hr
-                    br
-                    h1 Ma famille
-                    form.form_content(method="put" action='/auth/profile/')
-                        p Présentez-nous votre famille pour bénéficier de <a href="/family">conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
-                        hr.separator
-                        div#child
-                            div.form-group.material_input
-                                input#child_first_name.form-control(type='text', placeholder=lang[locale].keys.child_first_name_holder, name='child_first_name', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_name_error)
-                                label(for='child_first_name') !{lang[locale].keys.child_first_name_holder}
-                            div.form-group.material_input
-                                input#child_first_birth_date.form-control(type='date', placeholder=lang[locale].keys.child_first_birth_date_holder, name='child_first_birth_date', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_birth_date_error)
-                                label(for='child_first_birth_date') !{lang[locale].keys.child_first_birth_date_holder}
-                        button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.add_kid_cta
-                div.formular
-                    hr
-                    br
-                    h1 Ma carte de fidélité
-                    form.form_content
-                        p Demandez votre carte de <a href="/fidelity_card">fidélité pour profiter des avantages</a> de nos marques et services
-                        button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.fidelity_card_cta
-        div.row#informations(style= page === "informations" ? "display:block" : "display:none")
-            div.col.col-md-8
                 div.formular#private_datas
                     hr
                     br
                     h1 Civilité
-                    form.form_content(method="put" action='/auth/profile/')
+                    form.form_content(method="POST" action='/account/profile/')
                         p Vos données sont strictement confidentielles
                         hr
+                        div.form_group.radio_list
+                            input#male(type="radio" name="gender" value="male" required='required', checked=user.gender=="male")
+                            label(for='male')= lang[locale].keys.gender_male
+                            input#female(type="radio" name="gender" value="female", checked=user.gender=="female")
+                            label(for='female')= lang[locale].keys.gender_female
                         div.form-group.material_input
                             input#email.form-control(disabled="true" type='email', placeholder=lang[locale].keys.email_holder, name='pseudo', required="required", value=user.email, minlength="4", data-erromessage=lang[locale].keys.email_error)
                             label(for='email') !{lang[locale].keys.email_holder}
@@ -173,59 +61,166 @@ block content
                             input#lastName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.lastName_holder, name='lastName' value=user.lastName)
                             label(for='lastName') !{lang[locale].keys.lastName_holder}
                         div.form-group.material_input
-                            input#phone.form-control(type='tel', minlength="2", required="required", placeholder=lang[locale].keys.phone_holder, name='phone' value=user.phone)
+                            input#phone.form-control(type='tel', minlength="2", placeholder=lang[locale].keys.phone_holder, name='phone' value=user.phone)
                             label(for='phone') !{lang[locale].keys.phone_holder}
                         div.form-group.material_input
-                            input#mobile.form-control(type='tel', minlength="2", required="required", placeholder=lang[locale].keys.mobile_holder, name='phone' value=user.mobile)
+                            input#mobile.form-control(type='tel', minlength="2", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile)
                             label(for='mobile') !{lang[locale].keys.mobile_holder}
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
-                
-                div.formular#private_adresses
+            div.col.col-md-4
+                div.formular#add_kid
+                    hr
+                    br
+                    h2 Mes Enfants
+                    if(typeof user.members !== "undefined")
+                        if(user.members.length > 0)
+                            ul.col_options_list
+                                each member in user.members
+                                    li(data-memberid=member._id)
+                                        div.infos
+                                            div.avatar
+                                                img(src=member.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                                            div.first_name= member.first_name 
+                                            div.birth_date= member.birth_date
+                                        ul.options
+                                            li.primary(data-action="edit" data-edittemplate="member_edit_template" data-post="/me/members" data-value=member._id)
+                                                div.icon.icon-pencil.idkids-icons
+                                                div.label Éditer
+                                            li.danger(data-action="delete" data-post="/me/members" data-type="member_id" data-value=member._id)
+                                                div.icon.icon-trash.idkids-icons
+                                                div.label Supprimer
+                    form.form_content(method="POST" action='/me/members')
+                        if(typeof user.members !== "undefined")
+                            if(user.members.length == 0)
+                                p Présentez-nous votre famille pour bénéficier de <a href="/family">conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
+                            else
+                                h3 Ajouter un enfant
+                        hr.separator
+                        div#child
+                            div.form-group.material_input
+                                input#first_name.form-control(type='text', placeholder=lang[locale].keys.child_first_name_holder, name='first_name', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_name_error)
+                                label(for='child_first_name') !{lang[locale].keys.child_first_name_holder}
+                            div.form-group.material_input
+                                input#birth_date.form-control(type='date', placeholder=lang[locale].keys.child_birth_date_holder, name='birth_date', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_birth_date_error)
+                                label(for='birth_date') !{lang[locale].keys.child_birth_date_holder}
+                        div.btn.btn-success.btn-m.btn-disabled(data-action='submit')= lang[locale].keys.add_kid_cta
+                div.formular
+                    hr
+                    br
+                    h1 Ma carte de fidélité
+                    form.form_content
+                        p Demandez votre carte de <a href="/fidelity_card">fidélité pour profiter des avantages</a> de nos marques et services
+                        button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.fidelity_card_cta
+        div.row#informations(style= page === "informations" ? "display:block" : "display:none")
+            div.col.col-md-8
+                div.formular#address_form
                     hr
                     br
                     h1= lang[locale].keys.address_form_title
-                    form.form_content(method="put" action='/auth/profile/')
+                    form.form_content(method="POST" action='/address/')
                         p= lang[locale].keys.address_form_message
                         hr
+                        input#user_id.invisible(type='text', name='user_id', value=user._id)
                         div.form-group.material_input
-                            input#addressLabel.form-control(type='text', placeholder=lang[locale].keys.addressLabel_holder, name='address', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.addressLabel_error)
+                            input#addressLabel.form-control(type='text', placeholder=lang[locale].keys.addressLabel_holder, name='label', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.addressLabel_error)
                             label(for='addressLabel') !{lang[locale].keys.addressLabel_holder}
                         div.form-group.material_input
-                            input#addressFirstName.form-control(type='text', placeholder=lang[locale].keys.addressFirstName_holder, name='addressFirstName', required="required", value=user.firstName, minlength="4", data-erromessage=lang[locale].keys.addressFirstName_error)
+                            input#addressFirstName.form-control(type='text', placeholder=lang[locale].keys.addressFirstName_holder, name='first_name', required="required", value=user.firstName, minlength="4", data-erromessage=lang[locale].keys.addressFirstName_error)
                             label(for='addressFirstName') !{lang[locale].keys.addressFirstName_holder}
                         div.form-group.material_input
-                            input#addressLastName.form-control(type='text', placeholder=lang[locale].keys.addressLastName_holder, name='addressLastName', required="required", value=user.lastName, minlength="4", data-erromessage=lang[locale].keys.addressLastName_error)
+                            input#addressLastName.form-control(type='text', placeholder=lang[locale].keys.addressLastName_holder, name='last_name', required="required", value=user.lastName, minlength="4", data-erromessage=lang[locale].keys.addressLastName_error)
                             label(for='addressLastName') !{lang[locale].keys.addressLastName_holder}
                         div.form-group.material_input
-                            input#address.form-control(type='text', placeholder=lang[locale].keys.addess_holder, name='address', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.address_error)
+                            input#address.form-control(type='text', placeholder=lang[locale].keys.addess_holder, name='AddressLine1', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.address_error)
                             label(for='address') !{lang[locale].keys.addess_holder}
                         div.form-group.material_input
-                            input#addressMore.form-control(type='text', placeholder=lang[locale].keys.addressMore_holder, name='addressMore' value="", data-erromessage=lang[locale].addressMore_error)
+                            input#addressMore.form-control(type='text', placeholder=lang[locale].keys.addressMore_holder, name='AddressLine2' value="", data-erromessage=lang[locale].addressMore_error)
                             label(for='addressMore') !{lang[locale].keys.addressMore_holder}
                         div.form-group.material_input
                             input#city.form-control(required="required", type='text', placeholder=lang[locale].keys.city_holder, name='city' value="", data-erromessage=lang[locale].city_error)
                             label(for='city') !{lang[locale].keys.city_holder}
                         div.form-group.material_input
-                            input#postalCode.form-control(required="required", type='text', placeholder=lang[locale].keys.postalCode_holder, name='postalCode' value="", data-erromessage=lang[locale].postalCode_error)
+                            input#postalCode.form-control(required="required", type='text', placeholder=lang[locale].keys.postalCode_holder, name='cp' value="", data-erromessage=lang[locale].postalCode_error)
                             label(for='postalCode') !{lang[locale].keys.postalCode_holder}
                         div.form-group.material_input
-                            input#addressCountry.form-control(required="required", type='text', placeholder=lang[locale].keys.addressCountry_holder, name='addressCountry' value="", data-erromessage=lang[locale].addressCountry_error)
+                            input#addressCountry.form-control(required="required", type='text', placeholder=lang[locale].keys.addressCountry_holder, name='country' value="", data-erromessage=lang[locale].addressCountry_error)
                             label(for='addressCountry') !{lang[locale].keys.addressCountry_holder}
                         div.form-group.material_input
                             input#addressMobile.form-control(type='tel', placeholder=lang[locale].keys.addressMobile_holder, name='phone' value=user.mobile, data-erromessage=lang[locale].addressMobile_error)
                             label(for='addressMobile') !{lang[locale].keys.mobile_holder}
                         hr
-                        div.map_preview Google Map pour vérifier la validité de l'adresse indiquée
+                        div.form_group
+                            img#address_preview(src="" width="100%")
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.saveAddress_cta
                         p= lang[locale].keys.input_need_message
                         div.form-group.material_input
-                            textarea#more_datas(placeholder="précisions pour la livraison." name="more_datas")
+                            textarea#more_datas(placeholder="précisions pour la livraison." name="AddressLine3")
                             label(for='more_datas') Précisions sur la livraison
-                            
                     
             div.col.col-md-4
+                div.formular
+                    hr
+                    br
+                    h2 Mes Addresses
+                    if(typeof user.address !== "undefined")
+                        if(user.address.length > 0)
+                            ul.col_options_list
+                                each address in user.address
+                                    li(data-memberid=address._id)
+                                        div.infos
+                                            hr
+                                            div.label
+                                                b= address.label 
+                                            div.infos= address.AddressLine1+" "+address.cp+" "+address.city+" "+address.country
+                                            hr
+                                            if(typeof address.geocoder !== "undefined")
+                                                img(src="https://maps.googleapis.com/maps/api/staticmap?center="+address.geocoder.latitude+","+address.geocoder.longitude+"&size=308x150&maptype=roadmap&markers=color:blue%7Clabel:"+address.label+"%7C"+address.geocoder.latitude+","+address.geocoder.longitude+"&key=AIzaSyC775FJ84i8138zCKyiLchlMzrvF1nbEvA" width="100%")
+                                        ul.options
+                                            li.primary(data-action="edit" data-edittemplate="address_edit_template" data-post="/address" data-value=address._id)
+                                                div.icon.icon-pencil.idkids-icons
+                                                div.label Éditer
+                                            li.danger(data-action="delete" data-post="/address" data-type="address_id" data-value=address._id)
+                                                div.icon.icon-trash.idkids-icons
+                                                div.label Supprimer
+                    br
+                    br
+                    br
+                            
+                            
+        div.row#member(style= page === "member" ? "display:block" : "display:none")
+            if(typeof member_infos !== "undefined")
+                div.col.col-md-8
+                    div.formular#member_datas(data-memberid=member_infos._id)
+                        hr
+                        br
+                        form.form_content(method="PUT" action='/me/members/')
+                            div.form-group
+                                input#child_avatar_file.invisible(type="file" name="child_avatar_file" data-file="avatar" accept="image/*")
+                                label.avatar(for="child_avatar_file")
+                                    div.preview
+                                        img(src=member_infos.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                                input#child_avatar.invisible(type="text", name="avatar")
+                            hr.separator
+                            div.form-group.material_input
+                                input#first_name(type="text" name="first_name" minlength="4" value=member_infos.first_name)
+                                label(for="first_name") child_first_name
+                            div.form-group.material_input
+                                input#last_name(type="text" name="last_name" minlength="4" value=member_infos.last_name)
+                                label(for="last_name") child_last_name
+                            div.form-group.material_input
+                                input#birth_date(type="date" name="birth_date" value=member_infos.birth_date)
+                                label(for="birth_date") birth_date
+                            hr.separator
+                            div.form_group.radio_list
+                                input#child_male(type="radio" name="gender" value="male" required='required', checked=member_infos.gender=="male")
+                                label(for='child_male') garçon
+                                input#child_female(type="radio" name="gender" value="female", checked=member_infos.gender=="female")
+                                label(for='child_female') fille
+                            div.form-group.buttons.inline
+                                div#submit_member.btn.btn-success(data-action="save" data-memberid=member_infos._id) Enregistrer
+                
         div.row#basket(style= page === "basket" ? "display:block" : "display:none")
             h1 basket
         div.row#orders(style= page === "orders" ? "display:block" : "display:none")
@@ -233,111 +228,9 @@ block content
         div.row#services(style= page === "services" ? "display:block" : "display:none")
             h1 services
         div.row#fidelity(style= page === "fidelity" ? "display:block" : "display:none")
-            div.row
-                h1 fidelity
-                div.col.col-md-3
-                    canvas#canvas(width="50" height="50")
-                div.col.col-md-9
-                    p= JSON.stringify(user) 
-    footer.container
-        div.row
+            h1 fidelity
             div.col.col-md-3
-                h3 À propos de IDKIDS
-                ul
-                    li 
-                        a(href="#") Histoire
-                    li 
-                        a(href="#") Valeurs
-                    li 
-                        a(href="#") Politique RSE
-                    li 
-                        a(href="#") Act For Kids
-                    li 
-                        a(href="#") Nous rejoindre - Recrutement
-                    li 
-                        a(href="#") Membres IDKIDS.community
-                    li 
-                        a(href="#") Devenir membre IDKIDS.community
-            div.col.col-md-4
-                h3 Aide et confidentialité
-                ul
-                    li 
-                        a(href="#") Paiements et gestion de mes commandes
-                    li 
-                        a(href="#") Retours et remboursement
-                    li 
-                        a(href="#") Règles de confidentialité
-                    li 
-                        a(href="#") Confitions d'utilisation
-                    li 
-                        a(href="#") Contact et renseignements
-                    li 
-                        a(href="#") Vie privée, sécurité et contrôle de vos données
-                    li
-                        a(href="#") Questions relatives à l'utilisation de nos services
-                hr
-                h3 Développeurs
-                ul
-                    li 
-                        a(href="#") Compte développeur
-                    li 
-                        a(href="#") Premiers pas avec le SDK idkids
-            div.col.col-md-2
-                h3 Marques
-                ul
-                    li 
-                        a(href="#") Okaidi
-                    li 
-                        a(href="#") Obaibi
-                    li 
-                        a(href="#") Jacadi
-                    li 
-                        a(href="#") Oxybul
-                hr
-                h3 Services
-                ul
-                    li 
-                        a(href="#") Rigolo comme la vie
-                    li 
-                        a(href="#") N'JOY
-                    li 
-                        a(href="#") Bubble Mag
-                    li 
-                        a(href="#") Joyvox
-            div.col.col-md-2
-                h3 Mon compte
-                ul
-                    li 
-                        a(href="#") Informations
-                    li 
-                        a(href="#") Panier
-                    li 
-                        a(href="#") Commandes
-                    li
-                        a(href='#') Historique
-                    li 
-                        a(href="#") Adresses de livraison
-                    li
-                        a(href='#') Informations et vie privée
-        hr
-        div.row
-            a(href="https://www.okaidi.com")
-                div.icon.okaidi
-            a(href="https://www.obaibi.com")
-                div.icon.obaibi
-            a(href="https://www.jacadi.com")
-                div.icon.jacadi
-            a(href="https://www.oxybul.com")
-                div.icon.oxybul
-            a(href="https://www.rigolocommelavie.com")
-                div.icon.rclv
-            a(href="https://www.njoy.com")
-                div.icon.njoy
-            a(href="https://www.bubblemag.fr")
-                div.icon.bubble
-            a(href="https://www.joyvox.fr")
-                div.icon.joyvox
-            a(href="https://www.joybox.fr")    
-                div.icon.joybox
-        hr
+                canvas#canvas(width="50" height="50")
+            div.col.col-md-9
+                p= JSON.stringify(user) 
                    

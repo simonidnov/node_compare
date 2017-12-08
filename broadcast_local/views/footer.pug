@@ -1,0 +1,109 @@
+block footer
+    footer.container
+        div.row
+            div.col.col-md-3
+                h3 À propos de IDKIDS
+                ul
+                    li 
+                        a(href="#") Histoire
+                    li 
+                        a(href="#") Valeurs
+                    li 
+                        a(href="#") Politique RSE
+                    li 
+                        a(href="#") Act For Kids
+                    li 
+                        a(href="#") Nous rejoindre - Recrutement
+                    li 
+                        a(href="#") Membres IDKIDS.community
+                    li 
+                        a(href="#") Devenir membre IDKIDS.community
+            div.col.col-md-4
+                h3 Aide et confidentialité
+                ul
+                    li 
+                        a(href="#") Paiements et gestion de mes commandes
+                    li 
+                        a(href="#") Retours et remboursement
+                    li 
+                        a(href="#") Règles de confidentialité
+                    li 
+                        a(href="#") Confitions d'utilisation
+                    li 
+                        a(href="#") Contact et renseignements
+                    li 
+                        a(href="#") Vie privée, sécurité et contrôle de vos données
+                    li
+                        a(href="#") Questions relatives à l'utilisation de nos services
+                hr
+                h3 Développeurs
+                ul
+                    li 
+                        a(href="#") Compte développeur
+                    li 
+                        a(href="#") Premiers pas avec le SDK idkids
+            div.col.col-md-2
+                h3 Marques
+                ul
+                    li 
+                        a(href="#") Okaidi
+                    li 
+                        a(href="#") Obaibi
+                    li 
+                        a(href="#") Jacadi
+                    li 
+                        a(href="#") Oxybul
+                hr
+                h3 Services
+                ul
+                    li 
+                        a(href="#") Rigolo comme la vie
+                    li 
+                        a(href="#") N'JOY
+                    li 
+                        a(href="#") Bubble Mag
+                    li 
+                        a(href="#") Joyvox
+            div.col.col-md-2
+                h3 Mon compte
+                ul
+                    li 
+                        a(href="#") Informations
+                    li 
+                        a(href="#") Panier
+                    li 
+                        a(href="#") Commandes
+                    li
+                        a(href='#') Historique
+                    li 
+                        a(href="#") Adresses de livraison
+                    li
+                        a(href='#') Informations et vie privée
+        hr
+        div.row
+            a(href="https://www.okaidi.com")
+                div.icon.okaidi
+            a(href="https://www.obaibi.com")
+                div.icon.obaibi
+            a(href="https://www.jacadi.com")
+                div.icon.jacadi
+            a(href="https://www.oxybul.com")
+                div.icon.oxybul
+            a(href="https://www.rigolocommelavie.com")
+                div.icon.rclv
+            a(href="https://www.njoy.com")
+                div.icon.njoy
+            a(href="https://www.bubblemag.fr")
+                div.icon.bubble
+            a(href="https://www.joyvox.fr")
+                div.icon.joyvox
+            a(href="https://www.joybox.fr")    
+                div.icon.joybox
+        hr
+        script(src="/node_modules/jquery/dist/jquery.min.js")
+        script(src="/node_modules/underscore/underscore-min.js")
+        script(src="/public/javascripts/index.min.js")
+        script(src="/public/javascripts/idkids-sdk/idkids-sdk.js")
+        if(js)
+            each val in js
+                script(src=val)
