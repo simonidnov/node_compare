@@ -136,6 +136,10 @@
     box-shadow: none;
     filter:none;
 }
+.col_options_list li .options a{
+    width:100%;
+    display: inline-flex;
+}
 .col_options_list li .options li.primary{
     color:black;
 }

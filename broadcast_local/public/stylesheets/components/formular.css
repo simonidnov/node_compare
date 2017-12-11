@@ -305,6 +305,22 @@
 }
 /* --------------- SWITCH TAB -------------- */
 
+.formular select{
+    border: none;
+    background-color: rgba(0,0,0,0);
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    padding: 0px;
+    height: 40x !important;
+    margin: 0px;
+    font-size: 15px;
+    line-height: 24px;
+    height: 47px;
+    outline: 0 !important;
+    cursor: pointer;
+    width:100%;
+}
 
 .formular .material_input{
     position: relative;
@@ -430,10 +446,11 @@ input:-webkit-autofill {
 .formular .material_input textarea:focus + label,
 .formular .material_input textarea:valid + label,
 .formular .material_input.notempty label,
-.formular .material_input.invalid label{
-    top:0px;
-    font-size: 12px;
-    color:#CCC;
+.formular .material_input.invalid label,
+.formular select + label{
+    top:0px !important;
+    font-size: 12px !important;
+    color:#CCC !important;
 }
 .formular input:invalidli:has(> .material_input):after {
     background:coral;
