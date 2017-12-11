@@ -1,0 +1,21 @@
+extends admin_header
+block content
+    div.admin
+        div.shutter
+            a.shutter_action(href="#new_app" title="ajouter une application") 
+                span.icon.icon-more.idkids-icons
+                div.label Nouvelle Page
+            h3 Liste des pages
+            ul.app_list
+                li PAGE#1
+        div#pages.container
+            div.article
+                div.col.col-md-4
+                    h1 Qu'est ce qu'une page
+                    p Les pages sont des outils de communication que vous pouvez requêter depuis l'API idkids.
+                    h2 Pourquoi créer des pages
+                    p Les pages sont principalement utilisées sur l'account, cependant les sites reconnus par le SDK peuvent requêter différents contenus directement via l'API. des pages telles que les mentions légales peuvent ainsi être diffusées par les applications et sont mises à jour une seule fois pour l'ensemble des apps intégrant le SDK IDKIDS
+                    h2 Comment requêter une page
+                    p après avoir intégré le SDK sur votgre site, vous pouvez requêter des pages soit côté client avec un appel XHTML classique, soit côté serveur en vous appuyant sur la technologie que vous utilisez par exemple en CURL.
+                div.col.col-md-4
+                    h2 Dernières mises à jour

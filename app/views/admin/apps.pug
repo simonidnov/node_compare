@@ -1,0 +1,30 @@
+extends admin_header
+block content
+    div.admin
+        div.shutter
+            a.shutter_action(href="#new_app" title="ajouter une application") 
+                span.icon.icon-more.idkids-icons
+                div.label Nouvelle Application
+            h3 Mes applications
+            ul.app_list
+                li 
+                    span.icon.okaidi
+                    div.label OKAIDI
+                li 
+                    span.icon.obaibi
+                    div.label OBAIBI
+                li 
+                    span.icon.jacadi
+                    div.label JACADI
+                li 
+                    span.icon.oxybul
+                    div.label OXYBUL
+        div#apps.container
+            div.article
+                div.col.col-md-8
+                    h1 Qu'est ce qu'une application
+                    p Les applications sont des domaines ou des applications natives reconnues par l'authentification Idkids.
+                    h2 Pourquoi créer une application
+                    p Pour utiliser le SDK idkids sur un nouveau nom de domaine ou dans une nouvelle application, vous devez créer une nouvelle app.<br/>Une fois créée vous trouverez un script à intégrer sur votre site ou application pour pouvoir utiliser les ressources des comptes utilsateurs IDKIDS.
+                div.col.col-md-4
+                    h2 dernières mises à jour

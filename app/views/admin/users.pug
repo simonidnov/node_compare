@@ -1,0 +1,97 @@
+extends admin_header
+block content
+    div.admin
+        div.shutter
+            h3 Filtrer les utilisateurs
+            div.formular.fullscreen#users_filter
+                form
+                    div.form-group
+                        input#male.form-control(type='checkbox', name='male')
+                        label(for="male") Homme
+                    div.form-group
+                        input#female.form-control(type='checkbox', name='female')
+                        label(for="female") Femme
+                    div.form-group
+                        input#is_newsletter.form-control(type='checkbox', name='is_newsletter')
+                        label(for="is_newsletter") Accepte la newsletter
+                    div.form-group.checkbox_relative_container(data-checkboxrelative="is_newsletter")
+                        div.checkbox_relative
+                            div.line
+                                input#newsletter_okaidi.form-control(type='checkbox', name='newsletter_okaidi', checked='true')
+                                label(for="newsletter_okaidi") !{lang[locale].keys.accept_newsletter_okaidi}
+                            div.line
+                                input#newsletter_obaibi.form-control(type='checkbox', name='newsletter_obaibi', checked='true')
+                                label(for="newsletter_obaibi") !{lang[locale].keys.accept_newsletter_obaibi}
+                            div.line
+                                input#newsletter_jacadi.form-control(type='checkbox', name='newsletter_jacadi', checked='true')
+                                label(for="newsletter_jacadi") !{lang[locale].keys.accept_newsletter_jacadi}
+                            div.line
+                                input#newsletter_oxybul.form-control(type='checkbox', name='newsletter_oxybul', checked='true')
+                                label(for="newsletter_oxybul") !{lang[locale].keys.accept_newsletter_oxybul}
+                            div.line
+                                input#newsletter_rclv.form-control(type='checkbox', name='newsletter_rclv', checked='true')
+                                label(for="newsletter_rclv") !{lang[locale].keys.accept_newsletter_rclv}
+                            div.line
+                                input#newsletter_njoy.form-control(type='checkbox', name='newsletter_njoy', checked='true')
+                                label(for="newsletter_njoy") !{lang[locale].keys.accept_newsletter_njoy}
+                            div.line
+                                input#newsletter_bubble.form-control(type='checkbox', name='newsletter_bubble', checked='true')
+                                label(for="newsletter_bubble") !{lang[locale].keys.accept_newsletter_bubble}
+                            div.line
+                                input#newsletter_joyvox.form-control(type='checkbox', name='newsletter_joyvox', checked='true')
+                                label(for="newsletter_joyvox") !{lang[locale].keys.accept_newsletter_joyvox}
+                    div.form-group
+                        input#app_user.form-control(type='checkbox', name='app_user')
+                        label(for="app_user") utilise une application
+                    div.form-group.checkbox_relative_container(data-checkboxrelative="app_user")
+                        div.checkbox_relative
+                            div.line
+                                input#app_user_okaidi.form-control(type='checkbox', name='app_user_okaidi', checked='true')
+                                label(for="app_user_okaidi") Okaidi
+                    div.form-group
+                        input#has_kid.form-control(type='checkbox', name='has_kid')
+                        label(for="has_kid") Au moins un enfant
+                    div.form-group.checkbox_relative_container(data-checkboxrelative="has_kid")
+                        div.checkbox_relative
+                            div.form-group
+                                input#kid_male.form-control(type='checkbox', name='kid_male')
+                                label(for="kid_male") Au moins un garçon
+                            div.form-group
+                                input#kid_female.form-control(type='checkbox', name='kid_female')
+                                label(for="kid_female") Au moins une fille
+                            div.form-group.material_input
+                                input#min_age(type="number" val="" name="min_age" min="0")
+                                label(for='min_age') âge minimum requis
+                            div.form-group.material_input
+                                input#max_age(type="number" val="" name="max_age" min="1")
+                                label(for='max_age') âge maximum requis
+                    div.form-group
+                        input#has_geolocation.form-control(type='checkbox', name='has_geolocation')
+                        label(for="has_geolocation") Géolocatlisation
+                    div.form-group.checkbox_relative_container(data-checkboxrelative="has_geolocation")
+                        div.checkbox_relative
+                            div.form-group.material_input
+                                input#geolocation_address(type='text' name="geolocation_address")
+                                label(for='geolocation_address') indiquez une adresse valide
+                            div.form-group.material_input
+                                input#geolocation_distance(type='number' name="geolocation_distance" min="4")
+                                label(for='geolocation_distance') Indiqueez la distance de l'utilisateur requis
+                    div.form-group
+                        input#is_active.form-control(type='checkbox', name='is_active')
+                        label(for="is_active") Utilisateurs actifs
+                    div.form-group.checkbox_relative_container(data-checkboxrelative="is_active")
+                        div.checkbox_relative
+                            div.form-group.radio_list
+                                input#one_week(type="radio" name="active" value="one_week")
+                                label(for='one_week') 1 semaine
+                            div.form-group.radio_list
+                                input#two_weeks(type="radio" name="active" value="two_weeks")
+                                label(for='two_weeks') 2 semaines
+                            div.form-group.radio_list
+                                input#three_weekd(type="radio" name="active" value="three_weekd")
+                                label(for='three_weekd') 3 semaines
+                            div.form-group.radio_list
+                                input#one_month(type="radio" name="active" value="one_month")
+                                label(for='one_month') 1 mois
+        div#users.container
+            h1 UTILISATEURS

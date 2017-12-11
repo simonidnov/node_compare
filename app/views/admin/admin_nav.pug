@@ -1,0 +1,14 @@
+block navigation
+    nav.hor_nav
+        ul
+            a(href="/admin/dashboard")
+                li(class= page === "dashboard" ? "selected" : "" data-for="dashboard")= "Dashboard"
+            a(href="/admin/apps")
+                li(class= page === "apps" ? "selected" : "" data-for="apps")= "Applications"
+            a(href="/admin/pages")
+                li(class= page === "pages" ? "selected" : "" data-for="pages")= "pages"
+            a(href="/admin/users")
+                li(class= page === "users" ? "selected" : "" data-for="users")= "Utilisateurs"
+            a(href="/admin/notifications")
+                li(class= page === "notifications" ? "selected" : "" data-for="newsletters")= "Notifications"
+            

@@ -1,0 +1,5 @@
+var dashboard = {
+    init:function(){
+        
+    }
+}

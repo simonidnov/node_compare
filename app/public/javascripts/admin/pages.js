@@ -1,0 +1,5 @@
+var pages = {
+    init:function(){
+        
+    }
+}

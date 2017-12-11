@@ -1,0 +1,5 @@
+var applications = {
+    init:function(){
+        
+    }
+}

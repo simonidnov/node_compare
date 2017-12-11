@@ -61,8 +61,11 @@ function formular(target, callback){
         $(target).find('.material_input input').off('input').on('input', function(){
             self.inputCheck($(this));
         });
+        console.log('set input checkbox change');
         $(target).find('input[type="checkbox"]').off('change').on('change', function(){
+            console.log('checkbox change');
             self.inputCheck($(this));
+            self.checkInputs();
             self.callback({"status":"checkbox", name:$(this).attr('name'), value:$(this).is(':checked')});
         });
         $(target).find('[data-tab]').off('click').on('click', function(){

@@ -1,0 +1,5 @@
+var notifications = {
+    init:function(){
+        
+    }
+}

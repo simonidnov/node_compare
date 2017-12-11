@@ -10,6 +10,7 @@ const express = require('express'),
     index = require('./routes/index'),
     users = require('./routes/users'),
     media = require('./routes/media'),
+    admin = require('./routes/admin'),
     templating = require('./routes/templating'),
     auth = require('./routes/auth'),
     me = require('./routes/me'),
@@ -59,6 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', users);
 app.use('/auth', auth);
+app.use('/admin', admin);
 app.use('/me', me);
 app.use('/media', media);
 app.use('/account', account);

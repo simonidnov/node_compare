@@ -11,20 +11,7 @@ module.exports = {
         if(typeof req.options.secret === "undefined" || typeof req.options.from_origin === "undefined"){
             return false;
         }
-        if(req.options.secret !== "000-000-000" || req.options.from_origin !== "http://localhost:3000"  && req.options.from_origin !== "http://localhost:8080" || req.options.from_origin.indexOf(host) === -1){
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
-            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+        if(req.options.secret !== "000-000-000" || req.options.from_origin !== "http://localhost:3000"  && req.options.from_origin !== "http://localhost:9000" || req.options.from_origin.indexOf(host) === -1){
             return false;
         }
         return true;
@@ -50,10 +37,22 @@ module.exports = {
         });
     },
     validate_session:function(req, callback){
+        console.log(req.session);
         if(typeof req.session.Auth === "undefined"){
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
-            callback({status:200, "message":"UNAUTHAURIZED"});
+            callback({status:200, "message":"AUTHAURIZED"});
+        }
+    },
+    validate_admin:function(req, callback){
+        if(typeof req.session.Auth.rights === "undefined"){
+            callback({status:401, "message":"UNAUTHAURIZED"});
+        }else{
+            if(req.session.Auth.rights.type === "RWO"){
+                callback({status:200, "message":"AUTHAURIZED"});
+            }else{
+                callback({status:301, "message":"UNAUTHAURIZED"});
+            }
         }
     },
     check_session:function(req, user_id, callback){

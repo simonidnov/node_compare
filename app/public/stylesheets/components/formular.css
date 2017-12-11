@@ -23,6 +23,18 @@
     -o-transition: height .6s ease-in-out;
     transition: height .6s ease-in-out;
 }
+.formular.fullscreen{
+    width:100%;
+    padding:10px;
+    margin-top:0px;
+    margin-bottom:0px;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    -o-box-shadow:none;
+    box-shadow:none;
+    filter:none;
+    background-color: rgba(0,0,0,0);
+}
 .formular.mini{
     max-width: 450px;
 }
