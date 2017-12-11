@@ -11,7 +11,20 @@ module.exports = {
         if(typeof req.options.secret === "undefined" || typeof req.options.from_origin === "undefined"){
             return false;
         }
-        if(req.options.secret !== "000-000-000" || req.options.from_origin !== "http://localhost:3000" || req.options.from_origin.indexOf(host) === -1){
+        if(req.options.secret !== "000-000-000" || req.options.from_origin !== "http://localhost:3000"  && req.options.from_origin !== "http://localhost:8080" || req.options.from_origin.indexOf(host) === -1){
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
+            console.log(' ---------------- UNAUTHORIZED ---------------------- ');
             return false;
         }
         return true;

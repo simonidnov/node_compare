@@ -143,7 +143,7 @@ var idkids_jssdk = function(options, callback){
         if(document.getElementById(target) === null){
             callback({"status":"error", "message":"TARGET_ID_TAG_ELEMENT_NOT_FOUND"});
         }else{
-            document.getElementById(target).innerHTML = '<div class="idkids-sdk"><a href="http://localhost:3000/auth?from='+window.location.origin.replace(new RegExp('/', 'g'), 'R|')+'&redirect='+this.options.callback_url.replace(new RegExp('/', 'g'), '|')+'&secret='+this.options.secret+'" class="auth_button" data-action="login"><div class="avatar"></div><div class="label">CONNEXION</div></a></div>';
+            document.getElementById(target).innerHTML = '<div class="idkids-sdk"><a href="'+window.location.origin+'/auth?from='+window.location.origin.replace(new RegExp('/', 'g'), 'R|')+'&redirect='+this.options.callback_url.replace(new RegExp('/', 'g'), '|')+'&secret='+this.options.secret+'" class="auth_button" data-action="login"><div class="avatar"></div><div class="label">CONNEXION</div></a></div>';
         }
     }
     callback({status:"sdk instance created"}, this.options);

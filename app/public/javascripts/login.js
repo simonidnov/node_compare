@@ -39,7 +39,7 @@ var login = {
        this.sdk = new idkids_jssdk(
             {
                 "secret":"000-000-000",
-                "callback_url":"http://localhost:3000/account/",
+                "callback_url":window.location.origin+"/account/",
                 "authorisation":{
                     "email"         : true,
                     "mobile"        : true,

@@ -18,7 +18,14 @@ const express = require('express'),
 
 let session = require("express-session");
 
+
+/*http.listen(8080, function(){
+    console.log('listening on *:8080');
+});*/
+
 app = module.exports = express();
+//app.set('port', process.env.PORT || 8080);
+app.listen(8080);
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -33,6 +40,7 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
