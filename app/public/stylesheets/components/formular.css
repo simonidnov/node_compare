@@ -284,17 +284,17 @@
     transition: background .3s ease-in-out;
 }
 
-.formular .switch_tab .tab:last-child{
+.formular .switch_tab .tab:last-child {
     border:none;
 }
 
-.formular .switch_tab .tab.selected{
+.formular .switch_tab .tab.selected {
     background-color:#CCC;
     color:#FFF;
 }
 
 
-.formular .tab_group form{
+.formular .tab_group form {
     display: none;
     margin:0;
     padding:0;
