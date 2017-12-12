@@ -1,6 +1,6 @@
 extends admin_header
 block content
-    div.admin
+    div.admin.users
         div.shutter
             h3 Filtrer les utilisateurs
             div.formular.fullscreen#users_filter
@@ -109,3 +109,19 @@ block content
                         div.btn.btn-success Appliquer les filtres
         div#users.container
             h1 UTILISATEURS
+            ul.users_list.col_options_list
+                each user in users
+                    li(data-memberid=user._id)
+                        div.infos
+                            div.avatar
+                                img(src=user.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                            div.first_name= user.pseudo 
+                            div.birth_date= user.email
+                        ul.options
+                            li.primary(data-action="edit" data-edittemplate="member_edit_template" data-post="/me/members" data-value=user._id)
+                                div.icon.icon-pencil.idkids-icons
+                                div.label Éditer
+                            li.danger(data-action="delete" data-post="/me/members" data-type="member_id" data-value=user._id)
+                                div.icon.icon-trash.idkids-icons
+                                div.label Supprimer
+                

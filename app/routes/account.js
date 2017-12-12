@@ -42,6 +42,7 @@ account
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/account.css',
+                '/public/stylesheets/ui.css',
                 '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]
@@ -62,6 +63,7 @@ account
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/account.css',
+                '/public/stylesheets/ui.css',
                 '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]
@@ -82,6 +84,7 @@ account
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/account.css',
+                '/public/stylesheets/ui.css',
                 '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]

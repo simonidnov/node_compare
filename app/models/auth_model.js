@@ -51,6 +51,26 @@ const userSchemas = new db.Schema(user_datas),
 module.exports = {
     attributes: user_datas
 };
+module.exports.getCount = function(){
+    return User.find({}).count();
+};
+module.exports.getActive = function(){
+    return User.find(
+        {
+            updated : {$gte:new Date(ISODate().getTime() - 1000 * 86400 * 3)}
+        }
+    ).count();
+};
+module.exports.get = function(req, datas, callback) {
+    var self = this;
+    User.find({}, function(err, users){
+        if (err){
+            callback({"status":304, "code":err.code, "error":err, "message":err.message});
+        }else{
+            callback({"status":200, "users":users, "total":self.getCount()});
+        }
+    }).skip (parseInt(datas.page)*50).limit (50);
+};
 // check user login then return user_infos
 module.exports.login = function(req, datas, callback) {
     var self = this;

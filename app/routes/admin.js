@@ -157,22 +157,29 @@ admin
         return;
     })
     .get('/users', function(req, res, next) {
-         res.render('admin/users', {
-            title: 'Admin Users',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:'users',
-            js:[
-                '/public/javascripts/admin/users.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
-            ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/users.css',
-                '/public/stylesheets/components/formular.css'
-            ]
-        });
+         var Auth_controller = require('../controllers/auth_controller');
+         Auth_controller.get(req, res, function(e){
+            console.log(e); 
+            res.render('admin/users', {
+                title: 'Admin Users',
+                user : req.session.Auth,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                page:'users',
+                users:e.users,
+                js:[
+                    '/public/javascripts/admin/users.js',
+                    '/public/javascripts/components/formular.js',
+                    '/node_modules/qrcode/build/qrcode.min.js'
+                ], css:[
+                    '/public/stylesheets/admin/admin.css',
+                    '/public/stylesheets/ui.css',
+                    '/public/stylesheets/admin/users.css',
+                    '/public/stylesheets/components/formular.css'
+                ]
+            });
+         });
+         
     })
     .get('/notifications', function(req, res, next) {
          res.render('admin/notifications', {

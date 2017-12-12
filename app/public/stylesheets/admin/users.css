@@ -1,0 +1,31 @@
+.users{
+    box-sizing: border-box;
+}
+.users .users_list{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.users .users_list li{
+    margin:0;
+    padding:0;
+    list-style: none;
+    width:300px;
+    height:70px;
+    margin:5px;
+    background:#FFF;
+    float: left;
+}
+.users .users_list li .avatar{
+    width:50px;
+    height:50px;
+    margin:10px;
+    border-radius: 100%;
+    background-position: center center;
+    background-size: cover;
+    background-color: #E3E3E3;
+}
+.users .users_list li .pseudo{
+    width:130px;
+    padding-top:20px;
+}

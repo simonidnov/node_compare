@@ -13,143 +13,144 @@ block content
                             span.icon(style= "background-image:url("+apps.icon+")")
                             div.label= apps.short_name
         div#apps.container(style= page === "apps" ? "display:block" : "display:none")
-            div.row
-                div.col.col-md-8
-                    h1 Qu'est ce qu'une application
-                    p Les applications sont des domaines ou des applications natives reconnues par l'authentification Idkids.
-                    h2 Pourquoi créer une application
-                    p Pour utiliser le SDK idkids sur un nouveau nom de domaine ou dans une nouvelle application, vous devez créer une nouvelle app.<br/>Une fois créée vous trouverez un script à intégrer sur votre site ou application pour pouvoir utiliser les ressources des comptes utilsateurs IDKIDS.
-                div.col.col-md-4
-                    h2 dernières mises à jour
-                    p= JSON.stringify(applications)
+            div.col.col-md-6
+                h1 Qu'est ce qu'une application
+                p Les applications sont des domaines ou des applications natives reconnues par l'authentification Idkids.
+                h2 Pourquoi créer une application
+                p Pour utiliser le SDK idkids sur un nouveau nom de domaine ou dans une nouvelle application, vous devez créer une nouvelle app.<br/>Une fois créée vous trouverez un script à intégrer sur votre site ou application pour pouvoir utiliser les ressources des comptes utilsateurs IDKIDS.
+            div.col.col-md-4
+                h2 dernières mises à jour
+                p hello
         div#new_app.container(style= page === "new_app" ? "display:block" : "display:none")
-            div.formular#create_app
-                br
-                hr
-                h1 Créer une application
-                br
-                form.form_content(method="POST" action='/api/apps')
-                    div.form_group
-                        input#icon_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="icon" name="icon_cropper")
-                        label(for="icon_cropper") Icon 1024*1024px
-                        br
-                        img#icon_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="icon")
-                        input#icon.invisible(type="text" name="icon")
-                    hr.separator
-                    div.form_group
-                        input#logo_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="410" data-target="logo" name="logo_cropper")
-                        label(for="logo_cropper") Logo 1024*410px
-                        br
-                        img#logo_cropper_preview.cropper_preview(width="230" height="90" data-for="logo")
-                        input#logo.invisible(type="text" name="logo")
-                    hr.separator
-                    div.form_group
-                        label(for="color") Color
-                        br
-                        input#color(type="color" name="color")
-                    div.form_group.material_input
-                        input#label(type="text" name="label" minlength="4" required)
-                        label(for="label") Label
-                    div.form_group.material_input
-                        input#name(type="text" name="name" minlength="4" required)
-                        label(for="name") Name
-                    div.form_group.material_input
-                        input#short_name(type="text" name="short_name" minlength="4" required)
-                        label(for="short_name") Short Name (without spaces and special characters)
-                    div.form_group.material_input
-                        input#host(type="text" name="host" minlength="4" required)
-                        label(for="host") host ex : http://account.idkids-app.com
-                    div.form_group.material_input
-                        input#redirect_url(type="text" name="redirect_url" minlength="4" required)
-                        label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
-                    div.form_group
-                        a.hyperlink(href="#") En savoir plus sur l'url de redirection
-                    div.form_group.material_input
-                        textarea#description(type="text" minlength="50" maxlength="250" name="description" required)
-                        label(for="description") description
-                    div.form_group.material_input
-                        input#short_desc(type="text" minlength="10" maxlength="50" name="short_desc" required)
-                        label(for="short_desc") short description
-                    div.form_group.material_input
-                        input#bundle(type="text" minlength="20" maxlength="50" name="bundle" required)
-                        label(for="bundle") bundle ex : account.idkids.fr
-                    div.form_group.material_input
-                        input#terms_url(type="text" minlength="20" maxlength="50" name="terms_url" required)
-                        label(for="terms_url") special terms url with http://
-                    div.form_group
-                        div.btn.btn-success.btn-lg(data-action="submit") Ajouter
-        div.container(style= page === "edit_app" ? "display:block" : "display:none")
-            div.formular#edit_app
-                br
-                hr
-                h1 Éditer l'application
-                br
-                if(typeof edit_application !== "undefined")
-                    form.form_content(method="PUT" action='/api/apps' data-id=edit_application._id)
-                        input#_id.invisible(type="text" name="_id" value=edit_application._id)
+            div.col.col-md-6
+                div.formular.fullscreen#create_app
+                    br
+                    hr
+                    h1 Créer une application
+                    br
+                    form.form_content(method="POST" action='/api/apps')
                         div.form_group
-                            input#edit_icon_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="icon" name="edit_icon_cropper")
-                            label(for="edit_icon_cropper") Icon 1024*1024px
+                            input#icon_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="icon" name="icon_cropper")
+                            label(for="icon_cropper") Icon 1024*1024px
                             br
-                            img#edit_icon_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="icon" src=edit_application.icon)
-                            input#icon.invisible(type="text" name="icon" value=edit_application.icon)
+                            img#icon_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="icon")
+                            input#icon.invisible(type="text" name="icon")
                         hr.separator
                         div.form_group
-                            input#edit_logo_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="410" data-target="logo" name="edit_logo_cropper")
-                            label(for="edit_logo_cropper") Logo 1024*410px
+                            input#logo_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="410" data-target="logo" name="logo_cropper")
+                            label(for="logo_cropper") Logo 1024*410px
                             br
-                            img#edit_logo_cropper_preview.cropper_preview(width="230" height="90" data-for="logo" src=edit_application.logo)
-                            input#logo.invisible(type="text" name="logo" value=edit_application.logo)
+                            img#logo_cropper_preview.cropper_preview(width="230" height="90" data-for="logo")
+                            input#logo.invisible(type="text" name="logo")
                         hr.separator
                         div.form_group
                             label(for="color") Color
                             br
-                            input#color(type="color" name="color" value=edit_application.color)
+                            input#color(type="color" name="color")
                         div.form_group.material_input
-                            input#label(type="text" name="label" minlength="4" value=edit_application.name required)
-                            label(for="label") Name
+                            input#label(type="text" name="label" minlength="4" required)
+                            label(for="label") Label
                         div.form_group.material_input
-                            input#short_name(type="text" name="short_name" minlength="4" value=edit_application.short_name required)
+                            input#name(type="text" name="name" minlength="4" required)
+                            label(for="name") Name
+                        div.form_group.material_input
+                            input#short_name(type="text" name="short_name" minlength="4" required)
                             label(for="short_name") Short Name (without spaces and special characters)
                         div.form_group.material_input
-                            input#host(type="text" name="host" minlength="4" value=edit_application.host required)
+                            input#host(type="text" name="host" minlength="4" required)
                             label(for="host") host ex : http://account.idkids-app.com
                         div.form_group.material_input
-                            input#redirect_url(type="text" name="redirect_url" minlength="4" value=edit_application.redirect_url required)
+                            input#redirect_url(type="text" name="redirect_url" minlength="4" required)
                             label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
                         div.form_group
-                            a.hyperlink(href="#") > En savoir plus sur l'url de redirection
+                            a.hyperlink(href="#") En savoir plus sur l'url de redirection
                         div.form_group.material_input
-                            textarea#description(type="text" minlength="50" maxlength="250" name="description" required)= edit_application.description
+                            textarea#description(type="text" minlength="50" maxlength="250" name="description" required)
                             label(for="description") description
                         div.form_group.material_input
-                            input#short_desc(type="text" minlength="10" maxlength="50" value=edit_application.short_desc name="short_desc" required)
+                            input#short_desc(type="text" minlength="10" maxlength="50" name="short_desc" required)
                             label(for="short_desc") short description
                         div.form_group.material_input
-                            input#bundle(type="text" value=edit_application.bundle name="bundle" required)
+                            input#bundle(type="text" minlength="20" maxlength="50" name="bundle" required)
                             label(for="bundle") bundle ex : account.idkids.fr
                         div.form_group.material_input
-                            input#terms_url(type="text" minlength="5" value=edit_application.terms_url name="terms_url" required)
+                            input#terms_url(type="text" minlength="20" maxlength="50" name="terms_url" required)
                             label(for="terms_url") special terms url with http://
-                        hr.separator
-                        div.form-group.array_list_inputs(data-name="aliases")
-                            h3 Ajouter des alias au domaine de l'application
-                            p Si votre domaine est accessible avec ou sans les www en https ou sans certificat SSL ou encore si vous utilisez le SDK sur différents sous-domaines, veuillez renseigner les possibilités ci-dessous.
-                            ul.array_list_menu
-                                li.add_input_array_button Ajouter +
-                            ul.array_list_inputs
-                                each alias in edit_application.aliases
-                                    li.form-group.material_input
-                                        input(type="text" minlength="5" name="alias" value=alias[0])
-                                        label Entrez l'url de l'alias
-                                        div.delete_input_array_button Supprimer
-                        hr.separator
-                        div.form_group.material_input
-                            input#secret(type="text" value=edit_application.secret name="terms_url" disabled)
-                            label(for="secret") secret
-                        div.form_group.material_input
-                            input#token(type="text" value=edit_application.token name="terms_url" disabled)
-                            label(for="token") token
-                        div.form_group.buttons.inline
-                            div.btn.btn-success.btn-lg(data-action="submit") Enregistrer
-                            div.btn.btn-danger.btn-lg(data-action="delete") Supprimer
+                        div.form_group
+                            div.btn.btn-success.btn-lg(data-action="submit") Ajouter
+        div.container(style= page === "edit_app" ? "display:block" : "display:none")
+            div.col.col-md-6
+                div.formular.fullscreen#edit_app
+                    br
+                    hr
+                    h1 Éditer l'application
+                    br
+                    if(typeof edit_application !== "undefined")
+                        form.form_content(method="PUT" action='/api/apps' data-id=edit_application._id)
+                            input#_id.invisible(type="text" name="_id" value=edit_application._id)
+                            div.form_group
+                                input#edit_icon_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="icon" name="edit_icon_cropper")
+                                label(for="edit_icon_cropper") Icon 1024*1024px
+                                br
+                                img#edit_icon_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="icon" src=edit_application.icon)
+                                input#icon.invisible(type="text" name="icon" value=edit_application.icon)
+                            hr.separator
+                            div.form_group
+                                input#edit_logo_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="410" data-target="logo" name="edit_logo_cropper")
+                                label(for="edit_logo_cropper") Logo 1024*410px
+                                br
+                                img#edit_logo_cropper_preview.cropper_preview(width="230" height="90" data-for="logo" src=edit_application.logo)
+                                input#logo.invisible(type="text" name="logo" value=edit_application.logo)
+                            hr.separator
+                            div.form_group
+                                label(for="color") Color
+                                br
+                                input#color(type="color" name="color" value=edit_application.color)
+                            div.form_group.material_input
+                                input#label(type="text" name="label" minlength="4" value=edit_application.name required)
+                                label(for="label") Name
+                            div.form_group.material_input
+                                input#short_name(type="text" name="short_name" minlength="4" value=edit_application.short_name required)
+                                label(for="short_name") Short Name (without spaces and special characters)
+                            div.form_group.material_input
+                                input#host(type="text" name="host" minlength="4" value=edit_application.host required)
+                                label(for="host") host ex : http://account.idkids-app.com
+                            div.form_group.material_input
+                                input#redirect_url(type="text" name="redirect_url" minlength="4" value=edit_application.redirect_url required)
+                                label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
+                            div.form_group
+                                a.hyperlink(href="#") > En savoir plus sur l'url de redirection
+                            div.form_group.material_input
+                                textarea#description(type="text" minlength="50" maxlength="250" name="description" required)= edit_application.description
+                                label(for="description") description
+                            div.form_group.material_input
+                                input#short_desc(type="text" minlength="10" maxlength="50" value=edit_application.short_desc name="short_desc" required)
+                                label(for="short_desc") short description
+                            div.form_group.material_input
+                                input#bundle(type="text" value=edit_application.bundle name="bundle" required)
+                                label(for="bundle") bundle ex : account.idkids.fr
+                            div.form_group.material_input
+                                input#terms_url(type="text" minlength="5" value=edit_application.terms_url name="terms_url" required)
+                                label(for="terms_url") special terms url with http://
+                            hr.separator
+                            div.form-group.array_list_inputs(data-name="aliases")
+                                h3 Ajouter des alias au domaine de l'application
+                                p Si votre domaine est accessible avec ou sans les www en https ou sans certificat SSL ou encore si vous utilisez le SDK sur différents sous-domaines, veuillez renseigner les possibilités ci-dessous.
+                                ul.array_list_menu
+                                    li.add_input_array_button Ajouter +
+                                ul.array_list_inputs
+                                    each alias in edit_application.aliases
+                                        li.form-group.material_input
+                                            input(type="text" minlength="5" name="alias" value=alias[0])
+                                            label Entrez l'url de l'alias
+                                            div.delete_input_array_button Supprimer
+                            hr.separator
+                            div.form_group.material_input
+                                input#secret(type="text" value=edit_application.secret name="terms_url" disabled)
+                                label(for="secret") secret
+                            div.form_group.material_input
+                                input#token(type="text" value=edit_application.token name="terms_url" disabled)
+                                label(for="token") token
+                            div.form_group.buttons.inline
+                                div.btn.btn-success.btn-lg(data-action="submit") Enregistrer
+                                div.btn.btn-danger.btn-lg(data-action="delete") Supprimer

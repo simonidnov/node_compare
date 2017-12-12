@@ -1,6 +1,12 @@
+.admin_content{
+    padding-top:108px;
+}
 .admin{
-    padding-top:105px;
-    display: -webkit-inline-box;
+    display: flex;
+    width:100%;
+    height:100%;
+    position: relative;
+    min-height: 70vh;
 }
 .admin h1{
     margin: 0;
@@ -8,16 +14,24 @@
 }
 .admin .shutter{
     height:100%;
-    min-height: 100vh;
-    display: block;
-    width: 230px;
+    width: 20vw;
     background:#F9F9F9;
+    box-sizing: border-box;
+    position: absolute;
     -moz-box-shadow: 0px 0px 25px -10px #656565;
     -webkit-box-shadow: 0px 0px 25px -10px #656565;
     -o-box-shadow: 0px 0px 25px -10px #656565;
     box-shadow: 0px 0px 25px -10px #656565;
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=NaN, Strength=25);
     overflow: scroll;
+}
+.admin .container{
+    padding: 20px;
+    margin: 0;
+    width:80vw;
+    margin-left: 20vw;
+    display: inline;
+    box-sizing: border-box;
 }
 .admin .shutter h3{
     margin:0;
@@ -48,11 +62,6 @@
 .admin .shutter ul li .label{
     line-height: 32px;
     padding-left: 10px;
-}
-.admin .container{
-    padding: 20px;
-    margin: 0;
-    width:100%;
 }
 .admin .shutter_action{
     background-color: lightseagreen;

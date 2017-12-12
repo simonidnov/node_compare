@@ -1,5 +1,7 @@
 const Auth_model = require('../models/auth_model');
-
+exports.get = function(req, datas, callback) {
+    Auth_model.get(req, datas, callback);
+};
 // check user login then return user_infos
 exports.login = function(req, datas, callback) {
     Auth_model.login(req, datas, callback);
