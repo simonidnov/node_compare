@@ -8,6 +8,9 @@ const db = require('mongoose'),
 
 module.exports = {
     validate_from:function(req, host) {
+        if(typeof req.options === "undefined"){
+            return false;
+        }
         if(typeof req.options.secret === "undefined" || typeof req.options.from_origin === "undefined"){
             return false;
         }

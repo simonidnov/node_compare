@@ -32,7 +32,9 @@ const db = require('mongoose'),
                 level2short : {type:'string'}
               },
               provider: {type:'string'}
-          }
+          },
+          created     : {type:'Date', default: Date.now},
+          updated     : {type:'Date', default: Date.now}
       },
       NodeGeocoder = require('node-geocoder'),
       options = {

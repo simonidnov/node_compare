@@ -104,7 +104,7 @@
     margin-bottom: 10px;
 }
 .formular .form-group{
-    display: inline-block;
+    display: inline-flex;
     width: 100%;
     text-align: left;
     box-sizing: border-box;
@@ -636,7 +636,14 @@ input:-webkit-autofill {
     left:0px;
 }
 
-
+/* ------------------ TYPE COLOR ---------------- */
+input[type="color"]{
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 80px;
+    height: 80px;
+}
 
 
 /* SET PLACEHOLDER FOR ALL INPUTS TYPE */
@@ -782,4 +789,61 @@ input:-webkit-autofill {
 .calendar .content ul li.disabled{
     background:#F0F0F0;
     color:#CCC;
+}
+
+
+
+/* CROPPER */
+.cropper_preview{
+    background:#E3E3E3;
+    margin-top:10px;
+    border:none;
+    background-image: url(../../images/assets/picture.svg);
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+    background-position: center center;
+}
+
+
+/* ARRAY LIST INPUTS */
+.array_list_inputs{
+    display: block !important;
+    position: relative;
+}
+.array_list_inputs .array_list_menu{
+    margin:0;
+    padding:0;
+    width:100%;
+    position: relative;
+    display: table;
+}
+.array_list_inputs .array_list_menu li{
+    margin:0;
+    padding:10px;
+    list-style: none;
+    float: right;
+    position: relative;
+}
+.array_list_inputs .array_list_inputs{
+    position: relative;
+    margin:0;
+    padding:0;
+}
+.array_list_inputs .array_list_inputs li{
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+.array_list_inputs .array_list_inputs li .delete_input_array_button{
+    position: absolute;
+    right:0;
+    bottom:0;
+    padding:10px;
+    color:#FFF;
+    background:coral;
+    cursor: pointer;
+}
+.array_list_inputs .array_list_menu li.add_input_array_button{
+    padding:10px;
+    cursor: pointer;
 }

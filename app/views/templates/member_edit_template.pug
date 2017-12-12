@@ -6,11 +6,20 @@ block member_edit
             var query = "#{query}";
             var member= _.where(user.members, {_id:query.member_id})[0];
         form(method="PUT" action='/me/members/')
-            div.form-group
-                input#child_avatar_file(type="file" name="child_avatar_file" accept="image/*" data-file="avatar")
-                label.avatar(for="child_avatar_file")
-                    img(src=member.avatar+"" onerror="this.src='/images/assets/account.svg'")
-                input#child_avatar.invisible(type="text" name="avatar")
+            div.form_group
+                input#kid_avatar_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="kid_avatar" name="kid_avatar_cropper")
+                label(for="kid_avatar_cropper") Avatar 1024*1024px
+                br
+                img#kid_avatar_cropper_preview.preview.cropper_preview(width="80" height="80" data-for="child_avatar_cropper" src=member.avatar  onerror="this.src='/images/assets/account.svg'")
+                input#kid_avatar.invisible(type="text" name="avatar" value=member.avatar)
+            
+            //div.form-group
+            //    input#child_avatar_file(type="file" name="child_avatar_file" accept="image/*" data-file="avatar")
+            //    label.avatar(for="child_avatar_file")
+            //        img(src=member.avatar+"" onerror="this.src='/images/assets/account.svg'")
+            //    input#child_avatar.invisible(type="text" name="avatar")
+            
+            
             hr.separator
             div.form-group.material_input
                 input#first_name(type="text" name="first_name" minlength="4" value=member.first_name)

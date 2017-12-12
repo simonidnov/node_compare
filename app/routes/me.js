@@ -26,7 +26,7 @@ me.use(function(req, res, next) {
     }
     
     if(!auth_helper.validate_from(dataCheck, req.get('host'))){
-        res.status(401).send({ message: "your server was not authorised", request:dataCheck, host:req.get('host'), is_ok:dataCheck.options.from_origin.indexOf(req.get('host'))});
+        res.status(401).send({ message: "your server was not authorised", request:dataCheck, host:req.get('host'), is_ok:""});
     }
     // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
     if(req.url.indexOf('/from') === -1){

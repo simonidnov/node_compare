@@ -8,6 +8,15 @@ function formular(target, callback){
     };
     this.setListeners = function(){
         var self = this;
+        $(target).find('.delete_input_array_button').off('click').on('click', function(){
+            $(this).parent().remove();
+        });
+        $(target).find('.add_input_array_button').off('click').on('click', function(){
+            $(this).parent().parent().find(".array_list_inputs").append('<li class="form-group material_input"><input minlength="5" type="text" name="alias" value=""/><label>Entrez une valeur</label><div class="delete_input_array_button">Supprimer</div></li>');
+            $(target).find('.delete_input_array_button').off('click').on('click', function(){
+                $(this).parent().remove();
+            });
+        });
         $(target).find('[data-file]').off('change').on('change', function(e){
             var input = this,
                 input_id = $(this).attr("id");
@@ -22,12 +31,52 @@ function formular(target, callback){
                 processData: false,
                 //Ajax events
                 success: function(response){
-                    console.log(target);
                     $(target).find('[for="'+input_id+'"] img').attr('src', "/"+response.path);
-                    console.log("input to replace ::::: ", $(target).find('#'+input_id.replace('_file', '')));
                     $(target).find('#'+input_id.replace('_file', '')).val("/"+response.path);
                 }
             });
+        });
+        
+        $(target).find(".image_cropper").change(function() {
+            console.log('cropper');
+            var $image = document.getElementById($(this).attr('id')+'_preview'),
+                oFReader = new FileReader(),
+                _target = $(this);
+            oFReader.readAsDataURL(this.files[0]);
+            oFReader.onload = function (oFREvent) {
+                console.log('image loaded');
+                $image.src = this.result;
+                _target.parent().append('<div class="btn btn-success valid_crop">Valider</div>');
+                var cropper = new Cropper($image, {
+                  aspectRatio: _target.attr('data-width') / _target.attr('data-height'),
+                  crop: function(e) {}
+                });
+                _target.parent().find('.valid_crop').off('click').on('click', function(){
+                    _target.parent().find('.valid_crop').remove();
+                    $image.src = cropper.getCroppedCanvas().toDataURL();
+                    cropper.destroy();
+                    
+                    var url = "url/action";                
+                    var image = $('#image-id').attr('src');
+                    var base64ImageContent = $image.src.replace(/^data:image\/(png|jpg);base64,/, "");
+                    var blob = base64ToBlob(base64ImageContent, 'image/png');
+                    var formData = new FormData();
+                    formData.append('base64', blob);
+                    
+                    $.ajax({
+                        url: '/media/base64',  //Server script to process data
+                        type: 'POST',
+                        method : 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        //Ajax events
+                        success: function(response){
+                            $(target).find('#'+_target.attr('data-target')).val(response.path);
+                        }
+                    });
+                });
+            };
         });
         $(target).find('[data-action]').off("click").on("click", function(e){
             e.preventDefault();
@@ -36,6 +85,7 @@ function formular(target, callback){
                 case 'switch_tab':
                     break;
                 case 'submit':
+                    //callback({status:"hitted", "action":"submit"});
                     break;
                 default:
                     break;
@@ -248,6 +298,20 @@ function formular(target, callback){
     this.validateEmail = function(email){
         if(this.email_tester.test(email)) return true;
         else return false;
+    };
+    this.get_datas = function(){
+        var form_datas = {};
+        $.each($(target).find("form").serializeArray(), function(index, serie){
+            form_datas[serie.name] = serie.value;
+        });
+        $.each($(target).find('.array_list_inputs'), function(index, array_list){
+            var array_list = [];
+            $.each($(this).find('input'), function(index, input_list){
+               array_list.push($(this).val()); 
+            });
+            form_datas[$(this).attr('data-name')] = array_list;
+        });
+        return form_datas;
     }
 }
 
@@ -370,4 +434,29 @@ function datepicker(target, callback){
         target.val(year+'-'+month+'-'+day);
         target.blur();
     }
+}
+
+
+
+function base64ToBlob(base64, mime) 
+{
+    mime = mime || '';
+    var sliceSize = 1024;
+    var byteChars = window.atob(base64);
+    var byteArrays = [];
+
+    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+        var slice = byteChars.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: mime});
 }

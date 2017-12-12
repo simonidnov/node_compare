@@ -6,3 +6,4 @@ app/ssh/*
 authentication/
 test-sails/
 ssh/
+app/public/uploads/

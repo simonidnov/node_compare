@@ -357,7 +357,7 @@ footer ul li a:hover:after{
 }
 
 .container .row{
-    max-width: 980px;
+    max-width: 1280px;
     text-align: left;
     margin:0 auto;
     display: block;
@@ -382,17 +382,23 @@ p{
     width:25%;
 }
 .col-md-4{
-    width:40%;
+    width:33%;
 }
 .col-md-6{
     width:50%;
 }
 .col-md-8{
-    width:60%;
+    width:66%;
+}
+.col-md-12{
+    width:100%;
 }
 
 
 /* --------- BUTTONS CTA ---------- */
+.buttons.inline{
+    display: inline-flex;
+}
 .btn{
     padding:10px;
     padding-left:20px;

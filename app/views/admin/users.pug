@@ -93,5 +93,19 @@ block content
                             div.form-group.radio_list
                                 input#one_month(type="radio" name="active" value="one_month")
                                 label(for='one_month') 1 mois
+                    div.form-group
+                        input#has_fidelity.form-control(type='checkbox', name='has_fidelity')
+                        label(for="has_fidelity") Carte de fidélité
+                    div.form-group
+                        input#has_basket.form-control(type='checkbox', name='has_basket')
+                        label(for="has_basket") Panier en cours
+                    div.form-group
+                        input#has_orders.form-control(type='checkbox', name='has_orders')
+                        label(for="has_orders") Paiements
+                    div.form-group
+                        input#has_return.form-control(type='checkbox', name='has_return')
+                        label(for="has_return") Retours
+                    div.form-group
+                        div.btn.btn-success Appliquer les filtres
         div#users.container
             h1 UTILISATEURS

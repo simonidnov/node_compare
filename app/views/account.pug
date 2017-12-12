@@ -10,11 +10,15 @@ block content
                     h1 Mon profil
                     form.form_content(method="POST" action='/account/profile/')
                         p Informations de votre profil public
-                        input#avatar_file(type="file" name="avatar_file" data-file="avatar" accept="image/*")
-                        label.avatar(for="avatar_file")
-                            div.preview
-                                img(src=user.avatar+"" onerror="this.src='/images/assets/account.svg'")
-                        input#avatar(type="text" name="avatar")
+                        
+                        div.form_group
+                            input#avatar_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="avatar" name="avatar_cropper")
+                            label(for="avatar_cropper") Avatar 1024*1024px
+                            br
+                            img#avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="avatar_cropper" src=user.avatar  onerror="this.src='/images/assets/account.svg'")
+                            input#avatar.invisible(type="text" name="avatar" value=user.avatar)
+                            
+                        
                         div.form-group.material_input
                             input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="4", data-erromessage=lang[locale].keys.pseudo_error)
                             label(for='pseudo') !{lang[locale].keys.pseudo_holder}
@@ -452,12 +456,20 @@ block content
                         hr
                         br
                         form.form_content(method="PUT" action='/me/members/')
-                            div.form-group
-                                input#child_avatar_file.invisible(type="file" name="child_avatar_file" data-file="avatar" accept="image/*")
-                                label.avatar(for="child_avatar_file")
-                                    div.preview
-                                        img(src=member_infos.avatar+"" onerror="this.src='/images/assets/account.svg'")
-                                input#child_avatar.invisible(type="text", name="avatar")
+                            div.form_group
+                                input#child_avatar_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="child_avatar" name="child_avatar_cropper")
+                                label(for="child_avatar_cropper") Avatar 1024*1024px
+                                br
+                                img#child_avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="child_avatar_cropper" src=member_infos.avatar  onerror="this.src='/images/assets/account.svg'")
+                                input#child_avatar.invisible(type="text" name="avatar" value=member_infos.avatar)
+
+                            //div.form-group
+                            //    input#child_avatar_file.invisible(type="file" name="child_avatar_file" data-file="avatar" accept="image/*")
+                            //    label.avatar(for="child_avatar_file")
+                            //        div.preview
+                            //            img(src=member_infos.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                            //    input#child_avatar.invisible(type="text", name="avatar")
+                            
                             hr.separator
                             div.form-group.material_input
                                 input#first_name(type="text" name="first_name" minlength="4" value=member_infos.first_name)

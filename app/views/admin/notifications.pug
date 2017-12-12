@@ -1,5 +1,26 @@
 extends admin_header
 block content
     div.admin
-        div#users
-            h1 ADMIN NOTIFICATIONS
+        div.shutter
+            a.shutter_action(href="/admin/notifications/new" title="ajouter une application") 
+                span.icon.icon-more.idkids-icons
+                div.label Nouvelle Newsletter
+            ul
+                li 
+                    span.icon.icon-settings.idkids-icons
+                    div.label Paramètres
+                li 
+                    span.icon.icon-newsletter.idkids-icons
+                    div.label Templates
+                li 
+                    span.icon.icon-group.idkids-icons
+                    div.label Groupes
+                li 
+                    span.icon.icon-notifications.idkids-icons
+                    div.label Notifications
+                li 
+                    span.icon.icon-widgets.idkids-icons
+                    div.label Archives
+        div.container
+            div.article
+                h1 Notifications

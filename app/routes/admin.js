@@ -8,7 +8,6 @@ var express = require('express'),
     lang = require('../public/languages/auth_lang');
 
 admin.use(function(req, res, next){
-    //ACCEPT CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
@@ -17,25 +16,24 @@ admin.use(function(req, res, next){
     // TODO : VALIDATE SESSION USER
     Auth_helper.validate_session(req, function(e){
         if(e.status === 200){
-            next();
+            Auth_helper.validate_admin(req, function(e){
+                if(e.status === 200){
+                    next();
+                }else{
+                    //next();
+                    res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                }
+            });
         }else{
             res.redirect(301, '/auth');
-            //next();
         }
     });
-    Auth_helper.validate_admin(req, function(e){
-        if(e.status === 200){
-            next();
-        }else{
-            //next();
-            res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
-        }
-    });
+    //next();
 });
 /* GET admin page. */
 admin
     .get('/', function(req, res, next) {
-        res.render('admin/dashboard', {
+        return res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
             locale:language_helper.getlocale(),
@@ -72,22 +70,91 @@ admin
         });
     })
     .get('/apps', function(req, res, next) {
-         res.render('admin/apps', {
-            title: 'Admin Dashboard',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:'apps',
-            js:[
-                '/public/javascripts/admin/apps.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
-            ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/apps.css',
-                '/public/stylesheets/components/formular.css'
-            ]
+        var Apps_controller = require('../controllers/apps_controller');
+        var applications = null;
+        Apps_controller.get(req, res, function(e){
+            applications = e.datas;
+            res.render('admin/apps', {
+                title: 'Admin Dashboard',
+                user : req.session.Auth,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                page:'apps',
+                applications:applications,
+                js:[
+                    '/public/javascripts/admin/apps.js',
+                    '/node_modules/cropperjs/dist/cropper.min.js',
+                    '/public/javascripts/components/formular.js',
+                    '/node_modules/qrcode/build/qrcode.min.js'
+                ], css:[
+                    '/public/stylesheets/admin/admin.css',
+                    '/node_modules/cropperjs/dist/cropper.min.css',
+                    '/public/stylesheets/admin/apps.css',
+                    '/public/stylesheets/components/formular.css'
+                ]
+            });
         });
+        return;
+    })
+    .get('/apps/:page', function(req, res, next) {
+        var Apps_controller = require('../controllers/apps_controller');
+        var applications = null;
+        Apps_controller.get(req, res, function(e){
+            applications = e.datas;
+            res.render('admin/apps', {
+                title: 'Admin Dashboard',
+                user : req.session.Auth,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                page:req.params.page,
+                applications:applications,
+                js:[
+                    '/public/javascripts/admin/apps.js',
+                    '/node_modules/cropperjs/dist/cropper.min.js',
+                    '/public/javascripts/components/formular.js',
+                    '/node_modules/qrcode/build/qrcode.min.js'
+                ], css:[
+                    '/public/stylesheets/admin/admin.css',
+                    '/node_modules/cropperjs/dist/cropper.min.css',
+                    '/public/stylesheets/admin/apps.css',
+                    '/public/stylesheets/components/formular.css'
+                ]
+            });
+        });
+        return;
+    })
+    .get('/apps/:page/:_id', function(req, res, next) {
+        var Apps_controller = require('../controllers/apps_controller');
+        var applications = null;
+        var edit_application = null;
+        Apps_controller.get(req, res, function(e){
+            applications = e.datas;
+            //application = _.where(applications, {_id:"5a2eb38289fda770c4af9312"})[0];
+            edit_application = _.where(JSON.parse(JSON.stringify(applications)), {_id:req.params._id})[0];
+            res.render('admin/apps', {
+                title: 'Admin Dashboard',
+                user : req.session.Auth,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                page:req.params.page,
+                applications:applications,
+                app_id:req.params._id,
+                edit_application:edit_application,
+                _:_,
+                js:[
+                    '/public/javascripts/admin/apps.js',
+                    '/node_modules/cropperjs/dist/cropper.min.js',
+                    '/public/javascripts/components/formular.js',
+                    '/node_modules/qrcode/build/qrcode.min.js'
+                ], css:[
+                    '/public/stylesheets/admin/admin.css',
+                    '/node_modules/cropperjs/dist/cropper.min.css',
+                    '/public/stylesheets/admin/apps.css',
+                    '/public/stylesheets/components/formular.css'
+                ]
+            });
+        });
+        return;
     })
     .get('/users', function(req, res, next) {
          res.render('admin/users', {
@@ -114,6 +181,24 @@ admin
             locale:language_helper.getlocale(),
             lang:lang,
             page:'notifications',
+            js:[
+                '/public/javascripts/admin/notifications.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/admin/admin.css',
+                '/public/stylesheets/admin/notifications.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+    })
+    .get('/settings', function(req, res, next) {
+         res.render('admin/settings', {
+            title: 'Admin Settings',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:'settings',
             js:[
                 '/public/javascripts/admin/notifications.js',
                 '/public/javascripts/components/formular.js',

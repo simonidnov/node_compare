@@ -8,8 +8,8 @@
 }
 .admin .shutter{
     height:100%;
-    min-height: 80vh;
-    max-height: 80vh;
+    min-height: 100vh;
+    display: block;
     width: 230px;
     background:#F9F9F9;
     -moz-box-shadow: 0px 0px 25px -10px #656565;
@@ -43,6 +43,7 @@
 .admin .shutter ul li .icon{
     width:32px;
     height:32px;
+    background-size: cover;
 }
 .admin .shutter ul li .label{
     line-height: 32px;
@@ -51,6 +52,7 @@
 .admin .container{
     padding: 20px;
     margin: 0;
+    width:100%;
 }
 .admin .shutter_action{
     background-color: lightseagreen;

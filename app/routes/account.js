@@ -37,10 +37,12 @@ account
             page:req.params.page,
             js:[
                 '/public/javascripts/account.js',
+                '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/account.css',
+                '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]
         });
@@ -51,14 +53,16 @@ account
             user : req.session.Auth,
             locale:language_helper.getlocale(),
             lang:lang,
-            page:req.params.page,
+            page:"member",
             member_infos:_.where(req.session.Auth.members, {_id:req.params.member_id})[0],
             js:[
                 '/public/javascripts/account.js',
+                '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/account.css',
+                '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]
         });
@@ -73,10 +77,12 @@ account
             address_infos:_.where(req.session.Auth.address, {_id:req.params.address_id})[0],
             js:[
                 '/public/javascripts/account.js',
+                '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/account.css',
+                '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]
         });
