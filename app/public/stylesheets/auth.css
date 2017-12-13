@@ -250,3 +250,11 @@ header .logo{
 .icon.bubble{
     background-image:url(../images/assets/icon_bubble.svg);
 }
+
+
+@media screen and (max-width: 420px) {
+    .auth .account_list li{
+        padding-left:20px;
+        padding-right:20px;
+    }
+}
