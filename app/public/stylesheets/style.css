@@ -615,6 +615,13 @@ p{
         background-position: center center;
         background-image:url(../images/assets/icon_idkids.svg);
     }
+    header .hor_nav{
+        -moz-box-shadow: 0px 2px 15px -10px #656565;
+        -webkit-box-shadow: 0px 2px 15px -10px #656565;
+        -o-box-shadow: 0px 2px 15px -10px #656565;
+        box-shadow: 0px 2px 15px -10px #656565;
+        filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
+    }
 }`
 
 
