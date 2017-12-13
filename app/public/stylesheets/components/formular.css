@@ -483,6 +483,8 @@ input:-webkit-autofill {
     height:24px;
     cursor: pointer;
     position: relative;
+    border:none;
+    background:none;
 }
 .radio_list input[type="radio"]:before{
     position: absolute;
