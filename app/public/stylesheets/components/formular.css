@@ -343,6 +343,7 @@
     position: relative;
     padding-top:20px;
     margin-bottom: 10px;
+    display: inline-block;
 }
 .formular .material_input:after{
     content:"";
