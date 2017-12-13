@@ -10,8 +10,8 @@ block content
                         p Informations de votre profil public
                         
                         div.form_group
-                            input#avatar_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="avatar" name="avatar_cropper")
-                            label(for="avatar_cropper") Avatar 1024*1024px
+                            input#avatar_cropper.image_cropper.invisible(type="file" data-width="256" data-height="256" data-target="avatar" name="avatar_cropper")
+                            label(for="avatar_cropper") Avatar 256*256
                             br
                             img#avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="avatar_cropper" src=user.avatar  onerror="this.src='/images/assets/account.svg'")
                             input#avatar.invisible(type="text" name="avatar" value=user.avatar)  
@@ -549,8 +549,8 @@ block content
                         br
                         form.form_content(method="PUT" action='/me/members/')
                             div.form_group
-                                input#child_avatar_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="child_avatar" name="child_avatar_cropper")
-                                label(for="child_avatar_cropper") Avatar 1024*1024px
+                                input#child_avatar_cropper.image_cropper.invisible(type="file" data-width="256" data-height="256" data-target="child_avatar" name="child_avatar_cropper")
+                                label(for="child_avatar_cropper") Avatar 256*256px
                                 br
                                 img#child_avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="child_avatar_cropper" src=member_infos.avatar  onerror="this.src='/images/assets/account.svg'")
                                 input#child_avatar.invisible(type="text" name="avatar" value=member_infos.avatar)
