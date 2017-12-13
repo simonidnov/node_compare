@@ -412,8 +412,6 @@ block content
                     
             div.col.col-md-5
                 div.formular
-                    hr
-                    br
                     h2 Mes Addresses
                     if(typeof user.address !== "undefined")
                         if(user.address.length > 0)
@@ -514,8 +512,6 @@ block content
                             div#submit_services.btn.btn-success(data-action="submit" data-userid=user._id)= lang[locale].keys.save_cta
             div.col.col-md-5
                 div.formular
-                    hr
-                    br
                     h2= lang[locale].keys.notifications_kids_title
                     p= lang[locale].keys.notifications_kids_message
                     if(user.members && user.members.length > 0)
@@ -535,8 +531,6 @@ block content
                             div.btn.btn-m.btn-success(href="/account/profile" data-action="page_reload")= lang[locale].keys.manage_kids_cta
                 //if(!user.mobile || user.mobile === "")
                 div.formular
-                    hr
-                    br
                     h2= lang[locale].keys.notifications_sms_need_mobile_title
                     p= lang[locale].keys.notifications_sms_need_mobile_message
                     form.form_content(method="POST" action='/account/profile/')
