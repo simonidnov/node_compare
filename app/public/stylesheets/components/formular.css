@@ -870,4 +870,7 @@ input[type="color"]{
     .formular header{
         padding:20px;
     }
+    .formular h1{
+        padding-left:20px;
+    }
 }
