@@ -7,3 +7,4 @@ authentication/
 test-sails/
 ssh/
 app/public/uploads/
+app/config/
