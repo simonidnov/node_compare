@@ -115,7 +115,9 @@ a {
     _border-color: #000000 #000000 #ffffff #000000;
     _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 }
-.header .short_cuts ul li:hover .subnav{
+.header .short_cuts ul li:hover .subnav,
+.header .short_cuts ul li:focus .subnav,
+.header .short_cuts ul li:active .subnav{
     visibility: visible;
     opacity: 1;
     right:0px;
