@@ -139,9 +139,9 @@ block content
                                 ul.array_list_menu
                                     li.add_input_array_button Ajouter +
                                 ul.array_list_inputs
-                                    each alias in edit_application.aliases
+                                    each alias in _.keys(edit_application.aliases[0][0])
                                         li.form-group.material_input
-                                            input(type="text" minlength="5" name="alias" value=alias[0])
+                                            input(type="text" minlength="5" name=alias value=edit_application.aliases[0][0][alias])
                                             label Entrez l'url de l'alias
                                             div.delete_input_array_button Supprimer
                             hr.separator

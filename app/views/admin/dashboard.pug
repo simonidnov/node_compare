@@ -3,18 +3,26 @@ block content
     div.admin
         div.shutter
             ul
-                li 
-                    span.icon.icon-widgets.idkids-icons
-                    div.label Applications
-                li 
-                    span.icon.icon-pencil.idkids-icons
-                    div.label Pages
-                li 
-                    span.icon.icon-account.idkids-icons
-                    div.label Utilisateurs
-                li 
-                    span.icon.icon-notifications.idkids-icons
-                    div.label Notification
+                a(href="/admin/apps")
+                    li 
+                        span.icon.icon-widgets.idkids-icons
+                        div.label Applications
+                a(href="/admin/pages")
+                    li 
+                        span.icon.icon-pencil.idkids-icons
+                        div.label Pages
+                a(href="/admin/users")
+                    li 
+                        span.icon.icon-account.idkids-icons
+                        div.label Utilisateurs
+                a(href="/admin/notifications")
+                    li 
+                        span.icon.icon-notifications.idkids-icons
+                        div.label Notification
+                a(href="/admin/settings")
+                    li 
+                        span.icon.icon-settings.idkids-icons
+                        div.label Paramètres
         div.container
             div.article
                 h1 Dashboard

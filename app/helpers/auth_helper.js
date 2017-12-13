@@ -1,23 +1,37 @@
 const db = require('mongoose'),
       config = require('../config/config'),
       Auth_model = require('../models/auth_model'),
+      Apps_model = require('../models/apps_model'),
       machineId = require('node-machine-id'),
+      jwt = require('jsonwebtoken'),
       device_uid = machineId.machineIdSync({original: true});
 
 
 
 module.exports = {
-    validate_from:function(req, host) {
+    validate_from:function(req, host, callback) {
+        //callback(true);
         if(typeof req.options === "undefined"){
+            callback(false);
             return false;
         }
         if(typeof req.options.secret === "undefined" || typeof req.options.from_origin === "undefined"){
+            callback(false);
             return false;
         }
-        if(req.options.secret !== "000-000-000" || req.options.from_origin !== "http://localhost:3000"  && req.options.from_origin !== "http://localhost:9000" || req.options.from_origin.indexOf(host) === -1){
-            return false;
+        if(req.options.from_origin === "localhost:9000"){
+            // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
+            callback(true);
+            return true;
         }
-        return true;
+        Apps_model.validate(req.options.secret, req.options.from_origin, function(e){
+            /* TODO CHECK RESULT LENGTH OR TRUE */
+            if(e.datas.length === 0){
+                callback(false);
+            }else{
+                callback(true);
+            }
+        });
     },
     validate_user:function(req, host, callback) {
         /* check user id */
@@ -32,6 +46,8 @@ module.exports = {
         if(typeof req.options.user_token === "undefined"){
             callback({status:401, "message":"UNAUTHARISED need valid user token"});
         }
+        /* TOFO VERIFY TOKEN FROM USER SECRET */
+        //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
         /* match user token + device */
         db.connect(config.database.users, {useMongoClient: true});
         req.options.device_uid = device_uid;
@@ -40,7 +56,6 @@ module.exports = {
         });
     },
     validate_session:function(req, callback){
-        console.log(req.session);
         if(typeof req.session.Auth === "undefined"){
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
@@ -51,16 +66,15 @@ module.exports = {
         if(typeof req.session.Auth.rights === "undefined"){
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
-            if(req.session.Auth.rights.type === "RWO"){
+            /* UNCOMMENT IF USER READ AND WRITE OWNER RWO IS SET */
+            //if(req.session.Auth.rights.type === "RWO"){
                 callback({status:200, "message":"AUTHAURIZED"});
-            }else{
-                callback({status:301, "message":"UNAUTHAURIZED"});
-            }
+            //}else{
+            //    callback({status:301, "message":"UNAUTHAURIZED"});
+            //}
         }
     },
     check_session:function(req, user_id, callback){
-        console.log('-------------------------------- RESET SESSION --------------------------------------------- ', user_id);
-        console.log('-------------------------------- user_id --------------------------------------------- ', user_id);
         Auth_model.reset_session(req, user_id, callback);
     }
 }

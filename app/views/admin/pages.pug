@@ -19,3 +19,32 @@ block content
                     p après avoir intégré le SDK sur votgre site, vous pouvez requêter des pages soit côté client avec un appel XHTML classique, soit côté serveur en vous appuyant sur la technologie que vous utilisez par exemple en CURL.
                 div.col.col-md-3
                     h2 Dernières mises à jour
+                    code
+                        xmp.
+                          <?xml version=«1.0» encoding=«UTF-8» ?>
+                          <OrdersList>
+                            <SendOrder date=«1486019811» nomber=«63723» price_sum=«6940» weight_sum=«800»>
+                              <UserInfo>
+                                <family>Громович</family>
+                                <name>Алексей</name>
+                                <patronymic>Алексеевич</patronymic>
+                                <phone>79252458485</phone>
+                                <email>grmvch@gmail.com</email>
+                              </UserInfo>
+                              <Delivery>
+                                <transport_companies>4</transport_companies>
+                                <city_id>0a7e138b-7c55-4745-8a75-0441df4d3432</city_id>
+                                <delivery_points_id>900305</delivery_points_id>
+                                <price_delivery>400</price_delivery>
+                              </Delivery>
+                              <Commentary></Commentary>
+                              <Items>
+                                <Item article_product=«00122000» title=«Сноубордический рюкзак DAKINE HELI PRO 20L BOZEMAN» count=«1» price=«6940»/>
+                              </Items>
+                            </SendOrder>
+                          </OrdersList>
+                    code.script
+                        xmp.
+                            for(var i =0; i<8 i++){
+                                console.log(i);
+                            }

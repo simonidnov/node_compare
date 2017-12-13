@@ -9,8 +9,8 @@ var index = {
         this.set_hornav();
         this.sdk = new idkids_jssdk(
             {
-                "secret":"000-000-000",
-                "callback_url":window.location.origin+"/account/",
+                "secret":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiI1YTMwZGViZmYzNjViMzBhZmQ3ODY4OWMiLCJpYXQiOjE1MTMxNTgxODV9.8e9JhLtcpzf8hO2CguRuUINBpLWOOClx_-3GfFoVqcM",
+                "callback_url":window.location.origin+"/redirect/",
                 "authorisation":{
                     "email"         : true,
                     "mobile"        : true,

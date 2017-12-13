@@ -59,6 +59,11 @@
     font-size: 13px;
     font-weight: 300;
     line-height: 19px;
+    padding:10px;
+    padding-left:40px;
+}
+.formular .form_content p{
+    padding:0;
 }
 .formular h1,
 .formular h2{
@@ -81,7 +86,7 @@
 }
 .formular .hyperlink{
     margin-top:5px;
-    text-align: center;
+    text-align: left;
     width:100%;
     line-height: 24px;
     text-decoration: underline;

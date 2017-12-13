@@ -3,7 +3,7 @@ extends account_header
 block content
     div.container.with_head
         div.row#profile(style= page === "profile" ? "display:block" : "display:none")
-            div.col.col-md-8
+            div.col.col-md-7
                 div.formular#public_datas
                     hr
                     br
@@ -16,9 +16,7 @@ block content
                             label(for="avatar_cropper") Avatar 1024*1024px
                             br
                             img#avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="avatar_cropper" src=user.avatar  onerror="this.src='/images/assets/account.svg'")
-                            input#avatar.invisible(type="text" name="avatar" value=user.avatar)
-                            
-                        
+                            input#avatar.invisible(type="text" name="avatar" value=user.avatar)  
                         div.form-group.material_input
                             input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="4", data-erromessage=lang[locale].keys.pseudo_error)
                             label(for='pseudo') !{lang[locale].keys.pseudo_holder}
@@ -28,19 +26,19 @@ block content
                         hr
                         p Je souhaites que les données suivantes soient visible publiquement
                         div.form-group.inline
-                            input#public_locale.form-control(type='checkbox' name='public_profile' value='public_locale' checked=((user.public_profile.indexOf('public_locale') === -1)? false : true))
+                            input#public_locale.form-control(type='checkbox' name='public_profile' value='public_locale' checked=((user.public_profile && user.public_profile.indexOf('public_locale') === -1)? false : true))
                             label(for="public_locale") Ma ville, ma région et mon pays <b>(votre adresses postale exacte ne sera pas visible)</b>
                         div.form-group.inline
-                            input#public_kids.form-control(type='checkbox' name='public_profile' value='public_kids' checked=((user.public_profile.indexOf('public_kids') === -1)? false : true))
+                            input#public_kids.form-control(type='checkbox' name='public_profile' value='public_kids' checked=((user.public_profile && user.public_profile.indexOf('public_kids') === -1)? false : true))
                             label(for="public_kids") Pseudo et l'âge de mes enfants
                         div.form-group.inline
-                            input#public_gamification.form-control(type='checkbox' name='public_profile' value='public_gamification' checked=((user.public_profile.indexOf('public_gamification') === -1)? false : true))
+                            input#public_gamification.form-control(type='checkbox' name='public_profile' value='public_gamification' checked=((user.public_profile && user.public_profile.indexOf('public_gamification') === -1)? false : true))
                             label(for="public_gamification") Partager mes badges et succès
                         div.form-group.inline
-                            input#public_created.form-control(type='checkbox' name='public_profile' value='public_created' checked=((user.public_profile.indexOf('public_created') === -1)? false : true))
+                            input#public_created.form-control(type='checkbox' name='public_profile' value='public_created' checked=((user.public_profile && user.public_profile.indexOf('public_created') === -1)? false : true))
                             label(for="public_created") Date d'inscrition et ancienneté
                         div.form-group.inline
-                            input#public_interest.form-control(type='checkbox' name='public_profile' value='public_interest' checked=((user.public_profile.indexOf('public_interest') === -1)? false : true))
+                            input#public_interest.form-control(type='checkbox' name='public_profile' value='public_interest' checked=((user.public_profile && user.public_profile.indexOf('public_interest') === -1)? false : true))
                             label(for="public_interest") !{lang[locale].keys.public_interest_check}
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
                 div.formular#private_datas
@@ -56,7 +54,7 @@ block content
                             input#female(type="radio" name="gender" value="female", checked=user.gender=="female")
                             label(for='female')= lang[locale].keys.gender_female
                         div.form-group.material_input
-                            input#email.form-control(disabled="true" type='email', placeholder=lang[locale].keys.email_holder, name='pseudo', required="required", value=user.email, minlength="4", data-erromessage=lang[locale].keys.email_error)
+                            input#email.form-control(disabled="true" type='email' placeholder=lang[locale].keys.email_holder name='pseudo' value=user.email data-erromessage=lang[locale].keys.email_error)
                             label(for='email') !{lang[locale].keys.email_holder}
                         div.form-group.material_input
                             input#firstName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.firstName_holder, name='firstName' value=user.firstName)
@@ -72,7 +70,7 @@ block content
                             label(for='mobile') !{lang[locale].keys.mobile_holder}
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
-            div.col.col-md-4
+            div.col.col-md-5
                 div.formular#add_kid
                     hr
                     br
@@ -97,7 +95,7 @@ block content
                     form.form_content(method="POST" action='/me/members')
                         if(typeof user.members !== "undefined")
                             if(user.members.length == 0)
-                                p Présentez-nous votre famille pour bénéficier de <a href="/family")conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
+                                p Présentez-nous votre famille pour bénéficier de <a href="/family">conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
                             else
                                 h3 Ajouter un enfant
                         hr.separator
@@ -117,7 +115,7 @@ block content
                         p Demandez votre carte de <a href="/fidelity_card">fidélité pour profiter des avantages</a> de nos marques et services
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.fidelity_card_cta
         div.row#addresses(style= page === "addresses" ? "display:block" : "display:none")
-            div.col.col-md-8
+            div.col.col-md-7
                 div.formular#address_form
                     hr
                     br
@@ -129,6 +127,8 @@ block content
                         if(!address_infos)
                             p= lang[locale].keys.address_form_message
                         hr
+                        div.form-group
+                            input#user_id.invisible(type='text' name="user_id" value=user._id)
                         div.form-group.material_input
                             input#addressLabel.form-control(type='text', placeholder=lang[locale].keys.addressLabel_holder, name='label', required="required", value=((address_infos)? address_infos.label : ""), minlength="4", data-erromessage=lang[locale].keys.addressLabel_error)
                             label(for='addressLabel') !{lang[locale].keys.addressLabel_holder}
@@ -418,7 +418,7 @@ block content
                                 = ((address_infos)? address_infos.AddressLine3 : "")
                             label(for='more_datas') Précisions sur la livraison
                     
-            div.col.col-md-4
+            div.col.col-md-5
                 div.formular
                     hr
                     br
@@ -446,12 +446,123 @@ block content
                                                 div.label Supprimer
                     br
                     br
+                    br      
+                            
+        div.row#basket(style= page === "basket" ? "display:block" : "display:none")
+            h1 basket
+        div.row#orders(style= page === "orders" ? "display:block" : "display:none")
+            h1 orders
+        div.row#services(style= page === "services" ? "display:block" : "display:none")
+            div.col.col-md-7
+                div.formular#services_form
+                    hr
                     br
-                            
-                            
+                    h1 Mes services
+                    form.form_content(method="PUT" action='/account/profile/')
+                        div.form-group
+                            input#user_id.invisible(type='text' name="user_id" value=user._id)
+                        div.form-group
+                            input#newsletter.form-control(type='checkbox', name='newsletter' checked=user.newsletter)
+                            label(for="newsletter") !{lang[locale].keys.accept_newsletter}
+                        div.form-group.checkbox_relative_container(data-checkboxrelative="newsletter" style= user.newsletter === true ? "display:block" : "display:none")
+                            div.checkbox_relative.array_list_inputs(data-name="newsletter_services")
+                                p !{lang[locale].keys.accept_newsletter_partners}
+                                div.line
+                                    input#newsletter_okaidi.form-control(type='checkbox', name='newsletter_okaidi', checked=((user.newsletter_services && user.newsletter_services.newsletter_okaidi === true)? true : false))
+                                    label(for="newsletter_okaidi") !{lang[locale].keys.accept_newsletter_okaidi}
+                                div.line
+                                    input#newsletter_obaibi.form-control(type='checkbox', name='newsletter_obaibi', checked=((user.newsletter_services && user.newsletter_services.newsletter_obaibi === true)? true : false))
+                                    label(for="newsletter_obaibi") !{lang[locale].keys.accept_newsletter_obaibi}
+                                div.line
+                                    input#newsletter_jacadi.form-control(type='checkbox', name='newsletter_jacadi', checked=((user.newsletter_services && user.newsletter_services.newsletter_jacadi === true)? true : false))
+                                    label(for="newsletter_jacadi") !{lang[locale].keys.accept_newsletter_jacadi}
+                                div.line
+                                    input#newsletter_oxybul.form-control(type='checkbox', name='newsletter_oxybul', checked=((user.newsletter_services && user.newsletter_services.newsletter_oxybul === true)? true : false))
+                                    label(for="newsletter_oxybul") !{lang[locale].keys.accept_newsletter_oxybul}
+                                div.line
+                                    input#newsletter_rclv.form-control(type='checkbox', name='newsletter_rclv', checked=((user.newsletter_services && user.newsletter_services.newsletter_rclv === true)? true : false))
+                                    label(for="newsletter_rclv") !{lang[locale].keys.accept_newsletter_rclv}
+                                div.line
+                                    input#newsletter_njoy.form-control(type='checkbox', name='newsletter_njoy', checked=((user.newsletter_services && user.newsletter_services.newsletter_njoy === true)? true : false))
+                                    label(for="newsletter_njoy") !{lang[locale].keys.accept_newsletter_njoy}
+                                div.line
+                                    input#newsletter_bubble.form-control(type='checkbox', name='newsletter_bubble', checked=((user.newsletter_services && user.newsletter_services.newsletter_bubble === true)? true : false))
+                                    label(for="newsletter_bubble") !{lang[locale].keys.accept_newsletter_bubble}
+                                div.line
+                                    input#newsletter_joyvox.form-control(type='checkbox', name='newsletter_joyvox', checked=((user.newsletter_services && user.newsletter_services.newsletter_joyvox === true)? true : false))
+                                    label(for="newsletter_joyvox") !{lang[locale].keys.accept_newsletter_joyvox}
+                                p !{lang[locale].keys.accept_notifications_more_informations}
+                        div.form-group
+                            input#sms.form-control(type='checkbox', name='sms' checked=user.sms)
+                            label(for="sms") !{lang[locale].keys.accept_sms}
+                        div.form-group.checkbox_relative_container(data-checkboxrelative="sms" style= user.sms === true ? "display:block" : "display:none")
+                            div.checkbox_relative.array_list_inputs(data-name="sms_services")
+                                p !{lang[locale].keys.accept_sms_partners}
+                                div.line
+                                    input#sms_okaidi.form-control(type='checkbox', name='sms_okaidi', checked=((user.sms_services && user.sms_services.sms_okaidi === true)? true : false))
+                                    label(for="sms_okaidi") !{lang[locale].keys.accept_sms_okaidi}
+                                div.line
+                                    input#sms_obaibi.form-control(type='checkbox', name='sms_obaibi', checked=((user.sms_services && user.sms_services.sms_obaibi === true)? true : false))
+                                    label(for="sms_obaibi") !{lang[locale].keys.accept_sms_obaibi}
+                                div.line
+                                    input#sms_jacadi.form-control(type='checkbox', name='sms_jacadi', checked=((user.sms_services && user.sms_services.sms_jacadi === true)? true : false))
+                                    label(for="sms_jacadi") !{lang[locale].keys.accept_sms_jacadi}
+                                div.line
+                                    input#sms_oxybul.form-control(type='checkbox', name='sms_oxybul', checked=((user.sms_services && user.sms_services.sms_oxybul === true)? true : false))
+                                    label(for="sms_oxybul") !{lang[locale].keys.accept_sms_oxybul}
+                                div.line
+                                    input#sms_rclv.form-control(type='checkbox', name='sms_rclv', checked=((user.sms_services && user.sms_services.sms_rclv === true)? true : false))
+                                    label(for="sms_rclv") !{lang[locale].keys.accept_sms_rclv}
+                                div.line
+                                    input#sms_njoy.form-control(type='checkbox', name='sms_njoy', checked=((user.sms_services && user.sms_services.sms_njoy === true)? true : false))
+                                    label(for="sms_njoy") !{lang[locale].keys.accept_sms_njoy}
+                                div.line
+                                    input#sms_bubble.form-control(type='checkbox', name='sms_bubble', checked=((user.sms_services && user.sms_services.sms_bubble === true)? true : false))
+                                    label(for="sms_bubble") !{lang[locale].keys.accept_sms_bubble}
+                                div.line
+                                    input#sms_joyvox.form-control(type='checkbox', name='sms_joyvox', checked=((user.sms_services && user.sms_services.sms_joyvox === true)? true : false))
+                                    label(for="sms_joyvox") !{lang[locale].keys.accept_sms_joyvox}
+                                p !{lang[locale].keys.accept_notifications_more_informations}
+                        div.form-group.buttons.inline
+                            div#submit_services.btn.btn-success(data-action="submit" data-userid=user._id)= lang[locale].keys.save_cta
+            div.col.col-md-5
+                div.formular
+                    hr
+                    br
+                    h2= lang[locale].keys.notifications_kids_title
+                    p= lang[locale].keys.notifications_kids_message
+                    if(user.members && user.members.length > 0)
+                        hr.separator
+                        p= lang[locale].keys.notifications_kids_details
+                        ul.member_details
+                            each member in user.members
+                                li
+                                    div.avatar
+                                        img(src=member.avatar)
+                                    div.name= member.first_name
+                                    div.gender= lang[locale].keys["kid_gender_"+member.gender]
+                                    div.age= Math.abs(new Date().getUTCFullYear() - new Date(member.birth_date).getFullYear())+" "+lang[locale].keys.age_years
+                        hr.separator
+                        p= lang[locale].keys.how_to_manage_kids
+                        form.form_content
+                            div.btn.btn-m.btn-success(href="/account/profile" data-action="page_reload")= lang[locale].keys.manage_kids_cta
+                //if(!user.mobile || user.mobile === "")
+                div.formular
+                    hr
+                    br
+                    h2= lang[locale].keys.notifications_sms_need_mobile_title
+                    p= lang[locale].keys.notifications_sms_need_mobile_message
+                    form.form_content(method="POST" action='/account/profile/')
+                        input.invisible(type="text" name="user_id" value=user._id)
+                        div.form-group.material_input
+                            input#mobile.form-control(type='tel', minlength="2", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile)
+                            label(for='mobile') !{lang[locale].keys.mobile_holder}
+                        hr
+                        div.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.save_cta
+        
         div.row#member(style= page === "member" ? "display:block" : "display:none")
             if(typeof member_infos !== "undefined")
-                div.col.col-md-8
+                div.col.col-md-7
                     div.formular#member_datas(data-memberid=member_infos._id)
                         hr
                         br
@@ -487,14 +598,8 @@ block content
                                 input#child_female(type="radio" name="gender" value="female", checked=member_infos.gender=="female")
                                 label(for='child_female') fille
                             div.form-group.buttons.inline
-                                div#submit_member.btn.btn-success(data-action="save" data-memberid=member_infos._id) Enregistrer
-                
-        div.row#basket(style= page === "basket" ? "display:block" : "display:none")
-            h1 basket
-        div.row#orders(style= page === "orders" ? "display:block" : "display:none")
-            h1 orders
-        div.row#services(style= page === "services" ? "display:block" : "display:none")
-            h1 services
+                                div#submit_member.btn.btn-success(data-action="save" data-memberid=member_infos._id)= lang[locale].keys.save_cta
+                                
         div.row#fidelity(style= page === "fidelity" ? "display:block" : "display:none")
             h1 fidelity
             div.col.col-md-3

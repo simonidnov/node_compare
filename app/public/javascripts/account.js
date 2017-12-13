@@ -69,6 +69,7 @@ var account = {
             console.log(e);
         }).init();
         this.public_form = new formular("#add_kid", function(e){
+            console.log(e);
             if(e.status === "hitted" && e.action === "submit"){
                 var form_datas = {};
                 $.each($("#add_kid form").serializeArray(), function(index, serie){
@@ -91,6 +92,19 @@ var account = {
         this.private_form = new formular('#private_datas', function(e){
             //console.log(e);
         }).init();
+        
+        this.services_form = new formular('#services_form', function(e){
+            console.log(e);
+            if(e.status==="hitted" && e.action==="submit"){
+                var user_datas = account.services_form.get_datas();
+                console.log(user_datas);
+                index.sdk.api.post("/account/profile/", user_datas, function(e){
+                    console.log(e);
+                });
+                
+            }
+        });
+        this.services_form.init();
         if($('#member_datas').length > 0){
             this.member_form = new formular("#member_datas", function(e){
                 if(typeof e.action !== "undefined"){

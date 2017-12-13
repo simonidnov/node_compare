@@ -12,7 +12,8 @@ function formular(target, callback){
             $(this).parent().remove();
         });
         $(target).find('.add_input_array_button').off('click').on('click', function(){
-            $(this).parent().parent().find(".array_list_inputs").append('<li class="form-group material_input"><input minlength="5" type="text" name="alias" value=""/><label>Entrez une valeur</label><div class="delete_input_array_button">Supprimer</div></li>');
+            var name = $(this).parent().parent().attr('data-name')+""+$(this).parent().parent().find('input').length;
+            $(this).parent().parent().find(".array_list_inputs").append('<li class="form-group material_input"><input minlength="5" type="text" name="'+name+'" value=""/><label>Entrez une valeur</label><div class="delete_input_array_button">Supprimer</div></li>');
             $(target).find('.delete_input_array_button').off('click').on('click', function(){
                 $(this).parent().remove();
             });
@@ -86,6 +87,11 @@ function formular(target, callback){
                     break;
                 case 'submit':
                     //callback({status:"hitted", "action":"submit"});
+                    // PERHAPS WE CAN POST DATA HERE
+                    // ACTUALLY WE NEED TO USE CALLBACK LIGHTER FORM CLASS
+                    //if(typeof $(target).find('form').attr('action') !== "undefined" && typeof $(target).find('form').attr('method') !== "undefined"){
+                    //    
+                    //}
                     break;
                 default:
                     break;
@@ -280,7 +286,7 @@ function formular(target, callback){
 
                     }else{
                         if(!$(this).parent().hasClass('valid') && $(this).attr('required')){
-                            console.log('ca bloque ici ', $(this), " ---- ", $(this).attr('required'));
+                            //console.log('ca bloque ici ', $(this), " ---- ", $(this).attr('required'));
                             valid = false;
                         }
                     }
@@ -305,9 +311,17 @@ function formular(target, callback){
             form_datas[serie.name] = serie.value;
         });
         $.each($(target).find('.array_list_inputs'), function(index, array_list){
-            var array_list = [];
+            var array_list = {};
+            //var data = {};
             $.each($(this).find('input'), function(index, input_list){
-               array_list.push($(this).val()); 
+                console.log();
+                var name = $(this).attr('name'),
+                    value = $(this).val();
+                if($(this).attr('type') === "checkbox" || $(this).attr('type') === "radio"){
+                    value = $(this).is(':checked');
+                }
+                //data[name] = value;
+                array_list[name] = value;
             });
             form_datas[$(this).attr('data-name')] = array_list;
         });

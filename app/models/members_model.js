@@ -27,14 +27,18 @@ module.exports = {
 // check user login then return user_infos
 
 module.exports.get = function(user_id, member_id, callback){
+    console.log('MEMBER GET ', user_id);
     var query = {};  
     if(user_id !== null){
         query['user_id'] = user_id;
+        //callback({status:403, datas:[], message:"NO USER ID SPECIFIED"});
     }
     if(member_id !== null){
         query['member_id'] = member_id;
     }
+    console.log('MEMBER QUERY ', query);
     Member.find(query, function(err, members){
+        console.log('FIND MEMBER ', err, members);
         if(err) callback({status:405, datas:err});
         else callback({status:200, datas:members});
     });

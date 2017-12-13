@@ -14,7 +14,7 @@ const db = require('mongoose'),
           description       : {type:"string"},
           short_desc        : {type:"string"},
           host              : {type:"string"},
-          aliases           : {type:"Array"},
+          aliases           : {type:"Object"},
           redirect_url      : {type:"string"},
           tags              : {type:"Array"},
           secret            : {type:"string"},
@@ -43,10 +43,30 @@ const appsSchemas = new db.Schema(apps_datas),
 module.exports = {
     attributes: apps_datas
 };
-
+module.exports.validate = function(secret, host, callback){
+    var query = {
+        host:host
+    };
+    Apps.find(
+        {
+            host:host,
+            secret:secret,
+            $or:{
+                aliases:{$indexOfArray: [host]},
+                secret:secret
+            }
+        }, 
+        function(err, infos){
+            if(err) callback({status:405, datas:err});
+            else callback({status:200, datas:infos});
+        }
+    );
+}
 module.exports.get = function(user_id, apps_id, callback){
+    console.log('APP MODEL GET')
     var query = {};
     Apps.find(query, function(err, infos){
+        console.log('APP MODEL RESULT ', err, infos);
         if(err) callback({status:405, datas:err});
         else callback({status:200, datas:infos});
     });

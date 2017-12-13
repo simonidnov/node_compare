@@ -12,13 +12,13 @@ var login = {
             $('#password').parent().addClass('invalid');
         }
         this.add_account();
-        this.set_listeners();
         this.form = new formular('#auth_form', function(e){
             $('.formular.auth').css({
                 height:($('.displayblock').height()+140)+"px"
             });
         }).init();
         window.addEventListener('popstate', this.navigate);
+        this.set_listeners();
     },
     set_listeners : function(){
         $('[data-action]').off('click').on('click', function(e){
@@ -38,8 +38,8 @@ var login = {
     add_account : function(){
        this.sdk = new idkids_jssdk(
             {
-                "secret":"000-000-000",
-                "callback_url":window.location.origin+"/account/",
+                "secret":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiI1YTMwZGViZmYzNjViMzBhZmQ3ODY4OWMiLCJpYXQiOjE1MTMxNTgxODV9.8e9JhLtcpzf8hO2CguRuUINBpLWOOClx_-3GfFoVqcM",
+                "callback_url":window.location.origin+"/redirect/",
                 "authorisation":{
                     "email"         : true,
                     "mobile"        : true,

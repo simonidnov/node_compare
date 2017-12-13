@@ -138,6 +138,29 @@ a {
 .header .short_cuts ul a{
     text-decoration: none;
 }
+.header .short_cuts ul li .subnav.widgets{
+    display: inline-flex;
+}
+.header .short_cuts ul li .subnav.widgets ul{
+    display: inline-block;
+}
+.header .short_cuts ul li .subnav.widgets li{
+    width: 64px;
+    height:100px;
+    margin:2px;
+    display: block;
+    float: left;
+    text-align: center;
+}
+.header .short_cuts ul li .subnav.widgets li .icon{
+    width: 44px;
+    height:44px;
+    margin:10px;
+    background-color:#E3E3E3;
+}
+.header .short_cuts ul li .subnav.widgets li span{
+    padding:0;
+}
 .header .short_cuts ul li .subnav.account{
     width:304px;
     padding:0;
@@ -357,7 +380,7 @@ footer ul li a:hover:after{
 }
 
 .container .row{
-    max-width: 1280px;
+    max-width: 980px;
     text-align: left;
     margin:0 auto;
     display: block;
@@ -384,11 +407,23 @@ p{
 .col-md-4{
     width:33%;
 }
+.col-md-5{
+    width:41%;
+}
 .col-md-6{
     width:50%;
 }
+.col-md-7{
+    width:58%;
+}
 .col-md-8{
     width:66%;
+}
+.col-md-9{
+    width:75%;
+}
+.col-md-10{
+    width:83%;
 }
 .col-md-12{
     width:100%;
@@ -529,6 +564,12 @@ p{
 .bubble{
     background-image:url(../images/assets/logo_bubble.svg);
 }
+.joyvox{
+    background-image:url(../images/assets/logo_joyvox.svg);
+}
+.joybox{
+    background-image:url(../images/assets/logo_joybox.svg);
+}
 
 /* --------------- ICONS --------------- */
 .icon.okaidi{
@@ -552,6 +593,12 @@ p{
 .icon.bubble{
     background-image:url(../images/assets/icon_bubble.svg);
 }
+.icon.joyvox{
+    background-image:url(../images/assets/icon_joyvox.svg);
+}
+.icon.joybox{
+    background-image:url(../images/assets/icon_joybox.svg);
+}
 
 
 @media screen and (max-width: 640px) {
@@ -559,7 +606,7 @@ p{
         width:100% !important;
     }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 420px) {
     .header .logo{
         width: 50px;
         height: 50px;
@@ -569,3 +616,21 @@ p{
         background-image:url(../images/assets/icon_idkids.svg);
     }
 }`
+
+
+
+xmp { 
+    font-family: Cambria, Georgia; 
+    margin:10px;
+    background-color:#000;
+    color:#FFF;
+    padding:10px;
+} 
+.script { 
+    font-size: 100%;
+    font-family: Cambria, Georgia; 
+    margin:10px;
+    background-color:#000 !important;
+    color:#FFF;
+    padding:10px;
+}

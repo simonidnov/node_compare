@@ -19,55 +19,8 @@ html
                 div.logo.idkids
         nav.short_cuts
             ul
-                li#widgets.widgets
-                    div.icon.icon-widgets.idkids-icons.lg
-                    div.subnav
-                        ul
-                            a(href="https://okaidi.fr")
-                                li
-                                    div.icon.okaidi
-                                    span Okaidi
-                            a(href="https://obaibi.fr")
-                                li
-                                    div.icon.obaibi
-                                    span Obaibi
-                            a(href="https://jacadi.fr")
-                                li
-                                    div.icon.jacadi
-                                    span Jacadi
-                            a(href="https://oxybul.fr")
-                                li
-                                    div.icon.oxybul
-                                    span Oxybul
-                            a(href="https://rigolocommelavie.fr")
-                                li
-                                    div.icon.rclv
-                                    span Rigolo comme la vie
-                            a(href="https://njoy.fr")
-                                li
-                                    div.icon.njoy
-                                    span N'joy
-                            a(href="https://bubblemag.fr")
-                                li
-                                    div.icon.bubble
-                                    span Bubble
-                            a(href="https://joyvox.fr")
-                                li
-                                    div.icon.joyvox
-                                    span Joyvox
-                li#notifications
-                    div.icon.icon-notifications.idkids-icons.lg
-                    div.subnav
-                        ul
-                            li
-                                div.icon.idkids-icons.icon-basket
-                                span Mon panier (0)
-                            li
-                                div.icon.idkids-icons.icon-delivery
-                                span Mes livraisons (0)
-                            li
-                                div.icon.idkids-icons.icon-email
-                                span Mes messages (0)
+                include ../widgets.pug
+                include ../notifs.pug
                 li#account_taskbar
                     div#account_infos
                         if(user.avatar)
@@ -82,7 +35,7 @@ html
                             div.infos
                                 div.label= user.pseudo
                                 div.email= user.email
-                                a(href="/account/profile").btn.btn-success Mon compte
+                                a(href="/account/account").btn.btn-success Mon compte
                         div.other_accounts
                         div.options
                             a.btn.btn-default.btn-sm(href="/auth") Ajouter un compte

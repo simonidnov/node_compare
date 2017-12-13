@@ -11,3 +11,34 @@
 #member_edit_form{
     padding:10px;
 }
+.member_details{
+    margin:0;
+    padding:0;
+    padding-left:40px;
+    margin-bottom:40px;
+}
+.member_details li{
+    margin:0;
+    padding:0;
+    list-style: none;
+    display: inline-flex;
+}
+.member_details li .avatar{
+    width:32px;
+    height:32px;
+    overflow: hidden;
+}
+.member_details li .avatar img{
+    width:100%;
+    height:100%;
+}
+.member_details li .name,
+.member_details li .age,
+.member_details li .gender{
+    padding-left: 10px;
+    font-size: 18px;
+    padding-top: 6px;
+}
+.member_details li .name{
+    font-weight: bold;
+}

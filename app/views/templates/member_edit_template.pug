@@ -34,7 +34,7 @@ block member_edit
                 input#child_female(type="radio" name="gender" value="female", checked=member.gender=="female")
                 label(for='child_female') fille
             div.form-group.buttons.inline
-                div#submit_member.btn.btn-success(data-action="save" data-memberid=query.member_id) Enregistrer
-                div#submit_member.btn.btn-warning(data-action="cancel" data-memberid=query.member_id) Annuler
+                div#submit_member.btn.btn-success.btn-sm(data-action="save" data-memberid=query.member_id) Enregistrer
+                div#cancel_member.btn.btn-warning.btn-sm(data-action="cancel" data-memberid=query.member_id) Annuler
             div.form-group
                 a(href="/account/member/"+query.member_id title="édition avancée").hyperlink Édition avancée

@@ -3,6 +3,7 @@ var express = require('express'),
     admin = express.Router(),
     Auth_model = require('../models/auth_model'),
     Auth_helper = require('../helpers/auth_helper'),
+    Apps_controller = require('../controllers/apps_controller'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang');
@@ -70,11 +71,11 @@ admin
         });
     })
     .get('/apps', function(req, res, next) {
-        var Apps_controller = require('../controllers/apps_controller');
-        var applications = null;
+        var applications = [];
         Apps_controller.get(req, res, function(e){
+            console.log("Apps_controller.get RESPONSE ::: ", e);
             applications = e.datas;
-            res.render('admin/apps', {
+            res.status(e.status).render('admin/apps', {
                 title: 'Admin Dashboard',
                 user : req.session.Auth,
                 locale:language_helper.getlocale(),
@@ -97,12 +98,11 @@ admin
         return;
     })
     .get('/apps/:page', function(req, res, next) {
-        var Apps_controller = require('../controllers/apps_controller');
         var applications = null;
         Apps_controller.get(req, res, function(e){
             applications = e.datas;
             res.render('admin/apps', {
-                title: 'Admin Dashboard',
+                title: 'Application',
                 user : req.session.Auth,
                 locale:language_helper.getlocale(),
                 lang:lang,
@@ -124,7 +124,6 @@ admin
         return;
     })
     .get('/apps/:page/:_id', function(req, res, next) {
-        var Apps_controller = require('../controllers/apps_controller');
         var applications = null;
         var edit_application = null;
         Apps_controller.get(req, res, function(e){
@@ -159,7 +158,6 @@ admin
     .get('/users', function(req, res, next) {
          var Auth_controller = require('../controllers/auth_controller');
          Auth_controller.get(req, res, function(e){
-            console.log(e); 
             res.render('admin/users', {
                 title: 'Admin Users',
                 user : req.session.Auth,

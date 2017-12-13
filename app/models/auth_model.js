@@ -30,8 +30,12 @@ const db = require('mongoose'),
           devices     : {type:'Object'},
           termAccept  : {type:'Boolean'},
           newsletter  : {type:'Boolean'},
-          rights      : {type:'Object'},
           newsletter_services : {type:'Object'},
+          sms         : {type:'Boolean'},
+          sms_services : {type:'Object'},
+          notifications : {type:'Boolean'},
+          notifications_services : {type:'Object'},
+          rights      : {type:'Object'},
           validated   : {type:'Boolean'},
           created     : {type:'Date', default: Date.now},
           updated     : {type:'Date', default: Date.now},
@@ -47,6 +51,14 @@ if(db.connection.readyState === 0){
 const userSchemas = new db.Schema(user_datas),
       User = db.model('User', userSchemas);
 //db.close();
+
+db.connection.on('open', function (ref) {
+  console.log('Connected to mongo server.');
+});
+db.connection.on('error', function (err) {
+  console.log('Could not connect to mongo server!');
+  console.log(err);
+});
 
 module.exports = {
     attributes: user_datas
@@ -101,7 +113,7 @@ module.exports.login = function(req, datas, callback) {
                             arch    : os.arch(),
                             name    : os.hostname()
                         },
-                        new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret);
+                        new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
                     
                     new_device.token = new_token;
                     
@@ -118,7 +130,6 @@ module.exports.login = function(req, datas, callback) {
                         }, 
                         function(err, device) {
                             if(err){
-                                //console.log('new_device FIND error ::: ', err);
                                 // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
                                 User.update(
                                     { _id: users[0]._id },
@@ -131,7 +142,6 @@ module.exports.login = function(req, datas, callback) {
                                     }
                                 );
                             }else{
-                                //console.log('new_device FIND success device result ', device);
                                 if(device.length === 0){
                                     //console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
                                     /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
@@ -152,7 +162,6 @@ module.exports.login = function(req, datas, callback) {
                                         else console.log("new_device ajouté success ", device)
                                     });
                                     */
-                                    //console.log('-------------------- MISE A JOUR DU TOKEN SUR LE DEVICE TROUVE --------------------- ');
                                     /* Update Object in Array Collection */
                                     User.update(
                                         {id:users[0]._id, devices: {$elemMatch: {uid:datas.device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
@@ -176,6 +185,14 @@ module.exports.login = function(req, datas, callback) {
                     }else{
                         var avatar = users[0].avatar;
                     }
+                    /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
+                    /*
+                        TO SPECIFY A NEW ADMIN OWNER FIRST TIME ADD THIS PARAMS ON UPDATE :
+                                rights  : {
+                                    "type":'RWO',
+                                    "authorizations":['me']
+                                }
+                    */
                     User.update(
                         {
                             _id: users[0]._id 
@@ -226,19 +243,19 @@ module.exports.register = function(datas, callback) {
             email   : datas.body.subscribe_email,
             password: sha1(datas.body.subscribe_password),
             pseudo  : datas.body.pseudo,
-            secret  : jwt.sign({}, config.secrets.global.secret, {}),
+            secret  : jwt.sign({}, config.secrets.global.secret, {}, { expiresIn: '2 days' }),
             termAccept : true,
             rights  : {
-                "type":'RWU',
+                "type":'RWO',
                 "authorizations":['me']
             }
         }
-    new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret);
+    new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
     new_user_datas.device = [{
         uid     : datas.body.device_uid,
         arch    : os.arch(),
         name    : os.hostname(),
-        token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret),
+        token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' }),
         avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://')
     }];
     //network : os.networkInterfaces(),
@@ -294,15 +311,6 @@ module.exports.update = function(req, user_id, datas, callback) {
     if(typeof datas.birthDate !== "undefined"){
         datas.birthDate = datas.birthDate;
     }
-    console.log("USER UPDATE --------------------- ");
-    console.log("USER UPDATE --------------------- ");
-    console.log("USER UPDATE --------------------- ");
-    
-    console.log(datas)
-    
-    console.log("USER UPDATE --------------------- ");
-    console.log("USER UPDATE --------------------- ");
-    console.log("USER UPDATE --------------------- ");
     //User.findOne({ _id: 'bourne' }, function (err, doc){
     User.update(
         {
@@ -330,11 +338,10 @@ module.exports.check_user = function(req, callback){
             arch    : os.arch(),
             name    : os.hostname()
         },
-        new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret);
+        new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
     
     new_device.token = new_token;
     
-    //console.log('users[0]._id ', users[0]._id);
     /* check if device exist */
     User.find(
         {
@@ -411,8 +418,7 @@ module.exports.getPublicProfile = function(_id, callback){
                 "created" : e.datas.created,
                 "updated" : e.datas.updated
             };
-            callback({status:e.status, message:e.message, datas:public_profile});
-            
+            callback({status:e.status, message:e.message, datas:public_profile});     
         }else{
             callback(e);
         }
@@ -426,7 +432,6 @@ module.exports.getServices = function(_id, callback){
                 newsletter_services : e.datas.newsletter_services
             }  
             callback({status:e.status, message:e.message, datas:e.datas.public_services});
-            
         }else{
             callback(e);
         }
@@ -441,10 +446,14 @@ module.exports.getFullUser = function(_id, callback){
             if(err){
                 callback({status:401, "message":"This is no way to peace -> peace is the way. UNAUTHORIZED", "datas":err});
             }else{
-                Members_model.get(_id, null, function(e){
-                    user['members'] = e.datas;
-                    callback({status:200, "message":"success me", "datas":user});
-                });
+                if(user !== null){
+                    Members_model.get(_id, null, function(e){
+                        user['members'] = e.datas;
+                        callback({status:200, "message":"success me", "datas":user});
+                    });
+                }else{
+                    callback({status:304, "message":"USER NOT FOUND", "datas":user});
+                }
             }
         }
     );
