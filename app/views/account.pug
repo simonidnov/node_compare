@@ -5,8 +5,6 @@ block content
         div.row#profile(style= page === "profile" ? "display:block" : "display:none")
             div.col.col-md-7
                 div.formular#public_datas
-                    hr
-                    br
                     h1 Mon profil
                     form.form_content(method="POST" action='/account/profile/')
                         p Informations de votre profil public
@@ -42,8 +40,6 @@ block content
                             label(for="public_interest") !{lang[locale].keys.public_interest_check}
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
                 div.formular#private_datas
-                    hr
-                    br
                     h1 Civilité
                     form.form_content(method="POST" action='/account/profile/')
                         p Vos données sont strictement confidentielles
@@ -72,8 +68,6 @@ block content
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
             div.col.col-md-5
                 div.formular#add_kid
-                    hr
-                    br
                     h2 Mes Enfants
                     if(typeof user.members !== "undefined")
                         if(user.members.length > 0)
@@ -117,8 +111,6 @@ block content
         div.row#addresses(style= page === "addresses" ? "display:block" : "display:none")
             div.col.col-md-7
                 div.formular#address_form
-                    hr
-                    br
                     if(typeof address_infos === "undefined")
                         h1= lang[locale].keys.address_form_title
                     else
@@ -444,9 +436,6 @@ block content
                                             li.danger(data-action="delete" data-post="/address" data-type="address_id" data-value=address._id)
                                                 div.icon.icon-trash.idkids-icons
                                                 div.label Supprimer
-                    br
-                    br
-                    br      
                             
         div.row#basket(style= page === "basket" ? "display:block" : "display:none")
             h1 basket
@@ -455,8 +444,6 @@ block content
         div.row#services(style= page === "services" ? "display:block" : "display:none")
             div.col.col-md-7
                 div.formular#services_form
-                    hr
-                    br
                     h1 Mes services
                     form.form_content(method="PUT" action='/account/profile/')
                         div.form-group
