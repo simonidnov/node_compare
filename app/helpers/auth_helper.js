@@ -19,7 +19,7 @@ module.exports = {
             callback(false);
             return false;
         }
-        if(req.options.from_origin === "localhost:9000"){
+        if(req.options.from_origin === "localhost:9000" || req.options.from_origin.indexOf('idkids-app.com') !== -1){
             // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
             callback(true);
             return true;
