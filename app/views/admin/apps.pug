@@ -139,11 +139,13 @@ block content
                                 ul.array_list_menu
                                     li.add_input_array_button Ajouter +
                                 ul.array_list_inputs
-                                    each alias in _.keys(edit_application.aliases[0][0])
-                                        li.form-group.material_input
-                                            input(type="text" minlength="5" name=alias value=edit_application.aliases[0][0][alias])
-                                            label Entrez l'url de l'alias
-                                            div.delete_input_array_button Supprimer
+                                    if(typeof edit_application.aliases !== "undefined")
+                                        if(typeof edit_application.aliases[0] !== "undefined")
+                                            each alias in _.keys(edit_application.aliases[0][0])
+                                                li.form-group.material_input
+                                                    input(type="text" minlength="5" name=alias value=edit_application.aliases[0][0][alias])
+                                                    label Entrez l'url de l'alias
+                                                    div.delete_input_array_button Supprimer
                             hr.separator
                             div.form-group.material_input
                                 input#secret(type="text" value=edit_application.secret name="terms_url" disabled)
