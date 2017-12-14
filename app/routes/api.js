@@ -122,6 +122,9 @@ api
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         //});
     })
+    .get('/oauth/:any', function(){
+        res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
+    })
     .get('/send-sms', function(){
         //textbelt key : 57652f35ce6bd73e072a37701775ee0e3dec4194VPqWleqqdvVMWkw0VLpUasUvu
         var request = require('request');
