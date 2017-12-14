@@ -50,9 +50,21 @@ a {
     display: inline;
     background-color: #FFF;
     z-index: 99;
+    -webkit-transition: height .6s ease-out;
+    -moz-transition: height .6s ease-out;
+    -o-transition: height .6s ease-out;
+    transition: height .6s ease-out;
+}
+.header.sticky{
+    height:0px;
 }
 .header .short_cuts{
     float: right;
+    height:100%;
+}
+.header.sticky .short_cuts{
+    height:100%;
+    overflow: hidden;
 }
 .header .short_cuts ul{
     padding:0;
@@ -237,6 +249,13 @@ a {
     padding-left:10px;
 }
 
+header .scroll_progress{
+    position: absolute;
+    height:2px;
+    width:0%;
+    bottom:-2px;
+    background-color:#CCC;
+}
 header .hor_nav{
     position: absolute;
     height:44px;
@@ -457,9 +476,9 @@ p{
     cursor: pointer;
     text-decoration: none;
     outline:none !important;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
     display: table;
     -webkit-transition: all .2s ease-in;
     -moz-transition: all .2s ease-in;
