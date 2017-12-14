@@ -457,6 +457,26 @@ input:-webkit-autofill {
     background-size:32px 32px;
     background-position: right center;
 }
+
+
+.formular .material_input.minlength .number,
+.formular .material_input.maxlength .number,
+.formular .material_input.minmaxlength .number{
+    position: absolute;
+    bottom:0;
+    right:0;
+    font-size: 10px;
+    color:gray;
+    line-height: 23px;
+}
+.formular .material_input.minlength .number .icon,
+.formular .material_input.maxlength .number .icon,
+.formular .material_input.minmaxlength .numbe .icon{
+    font-size: 24px;
+    line-height: 12px;
+    color:lightseagreen;
+}
+
 .formular .material_input input[disabled] + label,
 .formular .material_input input[type="date"] + label,
 .formular .material_input input:focus + label,
@@ -471,7 +491,7 @@ input:-webkit-autofill {
     font-size: 12px !important;
     color:#CCC !important;
 }
-.formular input:invalidli:has(> .material_input):after {
+.formular input:invalid:has(> .material_input):after {
     background:coral;
 }
 /* --------- RADIO -------------- */

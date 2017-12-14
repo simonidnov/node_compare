@@ -18,6 +18,7 @@ function formular(target, callback){
                 $(this).parent().remove();
             });
         });
+        
         $(target).find('[data-file]').off('change').on('change', function(e){
             var input = this,
                 input_id = $(this).attr("id");
@@ -39,13 +40,11 @@ function formular(target, callback){
         });
         
         $(target).find(".image_cropper").change(function() {
-            console.log('cropper');
             var $image = document.getElementById($(this).attr('id')+'_preview'),
                 oFReader = new FileReader(),
                 _target = $(this);
             oFReader.readAsDataURL(this.files[0]);
             oFReader.onload = function (oFREvent) {
-                console.log('image loaded');
                 $image.src = this.result;
                 _target.parent().append('<div class="btn btn-success valid_crop">Valider</div>');
                 var cropper = new Cropper($image, {
@@ -108,22 +107,30 @@ function formular(target, callback){
             $(this).parent().addClass('focused');
             self.callback({"status":"focus", value:$(this)});
         });
+        
+        
+        //, .maxlength, .minmaxlength
+        self.check_min_max();
+        $(target).find('.material_input input, .material_input textarea').off('keypress').on('keypress', function(){
+            self.check_min_max();
+        });
+        
         $(target).find('.material_input input').off('blur').on('blur', function(){
-            self.inputCheck($(this));
+            self.check_min_max();
+            self.inputCheck($(this), true);
             //self.checkInputs();
             $(this).parent().removeClass('focused');
             self.callback({"status":"blur", value:$(this)});
         });
         $(target).find('.material_input input').off('input').on('input', function(){
-            self.inputCheck($(this));
+            self.inputCheck($(this), false);
         });
-        console.log('set input checkbox change');
         $(target).find('input[type="checkbox"]').off('change').on('change', function(){
-            console.log('checkbox change');
             self.inputCheck($(this));
-            self.checkInputs();
+            self.checkInputs(false);
             self.callback({"status":"checkbox", name:$(this).attr('name'), value:$(this).is(':checked')});
         });
+        self.checkInputs(false);
         $(target).find('[data-tab]').off('click').on('click', function(){
             var tab = $(this).attr('data-tab');
             $.each($(this).parent().find('[data-tab]'), function(index, switch_tab){
@@ -138,14 +145,38 @@ function formular(target, callback){
             self.callback({"status":"tab_change", value:$(this).attr('data-tab')});
         });
     };
-    this.checkInputs = function(){
+    this.check_min_max = function(){
+        $.each($(target).find('.minlength'), function(index, input){
+            var input = null,
+                val = "";
+            if($(this).find('input').length > 0){
+                input = $(this).find('input');
+                val = input.val();
+            }else if($(this).find('textarea').length > 0){
+                input = $(this).find('textarea');
+                val = input.val();
+            }else{
+                return false;
+            }
+            
+            if($(this).find('.number').length === 0){
+                $(this).append('<span class="number"></span>');
+            }
+            if(val.length >= parseInt(input.attr('minlength'))){
+                $(this).find('.number').html('<span class="icon idkids-icon icon-check"></span>');
+            }else{
+                $(this).find('.number').html(val.length+'/'+input.attr('minlength'));
+            }
+        });
+    }
+    this.checkInputs = function(with_message){
         var self = this;
         $.each($(target).find('.material_input input'), function(index, input){
-            self.inputCheck($(this));
+            self.inputCheck($(this), with_message);
             //var type=$(this).attr('type');
         });
     };
-    this.inputCheck = function(target){
+    this.inputCheck = function(target, with_message){
         var self = this;
         if(target.attr('type') === "checkbox"){
             this.validform();
@@ -174,7 +205,7 @@ function formular(target, callback){
                     }else{
                         target.parent().addClass('invalid');
                         target.parent().removeClass('valid');
-                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0){
+                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                             target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
                         }
                     }
@@ -203,7 +234,7 @@ function formular(target, callback){
                     }else{
                         target.parent().addClass('invalid');
                         target.parent().removeClass('valid');
-                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0){
+                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                             target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
                         }
                     }
@@ -211,7 +242,7 @@ function formular(target, callback){
                 }
                 var validator = new RegExp(target.attr('data-regex').toString());
                 if(!validator.test(target.val())){
-                    if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0){
+                    if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                         target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
                     }
                     target.parent().addClass('invalid');
