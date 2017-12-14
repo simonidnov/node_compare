@@ -79,6 +79,7 @@ var index = {
             }
         });
         window.addEventListener('popstate', this.navigate);
+        window.addEventListener("scroll", function(){index.replace_scroll();});
     },
     navigate : function(){
         var params = this.parse_url(window.location.pathname),
@@ -112,5 +113,14 @@ var index = {
     },
     add_params : function(href){
         return href;
+    },
+    replace_scroll:function(){
+        var st = $( document ).scrollTop();
+        if($( document ).scrollTop() > 300){
+            $('.header').addClass('sticky');
+        }else{
+            $('.header').removeClass('sticky');
+        }
+        $('.scroll_progress').css('width', (($(window).scrollTop()*100)/($('body').height()-$(window).height()))+"%");
     }
 }

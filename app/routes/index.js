@@ -6,7 +6,7 @@ var express = require('express'),
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'IDKIDS.community WELCOME' });
+    res.render('offline', { title: 'IDKIDS.community WELCOME' });
 });
 router.get('/:page_name', function(req, res, next) {
     res.render('index', {
