@@ -31,18 +31,25 @@ var index = {
         );
         var self = this;
         this.sdk.init($.proxy(function(status){
-            this.sdk.isLogged($.proxy(function(status){
+            this.sdk.isLogged($.proxy(function(e){
                 //QRCode.toCanvas(document.getElementById('canvas'), status._id, function (error) {
                 //    if (error) console.error(error)
                 //    console.log('QRCode success!');
                 //});
-                this.sdk.api.get('/me', {}, function(e){
-                    console.log('/me :::: ', e.datas);
-                    $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
-                    $('.account_infos .avatar img').attr('src', e.datas.avatar);
-                    $('.account_infos .infos .label').html(e.datas.pseudo);
-                    $('.account_infos .infos .email').html(e.datas.email);
-                });
+                if(e.status === "not_connected"){
+                    this.sdk.api.get('/me', {}, function(e){
+                        console.log('/me :::: ', e.datas);
+                        $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
+                        $('.account_infos .avatar img').attr('src', e.datas.avatar);
+                        $('.account_infos .infos .label').html(e.datas.pseudo);
+                        $('.account_infos .infos .email').html(e.datas.email);
+                    });
+                }else{
+                    $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.user.avatar+'" alt="avatar"/></div>');
+                    $('.account_infos .avatar img').attr('src', e.user.avatar);
+                    $('.account_infos .infos .label').html(e.user.pseudo);
+                    $('.account_infos .infos .email').html(e.user.email);
+                }
                 /*
                 this.sdk.api.get('/me/members', {}, function(e){
                     console.log('/me/members :::: ', e);

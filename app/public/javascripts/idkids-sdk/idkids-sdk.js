@@ -55,7 +55,7 @@ var idkids_jssdk = function(options, callback){
             if(this.user === null){
                 return {"status":"not_connected", "infos":"call api.get('me')"};
             }else{
-                return {"status":"logged", "token":this.user.token, "id":this.user.id, "device":this.user.device};
+                return {"status":"logged", "user":this.user, "token":this.user.token, "id":this.user.id, "device":this.user.device};
             }
         },
         get_params : function(){
