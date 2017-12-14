@@ -16,6 +16,15 @@ body {
 a {
   color: #00B7FF;
 }
+/* COLORS */
+.red{
+    background-color:#d51419;
+    color:#FFF;
+}
+.centered{
+    margin:0 auto !important;
+    float: none !important;
+}
 .idkids-icons.sm{
     width:16px;
     height:16px;

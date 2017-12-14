@@ -1,0 +1,9 @@
+block validated
+    if(!user.validated || user.validated === 0  || user.validated === false)
+        div#account_validation.container.red
+            div.row
+                div.account_validation
+                    h2 !{lang[locale].keys.account_validation_title}
+                    p !{lang[locale].keys.account_validation_messsage}
+                    div#request_validation_code.btn.btn-danger.centered(data-userid=user._id data-useremail=user.email data-action="request_validation_code")= lang[locale].keys.account_validation_cta
+                    div.icon.idkids-icons.icon-cross.cross_button

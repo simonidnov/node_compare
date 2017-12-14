@@ -18,6 +18,7 @@ const db = require('mongoose'),
           phone       : {type:'string'},
           mobile      : {type:'string'},
           token       : {type:'string'},
+          validation_code       : {type:'string'},
           secret      : {type:'string'},
           qrcode      : {type:'Object'},
           birthDate   : {type:'Date'},
@@ -454,6 +455,61 @@ module.exports.getFullUser = function(_id, callback){
                 }else{
                     callback({status:304, "message":"USER NOT FOUND", "datas":user});
                 }
+            }
+        }
+    );
+};
+module.exports.getValidationCode = function(_id, callback){
+    User.findOne(
+        {
+            _id:_id
+        },
+        function(err, user) {
+            if(err){
+                callback({status:401, "message":"This is no way to peace -> peace is the way. UNAUTHORIZED", "datas":err});
+            }else{
+                if(user !== null){
+                    var validation_code = jwt.sign({secret:user.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
+                    User.update(
+                        { _id: user._id },
+                        { 
+                            $set: { validation_code: validation_code }
+                        },
+                        function(err, validation){
+                            if(err) console.log('impossible de mettre à jour le code de validation ', err);
+                            else console.log("code de validation mis à jour ", user)
+                            callback({status:200, validation_code:validation_code, email:user.email, pseudo:user.pseudo, avatar:user.avatar});
+                        }
+                    );
+                }else{
+                    callback({status:304, "message":"USER NOT FOUND", "datas":user});
+                }
+            }
+        }
+    );
+};
+module.exports.validAccount = function(params, callback){
+    User.findOne(
+        {
+            email:params.email,
+            validation_code : params.validation_code
+        },
+        function(err, user){
+            if(err || user.length === 0){
+                callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});  
+            }else{
+                User.update(
+                    { 
+                        _id: user._id 
+                    },
+                    { 
+                        $set: { validated: true, certified: true }
+                    },
+                    function(err, validation){
+                        if(err) callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});
+                        else callback({status:200, message:"Utilisateur certifié validé", datas:validation})
+                    }
+                );
             }
         }
     );

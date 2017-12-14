@@ -68,8 +68,7 @@ var index = {
         /*$('.short_cuts li').off('touchstart').on('touchstart', function(){
             $(this).focus();
         });*/
-        $('[data-navigate]').off('click, touchstart').on('click, touchstart', function(e){
-            console.log('click, touchstart');
+        $('[data-navigate]').off('click').on('click', function(e){
             e.preventDefault();
             var action = $(this).attr('data-navigate');
             switch(action){
@@ -82,6 +81,21 @@ var index = {
                     break;
             }
         });
+        if ('ontouchstart' in document.documentElement) {
+            $('[data-navigate]').off('click, touchstart').on('click, touchstart', function(e){
+                e.preventDefault();
+                var action = $(this).attr('data-navigate');
+                switch(action){
+                    case 'page_reload':
+                        window.history.pushState({"pageTitle":$(this).attr('title')},"", self.add_params($(this).attr('href')));
+                        self.navigate();
+                        break;
+                    default:
+                        console.log('default ', action);
+                        break;
+                }
+            });
+        }
         window.addEventListener('popstate', this.navigate);
         window.addEventListener("scroll", function(){index.replace_scroll();});
     },

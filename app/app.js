@@ -11,6 +11,7 @@ const express = require('express'),
     users = require('./routes/users'),
     media = require('./routes/media'),
     admin = require('./routes/admin'),
+    validation = require('./routes/validation'),
     api = require('./routes/api'),
     templating = require('./routes/templating'),
     auth = require('./routes/auth'),
@@ -67,6 +68,7 @@ app.use('/api', api);
 app.use('/media', media);
 app.use('/account', account);
 app.use('/address', address);
+app.use('/validation', validation);
 app.use('/templating', templating);
 app.use('/', index);
 

@@ -10,6 +10,17 @@ var account = {
         this.set_listeners();
     },
     set_listeners : function(){
+        $('#request_validation_code').off('click').on('click', function(){
+            index.sdk.api.post('/api/request_validation_code', {
+                user_id:$(this).attr('data-userid'),
+                user_email:$(this).attr('data-useremail')
+            }, function(e){
+                console.log(e);
+            });
+        });
+        $('.account_validation .cross_button').off('click').on('click', function(){
+            $('#account_validation').remove();
+        });
         $('[data-action]').on('click', function(){
             switch($(this).attr('data-action')){
                 case "delete" :
@@ -66,10 +77,8 @@ var account = {
     },
     create_forms : function(){
         this.public_form = new formular("#public_datas", function(e){
-            console.log(e);
         }).init();
         this.public_form = new formular("#add_kid", function(e){
-            console.log(e);
             if(e.status === "hitted" && e.action === "submit"){
                 var form_datas = {};
                 $.each($("#add_kid form").serializeArray(), function(index, serie){
@@ -80,8 +89,20 @@ var account = {
                 });
             }
         }).init();
+        this.security_form = new formular('#security_form', function(e){
+            if(e.status === "hitted" && e.action === "submit"){
+                console.log('call update password XHTTP');
+                index.sdk.api.put("/api/change_password/", {
+                    user_id:$('#security_form #user_id').val(),
+                    password:$('#security_form #change_password_old').val(),
+                    new_password:$('#security_form #change_password_new').val(),
+                    retype_new_password:$('#security_form #retype_change_password_new').val()
+                }, function(e){
+                    console.log(e);
+                });
+            }
+        }).init();
         this.address_form = new formular('#address_form', function(e){
-            console.log(e);
             if(e.status === "validated"){
                 var addr = $('#addressLine1').val()+'+'+$('#postalCode').val()+'+'+$('#city').val()+'+'+$('#addressCountry').val()
                 //$('#address_preview').attr('src', "https://maps.googleapis.com/maps/api/staticmap?center="+addr+"&key=AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs");
@@ -94,14 +115,11 @@ var account = {
         }).init();
         
         this.services_form = new formular('#services_form', function(e){
-            console.log(e);
             if(e.status==="hitted" && e.action==="submit"){
                 var user_datas = account.services_form.get_datas();
-                console.log(user_datas);
                 index.sdk.api.post("/account/profile/", user_datas, function(e){
                     console.log(e);
                 });
-                
             }
         });
         this.services_form.init();

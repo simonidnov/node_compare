@@ -1,0 +1,21 @@
+extends email_layout
+
+block email_content
+    table.row(width="100%" cellpadding="0" cellspacing="0" style="max-idth:600px;")
+        tr
+            td(style="font-size:20px;" cellpadding="0" cellspacing="0")
+                h1= title
+    table.row
+        tr
+            td
+                img.avatar(src=avatar title=pseudo+"_avatar" width="50" height="50")
+            td(style="font-size:18px; line-height:24px; color:#818181;")
+                h2= "Bonjour "+pseudo
+    table.row(width="100%" cellpadding="0" cellspacing="0" style="max-idth:600px;")
+        tr
+            td(style="font-size:15px; line-height:20px; color:#818181;") 
+                p !{message}
+        tr
+            td(style="height:60px;")
+                a.cta.btn(href=url title="valider mon compte" style="") Je valide mon compte
+                

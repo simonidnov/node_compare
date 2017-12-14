@@ -1,6 +1,8 @@
 var express = require('express'),
     api = express.Router(),
     Apps_controller = require('../controllers/apps_controller'),
+    Auth_controller = require('../controllers/auth_controller'),
+    Email_controller = require('../controllers/email_controller'),
     Auth_helper = require('../helpers/auth_helper'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
@@ -92,6 +94,33 @@ api
             res.status(e.status).send(e);
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         });
+    })
+    .post('/request_validation_code', function(req, res, next){
+        Auth_controller.request_validation_code(req, res, function(e){
+            if(e.status === 200){
+                Email_controller.validate_account(req, e, function(e){
+                    res.status(e.status).send(e);
+                });
+            }else{
+                res.status(e.status).send(e);
+            }
+        });
+        //res.status(200).send({title:"POST API request_validation_code"});
+    })
+    .put('/change_password', function(req, res, next){
+        /*Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                //next();
+                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+            }
+        });*/
+        res.status(200).send({title:"POST UPDATE PASSWORD IS CURRENTLY ON TODO LIST"});
+        //Apps_controller.update(req, res, function(e){
+        //    res.status(e.status).send(e);
+            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        //});
     });
 
 module.exports = api;
