@@ -38,13 +38,13 @@ var index = {
                 //});
                 if(e.status === "not_connected"){
                     this.sdk.api.get('/me', {}, function(e){
-                        console.log('/me :::: ', e.datas);
                         $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
                         $('.account_infos .avatar img').attr('src', e.datas.avatar);
                         $('.account_infos .infos .label').html(e.datas.pseudo);
                         $('.account_infos .infos .email').html(e.datas.email);
                     });
                 }else{
+                    console.log(e.user);
                     $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.user.avatar+'" alt="avatar"/></div>');
                     $('.account_infos .avatar img').attr('src', e.user.avatar);
                     $('.account_infos .infos .label').html(e.user.pseudo);
