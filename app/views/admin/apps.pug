@@ -141,7 +141,7 @@ block content
                                     li.add_input_array_button Ajouter +
                                 ul.array_list_inputs
                                     if(typeof edit_application.aliases !== "undefined")
-                                        each alias in _.keys(edit_application.aliases[0][0])
+                                        each alias in _.keys(edit_application.aliases)
                                             li.form-group.material_input.minlength
                                                 input(type="text" minlength="5" name=alias value=edit_application.aliases[alias])
                                                 label Entrez l'url de l'alias
