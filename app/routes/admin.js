@@ -73,7 +73,6 @@ admin
     .get('/apps', function(req, res, next) {
         var applications = [];
         Apps_controller.get(req, res, function(e){
-            console.log("Apps_controller.get RESPONSE ::: ", e);
             applications = e.datas;
             res.status(e.status).render('admin/apps', {
                 title: 'Admin Dashboard',

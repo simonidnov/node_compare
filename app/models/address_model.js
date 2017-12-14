@@ -71,29 +71,9 @@ module.exports.get = function(user_id, address_id, callback){
     });
 }
 module.exports.create = function(user_id, datas, callback){
-    console.log('create ADDRESS');
     datas.user_id = user_id;
     geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log(res);
-            // TODO CREATE uniq_encoder || user_id+'-'+encoded_datas 
-            datas.geocoder = res[0];
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log(datas);
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
-            console.log('-------- geocoder datas ---------');
             new_address = new Address(datas);
             new_address.save(function(err, infos){  
                 if(err) callback({"status":405, "message":err});
@@ -101,13 +81,6 @@ module.exports.create = function(user_id, datas, callback){
             });
         })
         .catch(function(err) {
-            console.log('-------- geocoder ERROR ---------');
-            console.log('-------- geocoder ERROR ---------');
-            console.log('-------- geocoder ERROR ---------');
-            console.log(err);
-            console.log('-------- geocoder ERROR ---------');
-            console.log('-------- geocoder ERROR ---------');
-            console.log('-------- geocoder ERROR ---------');
             new_address = new Address(datas);
             new_address.save(function(err, infos){  
                 if(err) callback({"status":405, "message":err});

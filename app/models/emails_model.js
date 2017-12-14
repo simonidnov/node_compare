@@ -39,12 +39,9 @@ module.exports.send = function(template, user_id, datas, callback){
         if(err) callback({"status":405, "message":"error email sending impossible"});
         else console.log('success entry')
     });
-    console.log(config.emailing);
-    console.log('datas ::: ', datas);
     //callback({"status":200, "datas":infos});
     emailing.mailer.send(template, datas, function(err, infos){
         if (err) {
-            console.log("err :::: ", err);
             callback({status:405, message:'Email ERROR', datas:datas});
             return;
         }

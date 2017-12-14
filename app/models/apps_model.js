@@ -63,10 +63,8 @@ module.exports.validate = function(secret, host, callback){
     );
 }
 module.exports.get = function(user_id, apps_id, callback){
-    console.log('APP MODEL GET')
     var query = {};
     Apps.find(query, function(err, infos){
-        console.log('APP MODEL RESULT ', err, infos);
         if(err) callback({status:405, datas:err});
         else callback({status:200, datas:infos});
     });
