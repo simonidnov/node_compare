@@ -158,6 +158,9 @@ a {
 .header .short_cuts ul a{
     text-decoration: none;
 }
+.header .short_cuts ul a .icon{
+    color:#818181;
+}
 .header .short_cuts ul li .subnav.widgets{
     display: inline-flex;
 }

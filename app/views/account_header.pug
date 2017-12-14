@@ -22,12 +22,13 @@ html
                 include widgets.pug
                 include notifs.pug
                 li#account_taskbar
-                    div#account_infos
-                        if(user.avatar)
-                            div.avatar.sm
-                                img(src=user.avatar)
-                        else
-                            div.icon.icon-account_1.idkids-icons.lg
+                    a(href="#")
+                        div#account_infos
+                            if(user.avatar)
+                                div.avatar.sm
+                                    img(src=user.avatar)
+                            else
+                                div.icon.icon-account_1.idkids-icons.lg
                     div.subnav.account
                         div.account_infos
                             div.avatar
@@ -39,7 +40,7 @@ html
                         div.other_accounts
                         div.options
                             a.btn.btn-default.btn-sm(href="/auth") Ajouter un compte
-                            a.btn.btn-default.btn-sm(href="/auth/logout") Déconnexion
+                            a.btn.btn-default.btn-sm.btn-danger(href="/auth/logout") Déconnexion
         include account_nav.pug
         include scroll_progress.pug
     block content
