@@ -1,0 +1,35 @@
+block popeye
+    div#popeye.popeye
+        if(query.type === "modal")
+            div.modal(class=typeof query.className !== "undefined" ? query.className : '')
+                div.popeye_content
+                    div.cross_button
+                        div.icon.idkids-icons.icon-cross
+                    if(query.illus)
+                        div.popeye_header
+                            div.illus(style="background-image:url("+query.illus+"); background-color:"+query.color+";")
+                    if(query.message)
+                        div.popeye_title= query.title
+                    if(query.message)
+                        div.popeye_message !{query.message}
+                    if(query.buttons)
+                        div.popeye_buttons
+                            each button in query.buttons
+                                div.cta.btn.btn-ld(class= " "+button.class, data-buttonid=button.value)= button.label
+                    if(query.options)
+                        ul.popeye_options
+                            each option in query.options
+                                li(data-optionid=option.value)= option.label
+        if(query.type === "toast")
+            div.toast(class=typeof query.className !== "undefined" ? query.className : '')
+                div.popeye_content
+                    div.cross_button
+                        div.icon.idkids-icons.icon-cross
+                    if(query.title)
+                        div.popeye_title= query.title
+                    if(query.message)
+                        div.popeye_message !{message}
+                    if(query.options)
+                        ul.popeye_options
+                            each option in query.options
+                                li(data-optionid=option.value)= option.label
