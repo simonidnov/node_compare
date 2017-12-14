@@ -65,7 +65,8 @@ var index = {
                 */
             }, this));
         }, this));
-        $('[data-navigate]').off('click').on('click', function(e){
+        $('[data-navigate]').off('click, touchstart').on('click, touchstart', function(e){
+            console.log('click, touchstart');
             e.preventDefault();
             var action = $(this).attr('data-navigate');
             switch(action){
