@@ -47,33 +47,33 @@ block content
                             label(for="color") Color
                             br
                             input#color(type="color" name="color")
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#label(type="text" name="label" minlength="4" required)
                             label(for="label") Label
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#name(type="text" name="name" minlength="4" required)
                             label(for="name") Name
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#short_name(type="text" name="short_name" minlength="4" required)
                             label(for="short_name") Short Name (without spaces and special characters)
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#host(type="text" name="host" minlength="4" required)
                             label(for="host") host ex : http://account.idkids-app.com
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#redirect_url(type="text" name="redirect_url" minlength="4" required)
                             label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
                         div.form-group
                             a.hyperlink(href="#") En savoir plus sur l'url de redirection
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             textarea#description(type="text" minlength="50" maxlength="250" name="description" required)
                             label(for="description") description
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#short_desc(type="text" minlength="10" maxlength="50" name="short_desc" required)
                             label(for="short_desc") short description
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#bundle(type="text" minlength="20" maxlength="50" name="bundle" required)
                             label(for="bundle") bundle ex : account.idkids.fr
-                        div.form-group.material_input
+                        div.form-group.material_input.minlength
                             input#terms_url(type="text" minlength="20" maxlength="50" name="terms_url" required)
                             label(for="terms_url") special terms url with http://
                         div.form-group
@@ -107,30 +107,30 @@ block content
                                 label(for="color") Color
                                 br
                                 input#color(type="color" name="color" value=edit_application.color)
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 input#label(type="text" name="label" minlength="4" value=edit_application.name required)
                                 label(for="label") Name
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 input#short_name(type="text" name="short_name" minlength="4" value=edit_application.short_name required)
                                 label(for="short_name") Short Name (without spaces and special characters)
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 input#host(type="text" name="host" minlength="4" value=edit_application.host required)
                                 label(for="host") host ex : http://account.idkids-app.com
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 input#redirect_url(type="text" name="redirect_url" minlength="4" value=edit_application.redirect_url required)
                                 label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
                             div.form-group
                                 a.hyperlink(href="#") > En savoir plus sur l'url de redirection
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 textarea#description(type="text" minlength="50" maxlength="250" name="description" required)= edit_application.description
                                 label(for="description") description
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 input#short_desc(type="text" minlength="10" maxlength="50" value=edit_application.short_desc name="short_desc" required)
                                 label(for="short_desc") short description
                             div.form-group.material_input
                                 input#bundle(type="text" value=edit_application.bundle name="bundle" required)
                                 label(for="bundle") bundle ex : account.idkids.fr
-                            div.form-group.material_input
+                            div.form-group.material_input.minlength
                                 input#terms_url(type="text" minlength="5" value=edit_application.terms_url name="terms_url" required)
                                 label(for="terms_url") special terms url with http://
                             hr.separator
@@ -142,7 +142,7 @@ block content
                                 ul.array_list_inputs
                                     if(typeof edit_application.aliases !== "undefined")
                                         each alias in _.keys(edit_application.aliases[0][0])
-                                            li.form-group.material_input
+                                            li.form-group.material_input.minlength
                                                 input(type="text" minlength="5" name=alias value=edit_application.aliases[alias])
                                                 label Entrez l'url de l'alias
                                                 div.delete_input_array_button Supprimer
