@@ -65,6 +65,9 @@ var index = {
                 */
             }, this));
         }, this));
+        /*$('.short_cuts li').off('touchstart').on('touchstart', function(){
+            $(this).focus();
+        });*/
         $('[data-navigate]').off('click, touchstart').on('click, touchstart', function(e){
             console.log('click, touchstart');
             e.preventDefault();
