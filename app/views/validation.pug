@@ -1,0 +1,13 @@
+html
+    head
+        meta(name='viewport' content ='width=device-width, initial-scale=1, user-scalable=no')
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content ='IE=edge')
+        link(rel='stylesheet', href='/stylesheets/style.min.css')
+    body
+        div.container
+            div.row
+                h1 Validation
+                p= infos.message
+                //p= JSON.stringify(infos)
+                a.btn.btn-lg.btn-success(href="/account/account") Mon compte

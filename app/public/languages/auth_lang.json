@@ -6,7 +6,7 @@
         "keys":{
             "email_holder":"Entrez votre email",
             "email_error":"Votre email semble invalide.",
-            "password_holder":"Entre votre mot de passe.",
+            "password_holder":"Entrez votre mot de passe.",
             "password_error":"Votre mot de passe doit contenir une majuscule, un chiffre et compter un minimum de 8 charactères.",
             "login_tab_1":"Me connecter",
             "login_tab_2":"Créer un compte",
@@ -99,7 +99,16 @@
             "notifications_sms_need_mobile_message":"Pour recevoir le meilleur de nos offres par SMS, veuillez vérifier ou renseigner votre numéro de téléphone mobile ci-dessous :",
             "age_years":"ans",
             "how_to_manage_kids":"Pour ajouter ou modifier les informations personnalisées de vos enfants, rendez-vous sur votre profil :",
-            "manage_kids_cta":"modifier leurs informations"
+            "manage_kids_cta":"modifier leurs informations",
+            "security_form_account_title":"Ajouter une adresse email de secours",
+            "security_form_password_title":"Changer de mot de passe",
+            "actual_password_holder":"Entrez votre mot de passe actuel",
+            "password_new_holder":"Entrez votre nouveau mot de passe",
+            "retype_password_new_holder":"Retapez votre nouveau mot de passe",
+            "change_password_cta":"Confirmer le changement de mot de passe",
+            "account_validation_title":"Valider votre compte",
+            "account_validation_messsage":"<b>Pour sécuriser vos données personnelles, il est important de valider votre compte !</b><br/>Cliquez ci-dessous pour recevoir un email de validation",
+            "account_validation_cta":"Valider mon compte"
         }
     }
 }
