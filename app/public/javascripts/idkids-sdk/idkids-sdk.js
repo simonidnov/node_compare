@@ -97,7 +97,7 @@ var idkids_jssdk = function(options, callback){
                 
                 this.set_user();
                 callback(jeton);
-                window.location.href =window.location.pathname;
+                //window.location.href =window.location.pathname;
                 //window.location.reload(window.location.pathname+'/');
             }
         },
