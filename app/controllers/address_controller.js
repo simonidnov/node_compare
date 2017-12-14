@@ -9,7 +9,6 @@ exports.get = function(req, datas, callback) {
 };
 // check user login then return user_infos
 exports.create = function(req, datas, callback) {
-    console.log("req.body ====== ", req.body);
     Address_model.create(req.body.user_id, req.body, function(e){
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         auth_helper.check_session(req, req.body.user_id, function(){

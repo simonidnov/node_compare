@@ -70,7 +70,6 @@ auth.get('/', function(req, res, next) {
         });
     })
     .get('/:form_name/*', function(req, res, next) {
-        console.log('login get');
         req.query.device_uid = device_uid; 
         Auth_controller.login(req, req.query, function(e){
             var datas = { 
