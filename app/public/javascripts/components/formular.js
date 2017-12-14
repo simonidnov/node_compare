@@ -99,13 +99,26 @@ function formular(target, callback){
             return false;
         });
         $(target).find('.material_input input').off('focus').on('focus', function(){
+            $(this).parent().addClass('focused');
+            self.callback({"status":"focus", value:$(this)});
             if($(this).attr('type') === "date"){
+                var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                if (/windows phone/i.test(userAgent)) {
+                    return false;
+                }
+
+                if (/android/i.test(userAgent)) {
+                    return false;
+                }
+
+                // iOS detection from: http://stackoverflow.com/a/9039885/177710
+                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    return false;
+                }
                 var cal = new datepicker($(this), function(e){
                     console.log(e);
                 });
             }
-            $(this).parent().addClass('focused');
-            self.callback({"status":"focus", value:$(this)});
         });
         
         
@@ -260,6 +273,24 @@ function formular(target, callback){
                 if($('[data-checkinput="'+target.attr('id')+'"]').length > 0){
                     $('[data-checkinput="'+target.attr('id')+'"] .check').removeClass('checked');
                     /* TEST SI LA LONGEUR EST DEMANDEE */
+                    if($('[data-checkinput="'+target.attr('id')+'"] .check_hash').length > 0 && target.val().indexOf('#') !== -1){
+                        $('[data-checkinput="'+target.attr('id')+'"] .check_hash').addClass('checked');
+                    }else{
+                        $('[data-checkinput="'+target.attr('id')+'"] .check_hash').removeClass('checked');
+                    }
+                    
+                    if($('[data-checkinput="'+target.attr('id')+'"] .check_arobase').length > 0 && target.val().indexOf('@') !== -1){
+                        $('[data-checkinput="'+target.attr('id')+'"] .check_arobase').addClass('checked');
+                    }else{
+                        $('[data-checkinput="'+target.attr('id')+'"] .check_arobase').removeClass('checked');
+                    }
+                    
+                    if($('[data-checkinput="'+target.attr('id')+'"] .check_dot').length > 0 && target.val().indexOf('.') !== -1){
+                        $('[data-checkinput="'+target.attr('id')+'"] .check_dot').addClass('checked');
+                    }else{
+                        $('[data-checkinput="'+target.attr('id')+'"] .check_dot').removeClass('checked');
+                    }
+                    
                     if($('[data-checkinput="'+target.attr('id')+'"] .check_length').length > 0 && target.val().length >= target.attr('minlength')){
                         $('[data-checkinput="'+target.attr('id')+'"] .check_length').addClass('checked');
                     }else{
