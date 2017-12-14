@@ -9,3 +9,4 @@ ssh/
 app/public/uploads/
 app/config/
 app/config/*
+npm-debug.log
