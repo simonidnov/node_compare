@@ -27,8 +27,10 @@ block popeye
                         div.icon.idkids-icons.icon-cross
                     if(query.title)
                         div.popeye_title= query.title
+                    else
+                        br
                     if(query.message)
-                        div.popeye_message !{message}
+                        div.popeye_message !{query.message}
                     if(query.options)
                         ul.popeye_options
                             each option in query.options

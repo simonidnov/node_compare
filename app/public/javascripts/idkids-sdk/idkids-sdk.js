@@ -19,22 +19,21 @@ var idkids_jssdk = function(options, callback){
         delete : function(request, params, callback) {
             this.call('DELETE', request, params, callback);
         },
-        call : function(type, request, params, callback){
+        call : function(method, request, params, callback){
             this.show_loader();
             params = this.add_params(params);
             dataType = 'json';
-            if(type === "POST" || type === "PUT" || type === "DELETE"){
+            if(method === "POST" || method === "PUT" || method === "DELETE"){
                 dataType = 'json';
                 params = JSON.stringify(params);
             }
             jQuery.ajax(request, {
-                method: type,
+                method: method,
                 contentType: 'application/json',
                 dataType: dataType,
                 data: params
             })
             .done($.proxy(function(e) {
-                console.log("IS DONE :::: ", e);
                 if(typeof e.updated_token !== "undefined"){
                     this.user.token = e.updated_token;
                     this.store('idkids_local_user', this.user);
@@ -46,6 +45,30 @@ var idkids_jssdk = function(options, callback){
             })
             .always($.proxy(function(e) {
                 this.hide_loader();
+                /*if(typeof e.responseJSON !== "undefined"){
+                    if(typeof e.responseJSON.message !== "undefined"){
+                        e.message = e.responseJSON.message;
+                    }
+                }*/
+                if(typeof e.message !== "undefined"){
+                    if(typeof popeye !== "undefined"){
+                        e.type="";
+                        switch(e.status){
+                            case 200:
+                                e.type = 'toast';
+                                break;
+                            default:
+                                e.type = 'modal';
+                                break;
+                        }
+                        var pop = new popeye($('body'), 
+                            e,function(e){
+                                console.log(e);
+                            }
+                        ).init();
+                    }
+                }
+
                 /* TODO CHECK IF HAS MESSAGE THEN DISPLAY POPIN MESSAGE OR TOAST ? */
                 console.log('always ', e);
             },this));

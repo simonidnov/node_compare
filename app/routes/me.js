@@ -203,6 +203,6 @@ me.get('/', function(req, res, next) {
     })
     /* ------------ FROM VALIDATION ----------- */
     .get('/from', function(req, res, next) {
-        res.send({ message: "website authorised", updated_token:req.query.updated_token, host:req.get('host')});
+        res.send({ status:200, message: "website authorised", updated_token:req.query.updated_token, host:req.get('host')});
     });
 module.exports = me;
