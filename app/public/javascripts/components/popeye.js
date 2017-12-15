@@ -8,12 +8,19 @@ function popeye(target, datas, callback){
                 self.hide();
             });
             $('#popeye [data-optionid]').off('click').on('click', function(){
-                callback({status:'option', value:$(this).attr('data-optionid')}); self.hide();
+                callback({status:'option', value:$(this).attr('data-optionid')});
+                self.hide();
             });
             $('#popeye [data-buttonid]').off('click').on('click', function(){
-                callback({status:'button', value:$(this).attr('data-buttonid')}); self.hide();
+                callback({status:'button', value:$(this).attr('data-buttonid')});
+                self.hide();
             });
         });
+        if(datas.type === "toast"){
+            setTimeout($.proxy(function(){
+                self.hide();
+            }, this),4000);
+        }
     }
     this.hide = function(){
         $('#popeye .popeye_content').addClass('closing');
