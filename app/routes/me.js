@@ -26,24 +26,28 @@ me.use(function(req, res, next) {
     }
     
     auth_helper.validate_from(dataCheck, req.get('host'), function(e){
+        console.log('validate_from ::::: ', e);
         if(!e){
             res.status(401).send({ message: "your server was not authorised", request:dataCheck, host:req.get('host'), is_ok:""});
-        } 
-        // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
-        if(req.url.indexOf('/from') === -1){
-            auth_helper.validate_user(dataCheck, req.get('host'), function(response){
-                if(response.status === 200){
-                    if(typeof response.updated_token !== "undefined"){
-                        req.query.updated_token = response.updated_token;
-                    }
-                    next();
-                }else{
-                    res.status(401).send({ message: "the user token was not up to date", request:dataCheck, host:req.get('host')});
-                }
-            });
         }else{
-            next();   
-        }
+            // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
+            if(req.url.indexOf('/from') === -1){
+                auth_helper.validate_user(dataCheck, req.get('host'), function(response){
+                    console.log("response.status validate_user ::::: ", response);
+                    if(response.status === 200){
+                        if(typeof response.updated_token !== "undefined"){
+                            req.query.updated_token = response.updated_token;
+                        }
+                        next();
+                    }else{
+                        res.status(response.status).send({ message: "the user token was not up to date", request:dataCheck, host:req.get('host')});
+                        return false;
+                    }
+                });
+            }else{
+                next();   
+            }
+        } 
     });    
     
 });

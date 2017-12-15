@@ -2,31 +2,40 @@ function popeye(target, datas, callback){
     this.init = function(){
         var self = this;
         index.sdk.template('popeye', datas, function(e){
-            target.append(e);
+            var elements = $(e);
+            if(datas.type === "toast" && $('#popeye .toast').length > 0){
+                $('#popeye .toast').append(elements.find('.toast .popeye_content'));
+            }else{
+                target.append(e);
+            }
             $('#popeye .cross_button').off('click').on('click', function(){
                 callback({status:'close', value:"cross_button"});
-                self.hide();
+                self.hide($(this));
             });
             $('#popeye [data-optionid]').off('click').on('click', function(){
                 callback({status:'option', value:$(this).attr('data-optionid')});
-                self.hide();
+                self.hide($(this));
             });
             $('#popeye [data-buttonid]').off('click').on('click', function(){
                 callback({status:'button', value:$(this).attr('data-buttonid')});
-                self.hide();
+                self.hide($(this));
             });
+            if(datas.type === "toast"){
+                setTimeout($.proxy(function(){
+                   //self.hide($('.toast .popeye_content').last().find('.cross_button'));
+                }, this),4000);
+            }
         });
-        if(datas.type === "toast"){
-            setTimeout($.proxy(function(){
-                self.hide();
-            }, this),4000);
-        }
     }
-    this.hide = function(){
-        $('#popeye .popeye_content').addClass('closing');
+    this.hide = function(target){
+        target.parent().addClass('closing');
         setTimeout($.proxy(function(){
-            $("#popeye").remove();
-        }, this),400);
+            if($('#popeye .toast').length > 0 && $('#popeye .toast .popeye_content').length > 1){
+                target.parent().remove();
+            }else{
+                $("#popeye").remove();
+            }
+        }, this),4000);
     }
 }
 /* POPEYE SAMPLE MODAL 

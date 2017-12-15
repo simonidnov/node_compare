@@ -477,7 +477,7 @@ module.exports.getValidationCode = function(_id, callback){
                         },
                         function(err, validation){
                             if(err) console.log('impossible de mettre à jour le code de validation ', err);
-                            else console.log("code de validation mis à jour ", user)
+                            else console.log("token de validation mis à jour")
                             callback({status:200, validation_code:validation_code, email:user.email, pseudo:user.pseudo, avatar:user.avatar});
                         }
                     );
