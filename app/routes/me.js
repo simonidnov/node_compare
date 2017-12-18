@@ -9,18 +9,9 @@ var express = require('express'),
     machineId       = require('node-machine-id'),
     Auth_model      = require('../models/auth_model'),
     Members_model   = require('../models/members_model'),
-    Address_model   = require('../models/address_model'),
-    getmac = require('getmac');
+    Address_model   = require('../models/address_model');
 
-var device_uid = machineId.machineIdSync({original: true});
-getmac.getMac(function(err,macAddress){
-    device_uid = macAddress;
-});
-
-var macaddress = require('macaddress');
-macaddress.one(function (err, mac) {
-    device_uid = mac;  
-});
+var device_uid = null;
 
 //machineId.machineIdSync({original: true})
 me.use(function(req, res, next) {
@@ -35,6 +26,17 @@ me.use(function(req, res, next) {
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
+    console.log('PREVENT UUID ', device_uid);
+    console.log('PREVENT UUID ', device_uid);
+    console.log('PREVENT UUID ', device_uid);
+    console.log('PREVENT UUID ', device_uid);
+    
+    device_uid = dataCheck.device_uid;
+    
+    console.log('RESET UUID ', device_uid);
+    console.log('RESET UUID ', device_uid);
+    console.log('RESET UUID ', device_uid);
+    console.log('RESET UUID ', device_uid);
     
     auth_helper.validate_from(dataCheck, req.get('host'), function(e){
         console.log('validate_from ::::: ', e);

@@ -9,18 +9,9 @@ var express = require('express'),
     machineId       = require('node-machine-id'),
     Auth_model      = require('../models/auth_model'),
     Members_model   = require('../models/members_model'),
-    Address_model   = require('../models/address_model'),
-    getmac = require('getmac');
+    Address_model   = require('../models/address_model');
 
 var device_uid = machineId.machineIdSync({original: true});
-getmac.getMac(function(err,macAddress){
-    device_uid = macAddress;
-});
-
-var macaddress = require('macaddress');
-macaddress.one(function (err, mac) {
-    device_uid = mac;  
-});
 
 var fs = require('fs');
 var readline = require('readline');

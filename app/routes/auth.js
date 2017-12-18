@@ -12,8 +12,15 @@ var express = require('express'),
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {
-        req.query.device_uid = device_uid; 
-        Auth_controller.get_user_from_device(req, res, function(users_device){
+        //req.query.device_uid = device_uid; 
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        
+        //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 var datas = {
                     title: 'Mon compte', 
@@ -22,7 +29,6 @@ auth.get('/', function(req, res, next) {
                     lang:lang, 
                     uri_params : uri_helper.get_params(req),
                     response:e,
-                    users_device:users_device.users_device,
                     js:[
                         '/public/javascripts/login.js',
                         '/public/javascripts/components/formular.js'
@@ -37,9 +43,17 @@ auth.get('/', function(req, res, next) {
                 }
                 res.render('auth/login', datas);
             });
-        });
+        //});
     })
     .post('/login', function(req, res, next) {
+    
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
                 res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
@@ -64,11 +78,25 @@ auth.get('/', function(req, res, next) {
         });
     })
     .put('/login', function(req, res, next) {
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        
         Auth_controller.update(req, res, function(){
             res.send('login put params');
         });
     })
     .delete('/login', function(req, res, next) {
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        console.log('req.query.device_uid ', req.query.device_uid);
+        
         Auth_controller.unregister(req, res, function(){
             res.send('login delete params');
         });
