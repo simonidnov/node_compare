@@ -9,13 +9,25 @@ var express = require('express'),
     lang = require('../public/languages/auth_lang');
 
 admin.use(function(req, res, next){
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
+    
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     // TODO : VALIDATE SESSION USER
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
     Auth_helper.validate_session(req, function(e){
+        console.log(e);
         if(e.status === 200){
             Auth_helper.validate_admin(req, function(e){
                 if(e.status === 200){
@@ -29,6 +41,7 @@ admin.use(function(req, res, next){
             res.redirect(301, '/auth');
         }
     });
+    console.log('--------------------- Auth_helper.validate_session -----------------------');
     //next();
 });
 /* GET admin page. */

@@ -22,7 +22,7 @@ function popeye(target, datas, callback){
             });
             if(datas.type === "toast"){
                 setTimeout($.proxy(function(){
-                   //self.hide($('.toast .popeye_content').last().find('.cross_button'));
+                   self.hide($('.toast .popeye_content').last().find('.cross_button'));
                 }, this),4000);
             }
         });
@@ -35,7 +35,8 @@ function popeye(target, datas, callback){
             }else{
                 $("#popeye").remove();
             }
-        }, this),4000);
+            $("#popeye.modal").remove();
+        }, this),400);
     }
 }
 /* POPEYE SAMPLE MODAL 

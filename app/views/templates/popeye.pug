@@ -1,5 +1,5 @@
 block popeye
-    div#popeye.popeye
+    div#popeye.popeye(class=query.type)
         if(query.type === "modal")
             div.modal(class=typeof query.className !== "undefined" ? query.className : '')
                 div.popeye_content
