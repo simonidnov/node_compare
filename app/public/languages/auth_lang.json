@@ -108,7 +108,10 @@
             "change_password_cta":"Confirmer le changement de mot de passe",
             "account_validation_title":"Valider votre compte",
             "account_validation_messsage":"<b>Pour sécuriser vos données personnelles, il est important de valider votre compte !</b><br/>Cliquez ci-dessous pour recevoir un email de validation",
-            "account_validation_cta":"Valider mon compte"
+            "account_validation_cta":"Valider mon compte",
+            "lost_password_cta":"Recevoir un nouveau mot de passe",
+            "connected_status":"connecté",
+            "not_connected_status":"hors ligne"
         }
     }
 }

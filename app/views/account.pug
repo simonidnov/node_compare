@@ -66,6 +66,14 @@ block content
                             label(for='mobile') !{lang[locale].keys.mobile_holder}
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
+                div.formular#devices_list
+                    ul.option_list
+                        each device in user.devices
+                            li
+                                div.icon.idkids-icons.icon-desktop.icon-lg
+                                div.option_infos
+                                    div.label= device.name
+                                    div.arch= device.arch
             div.col.col-md-5
                 div.formular#add_kid
                     h2 Mes Enfants

@@ -514,6 +514,30 @@ module.exports.validAccount = function(params, callback){
         }
     );
 };
+module.exports.getUsersDevice = function(req, callback){
+    User.find(
+        {
+            _id: { $ne: req.session.Auth },
+            devices:{ 
+                $elemMatch : {
+                    uid:device_uid
+                }
+            }
+        },
+        {
+            email:1,
+            avatar:1,
+            pseudo:1
+        },
+        function(err, users){
+            if(err || users.length === 0){
+                callback({status:304, message:"Nouvel appareil", datas:err});  
+            }else{
+                callback({status:200, message:"liste des utilisateurs ayant utilisé ce device", users_device:users})
+            }
+        }
+    )
+}
 /* SPECIAL REQUEST SCHEMA SAMPLE CODE */
 user_datas.getAge = function(){
     return this.birthDate;
