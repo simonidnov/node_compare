@@ -29,13 +29,6 @@ module.exports = {
 };
 
 module.exports.send = function(template, user_id, datas, callback){
-    console.log('------- SEND EMAIL -----------');
-    console.log('------- SEND EMAIL -----------');
-    console.log('------- SEND EMAIL -----------');
-    console.log(config.emailing);
-    console.log('------- SEND EMAIL -----------');
-    console.log('------- SEND EMAIL -----------');
-    console.log('------- SEND EMAIL -----------');
     data = {
         user_id : user_id,
         email : datas.email,
@@ -49,7 +42,6 @@ module.exports.send = function(template, user_id, datas, callback){
     //callback({"status":200, "datas":infos});
     emailing.mailer.send(template, datas, function(err, infos){
         if (err) {
-            console.log("ERROR :::::: ", err);
             callback({status:405, message:'Email ERROR', datas:datas});
             return;
         }
