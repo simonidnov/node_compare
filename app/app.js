@@ -21,8 +21,6 @@ const express = require('express'),
     address = require('./routes/address'),
     account = require('./routes/account');
 
-
-
 let session = require("express-session");
 
 
