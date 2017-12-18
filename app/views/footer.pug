@@ -97,7 +97,7 @@ block footer
                 div.icon.bubble
             a(href="https://www.joyvox.fr")
                 div.icon.joyvox
-            a(href="https://www.joybox.fr")    
+            a(href="https://www.joybox.fr")
                 div.icon.joybox
         hr
         script(src="/node_modules/jquery/dist/jquery.min.js")
@@ -108,4 +108,6 @@ block footer
         script(src="/public/javascripts/idkids-sdk/idkids-sdk.js")
         if(js)
             each val in js
-                script(src=val)
+                script(src=val) 
+        script(src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js")
+        script(src="/public/javascripts/firebase_helper.js")

@@ -2,6 +2,7 @@
 //DEBUG=broadcast_local:* npm start
 const express = require('express'),
     path = require('path'),
+    config = require('./config/config'),
     favicon = require('serve-favicon'),
     cp = require('childprocess').spawn,
     logger = require('morgan'),
@@ -10,6 +11,7 @@ const express = require('express'),
     index = require('./routes/index'),
     users = require('./routes/users'),
     media = require('./routes/media'),
+    gmail = require('./routes/gmail'),
     admin = require('./routes/admin'),
     validation = require('./routes/validation'),
     api = require('./routes/api'),
@@ -18,6 +20,8 @@ const express = require('express'),
     me = require('./routes/me'),
     address = require('./routes/address'),
     account = require('./routes/account');
+
+
 
 let session = require("express-session");
 
@@ -32,6 +36,16 @@ app.listen(9000);
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
+
+//REST ANALYTICS MIDDLE WARE
+//app.use(analytics.middleware());
+
+// UNCOMMENT TO REST ANALYTICS WITH GOOGLE ANALYTICS
+//app.use(express.cookieParser());
+//app.use(ga(config.analytics.key, {
+//    safe: true
+//}));
 
 app.use(session({
     secret: "secret",
@@ -66,6 +80,7 @@ app.use('/admin', admin);
 app.use('/me', me);
 app.use('/api', api);
 app.use('/media', media);
+app.use('/gmail', gmail);
 app.use('/account', account);
 app.use('/address', address);
 app.use('/validation', validation);
