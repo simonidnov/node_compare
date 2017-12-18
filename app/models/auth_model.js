@@ -79,7 +79,9 @@ module.exports.getActive = function(){
     ).count();
 };
 module.exports.get = function(req, datas, callback) {
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.query.device_uid;
+    //machineId.machineIdSync({original: true});
+    
     var self = this;
     User.find({}, function(err, users){
         if (err){
@@ -91,7 +93,16 @@ module.exports.get = function(req, datas, callback) {
 };
 // check user login then return user_infos
 module.exports.login = function(req, datas, callback) {
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.query.device_uid;
+    console.log("device_uid :::: LOGIN ", req.query);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    console.log("device_uid :::: LOGIN ", device_uid);
+    //device_uid = machineId.machineIdSync({original: true});
     var self = this;
     if(datas.password){
         if(validator.validate(datas.email)){
@@ -114,17 +125,7 @@ module.exports.login = function(req, datas, callback) {
                         });
                         return false;
                     }
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
-                    console.log('check device ', device_uid);
+                    console.log("CHECK DEVICE device_uid :::: LOGIN ", device_uid);
                     /* CHECK DEVICE */
                     var new_device  = {
                             uid     : device_uid,
@@ -147,7 +148,8 @@ module.exports.login = function(req, datas, callback) {
                             }
                         }, 
                         function(err, device) {
-                            if(err || device.length === 0){
+                            if(err){
+                                console.log("device_uid :::: LOGIN ERROR ", device_uid, " ERRROR ::: ", err);
                                 // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
                                 User.update(
                                     { _id: users[0]._id },
@@ -174,6 +176,7 @@ module.exports.login = function(req, datas, callback) {
                                         }
                                     );
                                 }else{
+                                    console.log('-------------------- LE DEVICE EXISTE -------------- ', device);
                                     /*
                                     User.update({devices: { devices: new_device } }, function(err, device){
                                         if(err) console.log('impossible d insérer le new_device ', err);
@@ -246,14 +249,16 @@ module.exports.login = function(req, datas, callback) {
 };
 // check user logout then return user_infos
 module.exports.logout = function(datas, callback) {
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.query.device_uid;
+    //device_uid = machineId.machineIdSync({original: true});
     /* UPDATE token, updated then free user session and storage */
     callback();
     return datas;
 };
 // check user register then return user_infos
 module.exports.register = function(datas, callback) {
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.body.device_uid;
+    //device_uid = machineId.machineIdSync({original: true});
     /* UPDATE ALL datas set check email is uniq and valid then send confirmation email */
     /* ----- CHECK EMAIL UNIQ ----- */
     /* ----- GENERATE TOKEN FIRST expire in 24 H ----- */
@@ -320,13 +325,15 @@ module.exports.register = function(datas, callback) {
 };
 // check user unregister then return user_infos
 module.exports.unregister = function(datas) {
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.body.device_uid;
+    //device_uid = machineId.machineIdSync({original: true});
     /* DELETE where email, passe, secret and token */
     return datas;
 };
 // check user login then return user_infos
 module.exports.update = function(req, user_id, datas, callback) {
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.body.device_uid;
+    //device_uid = machineId.machineIdSync({original: true});
     var self = this;
     /* UPDATE token, updated then free user session and storage */
     datas.updated = Date.now();
@@ -355,7 +362,8 @@ module.exports.update = function(req, user_id, datas, callback) {
     );
 };
 module.exports.check_user = function(req, callback){
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.device_uid;
+    //device_uid = machineId.machineIdSync({original: true});
     var new_device  = {
             uid     : device_uid,
             arch    : os.arch(),
@@ -408,7 +416,6 @@ module.exports.check_user = function(req, callback){
     );
 }
 module.exports.reset_session = function(req, user_id, callback){
-    device_uid = machineId.machineIdSync({original: true});
     User.findOne(
         {
             _id: user_id
@@ -432,7 +439,6 @@ module.exports.reset_session = function(req, user_id, callback){
     );
 }
 module.exports.getPublicProfile = function(_id, callback){
-    device_uid = machineId.machineIdSync({original: true});
     this.getFullUser(_id, function(e){
         if(e.status === 200){
             var public_profile = {
@@ -450,7 +456,6 @@ module.exports.getPublicProfile = function(_id, callback){
     });
 }
 module.exports.getServices = function(_id, callback){
-    device_uid = machineId.machineIdSync({original: true});
     this.getFullUser(_id, function(e){
         if(e.status === 200){
             var public_services = {
@@ -464,7 +469,6 @@ module.exports.getServices = function(_id, callback){
     });
 }
 module.exports.getFullUser = function(_id, callback){
-    device_uid = machineId.machineIdSync({original: true});
     User.findOne(
         {
             _id:_id
@@ -486,7 +490,6 @@ module.exports.getFullUser = function(_id, callback){
     );
 };
 module.exports.getValidationCode = function(_id, callback){
-    device_uid = machineId.machineIdSync({original: true});
     User.findOne(
         {
             _id:_id
@@ -516,7 +519,6 @@ module.exports.getValidationCode = function(_id, callback){
     );
 };
 module.exports.validAccount = function(params, callback){
-    device_uid = machineId.machineIdSync({original: true});
     User.findOne(
         {
             email:params.email,
@@ -543,7 +545,8 @@ module.exports.validAccount = function(params, callback){
     );
 };
 module.exports.getUsersDevice = function(req, callback){
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = req.query.device_uid;
+    //device_uid = machineId.machineIdSync({original: true});
     User.find(
         {
             _id: { $ne: req.session.Auth },
@@ -571,9 +574,6 @@ module.exports.getUsersDevice = function(req, callback){
 user_datas.getAge = function(){
     return this.birthDate;
 };
-
-
-
 
 
 // Load mongoose package
