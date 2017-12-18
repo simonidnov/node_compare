@@ -7,19 +7,10 @@ const express = require('express'),
       language_helper = require('../helpers/languages_helper'),
       uri_helper = require('../helpers/uri_helper'),
       lang = require('../public/languages/auth_lang'),
-      machineId = require('node-machine-id'),
-      getmac = require('getmac');
+      machineId = require('node-machine-id');
 
 var  device_uid = machineId.machineIdSync({original: true});
 
-getmac.getMac(function(err,macAddress){
-    device_uid = macAddress;
-});
-
-var macaddress = require('macaddress');
-macaddress.one(function (err, mac) {
-    device_uid = mac;  
-});
 
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */

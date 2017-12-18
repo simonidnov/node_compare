@@ -21,57 +21,59 @@ var idkids_jssdk = function(options, callback){
         },
         call : function(method, request, params, callback){
             this.show_loader();
-            params = this.add_params(params);
-            dataType = 'json';
-            if(method === "POST" || method === "PUT" || method === "DELETE"){
+            this.add_params(params, $.proxy(function(new_params){
+                params = new_params;
                 dataType = 'json';
-                params = JSON.stringify(params);
-            }
-            jQuery.ajax(request, {
-                method: method,
-                contentType: 'application/json',
-                dataType: dataType,
-                data: params
-            })
-            .done($.proxy(function(e) {
-                if(typeof e.updated_token !== "undefined"){
-                    this.user.token = e.updated_token;
-                    this.store('idkids_local_user', this.user);
+                if(method === "POST" || method === "PUT" || method === "DELETE"){
+                    dataType = 'json';
+                    params = JSON.stringify(params);
                 }
-                callback(e);
-            }, this))
-            .fail(function(e) {
-                console.log('fail ', e);
-            })
-            .always($.proxy(function(e) {
-                this.hide_loader();
-                /*if(typeof e.responseJSON !== "undefined"){
-                    if(typeof e.responseJSON.message !== "undefined"){
-                        e.message = e.responseJSON.message;
+                jQuery.ajax(request, {
+                    method: method,
+                    contentType: 'application/json',
+                    dataType: dataType,
+                    data: params
+                })
+                .done($.proxy(function(e) {
+                    if(typeof e.updated_token !== "undefined"){
+                        this.user.token = e.updated_token;
+                        this.store('idkids_local_user', this.user);
                     }
-                }*/
-                if(typeof e.message !== "undefined"){
-                    if(typeof popeye !== "undefined"){
-                        e.type="";
-                        switch(e.status){
-                            case 200:
-                                e.type = 'toast';
-                                break;
-                            default:
-                                e.type = 'modal';
-                                break;
+                    callback(e);
+                }, this))
+                .fail(function(e) {
+                    console.log('fail ', e);
+                })
+                .always($.proxy(function(e) {
+                    this.hide_loader();
+                    /*if(typeof e.responseJSON !== "undefined"){
+                        if(typeof e.responseJSON.message !== "undefined"){
+                            e.message = e.responseJSON.message;
                         }
-                        var pop = new popeye($('body'), 
-                            e,function(e){
-                                console.log(e);
+                    }*/
+                    if(typeof e.message !== "undefined"){
+                        if(typeof popeye !== "undefined"){
+                            e.type="";
+                            switch(e.status){
+                                case 200:
+                                    e.type = 'toast';
+                                    break;
+                                default:
+                                    e.type = 'modal';
+                                    break;
                             }
-                        ).init();
+                            var pop = new popeye($('body'), 
+                                e,function(e){
+                                    console.log(e);
+                                }
+                            ).init();
+                        }
                     }
-                }
 
-                /* TODO CHECK IF HAS MESSAGE THEN DISPLAY POPIN MESSAGE OR TOAST ? */
-                console.log('always ', e);
-            },this));
+                    /* TODO CHECK IF HAS MESSAGE THEN DISPLAY POPIN MESSAGE OR TOAST ? */
+                    console.log('always ', e);
+                },this));
+            }, this));
         },
         get_user_status : function(){
             this.set_user();
@@ -95,7 +97,7 @@ var idkids_jssdk = function(options, callback){
         hide_loader : function(){
             $('.idkids_jssdk.loader').remove();  
         },
-        add_params : function(params){
+        add_params : function(params, callback){
             params.options = this.options;
             params.options.from_origin   = window.location.origin;
             if(this.user){
@@ -104,7 +106,10 @@ var idkids_jssdk = function(options, callback){
                 params.options.user_secret   = this.user.secret;
                 params.options.user_device   = this.user.current_device;
             }
-            return params;
+            this.get_device_uid(function(e){
+                params.device_uid = e;
+                callback(params);
+            });
         },
         reset_user : function(callback){
             var url = new URL(window.location.href),
@@ -139,6 +144,15 @@ var idkids_jssdk = function(options, callback){
                 this.user = JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
                 console.log("error ::: ", e); // error in the above string (in this case, yes)!
+            }
+        },
+        get_device_uid : function(callback){
+            console.log("get_device_uid");
+            if(typeof Fingerprint2 !== "undefined"){
+                new Fingerprint2().get(function(result, components){
+                    callback(result); //a hash, representing your device fingerprint
+                    console.log(result, components); // an array of FP components
+                });
             }
         }
     };
