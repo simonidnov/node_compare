@@ -44,7 +44,12 @@ const db = require('mongoose'),
           public_profile : {type:'Object'}
       },
       machineId = require('node-machine-id'),
-      device_uid = machineId.machineIdSync({original: true});
+      getmac = require('getmac');
+
+var  device_uid = machineId.machineIdSync({original: true});
+getmac.getMac(function(err,macAddress){
+    device_uid = macAddress;
+});
 
 if(db.connection.readyState === 0){ 
     db.connect(config.database.users, {useMongoClient: true});
@@ -108,9 +113,20 @@ module.exports.login = function(req, datas, callback) {
                         });
                         return false;
                     }
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
+                    console.log('check device ', device_uid);
                     /* CHECK DEVICE */
                     var new_device  = {
-                            uid     : datas.device_uid,
+                            uid     : device_uid,
                             arch    : os.arch(),
                             name    : os.hostname()
                         },
@@ -125,12 +141,12 @@ module.exports.login = function(req, datas, callback) {
                             _id:users[0]._id, 
                             devices:{ 
                                 $elemMatch : {
-                                    uid:datas.device_uid
+                                    uid:device_uid
                                 }
                             }
                         }, 
                         function(err, device) {
-                            if(err){
+                            if(err || device.length === 0){
                                 // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
                                 User.update(
                                     { _id: users[0]._id },
@@ -144,7 +160,7 @@ module.exports.login = function(req, datas, callback) {
                                 );
                             }else{
                                 if(device.length === 0){
-                                    //console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
+                                    console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
                                     /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
                                     User.update(
                                         { _id: users[0]._id },
@@ -165,7 +181,7 @@ module.exports.login = function(req, datas, callback) {
                                     */
                                     /* Update Object in Array Collection */
                                     User.update(
-                                        {id:users[0]._id, devices: {$elemMatch: {uid:datas.device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+                                        {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
                                         {
                                             $set : {token : new_token}
                                         } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
@@ -253,7 +269,7 @@ module.exports.register = function(datas, callback) {
         }
     new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
     new_user_datas.device = [{
-        uid     : datas.body.device_uid,
+        uid     : device_uid,
         arch    : os.arch(),
         name    : os.hostname(),
         token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' }),
@@ -335,7 +351,7 @@ module.exports.update = function(req, user_id, datas, callback) {
 };
 module.exports.check_user = function(req, callback){
     var new_device  = {
-            uid     : req.options.device_uid,
+            uid     : device_uid,
             arch    : os.arch(),
             name    : os.hostname()
         },
@@ -350,7 +366,7 @@ module.exports.check_user = function(req, callback){
             secret : req.options.user_secret,
             devices:{ 
                 $elemMatch : {
-                    uid:req.options.device_uid,
+                    uid:device_uid,
                     token:req.options.user_token
                 }
             }
@@ -365,7 +381,7 @@ module.exports.check_user = function(req, callback){
                         id:req.options.user_id, 
                         devices: {
                             $elemMatch: {
-                                uid:req.options.device_uid
+                                uid:device_uid
                             }
                         }
                     }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU

@@ -7,10 +7,15 @@ var express = require('express'),
     auth_helper     = require('../helpers/auth_helper'),
     lang            = require('../public/languages/auth_lang'),
     machineId       = require('node-machine-id'),
-    device_uid      = machineId.machineIdSync({original: true}),
     Auth_model      = require('../models/auth_model'),
     Members_model   = require('../models/members_model'),
-    Address_model   = require('../models/address_model');
+    Address_model   = require('../models/address_model'),
+    getmac = require('getmac');
+
+var device_uid = machineId.machineIdSync({original: true});
+getmac.getMac(function(err,macAddress){
+    device_uid = macAddress;
+});
 
 var fs = require('fs');
 var readline = require('readline');
