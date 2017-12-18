@@ -13,12 +13,6 @@ var express = require('express'),
 /* GET home page. */
 auth.get('/', function(req, res, next) {
         //req.query.device_uid = device_uid; 
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
         
         //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
@@ -46,13 +40,6 @@ auth.get('/', function(req, res, next) {
         //});
     })
     .post('/login', function(req, res, next) {
-    
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
         
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
@@ -78,31 +65,19 @@ auth.get('/', function(req, res, next) {
         });
     })
     .put('/login', function(req, res, next) {
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
         
         Auth_controller.update(req, res, function(){
             res.send('login put params');
         });
     })
     .delete('/login', function(req, res, next) {
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
-        console.log('req.query.device_uid ', req.query.device_uid);
         
         Auth_controller.unregister(req, res, function(){
             res.send('login delete params');
         });
     })
     .get('/:form_name/*', function(req, res, next) {
-        req.query.device_uid = device_uid; 
+        //req.query.device_uid = device_uid; 
         Auth_controller.login(req, req.query, function(e){
             var datas = { 
                 title: 'Mon compte',

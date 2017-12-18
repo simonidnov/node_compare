@@ -147,9 +147,10 @@ var idkids_jssdk = function(options, callback){
             }
         },
         get_device_uid : function(callback){
-            console.log("get_device_uid");
+            //console.log("get_device_uid");
             if(typeof Fingerprint2 !== "undefined"){
                 new Fingerprint2().get(function(result, components){
+                    $('[name="device_uid"]').val(result);
                     callback(result); //a hash, representing your device fingerprint
                     console.log(result, components); // an array of FP components
                 });
@@ -164,7 +165,7 @@ var idkids_jssdk = function(options, callback){
         //var sdkel;
         //if(document.getElementById('idkids-dsk') === null){ return false; }
         /* TODO REQUEST SECRET FROM SERVER URL THEN RETURN INITED OR NOT IDENTIFIED */
-        
+        this.api.get_device_uid(function(e){console.log('device uid ', e);});
         /* TODO ON STARTUP GET URL PARAMS THEN SET DEFAULT USER ID NEEDED THEN REDIRECT ONLY IF WEBSITE IS IDENTIFIED SERVER SIDE */
         this.api.reset_user(function(datas){
             //console.log('reset user ', datas);
