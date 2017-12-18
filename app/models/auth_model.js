@@ -51,6 +51,13 @@ getmac.getMac(function(err,macAddress){
     device_uid = macAddress;
 });
 
+var macaddress = require('macaddress');
+macaddress.one(function (err, mac) {
+    device_uid = mac;  
+});
+
+
+
 if(db.connection.readyState === 0){ 
     db.connect(config.database.users, {useMongoClient: true});
 }

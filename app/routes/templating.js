@@ -16,6 +16,11 @@ getmac.getMac(function(err,macAddress){
     device_uid = macAddress;
 });
 
+var macaddress = require('macaddress');
+macaddress.one(function (err, mac) {
+    device_uid = mac;  
+});
+
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 templating.get('/:template', function(req, res, next) {

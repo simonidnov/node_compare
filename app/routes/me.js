@@ -17,6 +17,11 @@ getmac.getMac(function(err,macAddress){
     device_uid = macAddress;
 });
 
+var macaddress = require('macaddress');
+macaddress.one(function (err, mac) {
+    device_uid = mac;  
+});
+
 //machineId.machineIdSync({original: true})
 me.use(function(req, res, next) {
     //ACCEPT CORS

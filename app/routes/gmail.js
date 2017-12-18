@@ -17,6 +17,11 @@ getmac.getMac(function(err,macAddress){
     device_uid = macAddress;
 });
 
+var macaddress = require('macaddress');
+macaddress.one(function (err, mac) {
+    device_uid = mac;  
+});
+
 var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
