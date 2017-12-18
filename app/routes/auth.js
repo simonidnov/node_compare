@@ -13,27 +13,30 @@ var express = require('express'),
 /* GET home page. */
 auth.get('/', function(req, res, next) {
         req.query.device_uid = device_uid; 
-        Auth_controller.login(req, req.query, function(e){
-            var datas = {
-                title: 'Mon compte', 
-                datas: req.query, 
-                locale:language_helper.getlocale(),
-                lang:lang, 
-                uri_params : uri_helper.get_params(req),
-                response:e,
-                js:[
-                    '/public/javascripts/login.js',
-                    '/public/javascripts/components/formular.js'
-                ], css:[
-                    '/public/stylesheets/components/formular.css',
-                    '/public/stylesheets/auth.css',
-                ]
-            };
-            //datas.user_session = req.session.Auth;
-            if(typeof e.user !== "undefined"){
-                res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
-            }
-            res.render('auth/login', datas);
+        Auth_controller.get_user_from_device(req, res, function(users_device){
+            Auth_controller.login(req, req.query, function(e){
+                var datas = {
+                    title: 'Mon compte', 
+                    datas: req.query, 
+                    locale:language_helper.getlocale(),
+                    lang:lang, 
+                    uri_params : uri_helper.get_params(req),
+                    response:e,
+                    users_device:users_device.users_device,
+                    js:[
+                        '/public/javascripts/login.js',
+                        '/public/javascripts/components/formular.js'
+                    ], css:[
+                        '/public/stylesheets/components/formular.css',
+                        '/public/stylesheets/auth.css',
+                    ]
+                };
+                datas.user_session = req.session.Auth;
+                if(typeof e.user !== "undefined"){
+                    res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                }
+                res.render('auth/login', datas);
+            });
         });
     })
     .post('/login', function(req, res, next) {
@@ -41,6 +44,7 @@ auth.get('/', function(req, res, next) {
             if(typeof e.user !== "undefined"){
                 res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
+            var user_device = [];
             var datas = {
                 title: 'Mon compte', 
                 datas: req.query, 

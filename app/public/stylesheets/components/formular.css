@@ -231,6 +231,12 @@
     cursor: pointer;
     width: 100%;
 }
+.formular .option_list .icon{
+    font-size: 64px;
+    width:64px;
+    height:64px;
+    padding:10px;
+}
 .formular .option_list a{
     text-decoration: none;
 }
@@ -268,6 +274,10 @@
     font-weight: 200;
     font-size: 12px;
     color:coral;
+    /* lightseagreen */
+}
+.formular .option_list li .option_infos .status.success{
+    color:lightseagreen;
     /* lightseagreen */
 }
 /* --------------- OPTION LIST -------------- */

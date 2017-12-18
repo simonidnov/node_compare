@@ -26,7 +26,16 @@ block content
                                     div.option_infos
                                         div.label= user_session.pseudo
                                         div.email= user_session.email
-                                        div.status connected
+                                        div.status.success= lang[locale].keys.connected_status
+                        if(typeof users_device !== "undefined")
+                            each users in users_device
+                                a(href="/auth/login/email/"+users.email title="Me connecter entant que "+users.pseudo data-action="page_reload")
+                                    li(data-userid=users._id)
+                                        img.avatar(src=users.avatar)
+                                        div.option_infos
+                                            div.label= users.pseudo
+                                            div.email= users.email
+                                            div.status= lang[locale].keys.not_connected_status
                         a(href="/auth/subscribe/" title="Me connecter" data-action="page_reload")
                             li.other
                                 img.avatar(src="/public/images/assets/account.svg")
@@ -123,6 +132,11 @@ block content
                                 input#from_where.phantom_input.form-control(name="from" value=uri_params.from)
                                 input#device_uid.phantom_input.form-control(name="device_uid" value=uri_params.device_uid)
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.subscribe_cta
+                        form#lost_form(method="post" action='/auth/lost_password/')
+                            div.form-group.material_input
+                                input#lost_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)
+                                label(for='lost_email') !{lang[locale].keys.email_holder}
+                            button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.lost_password_cta
                     if(response.status === "error" && typeof response.message !== "undefined")
                         div.error= lang[locale].keys[response.message]
             include footer.pug

@@ -25,3 +25,6 @@ exports.update = function(req, res) {
 exports.request_validation_code = function(req, datas, callback){
     Auth_model.getValidationCode(req.body.user_id, callback);
 };
+exports.get_user_from_device = function(req, res, callback){
+    Auth_model.getUsersDevice(req, callback);
+};
