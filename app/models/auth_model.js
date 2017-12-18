@@ -53,6 +53,14 @@ getmac.getMac(function(err,macAddress){
 
 var macaddress = require('macaddress');
 macaddress.one(function (err, mac) {
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
+    console.log('macaddress  ::::::: ', mac);
     device_uid = mac;  
 });
 
