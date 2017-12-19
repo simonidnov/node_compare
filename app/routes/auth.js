@@ -102,14 +102,16 @@ auth.get('/', function(req, res, next) {
             
         });
     })
-
-auth.get('/logout', function(req, res, next) {
-    Auth_controller.logout(req.query, function(err, data){
-        res.render('auth/logout', { title: 'logout auth page' });
+    .delete('/device', function(req, res, next){
+        console.log('delete device');
+    })
+    .get('/logout', function(req, res, next) {
+        Auth_controller.logout(req.query, function(err, data){
+            res.render('auth/logout', { title: 'logout auth page' });
+        });
+    })
+    .get('/account', function(req, res, next) {
+      res.render('account', { title: 'account auth page' });
     });
-});
-auth.get('/account', function(req, res, next) {
-  res.render('account', { title: 'account auth page' });
-});
 
 module.exports = auth;

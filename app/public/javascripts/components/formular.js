@@ -372,6 +372,13 @@ function formular(target, callback){
         $.each($(target).find("form").serializeArray(), function(index, serie){
             form_datas[serie.name] = serie.value;
         });
+        
+        $(target).find('input:checkbox, input:radio').map(function() {
+            console.log(this);
+            form_datas[$(this).attr('name')] = $(this).is(':checked');
+            //return { name: this.name, value: this.checked ? this.value : "false" };
+        });
+        
         $.each($(target).find('.array_list_inputs'), function(index, array_list){
             var array_list = {};
             //var data = {};

@@ -117,7 +117,9 @@ var account = {
         this.services_form = new formular('#services_form', function(e){
             if(e.status==="hitted" && e.action==="submit"){
                 var user_datas = account.services_form.get_datas();
-                index.sdk.api.post("/account/profile/", user_datas, function(e){
+                console.log('submit services');
+                console.log('submit services ', user_datas);
+                index.sdk.api.put("/account/profile/", user_datas, function(e){
                     console.log(e);
                 });
             }
@@ -144,5 +146,8 @@ var account = {
                 }
             }).init();
         }
+        $('.delete_device').off('click').on('click', function(){
+            console.log('data-device_uid ::: ', $(this).attr('data-device_uid'));
+        });
     }
 }

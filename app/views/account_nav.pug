@@ -7,13 +7,13 @@ block navigation
             //    li(class= page === "orders" ? "selected" : "" data-for="orders")= "Mes commandes"
             //a(href="/account/fidelity" data-navigate="page_reload")
             //    li(class= page === "fidelity" ? "selected" : "" data-for="fidelity")= "Ma carte de fidélité"
-            a(href="/account/services" data-navigate="page_reload")
-                li(class= page === "services" ? "selected" : "" data-for="services")= "Mes services"
             a(href="/account/account" data-navigate="page_reload")
-                li(class= page === "account" ? "selected" : "" data-for="account")= "Mon compte"
+                li(class= page === "account" ? "selected" : "" data-for="account")= lang[locale].keys.account_nav_account
+            a(href="/account/services" data-navigate="page_reload")
+                li(class= page === "services" ? "selected" : "" data-for="services")= lang[locale].keys.account_nav_services
             a(href="/account/profile" data-navigate="page_reload")
-                li(class= page === "profile" ? "selected" : "" data-for="profile")= "Mon profil"
+                li(class= page === "profile" ? "selected" : "" data-for="profile")= lang[locale].keys.account_nav_profile
             a(href="/account/addresses" data-navigate="page_reload")
-                li(class= page === "addresses" ? "selected" : "" data-for="addresses")= "Mes addresses"
+                li(class= page === "addresses" ? "selected" : "" data-for="addresses")= lang[locale].keys.account_nav_addresses
             a(href="/account/security" data-navigate="page_reload")
-                li(class= page === "security" ? "selected" : "" data-for="security")= "Sécurité"
+                li(class= page === "security" ? "selected" : "" data-for="security")= lang[locale].keys.account_nav_security

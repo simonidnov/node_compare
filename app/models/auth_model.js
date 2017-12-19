@@ -6,7 +6,6 @@ const db = require('mongoose'),
       Members_model = require('../models/members_model'),
       Address_model = require('../models/address_model'),
       config = require('../config/config'),
-      os = require('os'),
       gravatar = require('gravatar'),
       user_datas = {
           email       : {type:'string', unique: true},
@@ -91,17 +90,72 @@ module.exports.get = function(req, datas, callback) {
         }
     }).skip (parseInt(datas.page)*50).limit (50);
 };
+/* EXPERIMENTAL MONGO REQUEST DELETE FROM {OBJECT} SCHEMAS */
+module.exports.deleteDevice = function(req, datas, callback){
+    User.update(
+        { _id : datas.user_id },
+        { $pull: { devices: { uid: req.query.device_uid } }},
+        function(err, deleted){
+            if(errr) console.log('ERROR ', err)
+            else console.log('deleted ', deleted)
+        }
+    );
+}
 // check user login then return user_infos
 module.exports.login = function(req, datas, callback) {
-    device_uid = req.query.device_uid;
-    console.log("device_uid :::: LOGIN ", req.query);
-    console.log("device_uid :::: LOGIN ", device_uid);
-    console.log("device_uid :::: LOGIN ", device_uid);
-    console.log("device_uid :::: LOGIN ", device_uid);
-    console.log("device_uid :::: LOGIN ", device_uid);
-    console.log("device_uid :::: LOGIN ", device_uid);
-    console.log("device_uid :::: LOGIN ", device_uid);
-    console.log("device_uid :::: LOGIN ", device_uid);
+    var new_device = null;
+    console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
+    if(typeof req.query.remember_me === "undefined"){
+        console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
+    }else{
+        if(typeof req.query.device_infos !== "undefined"){
+            device_uid = req.query.device_infos.device_uid;
+            new_device  = {
+                uid            : device_uid,
+                appCodeName    : req.query.device_infos.appCodeName,
+                appName        : req.query.device_infos.appName,
+                appVersion     : req.query.device_infos.appVersion,
+                userAgent      : req.query.device_infos.userAgent,
+                vendor         : req.query.device_infos.vendor,
+                last_connexion : Date.now()
+            };
+        }else if(typeof req.query.device_uid !== "undefined"){
+            device_uid = req.query.device_uid;
+            new_device  = {
+                uid            : device_uid,
+                appCodeName    : req.query.appCodeName,
+                appName        : req.query.appName,
+                appVersion     : req.query.appVersion,
+                userAgent      : req.query.userAgent,
+                vendor         : req.query.vendor,
+                last_connexion : Date.now()
+            };
+        }
+    }
+
+    /*
+    { 
+        device_uid: '1be17d56f318dda2e37670a5eca8fc2a',
+        appCodeName: 'Mozilla',
+        appName: 'Netscape',
+        appVersion: '5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+        vendor: 'Google Inc.' 
+    }
+    */
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log(req.query);
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
+    console.log('--------');
     //device_uid = machineId.machineIdSync({original: true});
     var self = this;
     if(datas.password){
@@ -127,12 +181,8 @@ module.exports.login = function(req, datas, callback) {
                     }
                     console.log("CHECK DEVICE device_uid :::: LOGIN ", device_uid);
                     /* CHECK DEVICE */
-                    var new_device  = {
-                            uid     : device_uid,
-                            arch    : os.arch(),
-                            name    : os.hostname()
-                        },
-                        new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
+                   
+                    var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
                     
                     new_device.token = new_token;
                     
@@ -177,17 +227,14 @@ module.exports.login = function(req, datas, callback) {
                                     );
                                 }else{
                                     console.log('-------------------- LE DEVICE EXISTE -------------- ', device);
-                                    /*
-                                    User.update({devices: { devices: new_device } }, function(err, device){
-                                        if(err) console.log('impossible d insérer le new_device ', err);
-                                        else console.log("new_device ajouté success ", device)
-                                    });
-                                    */
                                     /* Update Object in Array Collection */
                                     User.update(
                                         {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
                                         {
-                                            $set : {token : new_token}
+                                            $set : {token : new_token},
+                                            device : {
+                                                $set : new_device
+                                            }
                                         } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
                                         function(err, infos){
                                             if(err) console.log('update device token error ', err);
@@ -278,8 +325,6 @@ module.exports.register = function(datas, callback) {
     new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
     new_user_datas.device = [{
         uid     : device_uid,
-        arch    : os.arch(),
-        name    : os.hostname(),
         token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' }),
         avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://')
     }];
@@ -365,9 +410,7 @@ module.exports.check_user = function(req, callback){
     device_uid = req.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     var new_device  = {
-            uid     : device_uid,
-            arch    : os.arch(),
-            name    : os.hostname()
+            uid     : device_uid
         },
         new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
     
