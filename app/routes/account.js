@@ -98,6 +98,15 @@ account
                 res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
             }
         });
+    })
+    .put('/profile', function(req, res, next) {
+        Auth_model.update(req, req.session.Auth._id, req.body, function(e){
+            if(e.status === 200){
+                res.send(e.status, '/account/'+req.url.replace('/',''));
+            }else{
+                res.send(e.status, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
+            }
+        });
     });
 
 module.exports = account;

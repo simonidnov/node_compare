@@ -66,14 +66,7 @@ block content
                             label(for='mobile') !{lang[locale].keys.mobile_holder}
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
-                div.formular#devices_list
-                    ul.option_list
-                        each device in user.devices
-                            li
-                                div.icon.idkids-icons.icon-desktop.icon-lg
-                                div.option_infos
-                                    div.label= device.name
-                                    div.arch= device.arch + " " + device.uid
+                
             div.col.col-md-5
                 div.formular#add_kid
                     h2 Mes Enfants
@@ -126,7 +119,7 @@ block content
                             p= lang[locale].keys.address_form_message
                         hr
                         div.form-group
-                            input#user_id.invisible(type='text' name="user_id" value=user._id)
+                            input.invisible(type='text' name="user_id" value=user._id)
                         div.form-group.material_input.minlength
                             input#addressLabel.form-control(type='text', placeholder=lang[locale].keys.addressLabel_holder, name='label', required="required", value=((address_infos)? address_infos.label : ""), minlength="4", data-erromessage=lang[locale].keys.addressLabel_error)
                             label(for='addressLabel') !{lang[locale].keys.addressLabel_holder}
@@ -451,7 +444,7 @@ block content
                     h1 Mes services
                     form.form_content(method="PUT" action='/account/profile/')
                         div.form-group
-                            input#user_id.invisible(type='text' name="user_id" value=user._id)
+                            input.invisible(type='text' name="user_id" value=user._id)
                         div.form-group
                             input#newsletter.form-control(type='checkbox', name='newsletter' checked=user.newsletter)
                             label(for="newsletter") !{lang[locale].keys.accept_newsletter}
@@ -482,6 +475,9 @@ block content
                                 div.line
                                     input#newsletter_joyvox.form-control(type='checkbox', name='newsletter_joyvox', checked=((user.newsletter_services && user.newsletter_services.newsletter_joyvox === true)? true : false))
                                     label(for="newsletter_joyvox") !{lang[locale].keys.accept_newsletter_joyvox}
+                                div.line
+                                    input#newsletter_others.form-control(type='checkbox', name='newsletter_others', checked=((user.newsletter_services && user.newsletter_services.newsletter_others === true)? true : false))
+                                    label(for="newsletter_others") !{lang[locale].keys.accept_newsletter_others}
                                 p !{lang[locale].keys.accept_notifications_more_informations}
                         div.form-group
                             input#sms.form-control(type='checkbox', name='sms' checked=user.sms)
@@ -513,6 +509,9 @@ block content
                                 div.line
                                     input#sms_joyvox.form-control(type='checkbox', name='sms_joyvox', checked=((user.sms_services && user.sms_services.sms_joyvox === true)? true : false))
                                     label(for="sms_joyvox") !{lang[locale].keys.accept_sms_joyvox}
+                                div.line
+                                    input#sms_others.form-control(type='checkbox', name='sms_others', checked=((user.sms_services && user.sms_services.sms_others === true)? true : false))
+                                    label(for="sms_others") !{lang[locale].keys.accept_sms_others}
                                 p !{lang[locale].keys.accept_notifications_more_informations}
                         div.form-group.buttons.inline
                             div#submit_services.btn.btn-success(data-action="submit" data-userid=user._id)= lang[locale].keys.save_cta
@@ -542,10 +541,10 @@ block content
                     form.form_content(method="POST" action='/account/profile/')
                         input.invisible(type="text" name="user_id" value=user._id)
                         div.form-group.material_input.minlength
-                            input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile)
-                            label(for='mobile') !{lang[locale].keys.mobile_holder}
+                            input#updt_mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile)
+                            label(for='updt_mobile') !{lang[locale].keys.mobile_holder}
                         hr
-                        div.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.save_cta
+                        button.btn.btn-success.btn-m= lang[locale].keys.save_cta
         
         div.row#member(style= page === "member" ? "display:block" : "display:none")
             if(typeof member_infos !== "undefined")
@@ -610,6 +609,19 @@ block content
                             input#retype_change_password_new.form-control(type='password' name='retype_change_password_new' required="required" minlength="8" data-regex="same" data-target="change_password_new" data-errormessage=lang[locale].keys.retype_password_error)
                             label(for='retype_change_password_new') !{lang[locale].keys.retype_password_new_holder}
                         div.btn.btn-m.btn-success(data-action="submit" data-userid=user._id)= lang[locale].keys.change_password_cta
+            div.col.col-md-5
+                div.formular#devices_list
+                    h1= lang[locale].keys.authorized_devices_title
+                    p= lang[locale].keys.authorized_devices_message
+                    hr.separator
+                    ul.option_list
+                        each device in user.devices
+                            li
+                                div.icon.idkids-icons.icon-desktop.icon-lg
+                                div.option_infos
+                                    div.label= JSON.stringify(device)
+                                    div.arch= device.arch + " " + device.uid
+                                    div#delete_device.delete_device.btn.btn-sm.btn-warning(data-device_uid=device.uid) supprimer
                    
                    
         div.row#fidelity(style= page === "fidelity" ? "display:block" : "display:none")

@@ -26,17 +26,12 @@ me.use(function(req, res, next) {
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
-    console.log('PREVENT UUID ', device_uid);
-    console.log('PREVENT UUID ', device_uid);
-    console.log('PREVENT UUID ', device_uid);
-    console.log('PREVENT UUID ', device_uid);
     
-    device_uid = dataCheck.device_uid;
-    
-    console.log('RESET UUID ', device_uid);
-    console.log('RESET UUID ', device_uid);
-    console.log('RESET UUID ', device_uid);
-    console.log('RESET UUID ', device_uid);
+    if(typeof dataCheck.device_infos !== "undefined"){
+        device_uid = dataCheck.device_infos.device_uid;
+    }else if(typeof dataCheck.device_uid !== "undefined"){
+        device_uid = dataCheck.device_uid;
+    }
     
     auth_helper.validate_from(dataCheck, req.get('host'), function(e){
         console.log('validate_from ::::: ', e);

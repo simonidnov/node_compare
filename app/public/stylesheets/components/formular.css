@@ -23,6 +23,11 @@
     -o-transition: height .6s ease-in-out;
     transition: height .6s ease-in-out;
 }
+fieldset{
+    border: none;
+    margin:0;
+    padding:0;
+}
 .formular.fullscreen{
     width:100%;
     padding:10px;

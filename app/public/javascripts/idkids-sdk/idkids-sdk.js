@@ -22,12 +22,14 @@ var idkids_jssdk = function(options, callback){
         call : function(method, request, params, callback){
             this.show_loader();
             this.add_params(params, $.proxy(function(new_params){
+                console.log('method ', method);
                 params = new_params;
                 dataType = 'json';
                 if(method === "POST" || method === "PUT" || method === "DELETE"){
                     dataType = 'json';
                     params = JSON.stringify(params);
                 }
+                console.log('method ', method);
                 jQuery.ajax(request, {
                     method: method,
                     contentType: 'application/json',
@@ -107,7 +109,11 @@ var idkids_jssdk = function(options, callback){
                 params.options.user_device   = this.user.current_device;
             }
             this.get_device_uid(function(e){
-                params.device_uid = e;
+                if(e.status !== 200){
+                    params.need_fingerprint = true;
+                }
+                delete e.status;
+                params.device_infos = e;
                 callback(params);
             });
         },
@@ -148,12 +154,40 @@ var idkids_jssdk = function(options, callback){
         },
         get_device_uid : function(callback){
             //console.log("get_device_uid");
+            $('[name="appCodeName"]').val(navigator.appCodeName);
+            $('[name="appName"]').val(navigator.appName);
+            $('[name="appVersion"]').val(navigator.appVersion);
+            $('[name="userAgent"]').val(navigator.userAgent);
+            $('[name="vendor"]').val(navigator.vendor);
             if(typeof Fingerprint2 !== "undefined"){
                 new Fingerprint2().get(function(result, components){
                     $('[name="device_uid"]').val(result);
-                    callback(result); //a hash, representing your device fingerprint
+                    callback(
+                        {
+                            status:200, 
+                            device_uid:result, 
+                            platform:navigator.platform,
+                            appCodeName : navigator.appCodeName,
+                            appName : navigator.appName,
+                            appVersion : navigator.appVersion,
+                            userAgent : navigator.userAgent,
+                            vendor : navigator.vendor
+                        }
+                    ); //a hash, representing your device fingerprint
                     console.log(result, components); // an array of FP components
                 });
+            }else{
+                callback(
+                    {
+                        status:404,
+                        platform:navigator.platform,
+                        appCodeName : navigator.appCodeName,
+                        appName : navigator.appName,
+                        appVersion : navigator.appVersion,
+                        userAgent : navigator.userAgent,
+                        vendor : navigator.vendor
+                    }
+                )
             }
         }
     };

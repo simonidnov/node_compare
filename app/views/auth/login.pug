@@ -67,8 +67,15 @@ block content
                                 input#donot_register_device.form-control(type='checkbox', name='donot_register_device')
                                 label(for="donot_register_device") !{lang[locale].keys.donot_register_device.toString()}
                             div.form-group
-                                input#from_where.phantom_input.form-control(name="from" value=uri_params.from)
-                                input#device_uid.phantom_input.form-control(name="device_uid" value=uri_params.device_uid)
+                                input.phantom_input.form-control(name="from" value=uri_params.from)
+                                fieldset(name="device_infos")
+                                    input.phantom_input.form-control(name="device_uid" value=uri_params.device_uid)
+                                    input.phantom_input.form-control(name="appCodeName")
+                                    input.phantom_input.form-control(name="appName")
+                                    input.phantom_input.form-control(name="appVersion")
+                                    input.phantom_input.form-control(name="userAgent")
+                                    input.phantom_input.form-control(name="vendor")
+                                
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.login_cta
                         form#subscribe_form(method="post" action='/auth/login/')
                             div.form-group.material_input
@@ -126,16 +133,33 @@ block content
                                 input#subscribe_remember_me.form-control(type='checkbox', name='subscribe_remember_me', checked="checked")
                                 label(for="subscribe_remember_me") !{lang[locale].keys.remember_me}
                             div.form-group
-                                input#donot_register_device.form-control(type='checkbox', name='donot_register_device')
-                                label(for="donot_register_device") !{lang[locale].keys.donot_register_device}
+                                input#do_not_register_device.form-control(type='checkbox', name='donot_register_device')
+                                label(for="do_not_register_device") !{lang[locale].keys.donot_register_device}
                             div.form-group
-                                input#from_where.phantom_input.form-control(name="from" value=uri_params.from)
-                                input#device_uid.phantom_input.form-control(name="device_uid" value=uri_params.device_uid)
+                                input.phantom_input.form-control(name="from" value=uri_params.from)
+                                fieldset(name="device_infos")
+                                    input.phantom_input.form-control(name="device_uid" value=uri_params.device_uid)
+                                    input.phantom_input.form-control(name="appCodeName")
+                                    input.phantom_input.form-control(name="appName")
+                                    input.phantom_input.form-control(name="appVersion")
+                                    input.phantom_input.form-control(name="userAgent")
+                                    input.phantom_input.form-control(name="vendor")
+                                
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.subscribe_cta
                         form#lost_form(method="post" action='/auth/lost_password/')
                             div.form-group.material_input
                                 input#lost_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)
                                 label(for='lost_email') !{lang[locale].keys.email_holder}
+                            div.form-group
+                                input.phantom_input.form-control(name="from" value=uri_params.from)
+                                fieldset(name="device_infos")
+                                    input.phantom_input.form-control(name="device_uid" value=uri_params.device_uid)
+                                    input.phantom_input.form-control(name="appCodeName")
+                                    input.phantom_input.form-control(name="appName")
+                                    input.phantom_input.form-control(name="appVersion")
+                                    input.phantom_input.form-control(name="userAgent")
+                                    input.phantom_input.form-control(name="vendor")
+                                
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.lost_password_cta
                     if(response.status === "error" && typeof response.message !== "undefined")
                         div.error= lang[locale].keys[response.message]

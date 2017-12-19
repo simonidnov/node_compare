@@ -46,6 +46,7 @@
             "accept_newsletter_njoy":"<b>N'joy</b> animations pour les 4-18 ans",
             "accept_newsletter_bubble":"<b>Bubble</b> bons plans des parents et des enfants",
             "accept_newsletter_joyvox":"<b>Joyvox</b> le label de musique des enfants",
+            "accept_newsletter_others":"Nos autres partenaires et services",
             "accept_notifications_more_informations":"<a href=\"/about/newsletter\" title=\"En savoir plus\">En savoir plus sur les notifications de nos partenaires</a>",
             "accept_sms":"Je souhaites être averti pas SMS",
             "accept_sms_partners":"Sélectionnez ci-dessous les services, marques et partenaires dont vous souhaitez recevoir les offres par sms :",
@@ -57,6 +58,7 @@
             "accept_sms_njoy":"<b>N'joy</b> animations pour les 4-18 ans",
             "accept_sms_bubble":"<b>Bubble</b> bons plans des parents et des enfants",
             "accept_sms_joyvox":"<b>Joyvox</b> le label de musique des enfants",
+            "accept_sms_others":"Nos autres partenaires et services",
             "accept_sms_more_informations":"<a href=\"/about/sms\" title=\"En savoir plus\">En savoir plus sur les sms de nos partenaires</a>",
             "notifications_kids_title":"Personnalisez vos notifications !",
             "notifications_kids_message":"Pour recevoir des offres et des contenus peronnsalisés pensez à renseigner ou mettre à jour l'âge de vos enfants.",
@@ -111,7 +113,16 @@
             "account_validation_cta":"Valider mon compte",
             "lost_password_cta":"Recevoir un nouveau mot de passe",
             "connected_status":"connecté",
-            "not_connected_status":"hors ligne"
+            "not_connected_status":"hors ligne",
+            "account_nav_account":"Mon compte",
+            "account_nav_services":"Mes services",
+            "account_nav_services":"Mes services",
+            "account_nav_profile":"Mon profile",
+            "account_nav_addresses":"Mes adresses",
+            "account_nav_addresses":"Mes adresses",
+            "account_nav_security":"Sécurité",
+            "authorized_devices_title":"Autorisations",
+            "authorized_devices_message":"Retrouvez ci-dessous la liste des matériels autorisés à utiliser votre compte"
         }
     }
 }

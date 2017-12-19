@@ -10,3 +10,4 @@ app/public/uploads/
 app/config/
 app/config/*
 npm-debug.log
+app/gource.mp4
