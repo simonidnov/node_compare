@@ -29,13 +29,23 @@ block content
                                         div.status.success= lang[locale].keys.connected_status
                         if(typeof users_device !== "undefined")
                             each users in users_device
-                                a(href="/auth/login/email/"+users.email title="Me connecter entant que "+users.pseudo data-action="page_reload")
-                                    li(data-userid=users._id)
-                                        img.avatar(src=users.avatar)
-                                        div.option_infos
-                                            div.label= users.pseudo
-                                            div.email= users.email
-                                            div.status= lang[locale].keys.not_connected_status
+                                if(typeof user_session !== "undefined")
+                                    if(users._id != user_session._id)
+                                        a(href="/auth/login/email/"+users.email title="Me connecter entant que "+users.pseudo data-action="page_reload")
+                                            li(data-userid=users._id)
+                                                img.avatar(src=users.avatar)
+                                                div.option_infos
+                                                    div.label= users.pseudo
+                                                    div.email= users.email
+                                                    div.status= lang[locale].keys.not_connected_status
+                                else
+                                    a(href="/auth/login/email/"+users.email title="Me connecter entant que "+users.pseudo data-action="page_reload")
+                                        li(data-userid=users._id)
+                                            img.avatar(src=users.avatar)
+                                            div.option_infos
+                                                div.label= users.pseudo
+                                                div.email= users.email
+                                                div.status= lang[locale].keys.not_connected_status
                         a(href="/auth/subscribe/" title="Me connecter" data-action="page_reload")
                             li.other
                                 img.avatar(src="/public/images/assets/account.svg")

@@ -16,6 +16,9 @@ auth.get('/', function(req, res, next) {
         
         //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
+                //Auth_controller.get_user_from_device("fingerprint", function(users_device){
+                //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
+                //});
                 var datas = {
                     title: 'Mon compte', 
                     datas: req.query, 
@@ -38,6 +41,38 @@ auth.get('/', function(req, res, next) {
                 res.render('auth/login', datas);
             });
         //});
+    })
+    .get('/fingerprint/:device_uid', function(req, res, next) {
+        //req.query.device_uid = device_uid; 
+        
+        Auth_controller.get_user_from_device(req.params.device_uid, function(users_device){
+            Auth_controller.login(req, req.query, function(e){
+                //Auth_controller.get_user_from_device("fingerprint", function(users_device){
+                //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
+                //});
+                var datas = {
+                    title: 'Mon compte', 
+                    datas: req.query, 
+                    locale:language_helper.getlocale(),
+                    lang:lang, 
+                    uri_params : uri_helper.get_params(req),
+                    users_device:users_device.users_device,
+                    response:e,
+                    js:[
+                        '/public/javascripts/login.js',
+                        '/public/javascripts/components/formular.js'
+                    ], css:[
+                        '/public/stylesheets/components/formular.css',
+                        '/public/stylesheets/auth.css',
+                    ]
+                };
+                datas.user_session = req.session.Auth;
+                if(typeof e.user !== "undefined"){
+                    res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                }
+                res.render('auth/login', datas);
+            });
+        });
     })
     .get('/google/callback', function(req, res, next){
         
@@ -115,7 +150,6 @@ auth.get('/', function(req, res, next) {
         });
     })
     .get('/logout', function(req, res, next) {
-        console.log(req.headers.referer);
         Auth_controller.logout(req, res, function(err, data){
             res.redirect(307, req.headers.referer);
             //res.render(req.headers.referer, { title: 'logout auth page' });

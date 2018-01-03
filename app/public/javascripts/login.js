@@ -19,6 +19,22 @@ var login = {
         }).init();
         window.addEventListener('popstate', this.navigate);
         this.set_listeners();
+        if(this.parse_url(window.location.pathname.replace('/auth')).length === 0){
+            this.sdk.api.get_device_uid(function(e){
+                if(e.status === 200){
+                    window.location.href="/auth/fingerprint/"+e.device_uid;    
+                }
+            });
+        }
+    },
+    parse_url : function(url){
+        var uri_params = [],
+            uri_array  = url.split('/');
+        for(var i=1; i<uri_array.length; i+=2){
+            uri_params.push({});
+            uri_params[uri_array[i]] = uri_array[i+1];
+        }
+        return uri_params;
     },
     set_listeners : function(){
         $('[data-action]').off('click').on('click', function(e){
