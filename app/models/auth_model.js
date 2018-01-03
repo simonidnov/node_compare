@@ -109,8 +109,8 @@ module.exports.deleteDevice = function(req, datas, callback){
         { _id : datas.user_id },
         { $pull: { devices: { uid: req.query.device_uid } }},
         function(err, deleted){
-            if(errr) console.log('ERROR ', err)
-            else console.log('deleted ', deleted)
+            if(errr) callback({status:403, message:"impossible de supprimer le device"})
+            else callback({status:200, message:"Device deleted"})
         }
     );
 }
@@ -121,7 +121,6 @@ module.exports.login = function(req, datas, callback) {
         console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
     }else{
         if(typeof req.query.device_infos !== "undefined"){
-            console.log("ua_parser :::::::::::::::::::::::::::::::::::::::::: ", ua_parser(req.query.device_infos.userAgent));
             device_uid = req.query.device_infos.device_uid;
             new_device  = {
                 uid            : device_uid,
@@ -134,7 +133,6 @@ module.exports.login = function(req, datas, callback) {
                 ua_parser      : ua_parser(req.query.device_infos.userAgent)
             };
         }else if(typeof req.query.device_uid !== "undefined"){
-            console.log("ua_parser :::::::::::::::::::::::::::::::::::::::::: ", ua_parser(req.query.userAgent));
             device_uid = req.query.device_uid;
             new_device  = {
                 uid            : device_uid,
@@ -189,7 +187,6 @@ module.exports.login = function(req, datas, callback) {
                     
                     if(typeof req.query.remember_me !== "undefined"){
                         new_device.token = new_token;
-                        //console.log('users[0]._id ', users[0]._id);
                         /* check if device exist */
                         User.find(
                             {
@@ -202,7 +199,6 @@ module.exports.login = function(req, datas, callback) {
                             }, 
                             function(err, device) {
                                 if(err){
-                                    console.log("device_uid :::: LOGIN ERROR ", device_uid, " ERRROR ::: ", err);
                                     // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
                                     User.update(
                                         { _id: users[0]._id },
@@ -216,7 +212,6 @@ module.exports.login = function(req, datas, callback) {
                                     );
                                 }else{
                                     if(device.length === 0){
-                                        console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
                                         /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
                                         User.update(
                                             { _id: users[0]._id },
@@ -229,7 +224,6 @@ module.exports.login = function(req, datas, callback) {
                                             }
                                         );
                                     }else{
-                                        console.log('-------------------- LE DEVICE EXISTE -------------- ', device);
                                         /* Update Object in Array Collection */
                                         User.update(
                                             {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
@@ -408,7 +402,6 @@ module.exports.update = function(req, user_id, datas, callback) {
     );
 };
 module.exports.updatePassword = function(res, callback){
-    console.log(req);
     callback({status:200, message:"password update progress"});
 }
 module.exports.check_user = function(req, callback){
@@ -555,8 +548,7 @@ module.exports.getValidationCode = function(_id, callback){
                         },
                         function(err, validation){
                             if(err) console.log('impossible de mettre à jour le code de validation ', err);
-                            else console.log("token de validation mis à jour")
-                            callback({status:200, validation_code:validation_code, email:user.email, pseudo:user.pseudo, avatar:user.avatar});
+                            else callback({status:200, validation_code:validation_code, email:user.email, pseudo:user.pseudo, avatar:user.avatar});
                         }
                     );
                 }else{
@@ -573,7 +565,6 @@ module.exports.validAccount = function(params, callback){
             validation_code : params.validation_code
         },
         function(err, user){
-            console.log(user);
             if(err || user === null){
                 callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});  
             }else{
@@ -593,12 +584,12 @@ module.exports.validAccount = function(params, callback){
         }
     );
 };
-module.exports.getUsersDevice = function(req, callback){
-    device_uid = req.query.device_uid;
+module.exports.getUsersDevice = function(device_uid, callback){
+    //device_uid = req.query.device_uid;
+    //console.log("getUsersDevice device_uid :::::::: ", req);
     //device_uid = machineId.machineIdSync({original: true});
     User.find(
         {
-            _id: { $ne: req.session.Auth },
             devices:{ 
                 $elemMatch : {
                     uid:device_uid
@@ -618,6 +609,7 @@ module.exports.getUsersDevice = function(req, callback){
             }
         }
     )
+    
 }
 module.exports.deleteDevice = function(req, callback){
     var self = this,
@@ -639,7 +631,7 @@ module.exports.deleteDevice = function(req, callback){
             }else{
                 self.reset_session(req, req.session.Auth._id, function(infos){
                     //callback({status:200, "message":"User updated", "idkids_user":infos});
-                    callback({status:200, message:"device supprimé", users_device:users, "idkids_user":infos});
+                    callback({status:200, message:"device supprimé", "idkids_user":infos});
                 });
             }
         }
