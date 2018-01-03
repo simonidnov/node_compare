@@ -30,7 +30,15 @@ const db = require('mongoose'),
           devices     : {
               uid:'string', 
               name:'string', 
-              arch:'string'
+              arch:'string',
+              appCodeName:'string',
+              appName:'string',
+              appVersion:'string',
+              userAgent:'string',
+              vendor:'string',
+              last_connexion:'string',
+              token:'string',
+              ua_parser:{type:'Object'}
           },
           termAccept  : {type:'Boolean'},
           newsletter  : {type:'Boolean'},
@@ -46,7 +54,8 @@ const db = require('mongoose'),
           public_locale : {type:'Boolean'},
           public_profile : {type:'Object'}
       },
-      machineId = require('node-machine-id');
+      machineId = require('node-machine-id'),
+      ua_parser = require('ua-parser-js');
 
       var device_uid = machineId.machineIdSync({original: true});
 
@@ -112,6 +121,7 @@ module.exports.login = function(req, datas, callback) {
         console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
     }else{
         if(typeof req.query.device_infos !== "undefined"){
+            console.log("ua_parser :::::::::::::::::::::::::::::::::::::::::: ", ua_parser(req.query.device_infos.userAgent));
             device_uid = req.query.device_infos.device_uid;
             new_device  = {
                 uid            : device_uid,
@@ -120,9 +130,11 @@ module.exports.login = function(req, datas, callback) {
                 appVersion     : req.query.device_infos.appVersion,
                 userAgent      : req.query.device_infos.userAgent,
                 vendor         : req.query.device_infos.vendor,
-                last_connexion : Date.now()
+                last_connexion : Date.now(),
+                ua_parser      : ua_parser(req.query.device_infos.userAgent)
             };
         }else if(typeof req.query.device_uid !== "undefined"){
+            console.log("ua_parser :::::::::::::::::::::::::::::::::::::::::: ", ua_parser(req.query.userAgent));
             device_uid = req.query.device_uid;
             new_device  = {
                 uid            : device_uid,
@@ -131,7 +143,8 @@ module.exports.login = function(req, datas, callback) {
                 appVersion     : req.query.appVersion,
                 userAgent      : req.query.userAgent,
                 vendor         : req.query.vendor,
-                last_connexion : Date.now()
+                last_connexion : Date.now(),
+                ua_parser      : ua_parser(req.query.userAgent)
             };
         }
     }
@@ -198,7 +211,7 @@ module.exports.login = function(req, datas, callback) {
                                         },
                                         function(err, device){
                                             if(err) console.log('impossible d insérer le new_device ', err);
-                                            else console.log("new_device ajouté success ", device)
+                                            else console.log("new_device ajouté success ", new_device)
                                         }
                                     );
                                 }else{
@@ -212,7 +225,7 @@ module.exports.login = function(req, datas, callback) {
                                             },
                                             function(err, device){
                                                 if(err) console.log('impossible d insérer le new_device ', err);
-                                                else console.log("new_device ajouté success ", device)
+                                                else console.log("new_device ajouté success ", new_device)
                                             }
                                         );
                                     }else{
@@ -616,9 +629,7 @@ module.exports.deleteDevice = function(req, callback){
         {
             $pull : {
                 devices:{ 
-                    $elemMatch : {
-                        uid:req.body.uid
-                    }
+                    uid:req.body.uid
                 }
             }
         },

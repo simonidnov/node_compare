@@ -172,12 +172,14 @@ var account = {
             }).init();
         }
         $('.delete_device').off('click').on('click', function(){
+            var self = $(this);
             index.sdk.api.call(
                 "DELETE",
                 '/auth/device',
                 {uid:$(this).attr('data-device_uid')},
                 function(e){
                     console.log(e);
+                    self.parent().parent().remove();
                     //window.location.reload();
                 }
             );

@@ -150,9 +150,9 @@ var idkids_jssdk = function(options, callback){
                     $('[name="device_uid"]').val(result);
                     callback(
                         {
-                            status:200, 
-                            device_uid:result, 
-                            platform:navigator.platform,
+                            status : 200,
+                            device_uid : result, 
+                            platform : navigator.platform,
                             appCodeName : navigator.appCodeName,
                             appName : navigator.appName,
                             appVersion : navigator.appVersion,
