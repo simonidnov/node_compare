@@ -17,7 +17,7 @@ const db = require('mongoose'),
           phone       : {type:'string'},
           mobile      : {type:'string'},
           token       : {type:'string'},
-          validation_code       : {type:'string'},
+          validation_code  : {type:'string'},
           secret      : {type:'string'},
           qrcode      : {type:'Object'},
           birthDate   : {type:'Date'},
@@ -27,7 +27,11 @@ const db = require('mongoose'),
           relations   : {type:'Array'},
           apps        : {type:'Array'},
           tags        : {type:'Object'},
-          devices     : {type:'Object'},
+          devices     : {
+              uid:'string', 
+              name:'string', 
+              arch:'string'
+          },
           termAccept  : {type:'Boolean'},
           newsletter  : {type:'Boolean'},
           newsletter_services : {type:'Object'},
@@ -104,7 +108,6 @@ module.exports.deleteDevice = function(req, datas, callback){
 // check user login then return user_infos
 module.exports.login = function(req, datas, callback) {
     var new_device = null;
-    console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
     if(typeof req.query.remember_me === "undefined"){
         console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
     }else{
@@ -143,19 +146,6 @@ module.exports.login = function(req, datas, callback) {
         vendor: 'Google Inc.' 
     }
     */
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log(req.query);
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
-    console.log('--------');
     //device_uid = machineId.machineIdSync({original: true});
     var self = this;
     if(datas.password){
@@ -181,40 +171,26 @@ module.exports.login = function(req, datas, callback) {
                     }
                     console.log("CHECK DEVICE device_uid :::: LOGIN ", device_uid);
                     /* CHECK DEVICE */
-                   
+                    
                     var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
                     
-                    new_device.token = new_token;
-                    
-                    //console.log('users[0]._id ', users[0]._id);
-                    /* check if device exist */
-                    User.find(
-                        {
-                            _id:users[0]._id, 
-                            devices:{ 
-                                $elemMatch : {
-                                    uid:device_uid
-                                }
-                            }
-                        }, 
-                        function(err, device) {
-                            if(err){
-                                console.log("device_uid :::: LOGIN ERROR ", device_uid, " ERRROR ::: ", err);
-                                // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
-                                User.update(
-                                    { _id: users[0]._id },
-                                    { 
-                                        $push: { devices: new_device }
-                                    },
-                                    function(err, device){
-                                        if(err) console.log('impossible d insérer le new_device ', err);
-                                        else console.log("new_device ajouté success ", device)
+                    if(typeof req.query.remember_me !== "undefined"){
+                        new_device.token = new_token;
+                        //console.log('users[0]._id ', users[0]._id);
+                        /* check if device exist */
+                        User.find(
+                            {
+                                _id:users[0]._id, 
+                                devices:{ 
+                                    $elemMatch : {
+                                        uid:device_uid
                                     }
-                                );
-                            }else{
-                                if(device.length === 0){
-                                    console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
-                                    /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
+                                }
+                            }, 
+                            function(err, device) {
+                                if(err){
+                                    console.log("device_uid :::: LOGIN ERROR ", device_uid, " ERRROR ::: ", err);
+                                    // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
                                     User.update(
                                         { _id: users[0]._id },
                                         { 
@@ -226,26 +202,41 @@ module.exports.login = function(req, datas, callback) {
                                         }
                                     );
                                 }else{
-                                    console.log('-------------------- LE DEVICE EXISTE -------------- ', device);
-                                    /* Update Object in Array Collection */
-                                    User.update(
-                                        {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
-                                        {
-                                            $set : {token : new_token},
-                                            device : {
-                                                $set : new_device
+                                    if(device.length === 0){
+                                        console.log('-------------------- new_device device introuvable on l\'ajoute -------------- ', device);
+                                        /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
+                                        User.update(
+                                            { _id: users[0]._id },
+                                            { 
+                                                $push: { devices: new_device }
+                                            },
+                                            function(err, device){
+                                                if(err) console.log('impossible d insérer le new_device ', err);
+                                                else console.log("new_device ajouté success ", device)
                                             }
-                                        } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
-                                        function(err, infos){
-                                            if(err) console.log('update device token error ', err);
-                                            else console.log('update device token success ', infos);
-                                        }, // CALLBACK
-                                        true //SAIS PAS POURQUOI
-                                    );
+                                        );
+                                    }else{
+                                        console.log('-------------------- LE DEVICE EXISTE -------------- ', device);
+                                        /* Update Object in Array Collection */
+                                        User.update(
+                                            {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+                                            {
+                                                $set : {token : new_token},
+                                                device : {
+                                                    $set : new_device
+                                                }
+                                            } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
+                                            function(err, infos){
+                                                if(err) console.log('update device token error ', err);
+                                                else console.log('update device token success ', infos);
+                                            }, // CALLBACK
+                                            true //SAIS PAS POURQUOI
+                                        );
+                                    }
                                 }
                             }
-                        }
-                    );
+                        );
+                    }
                     
                     /* UPDATE */
                     if(users[0].avatar === "" || users[0].avatar == null){
@@ -295,16 +286,13 @@ module.exports.login = function(req, datas, callback) {
     return datas;
 };
 // check user logout then return user_infos
-module.exports.logout = function(datas, callback) {
-    device_uid = req.query.device_uid;
-    //device_uid = machineId.machineIdSync({original: true});
-    /* UPDATE token, updated then free user session and storage */
+module.exports.logout = function(req, datas, callback) {
+    req.session.destroy();
     callback();
-    return datas;
 };
 // check user register then return user_infos
 module.exports.register = function(datas, callback) {
-    device_uid = req.body.device_uid;
+    //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* UPDATE ALL datas set check email is uniq and valid then send confirmation email */
     /* ----- CHECK EMAIL UNIQ ----- */
@@ -406,6 +394,10 @@ module.exports.update = function(req, user_id, datas, callback) {
         true //SAIS PAS POURQUOI
     );
 };
+module.exports.updatePassword = function(res, callback){
+    console.log(req);
+    callback({status:200, message:"password update progress"});
+}
 module.exports.check_user = function(req, callback){
     device_uid = req.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
@@ -568,7 +560,8 @@ module.exports.validAccount = function(params, callback){
             validation_code : params.validation_code
         },
         function(err, user){
-            if(err || user.length === 0){
+            console.log(user);
+            if(err || user === null){
                 callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});  
             }else{
                 User.update(
@@ -609,6 +602,34 @@ module.exports.getUsersDevice = function(req, callback){
                 callback({status:304, message:"Nouvel appareil", datas:err});  
             }else{
                 callback({status:200, message:"liste des utilisateurs ayant utilisé ce device", users_device:users})
+            }
+        }
+    )
+}
+module.exports.deleteDevice = function(req, callback){
+    var self = this,
+        device_uid = req.query.device_uid;
+    User.update(
+        {
+            _id: req.session.Auth._id
+        },
+        {
+            $pull : {
+                devices:{ 
+                    $elemMatch : {
+                        uid:req.body.uid
+                    }
+                }
+            }
+        },
+        function(err, users){
+            if(err || users.length === 0){
+                callback({status:304, message:"appareil inexistant", datas:err});  
+            }else{
+                self.reset_session(req, req.session.Auth._id, function(infos){
+                    //callback({status:200, "message":"User updated", "idkids_user":infos});
+                    callback({status:200, message:"device supprimé", users_device:users, "idkids_user":infos});
+                });
             }
         }
     )

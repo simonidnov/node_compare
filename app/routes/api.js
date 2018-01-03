@@ -116,11 +116,11 @@ api
                 res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
             }
         });*/
-        res.status(200).send({title:"POST UPDATE PASSWORD IS CURRENTLY ON TODO LIST"});
-        //Apps_controller.update(req, res, function(e){
-        //    res.status(e.status).send(e);
+        //res.status(200).send({title:"POST UPDATE PASSWORD IS CURRENTLY ON TODO LIST"});
+        Auth_controller.update_password(req, res, function(e){
+            res.status(e.status).send(e);
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
-        //});
+        });
     })
     .get('/oauth/:any', function(req, res, next){
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});

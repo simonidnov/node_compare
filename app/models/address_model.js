@@ -40,7 +40,7 @@ const db = require('mongoose'),
       options = {
           provider: 'google',
           httpAdapter: 'https',
-          apiKey: 'AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs',
+          apiKey: config.google.map,
           formatter: null
       },
       geocoder = NodeGeocoder(options);
@@ -72,8 +72,10 @@ module.exports.get = function(user_id, address_id, callback){
 }
 module.exports.create = function(user_id, datas, callback){
     datas.user_id = user_id;
+    //console.log(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country);
     geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
+            datas.geocoder = res[0];
             new_address = new Address(datas);
             new_address.save(function(err, infos){  
                 if(err) callback({"status":405, "message":err});
@@ -81,6 +83,7 @@ module.exports.create = function(user_id, datas, callback){
             });
         })
         .catch(function(err) {
+            console.log('google map error ', err);
             new_address = new Address(datas);
             new_address.save(function(err, infos){  
                 if(err) callback({"status":405, "message":err});

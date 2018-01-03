@@ -1,5 +1,4 @@
 /* ------------ SDK ALONE TEST ----------- */
-
 var idkids_jssdk = function(options, callback){
     this.options = options;
     this.callback = callback;
@@ -22,14 +21,12 @@ var idkids_jssdk = function(options, callback){
         call : function(method, request, params, callback){
             this.show_loader();
             this.add_params(params, $.proxy(function(new_params){
-                console.log('method ', method);
                 params = new_params;
                 dataType = 'json';
                 if(method === "POST" || method === "PUT" || method === "DELETE"){
                     dataType = 'json';
                     params = JSON.stringify(params);
                 }
-                console.log('method ', method);
                 jQuery.ajax(request, {
                     method: method,
                     contentType: 'application/json',
@@ -53,27 +50,16 @@ var idkids_jssdk = function(options, callback){
                             e.message = e.responseJSON.message;
                         }
                     }*/
-                    if(typeof e.message !== "undefined"){
-                        if(typeof popeye !== "undefined"){
-                            e.type="";
-                            switch(e.status){
-                                case 200:
-                                    e.type = 'toast';
-                                    break;
-                                default:
-                                    e.type = 'modal';
-                                    break;
+                    if(typeof e.response_display !== "undefined"){
+                        e.response_display.type ="modal";
+                        var pop = new popeye(
+                            $('body'), 
+                            e.response_display,
+                            function(e){
                             }
-                            var pop = new popeye($('body'), 
-                                e,function(e){
-                                    console.log(e);
-                                }
-                            ).init();
-                        }
+                        ).init();
                     }
-
                     /* TODO CHECK IF HAS MESSAGE THEN DISPLAY POPIN MESSAGE OR TOAST ? */
-                    console.log('always ', e);
                 },this));
             }, this));
         },
@@ -215,6 +201,7 @@ var idkids_jssdk = function(options, callback){
         $.get('/templating/'+template_name, params, function(e){callback(e);});
     }
     this.createAuthbutton = function(target, callback){
+        console.log('createAuthbutton');
         if(document.getElementById(target) === null){
             callback({"status":"error", "message":"TARGET_ID_TAG_ELEMENT_NOT_FOUND"});
         }else{

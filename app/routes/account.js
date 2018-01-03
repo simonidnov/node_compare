@@ -1,5 +1,6 @@
 var express = require('express'),
     _ = require('underscore'),
+    config = require('../config/config'),
     account = express.Router(),
     Auth_model = require('../models/auth_model'),
     Auth_helper = require('../helpers/auth_helper'),
@@ -39,7 +40,8 @@ account
                 '/public/javascripts/account.js',
                 '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
+                '/node_modules/qrcode/build/qrcode.min.js',
+                'https://maps.googleapis.com/maps/api/js?key='+config.google.map
             ], css:[
                 '/public/stylesheets/account.css',
                 '/public/stylesheets/ui.css',
@@ -60,7 +62,8 @@ account
                 '/public/javascripts/account.js',
                 '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
+                '/node_modules/qrcode/build/qrcode.min.js',
+                'https://maps.googleapis.com/maps/api/js?key='+config.google.map
             ], css:[
                 '/public/stylesheets/account.css',
                 '/public/stylesheets/ui.css',
@@ -81,7 +84,8 @@ account
                 '/public/javascripts/account.js',
                 '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
+                '/node_modules/qrcode/build/qrcode.min.js',
+                'https://maps.googleapis.com/maps/api/js?key='+config.google.map
             ], css:[
                 '/public/stylesheets/account.css',
                 '/public/stylesheets/ui.css',

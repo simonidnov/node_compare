@@ -55,3 +55,7 @@
     cursor: pointer;
     font-size: 50px;
 }
+.map_preview{
+    height:200px;
+    width:100%;
+}

@@ -39,6 +39,15 @@ auth.get('/', function(req, res, next) {
             });
         //});
     })
+    .get('/google/callback', function(req, res, next){
+        
+    })
+    .get('/facebook/callback', function(req, res, next){
+        
+    })
+    .get('/twitter/callback', function(req, res, next){
+        
+    })
     .post('/login', function(req, res, next) {
         
         Auth_controller.register(req, function(e){
@@ -71,7 +80,6 @@ auth.get('/', function(req, res, next) {
         });
     })
     .delete('/login', function(req, res, next) {
-        
         Auth_controller.unregister(req, res, function(){
             res.send('login delete params');
         });
@@ -99,15 +107,18 @@ auth.get('/', function(req, res, next) {
                 res.redirect(307, '/account?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
             }
             res.render('auth/login', datas);
-            
         });
     })
     .delete('/device', function(req, res, next){
-        console.log('delete device');
+        Auth_controller.delete_device(req, res, function(e){
+            res.send(e);
+        });
     })
     .get('/logout', function(req, res, next) {
-        Auth_controller.logout(req.query, function(err, data){
-            res.render('auth/logout', { title: 'logout auth page' });
+        console.log(req.headers.referer);
+        Auth_controller.logout(req, res, function(err, data){
+            res.redirect(307, req.headers.referer);
+            //res.render(req.headers.referer, { title: 'logout auth page' });
         });
     })
     .get('/account', function(req, res, next) {
