@@ -28,3 +28,9 @@ exports.request_validation_code = function(req, datas, callback){
 exports.get_user_from_device = function(req, res, callback){
     Auth_model.getUsersDevice(req, callback);
 };
+exports.delete_device = function(req, res, callback){
+    Auth_model.deleteDevice(req, callback);
+}
+exports.update_password = function(req, res, callback){
+    Auth_model.updatePassword(req, callback);
+}

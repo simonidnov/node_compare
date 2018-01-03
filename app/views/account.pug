@@ -399,8 +399,10 @@ block content
                         if(address_infos)
                             input#_id.invisible(type='text' name='_id' value=(address_infos._id||""))
                         hr
-                        div.form_group
-                            img#address_preview(src="" width="100%")
+                        h3 Prévisualisation
+                        hr
+                        div#map_preview.map_preview
+                        
                         hr
                         button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.saveAddress_cta
                         p= lang[locale].keys.input_need_message
@@ -411,9 +413,9 @@ block content
                     
             div.col.col-md-5
                 div.formular
-                    h2 Mes Addresses
                     if(typeof user.address !== "undefined")
                         if(user.address.length > 0)
+                            h2 Mes Addresses
                             ul.col_options_list
                                 each address in user.address
                                     li(data-memberid=address._id)
@@ -619,7 +621,7 @@ block content
                             li
                                 div.icon.idkids-icons.icon-desktop.icon-lg
                                 div.option_infos
-                                    div.label= JSON.stringify(device)
+                                    div.label= device.vendor
                                     div.arch= device.arch + " " + device.uid
                                     div#delete_device.delete_device.btn.btn-sm.btn-warning(data-device_uid=device.uid) supprimer
                    

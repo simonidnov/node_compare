@@ -268,6 +268,7 @@ header .scroll_progress{
     bottom:-2px;
     background-color:#CCC;
 }
+
 header .hor_nav{
     position: absolute;
     height:44px;
@@ -279,12 +280,12 @@ header .hor_nav{
     overflow: scroll;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    -moz-box-shadow: 0px 2px 25px -10px #656565;
-    -webkit-box-shadow: 0px 2px 25px -10px #656565;
-    -o-box-shadow: 0px 2px 25px -10px #656565;
-    box-shadow: 0px 2px 25px -10px #656565;
+    -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.1);
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
 }
+
 header .hor_nav::-webkit-scrollbar {
     width: 0px;
     height:0px;
@@ -656,11 +657,11 @@ p{
         background-image:url(../images/assets/icon_idkids.svg);
     }
     header .hor_nav{
-        -moz-box-shadow: 0px 2px 15px -10px #656565;
+        /*-moz-box-shadow: 0px 2px 15px -10px #656565;
         -webkit-box-shadow: 0px 2px 15px -10px #656565;
         -o-box-shadow: 0px 2px 15px -10px #656565;
         box-shadow: 0px 2px 15px -10px #656565;
-        filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
+        filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);*/
     }
 }`
 

@@ -42,9 +42,9 @@ module.exports.send = function(template, user_id, datas, callback){
     //callback({"status":200, "datas":infos});
     emailing.mailer.send(template, datas, function(err, infos){
         if (err) {
-            callback({status:405, message:'Email ERROR', datas:datas});
+            callback({status:405, response_display:{message:'Email ERROR', type:'modal'}, datas:datas});
             return;
         }
-        callback({status:200, message:'Email SENDED', datas:datas, infos:infos});
+        callback({status:200, response_display:{message:'Email SENDED', type:'toast'}, datas:datas, infos:infos});
     });
 }

@@ -74,6 +74,34 @@ var account = {
                     break;
             }
         });
+        this.init_map();
+    },
+    init_map : function(){
+        var uluru = {lat: 40, lng: 1},
+            self  = this;
+        var map = new google.maps.Map(document.getElementById('map_preview'), {
+          zoom: 1,
+          center: uluru
+        });
+        var geocoder = new google.maps.Geocoder;
+        var infowindow = new google.maps.InfoWindow;
+        $('#postalCode, #city, #address, #addressCountry').off('blur').on('blur', function(){
+            if(typeof self.marker !== "undefined"){
+                self.marker.setMap(null);
+            }
+            if($('#address').val() === "" && $('#city').val() === "" && $('#postalCode').val() === ""){
+                return false;
+            }
+            $.get("https://maps.googleapis.com/maps/api/geocode/json?address="+$('#address').val()+"+"+$('#city').val()+"+"+$('#postalCode').val()+"+"+$('#addressCountry').val()+"&key=AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs", function(data){
+                
+                self.marker = new google.maps.Marker({
+                  position: data.results[0].geometry.location,
+                  map: map
+                });
+                map.setZoom(16);
+                map.setCenter(self.marker.getPosition());
+            });
+        });
     },
     create_forms : function(){
         this.public_form = new formular("#public_datas", function(e){
@@ -117,10 +145,7 @@ var account = {
         this.services_form = new formular('#services_form', function(e){
             if(e.status==="hitted" && e.action==="submit"){
                 var user_datas = account.services_form.get_datas();
-                console.log('submit services');
-                console.log('submit services ', user_datas);
                 index.sdk.api.put("/account/profile/", user_datas, function(e){
-                    console.log(e);
                 });
             }
         });
@@ -147,7 +172,15 @@ var account = {
             }).init();
         }
         $('.delete_device').off('click').on('click', function(){
-            console.log('data-device_uid ::: ', $(this).attr('data-device_uid'));
+            index.sdk.api.call(
+                "DELETE",
+                '/auth/device',
+                {uid:$(this).attr('data-device_uid')},
+                function(e){
+                    console.log(e);
+                    //window.location.reload();
+                }
+            );
         });
     }
 }
