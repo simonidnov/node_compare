@@ -621,8 +621,8 @@ block content
                             li
                                 div.icon.idkids-icons.icon-desktop.icon-lg
                                 div.option_infos
-                                    div.label= device.vendor
-                                    div.arch= device.arch + " " + device.uid
+                                    div.label= device.ua_parser.os.name+" "+device.ua_parser.browser.name+" "+device.ua_parser.browser.major
+                                    div.arch= device.uid
                                     div#delete_device.delete_device.btn.btn-sm.btn-warning(data-device_uid=device.uid) supprimer
                    
                    
