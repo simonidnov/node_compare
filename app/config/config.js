@@ -20,11 +20,30 @@ module.exports = {
         'transportMethod': 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
         'auth': {
             'user': 'idnovant.it@gmail.com',
-            'pass': 'Idn#2015'
+            'pass': 'AlloRaki1'
         },
     	'tls': {
     	    'rejectUnauthorized': false
     	}
+    },
+    'analytics':{
+        'key':"UA-111340704-1"
+    },
+    'google':{
+        'map':"AIzaSyCEeeSCb_ystiyvYvD7piQLEAfmzIoUSaQ",
+        'app_id':"209153919630422",
+        'secret':"ce4d955ecc33a35bcaa38f8cca75da42",
+        'callbackURL' : 'http://www.idkids-app.com/auth/google/callback'
+    },
+    'facebook':{
+        'app_id':"209153919630422",
+        'secret':"ce4d955ecc33a35bcaa38f8cca75da42",
+        'callbackURL' : 'http://www.idkids-app.com/auth/facebook/callback'
+    },
+    'twitter':{
+        'app_id':"209153919630422",
+        'secret':"ce4d955ecc33a35bcaa38f8cca75da42",
+        'callbackURL' : 'http://www.idkids-app.com/auth/twitter/callback'
     }
 };
 //TODO CHECK SSH KEY SIGNING
