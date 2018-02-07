@@ -194,6 +194,9 @@ var idkids_jssdk = function(options, callback){
         if(typeof cb !== "undefined"){
             cb("hello world from cb");
         }
+        if (typeof(Unity) === 'undefined') {
+            Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
         //var sdkel;
         //if(document.getElementById('idkids-dsk') === null){ return false; }
         /* TODO REQUEST SECRET FROM SERVER URL THEN RETURN INITED OR NOT IDENTIFIED */
