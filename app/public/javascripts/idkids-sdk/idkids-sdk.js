@@ -196,6 +196,8 @@ var idkids_jssdk = function(options, callback){
         }
         if (typeof(Unity) === 'undefined') {
             Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }else{
+            console.log('UNITY IS NOT DEFINED');
         }
         //var sdkel;
         //if(document.getElementById('idkids-dsk') === null){ return false; }
