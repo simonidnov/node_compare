@@ -199,6 +199,7 @@ var idkids_jssdk = function(options, callback){
         }
         if (typeof Unity !== 'undefined') {
             alert('Unity is defined');
+            $('body').html("<h1>UNITY IS DEFINED</h1>");
             Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }else{
             console.log('UNITY IS NOT DEFINED');
