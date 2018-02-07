@@ -194,7 +194,7 @@ var idkids_jssdk = function(options, callback){
         if(typeof cb !== "undefined"){
             cb("hello world from cb");
         }
-        if (typeof Unity === 'undefined') {
+        if (typeof Unity !== 'undefined') {
             Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }else{
             console.log('UNITY IS NOT DEFINED');
