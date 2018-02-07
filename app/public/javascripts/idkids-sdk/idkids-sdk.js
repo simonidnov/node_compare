@@ -68,11 +68,8 @@ var idkids_jssdk = function(options, callback){
             if(this.user === null){
                 return {"status":"not_connected", "infos":"call api.get('me')"};
             }else{
-                if(typeof onJS !== "undefined"){
-                    onJS("hello world from onJS");
-                }
-                if(typeof cb !== "undefined"){
-                    cb("hello world from cb");
+                if(typeof Unity !== "undefined"){
+                    Unity.call('{"status":"logged", "user":"'+this.user+'", "token":"'+this.user.token+'", "id":"'+this.user.id+'", "device":"'+this.user.device+'"');
                 }
                 return {"status":"logged", "user":this.user, "token":this.user.token, "id":this.user.id, "device":this.user.device};
             }
@@ -188,22 +185,15 @@ var idkids_jssdk = function(options, callback){
     }
     this.api.options = options;
     this.init = function(callback){
-        alert('Init SDK');
-        if(typeof onJS !== "undefined"){
-            alert('onJS is defined');
-            onJS("hello world from onJS");
-        }
-        if(typeof cb !== "undefined"){
-            alert('cb is defined');
-            cb("hello world from cb");
-        }
-        if (typeof Unity !== 'undefined') {
-            alert('Unity is defined');
-            $('body').html("<h1>UNITY IS DEFINED</h1>");
-            Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }else{
-            console.log('UNITY IS NOT DEFINED');
-            $('body').html("<h1>UNITY IS NOT DEFINED</h1>");
+        if (typeof(Unity) === 'undefined') {
+           Unity = {
+            call: function(msg) {
+                var iframe = document.createElement('IFRAME');
+                iframe.setAttribute('src', 'unity:' + msg);
+                document.documentElement.appendChild(iframe);
+                document.documentElement.removeChild(iframe);
+                },
+            };
         }
         //var sdkel;
         //if(document.getElementById('idkids-dsk') === null){ return false; }
