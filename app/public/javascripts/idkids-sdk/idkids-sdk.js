@@ -188,6 +188,12 @@ var idkids_jssdk = function(options, callback){
     }
     this.api.options = options;
     this.init = function(callback){
+        if(typeof onJS !== "undefined"){
+            onJS("hello world from onJS");
+        }
+        if(typeof cb !== "undefined"){
+            cb("hello world from cb");
+        }
         //var sdkel;
         //if(document.getElementById('idkids-dsk') === null){ return false; }
         /* TODO REQUEST SECRET FROM SERVER URL THEN RETURN INITED OR NOT IDENTIFIED */
