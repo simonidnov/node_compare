@@ -75,6 +75,10 @@ var account = {
             }
         });
         this.init_map();
+        $(window).on('change', function(){
+            
+            console.log('change ', window.location);
+        });
     },
     init_map : function(){
         var uluru = {lat: 40, lng: 1},

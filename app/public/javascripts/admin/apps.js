@@ -16,7 +16,7 @@ var applications_page = {
                 index.sdk.api.post($("#create_app form").attr('action'), form_datas, function(e){
                     console.log("updated ::: ", e);
                     // window.location.reload();
-                });  
+                });
             }
         });
         this.create_app_form.init();
@@ -33,10 +33,10 @@ var applications_page = {
                         });
                         break;
                     case "delete":
+
                         var form_datas = {};
-                        index.sdk.api.delete($("#edit_app form").attr('action'), {_id:$("#edit_app form").attr('data-id')}, function(e){
+                        index.sdk.api.deleting($("#edit_app form").attr('action'), {_id:$("#edit_app form").attr('data-id')}, function(e){
                             console.log(e);
-                            //window.location.href= "/admin/apps/";
                         });
                         break;
                 }

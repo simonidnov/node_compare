@@ -2,13 +2,16 @@ extends admin_header
 block content
     div.admin
         div.shutter
-            a.shutter_action(href="#new_app" title="ajouter une application") 
+            a.shutter_action(href="/admin/pages/new_page" title="ajouter une application")
                 span.icon.icon-more.idkids-icons
                 div.label Nouvelle Page
             h3 Liste des pages
             ul.app_list
-                li PAGE#1
-        div#pages.container
+                each page in pages
+                    a(href="/admin/pages/edit_page/"+page._id title="éditer la page")
+                        li
+                            div.label= page.label
+        div#pages.container(style= page === "pages" ? "display:block" : "display:none")
             div.article
                 div.col.col-md-6
                     h1 Qu'est ce qu'une page
@@ -48,3 +51,41 @@ block content
                             for(var i =0; i<8 i++){
                                 console.log(i);
                             }
+        div.container(style= page === "new_page" ? "display:block" : "display:none")
+            div.col.col-md-6
+              div.formular.fullscreen#create_page
+                  h1 Créer une page
+                  br
+                  form.form_content(method="POST" action='/api/pages')
+                    div.form-group.material_input.minlength
+                        input#label(type="text" name="label" minlength="4" required)
+                        label(for="label") Label * uniq
+                    div.form-group.material_input.minlength
+                        textarea#description(type="text" name="description" maxlength="255" minlength="75" required)
+                        label(for="description") description (255 max char)
+                    div.form-group.material_input.minlength
+                        input#keywords(type="text" name="keywords" maxlength="75" minlength="25" required)
+                        label(for="keywords") keywords (75 max char)
+                    div.form-group
+                        div.btn.btn-success.btn-lg(data-action="submit") Ajouter
+        div.container(style= page === "edit_page" ? "display:block" : "display:none")
+            div.col.col-md-12
+              div.pager#pager_interface
+              div.formular.fullscreen#edit_page
+                h1 Éditer la page
+                br
+                if(typeof edit_page !== "undefined")
+                  form.form_content(method="PUT" action='/api/pages' data-id=edit_page._id)
+                    input#_id.invisible(type="text" name="_id" value=edit_page._id)
+                    div.form-group.material_input.minlength
+                        input#label(type="text" name="label" minlength="4" value=edit_page.label required)
+                        label(for="label") Label * uniq
+                    div.form-group.material_input.minlength
+                        textarea#description(type="text" name="description" maxlength="255" minlength="75" value=edit_page.description required)= edit_page.description
+                        label(for="description") description (255 max char)
+                    div.form-group.material_input.minlength
+                        input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_page.keywords required)
+                        label(for="keywords") keywords (75 max char)
+                    div.form-group.buttons.inline
+                        div.btn.btn-success.btn-lg(data-action="submit") Enregistrer
+                        div.btn.btn-danger.btn-lg(data-action="delete") Supprimer

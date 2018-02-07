@@ -2,14 +2,14 @@ extends admin_header
 block content
     div.admin
         div.shutter
-            a.shutter_action(href="/admin/apps/new_app" title="ajouter une application") 
+            a.shutter_action(href="/admin/apps/new_app" title="ajouter une application")
                 span.icon.icon-more.idkids-icons
                 div.label Nouvelle Application
             h3 Mes applications
             ul.app_list
                 each apps in applications
                     a(href="/admin/apps/edit_app/"+apps._id title="éditer l'application")
-                        li 
+                        li
                             span.icon(style= "background-image:url("+apps.icon+")")
                             div.label= apps.short_name
         div#apps.container(style= page === "apps" ? "display:block" : "display:none")
@@ -81,7 +81,6 @@ block content
         div.container(style= page === "edit_app" ? "display:block" : "display:none")
             div.col.col-md-6
                 div.formular.fullscreen#edit_app
-                    p= JSON.stringify(edit_application)
                     br
                     hr
                     h1 Éditer l'application
