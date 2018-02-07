@@ -34,7 +34,7 @@ const db = require('mongoose'),
           updated           : {type:'Date', default: Date.now}
       };
 
-if(db.connection.readyState === 0){ 
+if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
 const appsSchemas = new db.Schema(apps_datas),
@@ -55,7 +55,7 @@ module.exports.validate = function(secret, host, callback){
                 aliases:{$indexOfArray: [host]},
                 secret:secret
             }
-        }, 
+        },
         function(err, infos){
             if(err) callback({status:405, datas:err});
             else callback({status:200, datas:infos});
@@ -73,13 +73,13 @@ module.exports.create = function(user_id, datas, callback){
     datas.secret = jwt.sign({secret:user_id}, config.secrets.global.secret);
     datas.token = jwt.sign({secret:user_id+Date.now()}, config.secrets.global.secret);
     new_apps = new Apps(datas);
-    new_apps.save(function(err, infos){  
+    new_apps.save(function(err, infos){
         if(err) callback({"status":405, "message":err});
         else callback({"status":200, "datas":infos});
     });
 }
 module.exports.update = function(user_id, apps_id, datas, callback){
-    
+
     delete datas.options;
     delete datas._id;
     datas.updated = Date.now();

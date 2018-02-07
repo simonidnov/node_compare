@@ -1,6 +1,7 @@
 var express = require('express'),
     api = express.Router(),
     Apps_controller = require('../controllers/apps_controller'),
+    Pages_controller = require('../controllers/pages_controller'),
     Auth_controller = require('../controllers/auth_controller'),
     Email_controller = require('../controllers/email_controller'),
     Auth_helper = require('../helpers/auth_helper'),
@@ -15,7 +16,7 @@ api.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
-    
+
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
@@ -91,6 +92,30 @@ api
     })
     .delete('/apps', function(req, res, next) {
         Apps_controller.delete(req, res, function(e){
+            res.status(e.status).send(e);
+            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        });
+    })
+    .get('/pages', function(req, res, next) {
+        Pages_controller.get(req, res, function(e){
+            res.status(e.status).send(e);
+            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        });
+    })
+    .post('/pages', function(req, res, next) {
+        Pages_controller.create(req, res, function(e){
+            res.status(e.status).send(e);
+            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        });
+    })
+    .put('/pages', function(req, res, next) {
+        Pages_controller.update(req, res, function(e){
+            res.status(e.status).send(e);
+            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        });
+    })
+    .delete('/pages', function(req, res, next) {
+        Pages_controller.delete(req, res, function(e){
             res.status(e.status).send(e);
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         });

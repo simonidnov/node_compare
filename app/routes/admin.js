@@ -4,28 +4,17 @@ var express = require('express'),
     Auth_model = require('../models/auth_model'),
     Auth_helper = require('../helpers/auth_helper'),
     Apps_controller = require('../controllers/apps_controller'),
+    Pages_controller = require('../controllers/pages_controller'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang');
 
 admin.use(function(req, res, next){
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
-    
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
-    // TODO : VALIDATE SESSION USER
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
     Auth_helper.validate_session(req, function(e){
         console.log(e);
         if(e.status === 200){
@@ -41,7 +30,6 @@ admin.use(function(req, res, next){
             res.redirect(301, '/auth');
         }
     });
-    console.log('--------------------- Auth_helper.validate_session -----------------------');
     //next();
 });
 /* GET admin page. */
@@ -189,7 +177,7 @@ admin
                 ]
             });
          });
-         
+
     })
     .get('/notifications', function(req, res, next) {
          res.render('admin/notifications', {
@@ -216,6 +204,7 @@ admin
             locale:language_helper.getlocale(),
             lang:lang,
             page:'settings',
+            pages:pages,
             js:[
                 '/public/javascripts/admin/notifications.js',
                 '/public/javascripts/components/formular.js',
@@ -228,6 +217,8 @@ admin
         });
     })
     .get('/pages', function(req, res, next) {
+      Pages_controller.get(req, res, function(e){
+        pages = e.datas;
          res.render('admin/pages', {
             title: 'Admin Pages',
             user : req.session.Auth,
@@ -244,6 +235,65 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+      });
     })
+    .get('/pages/:page', function(req, res, next) {
+        var applications = null;
+        Pages_controller.get(req, res, function(e){
+            pages = e.datas;
+            res.render('admin/pages', {
+                title: 'Admin Pages',
+                user : req.session.Auth,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                page:req.params.page,
+                pages:pages,
+                js:[
+                    '/public/javascripts/admin/pages.js',
+                    '/public/javascripts/components/formular.js',
+                    '/node_modules/qrcode/build/qrcode.min.js'
+                ], css:[
+                    '/public/stylesheets/admin/admin.css',
+                    '/public/stylesheets/admin/pages.css',
+                    '/public/stylesheets/components/formular.css'
+                ]
+            });
+        });
+        return;
+    })
+    .get('/pages/:page/:_id', function(req, res, next) {
+      var pages = null;
+      var edit_application = null;
+      Pages_controller.get(req, res, function(e){
+          pages = e.datas;
+          //application = _.where(applications, {_id:"5a2eb38289fda770c4af9312"})[0];
+          edit_page = _.where(JSON.parse(JSON.stringify(pages)), {_id:req.params._id})[0];
+          res.render('admin/pages', {
+              title: 'Admin Pages',
+              user : req.session.Auth,
+              locale:language_helper.getlocale(),
+              lang:lang,
+              page:req.params.page,
+              pages:pages,
+              page_id:req.params._id,
+              edit_page:edit_page,
+              _:_,
+              js:[
+                  '/public/javascripts/admin/pages.js',
+                  '/public/javascripts/components/pager/pager.js',
+                  '/node_modules/cropperjs/dist/cropper.min.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/node_modules/cropperjs/dist/cropper.min.css',
+                  '/public/stylesheets/admin/pages.css',
+                  '/public/stylesheets/components/formular.css',
+                  '/public/stylesheets/components/pager/pager.css'
+              ]
+          });
+      });
+      return;
+    });
 
 module.exports = admin;

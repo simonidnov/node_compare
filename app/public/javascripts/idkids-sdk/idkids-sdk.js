@@ -15,7 +15,7 @@ var idkids_jssdk = function(options, callback){
         put : function(request, params, callback) {
             this.call('PUT', request, params, callback);
         },
-        delete : function(request, params, callback) {
+        deleting : function(request, params, callback) {
             this.call('DELETE', request, params, callback);
         },
         call : function(method, request, params, callback){
@@ -53,7 +53,7 @@ var idkids_jssdk = function(options, callback){
                     if(typeof e.response_display !== "undefined"){
                         e.response_display.type ="modal";
                         var pop = new popeye(
-                            $('body'), 
+                            $('body'),
                             e.response_display,
                             function(e){
                             }
@@ -68,22 +68,28 @@ var idkids_jssdk = function(options, callback){
             if(this.user === null){
                 return {"status":"not_connected", "infos":"call api.get('me')"};
             }else{
+                if(typeof onJS !== "undefined"){
+                    onJS("hello world from onJS");
+                }
+                if(typeof cb !== "undefined"){
+                    cb("hello world from cb");
+                }
                 return {"status":"logged", "user":this.user, "token":this.user.token, "id":this.user.id, "device":this.user.device};
             }
         },
         get_params : function(){
-            
+
         },
         show_loader : function(){
             if($('.idkids_jssdk.loader').length === 0){
                 $('body').append('<div class="idkids_jssdk loader"><div class="centered"><svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve"><style type="text/css">	.st0{fill:none;stroke:#4F555A;stroke-width:28;stroke-miterlimit:10;}	.st1{fill:#C93632;}</style><circle class="st0" cx="128" cy="128" r="53"/><circle class="st1" cx="128" cy="128" r="26"/></svg></div></div>');
-            }  
+            }
             setTimeout(function(){
                 $('.idkids_jssdk.loader').addClass('showed');
             }, 200);
         },
         hide_loader : function(){
-            $('.idkids_jssdk.loader').remove();  
+            $('.idkids_jssdk.loader').remove();
         },
         add_params : function(params, callback){
             params.options = this.options;
@@ -114,7 +120,7 @@ var idkids_jssdk = function(options, callback){
                     "device":url.searchParams.get("idkids-device")
                 };
                 this.store('idkids_local_user', jeton);
-                
+
                 this.set_user();
                 callback(jeton);
                 //window.location.href =window.location.pathname;
@@ -151,7 +157,7 @@ var idkids_jssdk = function(options, callback){
                     callback(
                         {
                             status : 200,
-                            device_uid : result, 
+                            device_uid : result,
                             platform : navigator.platform,
                             appCodeName : navigator.appCodeName,
                             appName : navigator.appName,
