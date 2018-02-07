@@ -188,13 +188,17 @@ var idkids_jssdk = function(options, callback){
     }
     this.api.options = options;
     this.init = function(callback){
+        alert('Init SDK');
         if(typeof onJS !== "undefined"){
+            alert('onJS is defined');
             onJS("hello world from onJS");
         }
         if(typeof cb !== "undefined"){
+            alert('cb is defined');
             cb("hello world from cb");
         }
         if (typeof Unity !== 'undefined') {
+            alert('Unity is defined');
             Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }else{
             console.log('UNITY IS NOT DEFINED');
