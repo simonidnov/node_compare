@@ -203,6 +203,7 @@ var idkids_jssdk = function(options, callback){
             Unity.call("MESSAGE FROM JS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }else{
             console.log('UNITY IS NOT DEFINED');
+            $('body').html("<h1>UNITY IS NOT DEFINED</h1>");
         }
         //var sdkel;
         //if(document.getElementById('idkids-dsk') === null){ return false; }
