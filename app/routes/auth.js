@@ -15,10 +15,14 @@ var express = require('express'),
 auth.get('/', function(req, res, next) {
         //req.query.device_uid = device_uid;
         console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
+        Fb.getLoginUrl({
+          scope: 'email,user_likes',
+          redirect_uri: 'https://www.idkids-app.com/auth/facebook'
+        });
         Fb.api('oauth/access_token', {
             client_id: '143900369638121',
             client_secret: '393fec1031105f7144748d3d569b7896',
-            redirect_uri: 'http://idkids-app.com/auth/facebook',
+            redirect_uri: 'https://www.idkids-app.com/auth/facebook',
             code: 'code'
         }, function (res) {
             if(!res || res.error) {
