@@ -40,8 +40,9 @@ var login = {
     loginFB : function(){
       FB.login(function(response) {
           FB.api('/me?fields=email,name,friends,likes,avatar', function (response) {
+            console.log(response);
               if(typeof response.email !== "undefined"){
-                console.log(response);
+
                   $('#email').val(response.email);
                   //window.location.href = "/auth/login/?email="+response.email+"&fb_id="+response.id;
                   //$('#fb_id').val(response.id);
