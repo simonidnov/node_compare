@@ -67,6 +67,7 @@ auth.get('/', function(req, res, next) {
         console.log('//////////////////');
         console.log('//////////////////');
         console.log('//////////////////');
+        var facebook_call = req;
         Auth_controller.login(req, req.query, function(e){
             //Auth_controller.get_user_from_device("fingerprint", function(users_device){
             //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
@@ -78,6 +79,7 @@ auth.get('/', function(req, res, next) {
                 lang:lang,
                 uri_params : uri_helper.get_params(req),
                 response:e,
+                facebook_call: facebook_call,
                 js:[
                     '/public/javascripts/login.js',
                     '/public/javascripts/components/formular.js'
