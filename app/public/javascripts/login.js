@@ -36,6 +36,15 @@ var login = {
           //statusChangeCallback(response);
       });
     },
+    loginFB : function(){
+      FB.login(function(response) {
+        console.log('facvebook response ', response);
+        // handle the response
+      }, {
+          scope: 'publish_actions,email,user_likes,user_friends',
+          return_scopes: true
+      });
+    },
     parse_url : function(url){
         var uri_params = [],
             uri_array  = url.split('/');
