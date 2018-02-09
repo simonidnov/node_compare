@@ -40,8 +40,12 @@ var login = {
     },
     loginFB : function(){
       FB.login(function(response) {
-        console.log('facebook response ', response);
-        // handle the response
+          console.log('facebook response ', response);
+          // handle the response
+          FB.api('/me', function (response) {
+            alert('Welcome, ' + response.name + "!");
+            alert('Your email id is : '+ response.email);
+          });
       }, {
           scope: 'publish_actions,email',
           return_scopes: true
