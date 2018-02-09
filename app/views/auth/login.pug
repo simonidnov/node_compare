@@ -11,13 +11,21 @@ block content
             appId      : '143900369638121',
             cookie     : true,
             xfbml      : true,
-            version    : 'v2.12'
+            version    : 'v2.12',
+            "data":
+            [
+              {
+                "permission":"public_profile",
+                "status":"granted"
+              },
+              {
+                "permission":"email",
+                "status":"granted"
+              }
+            ]
           });
-            
-          FB.AppEvents.logPageView();   
-            
+          FB.AppEvents.logPageView();
         };
-
         (function(d, s, id){
            var js, fjs = d.getElementsByTagName(s)[0];
            if (d.getElementById(id)) {return;}
