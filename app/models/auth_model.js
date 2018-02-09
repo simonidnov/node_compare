@@ -27,6 +27,15 @@ const db = require('mongoose'),
           relations   : {type:'Array'},
           apps        : {type:'Array'},
           tags        : {type:'Object'},
+          facebook    : {
+              id:'string',
+              name:'string',
+              email:'string',
+              likes:'array',
+              pages:'array',
+              shared:'boolean',
+              accessToken:'srting'
+          },
           devices     : {
               uid:'string',
               name:'string',
