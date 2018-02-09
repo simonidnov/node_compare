@@ -7,23 +7,38 @@ var express = require('express'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang'),
     machineId = require('node-machine-id'),
-    device_uid = machineId.machineIdSync({original: true});
+    device_uid = machineId.machineIdSync({original: true}),
+    Fb = require('fb');
 
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {
-        //req.query.device_uid = device_uid; 
-        
+        //req.query.device_uid = device_uid;
+        console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
+        Fb.api('oauth/access_token', {
+            client_id: '143900369638121',
+            client_secret: '393fec1031105f7144748d3d569b7896',
+            redirect_uri: 'http://idkids-app.com/auth/facebook',
+            code: 'code'
+        }, function (res) {
+            if(!res || res.error) {
+                console.log(!res ? 'error occurred' : res.error);
+                return;
+            }
+            var accessToken = res.access_token;
+            var expires = res.expires ? res.expires : 0;
+        });
+
         //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 //Auth_controller.get_user_from_device("fingerprint", function(users_device){
                 //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
                 //});
                 var datas = {
-                    title: 'Mon compte', 
-                    datas: req.query, 
+                    title: 'Mon compte',
+                    datas: req.query,
                     locale:language_helper.getlocale(),
-                    lang:lang, 
+                    lang:lang,
                     uri_params : uri_helper.get_params(req),
                     response:e,
                     js:[
@@ -42,19 +57,30 @@ auth.get('/', function(req, res, next) {
             });
         //});
     })
+    .get('/facebook', function(req, res, next){
+        console.log('//////////////////');
+        console.log('//////////////////');
+        console.log('//////////////////');
+        console.log('//////////////////');
+        console.log(req, res, next);
+        console.log('//////////////////');
+        console.log('//////////////////');
+        console.log('//////////////////');
+        console.log('//////////////////');
+    })
     .get('/fingerprint/:device_uid', function(req, res, next) {
-        //req.query.device_uid = device_uid; 
-        
+        //req.query.device_uid = device_uid;
+
         Auth_controller.get_user_from_device(req.params.device_uid, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 //Auth_controller.get_user_from_device("fingerprint", function(users_device){
                 //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
                 //});
                 var datas = {
-                    title: 'Mon compte', 
-                    datas: req.query, 
+                    title: 'Mon compte',
+                    datas: req.query,
                     locale:language_helper.getlocale(),
-                    lang:lang, 
+                    lang:lang,
                     uri_params : uri_helper.get_params(req),
                     users_device:users_device.users_device,
                     response:e,
@@ -75,26 +101,26 @@ auth.get('/', function(req, res, next) {
         });
     })
     .get('/google/callback', function(req, res, next){
-        
+
     })
     .get('/facebook/callback', function(req, res, next){
-        
+
     })
     .get('/twitter/callback', function(req, res, next){
-        
+
     })
     .post('/login', function(req, res, next) {
-        
+
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
                 res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
             var user_device = [];
             var datas = {
-                title: 'Mon compte', 
-                datas: req.query, 
+                title: 'Mon compte',
+                datas: req.query,
                 locale:language_helper.getlocale(),
-                lang:lang, 
+                lang:lang,
                 uri_params : uri_helper.get_params(req),
                 response:e,
                 js:[
@@ -109,7 +135,7 @@ auth.get('/', function(req, res, next) {
         });
     })
     .put('/login', function(req, res, next) {
-        
+
         Auth_controller.update(req, res, function(){
             res.send('login put params');
         });
@@ -120,18 +146,18 @@ auth.get('/', function(req, res, next) {
         });
     })
     .get('/:form_name/*', function(req, res, next) {
-        //req.query.device_uid = device_uid; 
+        //req.query.device_uid = device_uid;
         Auth_controller.login(req, req.query, function(e){
-            var datas = { 
+            var datas = {
                 title: 'Mon compte',
-                datas: req.query, 
-                response:e, 
-                locale:language_helper.getlocale(), 
-                lang:lang, 
-                uri_params:uri_helper.get_params(req), 
+                datas: req.query,
+                response:e,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                uri_params:uri_helper.get_params(req),
                 form:req.params.form_name,
                 js:[
-                    '/public/javascripts/login.js', 
+                    '/public/javascripts/login.js',
                     '/public/javascripts/components/formular.js'
                 ], css:[
                     '/public/stylesheets/components/formular.css',

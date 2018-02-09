@@ -6,7 +6,8 @@ var express = require('express'),
     Auth_helper = require('../helpers/auth_helper'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
-    lang = require('../public/languages/auth_lang');
+    lang = require('../public/languages/auth_lang'),
+    Fb = require('fb');
 
 account.use(function(req, res, next){
     //ACCEPT CORS

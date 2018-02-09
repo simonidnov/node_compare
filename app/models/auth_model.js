@@ -28,8 +28,8 @@ const db = require('mongoose'),
           apps        : {type:'Array'},
           tags        : {type:'Object'},
           devices     : {
-              uid:'string', 
-              name:'string', 
+              uid:'string',
+              name:'string',
               arch:'string',
               appCodeName:'string',
               appName:'string',
@@ -62,7 +62,7 @@ const db = require('mongoose'),
 
 
 
-if(db.connection.readyState === 0){ 
+if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
 const userSchemas = new db.Schema(user_datas),
@@ -93,7 +93,7 @@ module.exports.getActive = function(){
 module.exports.get = function(req, datas, callback) {
     device_uid = req.query.device_uid;
     //machineId.machineIdSync({original: true});
-    
+
     var self = this;
     User.find({}, function(err, users){
         if (err){
@@ -148,13 +148,13 @@ module.exports.login = function(req, datas, callback) {
     }
 
     /*
-    { 
+    {
         device_uid: '1be17d56f318dda2e37670a5eca8fc2a',
         appCodeName: 'Mozilla',
         appName: 'Netscape',
         appVersion: '5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
-        vendor: 'Google Inc.' 
+        vendor: 'Google Inc.'
     }
     */
     //device_uid = machineId.machineIdSync({original: true});
@@ -169,7 +169,7 @@ module.exports.login = function(req, datas, callback) {
                     if(users.length === 0){
                         User.find({email: datas.email}, function (err, users) {
                             if(err){
-                                callback({"status":"error", "code":11, "error":err, "message":"user_not_found"});   
+                                callback({"status":"error", "code":11, "error":err, "message":"user_not_found"});
                             }else{
                                 if(users.length === 0){
                                     callback({"status":"error", "code":11, "error":err, "message":"user_not_found", email_valid:users.length});
@@ -182,27 +182,27 @@ module.exports.login = function(req, datas, callback) {
                     }
                     console.log("CHECK DEVICE device_uid :::: LOGIN ", device_uid);
                     /* CHECK DEVICE */
-                    
+
                     var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
-                    
+
                     if(typeof req.query.remember_me !== "undefined"){
                         new_device.token = new_token;
                         /* check if device exist */
                         User.find(
                             {
-                                _id:users[0]._id, 
-                                devices:{ 
+                                _id:users[0]._id,
+                                devices:{
                                     $elemMatch : {
                                         uid:device_uid
                                     }
                                 }
-                            }, 
+                            },
                             function(err, device) {
                                 if(err){
                                     // TODO : ON PUSH UN DEVICE AVEC LE UID CORRESPONDANT POUR LA PROCHAINE SESSION ET ON SET UN JETON TOKEN
                                     User.update(
                                         { _id: users[0]._id },
-                                        { 
+                                        {
                                             $push: { devices: new_device }
                                         },
                                         function(err, device){
@@ -215,7 +215,7 @@ module.exports.login = function(req, datas, callback) {
                                         /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
                                         User.update(
                                             { _id: users[0]._id },
-                                            { 
+                                            {
                                                 $push: { devices: new_device }
                                             },
                                             function(err, device){
@@ -244,7 +244,7 @@ module.exports.login = function(req, datas, callback) {
                             }
                         );
                     }
-                    
+
                     /* UPDATE */
                     if(users[0].avatar === "" || users[0].avatar == null){
                         var avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
@@ -261,15 +261,15 @@ module.exports.login = function(req, datas, callback) {
                     */
                     User.update(
                         {
-                            _id: users[0]._id 
-                        }, 
+                            _id: users[0]._id
+                        },
                         {
                             $set:{
                                 token : new_token,
                                 updated : Date.now(),
                                 avatar : avatar
                             }
-                        }, 
+                        },
                         function(err, user){
                             if (err){
                                 callback({"status":"error", "code":err.code, "error":err, "message":err.message});
@@ -285,7 +285,7 @@ module.exports.login = function(req, datas, callback) {
             //
             //User.find({email: datas.email, password: sha1(datas.password), termAccept:1}, callback);
         }else{
-            callback({"message":"email invalide"}, null);   
+            callback({"message":"email invalide"}, null);
         }
     }else{
         callback([]);
@@ -305,7 +305,7 @@ module.exports.register = function(datas, callback) {
     /* ----- CHECK EMAIL UNIQ ----- */
     /* ----- GENERATE TOKEN FIRST expire in 24 H ----- */
     db.connect(config.database.users, {useMongoClient: true});
-    
+
     var new_user_datas = {
             email   : datas.body.subscribe_email,
             password: sha1(datas.body.subscribe_password),
@@ -332,7 +332,7 @@ module.exports.register = function(datas, callback) {
             new_user_datas.newsletter_services.okaidi = 1;
         }
         if(datas.body.newsletter_obaibi){
-            new_user_datas.newsletter_services.obaibi = 1; 
+            new_user_datas.newsletter_services.obaibi = 1;
         }
         if(datas.body.newsletter_jacadi){
             new_user_datas.newsletter_services.jacadi = 1;
@@ -353,9 +353,9 @@ module.exports.register = function(datas, callback) {
         new_user_datas.newsletter = false;
         new_user_datas.newsletter_services = {};
     }
-    
+
     new_user = new User(new_user_datas);
-    new_user.save(function(err){  
+    new_user.save(function(err){
         if(err) callback({"status":"error", "message":err});
         else callback({"status":"success", "user":new_user_datas});
         //db.close();
@@ -395,7 +395,7 @@ module.exports.update = function(req, user_id, datas, callback) {
                 /* TODO RESET SESSION USER FUNCTION */
                 self.reset_session(req, user_id, function(){
                     callback({status:200, "message":"User updated", "datas":infos});
-                });   
+                });
             }
         } , // CALLBACK
         true //SAIS PAS POURQUOI
@@ -411,15 +411,15 @@ module.exports.check_user = function(req, callback){
             uid     : device_uid
         },
         new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
-    
+
     new_device.token = new_token;
-    
+
     /* check if device exist */
     User.find(
         {
-            _id:req.options.user_id, 
+            _id:req.options.user_id,
             secret : req.options.user_secret,
-            devices:{ 
+            devices:{
                 $elemMatch : {
                     uid:device_uid,
                     token:req.options.user_token
@@ -433,7 +433,7 @@ module.exports.check_user = function(req, callback){
                 /* ON MET A JOUR LE TOKEN */
                 User.update(
                     {
-                        id:req.options.user_id, 
+                        id:req.options.user_id,
                         devices: {
                             $elemMatch: {
                                 uid:device_uid
@@ -460,7 +460,7 @@ module.exports.reset_session = function(req, user_id, callback){
     User.findOne(
         {
             _id: user_id
-        }, 
+        },
         function(err, user){
             if (err){
                 callback({"status":401, "code":err.code, "error":err, "message":err.message});
@@ -472,8 +472,8 @@ module.exports.reset_session = function(req, user_id, callback){
                     Address_model.get(user_id, null, function(e){
                         user_infos.address = e.datas;
                         req.session.Auth = user_infos;
-                        callback({status:200, "message":"Session Updated", "datas":user_infos});    
-                    });                
+                        callback({status:200, "message":"Session Updated", "datas":user_infos});
+                    });
                 });
             }
         }
@@ -490,7 +490,7 @@ module.exports.getPublicProfile = function(_id, callback){
                 "created" : e.datas.created,
                 "updated" : e.datas.updated
             };
-            callback({status:e.status, message:e.message, datas:public_profile});     
+            callback({status:e.status, message:e.message, datas:public_profile});
         }else{
             callback(e);
         }
@@ -502,7 +502,7 @@ module.exports.getServices = function(_id, callback){
             var public_services = {
                 is_newsletter : e.datas.is_newsletter,
                 newsletter_services : e.datas.newsletter_services
-            }  
+            }
             callback({status:e.status, message:e.message, datas:e.datas.public_services});
         }else{
             callback(e);
@@ -543,7 +543,7 @@ module.exports.getValidationCode = function(_id, callback){
                     var validation_code = jwt.sign({secret:user.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
                     User.update(
                         { _id: user._id },
-                        { 
+                        {
                             $set: { validation_code: validation_code }
                         },
                         function(err, validation){
@@ -566,13 +566,13 @@ module.exports.validAccount = function(params, callback){
         },
         function(err, user){
             if(err || user === null){
-                callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});  
+                callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});
             }else{
                 User.update(
-                    { 
-                        _id: user._id 
+                    {
+                        _id: user._id
                     },
-                    { 
+                    {
                         $set: { validated: true, certified: true }
                     },
                     function(err, validation){
@@ -590,7 +590,7 @@ module.exports.getUsersDevice = function(device_uid, callback){
     //device_uid = machineId.machineIdSync({original: true});
     User.find(
         {
-            devices:{ 
+            devices:{
                 $elemMatch : {
                     uid:device_uid
                 }
@@ -603,13 +603,13 @@ module.exports.getUsersDevice = function(device_uid, callback){
         },
         function(err, users){
             if(err || users.length === 0){
-                callback({status:304, message:"Nouvel appareil", datas:err});  
+                callback({status:304, message:"Nouvel appareil", datas:err});
             }else{
                 callback({status:200, message:"liste des utilisateurs ayant utilisé ce device", users_device:users})
             }
         }
     )
-    
+
 }
 module.exports.deleteDevice = function(req, callback){
     var self = this,
@@ -620,14 +620,14 @@ module.exports.deleteDevice = function(req, callback){
         },
         {
             $pull : {
-                devices:{ 
+                devices:{
                     uid:req.body.uid
                 }
             }
         },
         function(err, users){
             if(err || users.length === 0){
-                callback({status:304, message:"appareil inexistant", datas:err});  
+                callback({status:304, message:"appareil inexistant", datas:err});
             }else{
                 self.reset_session(req, req.session.Auth._id, function(infos){
                     //callback({status:200, "message":"User updated", "idkids_user":infos});
