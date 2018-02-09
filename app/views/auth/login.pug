@@ -87,6 +87,14 @@ block content
                     ul.switch_tab
                         li.tab.selected(data-tab="login_form") !{lang[locale].keys.login_tab_1}
                         li.tab(data-tab="subscribe_form") !{lang[locale].keys.login_tab_2}
+                    hr
+                    h3 Connectez-vous avec <b>Facebook</b> :
+                    ul.social_login.social_buttons
+                      li#facebook_login.facebook
+                        span.icon-facebook
+                        div Facebook
+                    h3 Utilisez votre <b>email</b> :
+                    hr
                     div.tab_group
                         form#login_form(method="get" action='/auth/login/')
                             div.form-group.material_input
