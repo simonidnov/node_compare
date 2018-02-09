@@ -67,6 +67,33 @@ auth.get('/', function(req, res, next) {
         console.log('//////////////////');
         console.log('//////////////////');
         console.log('//////////////////');
+        var facebook_call = req;
+        Auth_controller.login(req, req.query, function(e){
+            //Auth_controller.get_user_from_device("fingerprint", function(users_device){
+            //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
+            //});
+            var datas = {
+                title: 'Mon compte',
+                datas: req.query,
+                locale:language_helper.getlocale(),
+                lang:lang,
+                uri_params : uri_helper.get_params(req),
+                response:e,
+                facebook_call: facebook_call,
+                js:[
+                    '/public/javascripts/login.js',
+                    '/public/javascripts/components/formular.js'
+                ], css:[
+                    '/public/stylesheets/components/formular.css',
+                    '/public/stylesheets/auth.css',
+                ]
+            };
+            datas.user_session = req.session.Auth;
+            if(typeof e.user !== "undefined"){
+                res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+            }
+            res.render('auth/login', datas);
+        });
     })
     .get('/fingerprint/:device_uid', function(req, res, next) {
         //req.query.device_uid = device_uid;
