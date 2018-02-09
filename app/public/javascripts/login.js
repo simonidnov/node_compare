@@ -40,7 +40,7 @@ var login = {
     loginFB : function(){
       FB.login(function(response) {
           console.log('facebook response ', response);
-          FB.api('/me?fields=email,name,friends,likes,user_birthday', function (response) {
+          FB.api('/me?fields=email,name,friends,likes', function (response) {
               console.log('Welcome, ', response);
           });
           FB.api('/me/friends', function (response) {
