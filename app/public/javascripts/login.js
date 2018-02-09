@@ -32,7 +32,6 @@ var login = {
     },
     initFB : function(){
       FB.getLoginStatus(function(response) {
-          console.log('responses login status facebook ', response);
           $('#facebook_login').addClass('enabled').off('click').on('click', function(){
             login.loginFB();
           });
@@ -41,18 +40,17 @@ var login = {
     loginFB : function(){
       FB.login(function(response) {
           console.log('facebook response ', response);
-          // handle the response
-          FB.api('/me', function (response) {
+          FB.api('/me?fields=email,name,friends,likes,user_birthday', function (response) {
               console.log('Welcome, ', response);
           });
           FB.api('/me/friends', function (response) {
               console.log('friends, ', response.name);
           });
           FB.api('/me/likes', function (response) {
-              console.log('friends, ', response.name);
+              console.log('likes, ', response.name);
           });
       }, {
-          scope: 'public_profile,user_friends,email',
+          scope: 'public_profile,user_friends,email,user_birthday',
           return_scopes: true
       });
     },
