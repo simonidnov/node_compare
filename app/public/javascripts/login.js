@@ -5,6 +5,9 @@ $(function(){
 var login = {
     form : null,
     init:function(){
+        if(typeof FB !== "undefined"){
+          this;initFB();
+        }
         if(response.status === "error" && response.code == 11){
             $('#email').parent().addClass('invalid');
         }else if(response.status === "error" && response.code == 13){
@@ -26,6 +29,12 @@ var login = {
                 }
             });
         }
+    },
+    initFB : function(){
+      FB.getLoginStatus(function(response) {
+          console.log('responses login status facebook ', response);
+          //statusChangeCallback(response);
+      });
     },
     parse_url : function(url){
         var uri_params = [],
