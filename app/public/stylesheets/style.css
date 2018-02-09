@@ -582,7 +582,7 @@ p{
     background-position: center center;
 }
 .logo.idkids{
-    
+
 }
 .okaidi{
     background-image:url(../images/assets/logo_okaidi.svg);
@@ -641,7 +641,58 @@ p{
     background-image:url(../images/assets/icon_joybox.svg);
 }
 
-
+.social_buttons{
+  display: inline-block;
+  padding:0;
+}
+.social_buttons li{
+  display: inline-block;
+  height:48px;
+  background:#333;
+  list-style: none;
+  padding:5px;
+  margin:5px;
+  color: #FFF;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  -webkit-transition: all .2s ease-in;
+  -moz-transition: all .2s ease-in;
+  -o-transition: all .2s ease-in;
+  transition: all .2s ease-in;
+}
+.social_buttons li:hover{
+  transform: scale(1.02);
+  -moz-box-shadow: 2px 2px 20px -5px rgba(0,0,0,.3);
+  -webkit-box-shadow: 2px 2px 20px -5px rgba(0,0,0,.3);
+  -o-box-shadow: 2px 2px 20px -5px rgba(0,0,0,.3);
+  box-shadow: 2px 2px 20px -5px rgba(0,0,0,.3);
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=rgba(0,0,0,.3), Direction=134, Strength=20);
+}
+.social_buttons li span{
+  float:left;
+  font-family: 'idkids-icons';
+  font-size: 38px;
+}
+.social_buttons li div{
+  float:left;
+  font-family: sans-serif;
+  padding:8px;
+  font-size: 17px;
+}
+.social_buttons li.facebook{
+  background-color:#4166b2;
+}
+.social_buttons li.twitter{
+  background-color:#1ca1f2;
+}
+.social_buttons li.pinterest{
+  background-color:#bd091c;
+}
+.social_buttons li.google{
+  background-color:#dc4e41;
+}
 @media screen and (max-width: 640px) {
     .col{
         width:100% !important;
@@ -667,16 +718,16 @@ p{
 
 
 
-xmp { 
-    font-family: Cambria, Georgia; 
+xmp {
+    font-family: Cambria, Georgia;
     margin:10px;
     background-color:#000;
     color:#FFF;
     padding:10px;
-} 
-.script { 
+}
+.script {
     font-size: 100%;
-    font-family: Cambria, Georgia; 
+    font-family: Cambria, Georgia;
     margin:10px;
     background-color:#000 !important;
     color:#FFF;

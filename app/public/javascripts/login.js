@@ -5,9 +5,6 @@ $(function(){
 var login = {
     form : null,
     init:function(){
-        if(typeof FB !== "undefined"){
-          this;initFB();
-        }
         if(response.status === "error" && response.code == 11){
             $('#email').parent().addClass('invalid');
         }else if(response.status === "error" && response.code == 13){
@@ -29,11 +26,16 @@ var login = {
                 }
             });
         }
+        setTimeout(function(){
+          login.initFB();
+        },1500);
     },
     initFB : function(){
       FB.getLoginStatus(function(response) {
           console.log('responses login status facebook ', response);
-          //statusChangeCallback(response);
+          $('#facebook_login').addClass('enabled').off('click').on('click', function(){
+            login.loginFB();
+          });
       });
     },
     loginFB : function(){
