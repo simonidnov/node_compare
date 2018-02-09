@@ -22,7 +22,7 @@ var login = {
         if(this.parse_url(window.location.pathname.replace('/auth')).length === 0){
             this.sdk.api.get_device_uid(function(e){
                 if(e.status === 200){
-                    window.location.href="/auth/fingerprint/"+e.device_uid;    
+                    window.location.href="/auth/fingerprint/"+e.device_uid;
                 }
             });
         }
@@ -79,7 +79,7 @@ var login = {
             this.sdk.isLogged($.proxy(function(status){
                 this.sdk.api.get('/me', {}, $.proxy(function(e){
                     if($('[data-userid="'+e.datas._id+'"]').length == 0){
-                        $('.account_list').prepend('<a href="/auth/login/email/'+e.datas.email+'" data-action="page_reload"><li data-userid="'+e.datas._id+'"><div class="avatar" style="background-image:url('+e.datas.avatar+')"></div><div class="option_infos"><div class="label">'+e.datas.pseudo+'</div><div class="email">'+e.datas.email+'</div><div class="status">connected</div></div></li></a>');                        
+                        $('.account_list').prepend('<a href="/auth/login/email/'+e.datas.email+'" data-action="page_reload"><li data-userid="'+e.datas._id+'"><div class="avatar" style="background-image:url('+e.datas.avatar+')"></div><div class="option_infos"><div class="label">'+e.datas.pseudo+'</div><div class="email">'+e.datas.email+'</div><div class="status">connected</div></div></li></a>');
                     }
                     this.set_listeners();
                     this.navigate();
@@ -139,4 +139,4 @@ var login = {
         }
         return uri_params;
     }
-} 
+}

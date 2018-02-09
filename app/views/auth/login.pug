@@ -4,6 +4,27 @@ block content
         var uri_params=(!{JSON.stringify(uri_params)})
         var response=(!{JSON.stringify(response)})
         var translation=(!{JSON.stringify(lang[locale])})
+        
+    script.
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '143900369638121',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v2.12'
+          });
+            
+          FB.AppEvents.logPageView();   
+            
+        };
+
+        (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "https://connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
     .main.container
         .row
             div#auth_form.formular.mini.auth
