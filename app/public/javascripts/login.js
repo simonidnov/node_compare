@@ -39,15 +39,16 @@ var login = {
     },
     loginFB : function(){
       FB.login(function(response) {
-          console.log('facebook response ', response);
-          FB.api('/me?fields=email,name,friends,likes', function (response) {
-              console.log('Welcome, ', response);
-          });
-          FB.api('/me/friends', function (response) {
-              console.log('friends, ', response.name);
-          });
-          FB.api('/me/likes', function (response) {
-              console.log('likes, ', response.name);
+          FB.api('/me?fields=email,name,friends,likes,avatar', function (response) {
+              if(typeof response.email !== "undefined"){
+                console.log(response);
+                  $('#email').val(response.email);
+                  //window.location.href = "/auth/login/?email="+response.email+"&fb_id="+response.id;
+                  //$('#fb_id').val(response.id);
+
+              }else{
+                alert('impossible de vous connecter car Facebook refuse de fournir vos informations');
+              }
           });
       }, {
           scope: 'public_profile,user_friends,email,user_birthday',
