@@ -25,8 +25,7 @@ auth.get('/', function(req, res, next) {
         Fb.api('oauth/access_token', {
             client_id: '143900369638121',
             client_secret: '393fec1031105f7144748d3d569b7896',
-            redirect_uri: 'https://www.idkids-app.com/auth/facebook',
-            code: 'code'
+            redirect_uri: 'https://www.idkids-app.com/auth/facebook'
         }, function (res) {
             if(!res || res.error) {
                 console.log(!res ? 'error occurred' : res.error);
