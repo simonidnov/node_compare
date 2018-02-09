@@ -43,11 +43,16 @@ var login = {
           console.log('facebook response ', response);
           // handle the response
           FB.api('/me', function (response) {
-            alert('Welcome, ' + response.name + "!");
-            alert('Your email id is : '+ response.email);
+              console.log('Welcome, ', response);
+          });
+          FB.api('/me/friends', function (response) {
+              console.log('friends, ', response.name);
+          });
+          FB.api('/me/likes', function (response) {
+              console.log('friends, ', response.name);
           });
       }, {
-          scope: 'publish_actions,email',
+          scope: 'public_profile,user_friends,email',
           return_scopes: true
       });
     },
