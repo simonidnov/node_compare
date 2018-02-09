@@ -16,6 +16,7 @@ auth.get('/', function(req, res, next) {
         //req.query.device_uid = device_uid;
         console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
         Fb.getLoginUrl({
+          client_id: '143900369638121',
           scope: 'email,user_likes',
           redirect_uri: 'https://www.idkids-app.com/auth/facebook'
         });
