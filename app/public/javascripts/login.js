@@ -40,10 +40,10 @@ var login = {
     },
     loginFB : function(){
       FB.login(function(response) {
-        console.log('facvebook response ', response);
+        console.log('facebook response ', response);
         // handle the response
       }, {
-          scope: 'publish_actions,email,user_likes,user_friends',
+          scope: 'publish_actions,email',
           return_scopes: true
       });
     },
