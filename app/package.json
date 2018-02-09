@@ -17,6 +17,7 @@
     "express-device": "^0.4.2",
     "express-mailer": "^0.3.1",
     "express-session": "^1.15.6",
+    "fb": "^2.0.0",
     "fingerprintjs2": "^1.5.1",
     "getmac": "^1.2.1",
     "google-auth-library": "^0.12.0",

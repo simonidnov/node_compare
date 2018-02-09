@@ -69,7 +69,7 @@ var idkids_jssdk = function(options, callback){
                 return {"status":"not_connected", "infos":"call api.get('me')"};
             }else{
                 if(typeof Unity !== "undefined"){
-                    Unity.call('{"status":"logged", "user":"'+this.user+'", "token":"'+this.user.token+'", "id":"'+this.user.id+'", "device":"'+this.user.device+'"');
+                    Unity.call('{"status":"logged", "user":"'+JSON.stringify(this.user)+'", "token":"'+this.user.token+'", "id":"'+this.user.id+'", "device":"'+this.user.device+'"}');
                 }
                 return {"status":"logged", "user":this.user, "token":this.user.token, "id":this.user.id, "device":this.user.device};
             }
