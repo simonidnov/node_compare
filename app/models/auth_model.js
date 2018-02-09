@@ -32,6 +32,7 @@ const db = require('mongoose'),
               name:{type:'string'},
               email:{type:'string'},
               likes:{type:'array'},
+              friends:{type:'array'},
               pages:{type:'array'},
               shared:{type:'boolean'},
               accessToken:{type:'string'}
@@ -67,9 +68,6 @@ const db = require('mongoose'),
       ua_parser = require('ua-parser-js');
 
       var device_uid = machineId.machineIdSync({original: true});
-
-
-
 
 if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
