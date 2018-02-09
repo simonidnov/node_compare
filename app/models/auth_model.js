@@ -28,13 +28,13 @@ const db = require('mongoose'),
           apps        : {type:'Array'},
           tags        : {type:'Object'},
           facebook    : {
-              id:'string',
-              name:'string',
-              email:'string',
-              likes:'array',
-              pages:'array',
-              shared:'boolean',
-              accessToken:'srting'
+              id:{type:'string'},
+              name:{type:'string'},
+              email:{type:'string'},
+              likes:{type:'array'},
+              pages:{type:'array'},
+              shared:{type:'boolean'},
+              accessToken:{type:'string'}
           },
           devices     : {
               uid:'string',
