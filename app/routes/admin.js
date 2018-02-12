@@ -16,9 +16,10 @@ admin.use(function(req, res, next){
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     Auth_helper.validate_session(req, function(e){
-        console.log(e);
+        console.log("validate_session :::: ", e);
         if(e.status === 200){
             Auth_helper.validate_admin(req, function(e){
+                console.log("validate_admin :::: ", e);
                 if(e.status === 200){
                     next();
                 }else{
@@ -54,6 +55,7 @@ admin
         //res.redirect(307, '/admin/dashboard');
     })
     .get('/dashboard', function(req, res, next) {
+        console.log('DASHBOARD ?????');
          res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
