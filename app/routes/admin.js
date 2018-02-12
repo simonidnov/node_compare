@@ -168,7 +168,8 @@ admin
                 js:[
                     '/public/javascripts/admin/users.js',
                     '/public/javascripts/components/formular.js',
-                    '/node_modules/qrcode/build/qrcode.min.js'
+                    '/node_modules/qrcode/build/qrcode.min.js',
+                    '/public/javascripts/farnientejs/farnientejs.min.js'
                 ], css:[
                     '/public/stylesheets/admin/admin.css',
                     '/public/stylesheets/ui.css',

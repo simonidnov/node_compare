@@ -16,6 +16,7 @@ var idkids_jssdk = function(options, callback){
             this.call('PUT', request, params, callback);
         },
         deleting : function(request, params, callback) {
+            console.log("this ", this);
             this.call('DELETE', request, params, callback);
         },
         call : function(method, request, params, callback){

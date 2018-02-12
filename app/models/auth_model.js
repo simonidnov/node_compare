@@ -378,11 +378,14 @@ module.exports.register = function(datas, callback) {
     return datas.body;
 };
 // check user unregister then return user_infos
-module.exports.unregister = function(datas) {
-    device_uid = req.body.device_uid;
+module.exports.unregister = function(req, res, callback) {
+    //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* DELETE where email, passe, secret and token */
-    return datas;
+    //console.log("UNREGISTER ::::: ", req.body);
+    User.remove( {"_id": req.body.id}, function(){callback(req.body);} );
+
+    return req.body;
 };
 // check user login then return user_infos
 module.exports.update = function(req, user_id, datas, callback) {
