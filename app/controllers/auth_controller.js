@@ -15,8 +15,8 @@ exports.register = function(req, callback) {
     Auth_model.register(req, callback);
 };
 // check user unregister then return user_infos
-exports.unregister = function(req, res) {
-    Auth_model.unregister(req);
+exports.unregister = function(req, res, callback) {
+    Auth_model.unregister(req, res, callback);
 };
 // check user login then return user_infos
 exports.update = function(req, res) {

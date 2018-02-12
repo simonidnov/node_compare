@@ -147,6 +147,21 @@ api
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         });
     })
+    .get('/users/:any', function(req, res, next){
+        res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
+    })
+    .post('/users/:any', function(req, res, next){
+        res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
+    })
+    .put('/users/:any', function(req, res, next){
+        res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
+    })
+    .delete('/users/:any', function(req, res, next){
+        //TODO ADMIN OR REAL AUTH USER ONLY
+        Auth_controller.unregister(req, res, function(e){
+            res.status(200).send({title:"USER DELETED", datas:e});
+        });
+    })
     .get('/oauth/:any', function(req, res, next){
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
     })
