@@ -22,7 +22,7 @@ var login = {
         if(this.parse_url(window.location.pathname.replace('/auth')).length === 0){
             this.sdk.api.get_device_uid(function(e){
                 if(e.status === 200){
-                    window.location.href="/auth/fingerprint/"+e.device_uid;
+                    //window.location.href="/auth/fingerprint/"+e.device_uid;
                 }
             });
         }
