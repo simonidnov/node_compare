@@ -14,6 +14,7 @@ admin.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
+    console.log("ADMIN BEFORE VALIDATION USER :::: ");
     //res.setHeader('Content-Type', 'application/json');
     Auth_helper.validate_session(req, function(e){
         console.log("validate_session :::: ", e);
@@ -23,11 +24,13 @@ admin.use(function(req, res, next){
                 if(e.status === 200){
                     next();
                 }else{
+                  console.log('die not admin');
                     //next();
                     res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
                 }
             });
         }else{
+          //console.log('diediediediediediediediediediediediediediediediediediediediediedie');
             res.redirect(301, '/auth');
         }
     });
@@ -36,6 +39,7 @@ admin.use(function(req, res, next){
 /* GET admin page. */
 admin
     .get('/', function(req, res, next) {
+      console.log("ADMIN BEFORE VALIDATION USER :::: ");
         return res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,

@@ -52,6 +52,11 @@ module.exports = {
         /* match user token + device */
         db.connect(config.database.users, {useMongoClient: true});
         req.options.device_uid = device_uid;
+        console.log('AUTH MODEL CHECK USER ??????????? ');
+        console.log('AUTH MODEL CHECK USER ??????????? ');
+        console.log('AUTH MODEL CHECK USER ??????????? ');
+        console.log('AUTH MODEL CHECK USER ??????????? ');
+        console.log('AUTH MODEL CHECK USER ??????????? ');
         Auth_model.check_user(req, function(e){
             callback(e);
             return true;
