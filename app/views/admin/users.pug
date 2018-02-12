@@ -118,10 +118,10 @@ block content
                             div.first_name= user.pseudo 
                             div.birth_date= user.email
                         ul.options
-                            li.primary(data-action="edit" data-edittemplate="member_edit_template" data-post="/me/members" data-value=user._id)
+                            li.primary(data-farniente="template" data-edittemplate="member_edit_template" data-post="/me/members" data-value=user._id)
                                 div.icon.icon-pencil.idkids-icons
                                 div.label Éditer
-                            li.danger(data-action="delete" data-post="/me/members" data-type="member_id" data-value=user._id)
+                            li.danger(data-farniente="delete" data-url="/api/users" data-type="post" data-value=user._id)
                                 div.icon.icon-trash.idkids-icons
                                 div.label Supprimer
                 

@@ -49,7 +49,7 @@ block content
                     h1 !{lang[locale].keys.account_picker_title}
                     ul.account_list.option_list
                         if(typeof user_session !== "undefined")
-                            a(href="/account/account/" title="Accéder à mon compte")
+                            a(href="/account/" title="Accéder à mon compte")
                                 li(data-userid=user_session._id)
                                     img.avatar(src=user_session.avatar)
                                     div.option_infos

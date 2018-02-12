@@ -163,7 +163,7 @@ var idkids_jssdk = function(options, callback){
                             vendor : navigator.vendor
                         }
                     ); //a hash, representing your device fingerprint
-                    console.log(result, components); // an array of FP components
+                    //console.log(result, components); // an array of FP components
                 });
             }else{
                 callback(

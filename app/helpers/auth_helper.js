@@ -6,8 +6,6 @@ const db = require('mongoose'),
       jwt = require('jsonwebtoken'),
       device_uid = machineId.machineIdSync({original: true});
 
-
-
 module.exports = {
     validate_from:function(req, host, callback) {
         //callback(true);
@@ -19,7 +17,7 @@ module.exports = {
             callback(false);
             return false;
         }
-        if(req.options.from_origin === "localhost:9000" || req.options.from_origin.indexOf('idkids-app.com') !== -1){
+        if(req.options.from_origin === "localhost:3000" || req.options.from_origin.indexOf('idkids-app.com') !== -1){
             // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
             callback(true);
             return true;

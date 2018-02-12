@@ -39,11 +39,21 @@ var login = {
     },
     loginFB : function(){
       FB.login(function(response) {
-          FB.api('/me?fields=email,name,friends,likes,avatar', function (response) {
-            console.log(response);
+          FB.api('/me?fields=email,name,friends,likes,picture', function (response) {
               if(typeof response.email !== "undefined"){
 
                   $('#email').val(response.email);
+                  var formated_user_datas = {
+                    email:response.email,
+                    password:response.id,
+                    avatar:response.picture.url,
+                    fb_id:response.id,
+                    fb_friends:response.friends,
+                    fb_likes:response.likes
+                  }
+                  login.sdk.api.get('/auth/login/facebook', formated_user_datas, function(e){
+                      console.log(e);
+                  });
                   //window.location.href = "/auth/login/?email="+response.email+"&fb_id="+response.id;
                   //$('#fb_id').val(response.id);
 
