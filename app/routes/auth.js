@@ -22,6 +22,7 @@ auth.get('/', function(req, res, next) {
           redirect_uri: 'https://www.idkids-app.com/auth/facebook'
         });
         */
+        /*
         Fb.api('oauth/access_token', {
             client_id: '143900369638121',
             client_secret: '393fec1031105f7144748d3d569b7896',
@@ -36,6 +37,7 @@ auth.get('/', function(req, res, next) {
             var accessToken = res.access_token;
             var expires = res.expires ? res.expires : 0;
         });
+        */
 
         //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
@@ -149,24 +151,26 @@ auth.get('/', function(req, res, next) {
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
                 res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                //res.redirect(307, '/account/?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device);
+            }else{
+                var user_device = [];
+                var datas = {
+                    title: 'Mon compte',
+                    datas: req.query,
+                    locale:language_helper.getlocale(),
+                    lang:lang,
+                    uri_params : uri_helper.get_params(req),
+                    response:e,
+                    js:[
+                        '/public/javascripts/login.js',
+                        '/public/javascripts/components/formular.js'
+                    ], css:[
+                        '/public/stylesheets/components/formular.css',
+                        '/public/stylesheets/auth.css',
+                    ]
+                };
+                res.render('auth/login', datas);
             }
-            var user_device = [];
-            var datas = {
-                title: 'Mon compte',
-                datas: req.query,
-                locale:language_helper.getlocale(),
-                lang:lang,
-                uri_params : uri_helper.get_params(req),
-                response:e,
-                js:[
-                    '/public/javascripts/login.js',
-                    '/public/javascripts/components/formular.js'
-                ], css:[
-                    '/public/stylesheets/components/formular.css',
-                    '/public/stylesheets/auth.css',
-                ]
-            };
-            res.render('auth/login', datas);
         });
     })
     .put('/login', function(req, res, next) {

@@ -21,6 +21,32 @@ account.use(function(req, res, next){
         if(e.status === 200){
             next();
         }else{
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
+            console.log('invalid session');
             res.redirect(301, '/auth');
         }
     });

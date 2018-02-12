@@ -166,6 +166,7 @@ module.exports.login = function(req, datas, callback) {
     */
     //device_uid = machineId.machineIdSync({original: true});
     var self = this;
+
     if(datas.password){
         if(validator.validate(datas.email)){
             /* REQUEST UPDATED USER */
@@ -187,7 +188,6 @@ module.exports.login = function(req, datas, callback) {
                         });
                         return false;
                     }
-                    console.log("CHECK DEVICE device_uid :::: LOGIN ", device_uid);
                     /* CHECK DEVICE */
 
                     var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
@@ -254,7 +254,11 @@ module.exports.login = function(req, datas, callback) {
 
                     /* UPDATE */
                     if(users[0].avatar === "" || users[0].avatar == null){
-                        var avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
+                        if(datas.avatar === "" || datas.avatar == null || typeof datas.avatar == "undefined"){
+                          var avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
+                        }else{
+                          avatar = datas.avatar;
+                        }
                     }else{
                         var avatar = users[0].avatar;
                     }
@@ -312,7 +316,7 @@ module.exports.register = function(datas, callback) {
     /* ----- CHECK EMAIL UNIQ ----- */
     /* ----- GENERATE TOKEN FIRST expire in 24 H ----- */
     db.connect(config.database.users, {useMongoClient: true});
-
+    var self = this;
     var new_user_datas = {
             email   : datas.body.subscribe_email,
             password: sha1(datas.body.subscribe_password),
@@ -320,7 +324,7 @@ module.exports.register = function(datas, callback) {
             secret  : jwt.sign({}, config.secrets.global.secret, {}, { expiresIn: '2 days' }),
             termAccept : true,
             rights  : {
-                "type":'RWO',
+                "type":'R',
                 "authorizations":['me']
             }
         }
@@ -362,10 +366,13 @@ module.exports.register = function(datas, callback) {
     }
 
     new_user = new User(new_user_datas);
-    new_user.save(function(err){
+    new_user.save(function(err, usr){
         if(err) callback({"status":"error", "message":err});
-        else callback({"status":"success", "user":new_user_datas});
-        //db.close();
+        else{
+          self.reset_session(datas, usr._id, function(infos){
+              callback({"status":"success", "user":usr});
+          });
+        }
     });
     //callback(new_user);
     return datas.body;
@@ -472,7 +479,9 @@ module.exports.reset_session = function(req, user_id, callback){
             if (err){
                 callback({"status":401, "code":err.code, "error":err, "message":err.message});
             }else{
+
                 user_infos = JSON.parse(JSON.stringify(user));
+                console.log(' °°°°°°°°°°°°°°°°°° user_infos ', user_infos);
                 user_infos.current_device = device_uid;
                 Members_model.get(user_id, null, function(e){
                     user_infos.members = e.datas;
