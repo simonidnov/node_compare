@@ -23,7 +23,6 @@ const express = require('express'),
 
 let session = require("express-session");
 
-
 /*http.listen(8080, function(){
     console.log('listening on *:8080');
 });*/
@@ -73,7 +72,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', users);
-app.use('/auth', auth);
 app.use('/admin', admin);
 app.use('/me', me);
 app.use('/api', api);
@@ -83,6 +81,7 @@ app.use('/account', account);
 app.use('/address', address);
 app.use('/validation', validation);
 app.use('/templating', templating);
+app.use('/auth', auth);
 app.use('/', index);
 
 // catch 404 and forward to error handler
