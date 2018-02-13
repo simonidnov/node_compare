@@ -1,16 +1,16 @@
 block navigation
     nav.hor_nav
         ul
-            a(href="/admin/dashboard")
+            a(href="/admin/")
                 li(class= page === "dashboard" ? "selected" : "" data-for="dashboard")= "Dashboard"
-            a(href="/admin/apps")
+            a(href="/admin/apps/")
                 li(class= page === "apps" ? "selected" : "" data-for="apps")= "Applications"
-            a(href="/admin/pages")
+            a(href="/admin/pages/")
                 li(class= page === "pages" ? "selected" : "" data-for="pages")= "Pages"
-            a(href="/admin/users")
+            a(href="/admin/users/")
                 li(class= page === "users" ? "selected" : "" data-for="users")= "Utilisateurs"
-            a(href="/admin/notifications")
+            a(href="/admin/notifications/")
                 li(class= page === "notifications" ? "selected" : "" data-for="newsletters")= "Notifications"
-            a(href="/admin/settings")
+            a(href="/admin/settings/")
                 li(class= page === "settings" ? "selected" : "" data-for="settings")= "Paramètres"
             
