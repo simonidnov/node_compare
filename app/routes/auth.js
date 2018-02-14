@@ -10,6 +10,15 @@ var express = require('express'),
     device_uid = machineId.machineIdSync({original: true}),
     Fb = require('fb');
 
+    auth.use(function(req, res, next){
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+        //SET OUTPUT FORMAT
+        //res.setHeader('Content-Type', 'application/json');
+        console.log('WE ARE ON AUTH ROUTER');
+        next();
+    });
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {

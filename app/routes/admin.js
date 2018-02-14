@@ -15,6 +15,7 @@ admin.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
+    console.log('WE ARE ON ADMIN ROUTER');
     Auth_helper.validate_session(req, function(e){
         if(e.status === 200){
             Auth_helper.validate_admin(req, function(e){
@@ -27,7 +28,7 @@ admin.use(function(req, res, next){
                 }
             });
         }else{
-            //console.log('diediediediediediediediediediediediediediediediediediediediediedie');
+            console.log('diediediediediediediediediediediediediediediediediediediediediedie');
             res.redirect(301, '/auth');
         }
     });
@@ -201,20 +202,39 @@ admin
         });
     })
     .get('/settings', function(req, res, next) {
+          console.log('settings');
          res.render('admin/settings', {
             title: 'Admin Settings',
             user : req.session.Auth,
             locale:language_helper.getlocale(),
             lang:lang,
             page:'settings',
-            pages:pages,
             js:[
-                '/public/javascripts/admin/notifications.js',
+                '/public/javascripts/admin/settings.js',
                 '/public/javascripts/components/formular.js',
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/notifications.css',
+                '/public/stylesheets/admin/settings.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+    })
+    .get('/translations', function(req, res, next) {
+      console.log('translations');
+         res.render('admin/translations', {
+            title: 'Admin translations',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:'translations',
+            js:[
+                '/public/javascripts/admin/translations.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/admin/admin.css',
+                '/public/stylesheets/admin/translations.css',
                 '/public/stylesheets/components/formular.css'
             ]
         });

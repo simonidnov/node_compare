@@ -73,6 +73,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', users);
 app.use('/admin', admin);
+app.use('/admin/:any', admin);
 app.use('/me', me);
 app.use('/api', api);
 app.use('/media', media);
