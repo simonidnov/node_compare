@@ -23,7 +23,7 @@ redirect
             //res.status(e.status).send(e);
             res.redirect(301, '/account/addresses'+req.url.replace('/',''));
         });*/
-        res.redirect(301, 'https://www.okaidi.com');
+        res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
     })
     .get('/:url', function(req, res, next) {
         console.log('REDIRECT GET PAGE SETTINGS HERE HERE HERE HERE HERE HERE ???');
@@ -33,10 +33,10 @@ redirect
             res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
             break;
           case "planet_chellenge":
-            res.redirect(301, 'https://www.okaidi.com');
+            res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
             break;
           default:
-            res.redirect(301, 'https://www.okaidi.com');
+            res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
             break;
         }
         /*Address_controller.get(req, res, function(e){
