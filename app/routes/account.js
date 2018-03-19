@@ -22,31 +22,6 @@ account.use(function(req, res, next){
             next();
         }else{
             console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
-            console.log('invalid session');
             res.redirect(301, '/auth');
         }
     });
