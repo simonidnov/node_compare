@@ -1,3 +1,139 @@
+<div class="pager_editor">
+  <div class="pager_content_editor">
+    <div class="drop_zone">
+    </div>
+  </div>
+  <div class="pager_tools">
+    <div class="formular fullscreen" id="pager_tab_form">
+      <div class="form_content">
+        <ul class="switch_tab">
+            <li class="tab" data-tab="options">Options</li>
+            <li class="tab" data-tab="modules">Modules</li>
+            <li class="tab selected" data-tab="settings">Settings</li>
+        </ul>
+      </div>
+    </div>
+        <div class="tab_group">
+          <div id="settings">
+            <form id="Settings">
+              <br/>
+              <h3>Background Color</h3>
+              <br/>
+              <div class="liner">
+                <input type="color" class="small" id="body_background_color" name="body_background_color" value="#E3E3E3"/>
+                <label for="body_background_color">#E3E3E3</label>
+              </div>
+              <hr class="separator"/>
+              <br/>
+              <h3>Background Image</h3>
+              <br/>
+              <div id="body_background_file_upload">
+                <img width="50" src="/images/pager/assets/picture.svg"/>
+                <img width="50" src="/images/pager/assets/item_gallery.svg"/>
+              </div>
+              <!--<div class="form-group material_input minlength">
+                <label for="background_image_url">Background image url</label>
+                <input type="text" id="background_image_url" name="background_image_url" minlength="10"/>
+              </div>-->
+              <hr class="separator"/>
+                <p>Position</p>
+                <ul class="position_selector">
+                  <li data-pos="top_left"></li>
+                  <li data-pos="top_center"></li>
+                  <li data-pos="top_right"></li>
+                  <li data-pos="center_center"></li>
+                  <li data-pos="center_center" data-pos="center_center" class="selected"></li>
+                  <li data-pos="center_right"></li>
+                  <li data-pos="bottom_left"></li>
+                  <li data-pos="bottom_center"></li>
+                  <li data-pos="bottom_right"></li>
+                </ul>
+              <hr class="separator"/>
+                <p>Style</p>
+                <div class="liner">
+                  <input type="checkbox" id="body_background_repeat" name="body_background_repeat"/>
+                  <label for="body_background_repeat">Background Repeat</label>
+                </div>
+              <hr class="separator"/>
+                <div class="form_group radio_list inline">
+                  <div class="liner">
+                    <input id="cover" type="radio" name="body_background_style" value="cover" checked/>
+                    <label for="cover">Cover</label>
+                  </div>
+                  <div class="liner">
+                    <input id="contain" type="radio" name="body_background_style" value="contain"/>
+                    <label for="contain">Contain</label>
+                  </div>
+                  <div class="liner">
+                    <input id="parallax" type="radio" name="body_background_style" value="parallax"/>
+                    <label for="parallax">Parallax</label>
+                  </div>
+                </div>
+              <hr class="separator"/>
+              <br/>
+              <h3>Webfont</h3>
+              <select>
+                <option>Arial</option>
+                <option>Tahoma</option>
+              </select>
+              <ul>
+                <li>Google Font Embed</li>
+              </ul>
+              <h3>Margin</h3>
+              <p>Slider module margin value</p>
+              <h3>Padding</h3>
+              <p>Slider module padding value</p>
+            </form>
+          </div>
+          <div id="options" style="display:none;">
+            <p>Select a module to active options box</p>
+          </div>
+          <div id="modules" style="display:none;">
+            <p>Columns</p>
+            <ul class="draggable_modules">
+              <li class="draggable_module" data-template="full_width"><img src="/images/pager/assets/container.svg"/></li>
+              <li class="draggable_module" data-template="column_66"><img src="/images/pager/assets/column_66.svg"/></li>
+              <li class="draggable_module" data-template="column_48"><img src="/images/pager/assets/column_48.svg"/></li>
+              <li class="draggable_module" data-template="column_84"><img src="/images/pager/assets/column_84.svg"/></li>
+              <li class="draggable_module" data-template="column_444"><img src="/images/pager/assets/column_444.svg"/></li>
+              <li class="draggable_module" data-template="column_3333"><img src="/images/pager/assets/column_3333.svg"/></li>
+            </ul>
+          <hr class="separator"/>
+            <p>Basics</p>
+            <ul class="draggable_modules">
+              <li class="draggable_module" data-template="heading"><img src="/images/pager/assets/heading.svg"/></li>
+              <li class="draggable_module" data-template="title"><img src="/images/pager/assets/h2.svg"/></li>
+              <li class="draggable_module" data-template="paragraph"><img src="/images/pager/assets/paragraph.svg"/></li>
+              <li class="draggable_module" data-template="cta"><img src="/images/pager/assets/cta.svg"/></li>
+              <li class="draggable_module" data-template="picture"><img src="/images/pager/assets/picture.svg"/></li>
+              <li class="draggable_module" data-template="icon"><img src="/images/pager/assets/icon.svg"/></li>
+              <li class="draggable_module" data-template="video"><img src="/images/pager/assets/video.svg"/></li>
+              <li class="draggable_module" data-template="audio"><img src="/images/pager/assets/audio.svg"/></li>
+              <li class="draggable_module" data-template="iframe"><img src="/images/pager/assets/iframe.svg"/></li>
+              <li class="draggable_module" data-template="oembed"><img src="/images/pager/assets/oembed.svg"/></li>
+              <li class="draggable_module" data-template="place"><img src="/images/pager/assets/place.svg"/></li>
+              <li class="draggable_module" data-template="share"><img src="/images/pager/assets/share.svg"/></li>
+              <li class="draggable_module" data-template="quote"><img src="/images/pager/assets/quote.svg"/></li>
+            </ul>
+          <hr class="separator"/>
+            <p>Advanced | Navigations | Controllers</p>
+            <ul class="draggable_modules">
+              <li class="draggable_module" data-template="slider"><img src="/images/pager/assets/slider.svg"/></li>
+              <li class="draggable_module" data-template="gallery"><img src="/images/pager/assets/item_gallery.svg"/></li>
+              <li class="draggable_module" data-template="select"><img src="/images/pager/assets/select.svg"/></li>
+              <li class="draggable_module" data-template="form"><img src="/images/pager/assets/form.svg"/></li>
+              <li class="draggable_module" data-template="anchor_menu"><img src="/images/pager/assets/anchor_menu.svg"/></li>
+              <li class="draggable_module" data-template="tabbar"><img src="/images/pager/assets/tabbar.svg"/></li>
+              <li class="draggable_module" data-template="gallery_pin"><img src="/images/pager/assets/gallery_pin.svg"/></li>
+            </ul>
+            <hr class="separator"/>
+              <p>Social Walls</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/template" id="container_topleftmenu_template">
   <div class="pager_option menu topleft">
     <select>

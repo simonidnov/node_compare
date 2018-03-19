@@ -13,6 +13,7 @@ const express = require('express'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
     admin = require('./routes/admin'),
+    redirect = require('./routes/redirect'),
     validation = require('./routes/validation'),
     api = require('./routes/api'),
     templating = require('./routes/templating'),
@@ -82,6 +83,7 @@ app.use('/account', account);
 app.use('/address', address);
 app.use('/validation', validation);
 app.use('/templating', templating);
+app.use('/redirect', redirect);
 app.use('/auth', auth);
 app.use('/', index);
 

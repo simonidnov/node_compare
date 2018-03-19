@@ -7,13 +7,12 @@ var pager = function() {
     if(!this.target.hasClass('pager')){
       this.target.addClass('pager');
     }
-    if(this.target.find('.content_area').length === 0){
-      this.target.append('<div class="content_area"></div>');
-    }
     this.callback({status:200, "message":"pager inited"});
-    this.createEvents();
+    this.preload_templates($.proxy(function(){
+      this.createEvents();
+    },this));
   }
-  this.createEvents = function(){
+  this.createEvents = function() {
     this.target.find('.content_area').on('mouseenter', $.proxy(function(e){
       $(e.target).addClass('selected');
       $(e.target).append(this.templates.container_topleftmenu_template({}));
@@ -22,22 +21,25 @@ var pager = function() {
       $(e.target).append(this.templates.container_bottomrightmenu_template({}));
     }, this) );
     this.target.find('.content_area').on('mouseleave', $.proxy(function(e){
-      console.log("$(e.relatedTarget) ::: ", $(e.toElement));
       $(e.toElement).removeClass('selected')
         .find('.pager_option').remove();
     }, this));
-    this.preload_templates();
+    $(document).off('resize').on('resize', $.proxy(function(){
+      this.resize_area();
+    }, this));
+    $('.draggable_module').draggable();
+    this.resize_area();
+    this.tool_form = new formular($('#pager_tab_form'), function(e){console.log(e);});
+    this.tool_form.init();
   }
-  this.preload_templates = function(){
-    if(this.target.find('#pager_content').length === 0){
-      this.target.append('<div id="pager_content"></div>');
-    }
-    $('#pager_content').load('/public/javascripts/components/pager/pager.tmpl', $.proxy(function(e){
-      console.log(e);
-      $.each($('#pager_content').find('script[type="text/template"]'), $.proxy(function(index, template){
-        console.log("temp:::: ", _.template($(template).html()));
-        console.log("this.templates :::: ", this);
+  this.resize_area = function(){
+    $('.pager_content_editor').css('width', this.target.width()-360);
+  }
+  this.preload_templates = function(loaded){
+    this.target.load('/public/javascripts/components/pager/pager.tmpl', $.proxy(function(e){
+      $.each(this.target.find('script[type="text/template"]'), $.proxy(function(index, template){
         this.templates[""+$(template).attr('id')] = _.template($(template).html());
+        loaded();
       },this));
     },this));
   }

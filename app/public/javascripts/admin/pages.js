@@ -12,7 +12,6 @@ var pages = {
                     form_datas[serie.name] = serie.value;
                 });
                 index.sdk.api.post($("#create_page form").attr('action'), form_datas, function(e){
-                    console.log("created ::: ", e);
                     // window.location.reload();
                 });
             }
@@ -24,9 +23,7 @@ var pages = {
                     case "submit":
                         var form_datas = pages.edit_page_form.get_datas();
                         //{};
-                        console.log('form_datas :::: ', form_datas);
                         index.sdk.api.put($("#edit_page form").attr('action'), form_datas, function(e){
-                            console.log("template ", e);
                             //window.location.href= "/admin/apps/";
                         });
                         break;
@@ -40,7 +37,6 @@ var pages = {
             }
         });
         this.edit_page_form.init();
-        console.log(this.edit_page_form);
     },
     create_page : function(){
       if(typeof pager === "undefined"){
