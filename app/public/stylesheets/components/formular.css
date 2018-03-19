@@ -79,7 +79,7 @@ fieldset{
     margin: 0;
     padding-left:40px;
     padding-top:40px;
-} 
+}
 .formular h3{
     padding-top:0;
     font-size: 16px;
@@ -176,7 +176,7 @@ fieldset{
 .formular .avatar .preview{
     width:128px;
     height:128px;
-    background:#F9F9F9; 
+    background:#F9F9F9;
     -moz-border-radius: 100%;
     -webkit-border-radius: 100%;
     border-radius: 100%;
@@ -469,15 +469,15 @@ input:-webkit-autofill {
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
-    user-select: none;  
+    user-select: none;
     pointer-events: none;
-    
+
     -webkit-transition: all .2s ease-in;
     -moz-transition: all .2s ease-in;
     -o-transition: all .2s ease-in;
     transition: all .2s ease-in;
 }
-.formular .material_input input[disabled], 
+.formular .material_input input[disabled],
 .formular .material_input textarea[disabled]{
     color:#818181;
     background-color:#F0F0F0;
@@ -527,6 +527,9 @@ input:-webkit-autofill {
 .radio_list{
     padding:0;
     display: inline-flex;
+}
+.radio_list.inline{
+  display: block;
 }
 .radio_list input[type="radio"]{
     width:24px;
@@ -647,7 +650,10 @@ input:-webkit-autofill {
     max-width: 90%;
 }
 
-
+.liner{
+  width:100%;
+  display: inline-block;
+}
 .formular .checkbox_relative_container{
     display: none;
 }
@@ -701,6 +707,13 @@ input[type="color"]{
     border: none;
     width: 80px;
     height: 80px;
+}
+input[type="color"].small{
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 24px;
+    height: 24px;
 }
 
 
@@ -810,8 +823,8 @@ input[type="color"]{
     padding-top:100px;
     padding-bottom:100px;
 }
-.calendar .content ul::-webkit-scrollbar { 
-    display: none; 
+.calendar .content ul::-webkit-scrollbar {
+    display: none;
     -webkit-overflow-scrolling: touch;
 }
 .calendar .content ul li{

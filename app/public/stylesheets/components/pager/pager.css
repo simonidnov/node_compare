@@ -6,66 +6,95 @@
   box-sizing: border-box;
   display: block;
   position: relative;
+  display: block;
 }
-.pager .content_area{
+.pager_editor{
+  display: table;
+  width: 100%;
+  min-height: 900px;
+  border-bottom:1px solid #E3E3E3;
+}
+.pager .pager_tools{
+  background-color:#FFFFFF;
+  border-left:1px solid #E3E3E3;
+  border-bottom:1px solid #E3E3E3;
+  right:0;
+  top:0;
+  width:360px;
+  box-sizing: border-box;
+  height:100%;
+  position: absolute;
+  /* TODO TOUCH SCROLLING ADDS */
+}
+.pager .pager_tools .draggable_modules{
+  padding:0;
+  margin:0;
   width:100%;
-  border:1px solid #FF0000;
-  min-height: 48px;
-  cursor: pointer;
-  position: relative;
+  display: inline-block;
 }
-.pager .content_area.selected{
-  padding-top: 48px;
-  padding-bottom:48px;
-}
-.pager .pager_menu{
-  position: absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  width:48px;
-  height:28px;
-  margin:auto;
-  background-color:#FF0000;
-  border-top-left-radius: 48px;
-  border-top-right-radius: 48px;
-}
-.pager .menu{
-  position: absolute;
-  display: inline-flex;
-  margin:0;
-  padding:0;
-}
-.pager .menu.topleft{
-  top:0;
-  left:0;
-}
-.pager .menu.topright{
-  top:0;
-  right:0;
-}
-.pager .menu.bottomleft{
-  bottom:0;
-  left:0;
-}
-.pager .menu.bottomright{
-  bottom:0;
-  right:0;
-}
-.pager .menu ul{
-  margin:0;
-  padding:0;
-}
-.pager .menu li{
-  margin:0;
-  padding:0;
+.pager .pager_tools .draggable_modules li{
   list-style: none;
+  display: inline-block;
   width:48px;
   height:48px;
-  line-height: 48px;
-  border:1px solid #333;
+  cursor: -webkit-grab;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+.position_selector{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  width:92px;
+  height:92px;
+  border:1px solid #E3E3E3;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.position_selector li{
+  list-style: none;
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  float: left;
+  width:30px;
+  height:30px;
+  border:1px solid #E3E3E3;
+  cursor: pointer;
+}
+.position_selector li:hover{
+  background: #F0F0F0;
+}
+.position_selector li.selected{
+  background:#E3E3E3;
+}
+
+
+.pager .pager_tools .draggable_modules li img{
+  pointer-events: none;
+}
+.pager .pager_tools .draggable_modules li:focus{
+  cursor: -webkit-grabbing;
+}
+.pager .pager_content_editor{
+  width:100%;
+  min-height: 100%;
+  float: left;
+  background: #F0F0F0;
   box-sizing: border-box;
 }
-.pager .menu li:hover{
-  border:3px solid #333;
+.pager .pager_content_editor .drop_zone{
+  min-height: 80px;
+  width:100%;
+  box-sizing: border-box;
+}
+.pager .pager_content_editor .drop_zone:hover{
+  border:1px dashed #E3E3E3;
+}
+
+/* TODO PATCH CONTENT ADMIN FULLSCREEN SIZED */
+.admin .container{
+  padding:0;
 }

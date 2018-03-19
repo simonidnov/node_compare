@@ -15,11 +15,9 @@ admin.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
-    console.log('WE ARE ON ADMIN ROUTER');
     Auth_helper.validate_session(req, function(e){
         if(e.status === 200){
             Auth_helper.validate_admin(req, function(e){
-                console.log("validate_admin :::: ", e);
                 if(e.status === 200){
                     next();
                 }else{
@@ -28,7 +26,6 @@ admin.use(function(req, res, next){
                 }
             });
         }else{
-            console.log('diediediediediediediediediediediediediediediediediediediediediedie');
             res.redirect(301, '/auth');
         }
     });
@@ -306,6 +303,7 @@ admin
                   '/public/javascripts/components/pager/pager.js',
                   '/node_modules/cropperjs/dist/cropper.min.js',
                   '/public/javascripts/components/formular.js',
+                  '/public/javascripts/components/jquery-ui.min.js',
                   '/node_modules/qrcode/build/qrcode.min.js'
               ], css:[
                   '/public/stylesheets/admin/admin.css',

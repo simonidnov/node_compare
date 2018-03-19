@@ -25,6 +25,7 @@
     "gravatar": "^1.6.0",
     "install": "^0.10.2",
     "jquery": "^3.2.1",
+    "jquery-ui": "^1.12.1",
     "jsonwebtoken": "^8.1.0",
     "macaddress": "^0.2.8",
     "mongoose": "^4.13.5",
@@ -41,6 +42,7 @@
     "qrcode": "^1.0.0",
     "serve-favicon": "~2.4.5",
     "sha1": "^1.1.1",
+    "sortablejs": "^1.7.0",
     "ua-parser-js": "^0.7.17",
     "underscore": "^1.8.3"
   },
