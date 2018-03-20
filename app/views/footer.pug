@@ -5,26 +5,18 @@ block footer
                 h3 À propos de IDKIDS
                 ul
                     li 
-                        a(href="/idkids#story") Histoire
+                        a(href="http://corporate.idkidscommunity.com/groupe/qui-sommes-nous/" target="_blank") Histoire
                     li 
-                        a(href="/idkids#values") Valeurs
+                        a(href="http://corporate.idkidscommunity.com/act-for-kids/une-demarche-globale-rse/" target="blank") Politique RSE
                     li 
-                        a(href="/idkids#rhessemes") Politique RSE
+                        a(href="http://corporate.idkidscommunity.com/nous-rejoindre/nos-offres/" target="blank") Nous rejoindre - Recrutement
                     li 
-                        a(href="/idkids#act-for-kids") Act For Kids
-                    li 
-                        a(href="/idkids#join-us") Nous rejoindre - Recrutement
-                    li 
-                        a(href="/idkids#community") Membres IDKIDS.community
-                    li 
-                        a(href="/idkids#became-member") Devenir membre IDKIDS.community
+                        a(href="https://www.idkids.fr/utils/programme-fidelite" target="blank") Membres IDKIDS.community
             div.col.col-md-4
                 h3 Aide et confidentialité
                 ul
                     li 
                         a(href="/orders") Paiements et gestion de mes commandes
-                    li 
-                        a(href="/satisfaction") Retours et remboursement
                     li 
                         a(href="/cgu") Règles de confidentialité
                     li 
@@ -35,35 +27,14 @@ block footer
                         a(href="/private_datas") Vie privée, sécurité et contrôle de vos données
                     li
                         a(href="/FAQ") Questions relatives à l'utilisation de nos services
-                hr
-                h3 Développeurs
-                ul
-                    li 
-                        a(href="/admin/") Compte développeur
-                    li 
-                        a(href="/developpers") Premiers pas avec le SDK idkids
+                
             div.col.col-md-2
-                h3 Marques
-                ul
-                    li 
-                        a(href="https://www.okaidi.fr") Okaidi
-                    li 
-                        a(href="https://www.obaibi.fr") Obaibi
-                    li 
-                        a(href="https://www.jacadi.fr") Jacadi
-                    li 
-                        a(href="https://www.oxybul.fr") Oxybul
-                hr
-                h3 Services
-                ul
-                    li 
-                        a(href="https://www.rigolocommelavie.fr") Rigolo comme la vie
-                    li 
-                        a(href="https://www.njoy.fr") N'JOY
-                    li 
-                        a(href="https://www.bubblemag.fr") Bubble Mag
-                    li 
-                        a(href="https://www.joyvox.fr") Joyvox
+                h3 Widgets
+                ul 
+                  if(typeof app.locals.applications !== "undefined")
+                    each apps in app.locals.applications
+                      li
+                        a(href="https://"+apps.host)= apps.name
             div.col.col-md-2
                 h3 Mon compte
                 ul
@@ -81,24 +52,10 @@ block footer
                         a(href='/account/profile') Informations et vie privée
         hr
         div.row
-            a(href="https://www.okaidi.com")
-                div.icon.okaidi
-            a(href="https://www.obaibi.com")
-                div.icon.obaibi
-            a(href="https://www.jacadi.com")
-                div.icon.jacadi
-            a(href="https://www.oxybul.com")
-                div.icon.oxybul
-            a(href="https://www.rigolocommelavie.com")
-                div.icon.rclv
-            a(href="https://www.njoy.com")
-                div.icon.njoy
-            a(href="https://www.bubblemag.fr")
-                div.icon.bubble
-            a(href="https://www.joyvox.fr")
-                div.icon.joyvox
-            a(href="https://www.joybox.fr")
-                div.icon.joybox
+            if(typeof app.locals.applications !== "undefined")
+              each apps in app.locals.applications
+                a(href="https://"+apps.host)
+                    div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
         hr
         script(src="/node_modules/jquery/dist/jquery.min.js")
         script(src="/node_modules/underscore/underscore-min.js")

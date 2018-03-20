@@ -20,15 +20,19 @@ const express = require('express'),
     auth = require('./routes/auth'),
     me = require('./routes/me'),
     address = require('./routes/address'),
-    account = require('./routes/account');
-
-let session = require("express-session");
-
-/*http.listen(8080, function(){
-    console.log('listening on *:8080');
-});*/
+    account = require('./routes/account'),
+    session = require("express-session"),
+    Apps_controller = require('./controllers/apps_controller');
 
 app = module.exports = express();
+
+/* DEFINE STATIC GLOBAL APP SPEC HERE ACCESS IN ALL CONTROLLER INSIDE app.locals NEED TO REBOOT SERVER TO REFRESH */
+Apps_controller.get(null, null, function(e){
+    app.locals.applications = e.datas;
+});
+/* END DEFINED GLOBAL STATIC APP VARS */
+
+
 //app.set('port', process.env.PORT || 8080);
 app.listen(9000);
 
@@ -60,6 +64,7 @@ app.use(session({
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(__dirname + '/public')
@@ -104,5 +109,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 //module.exports = app;

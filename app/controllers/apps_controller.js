@@ -3,8 +3,13 @@ const Apps_model = require('../models/apps_model'),
 
 // check user login then return user_infos
 exports.get = function(req, datas, callback) {
-    Apps_model.get(null, null, function(e){
+    Apps_model.get(req, datas, function(e){
         callback(e);
+    });
+};
+exports.getApps = function(req, datas, callback) {
+    Apps_model.get(req, datas, function(e){
+        return e.datas;
     });
 };
 // check user login then return user_infos

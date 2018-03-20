@@ -76,7 +76,7 @@ var account = {
         });
         this.init_map();
         $(window).on('change', function(){
-            
+
             console.log('change ', window.location);
         });
     },
@@ -97,7 +97,7 @@ var account = {
                 return false;
             }
             $.get("https://maps.googleapis.com/maps/api/geocode/json?address="+$('#address').val()+"+"+$('#city').val()+"+"+$('#postalCode').val()+"+"+$('#addressCountry').val()+"&key=AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs", function(data){
-                
+
                 self.marker = new google.maps.Marker({
                   position: data.results[0].geometry.location,
                   map: map
@@ -141,11 +141,11 @@ var account = {
             }
             //"https://maps.googleapis.com/maps/api/staticmap?center="
         }).init();
-        
+
         this.private_form = new formular('#private_datas', function(e){
             //console.log(e);
         }).init();
-        
+
         this.services_form = new formular('#services_form', function(e){
             if(e.status==="hitted" && e.action==="submit"){
                 var user_datas = account.services_form.get_datas();

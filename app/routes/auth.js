@@ -224,9 +224,15 @@ auth.get('/', function(req, res, next) {
         });
     })
     .get('/logout', function(req, res, next) {
+        var user_id = req.session;
         Auth_controller.logout(req, res, function(err, data){
-            res.redirect(307, req.headers.referer);
-            //res.render(req.headers.referer, { title: 'logout auth page' });
+            var param = "?";
+            if(req.headers.referer.indexOf('?') !== -1){
+              param = "&";
+            }
+            res.redirect(307, req.headers.referer+param+"idkids-sdk-action=logout");
+            //res.render('logout', { "title": "déconnexion", "referer":req.headers.referer });
+            //res.render(req.headers.referer, { "title": "déconnexion", "referer":req.headers.referer, "idkids_sdk":"logout" });
         });
     })
     .get('/account', function(req, res, next) {

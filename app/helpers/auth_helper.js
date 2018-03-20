@@ -52,11 +52,6 @@ module.exports = {
         /* match user token + device */
         db.connect(config.database.users, {useMongoClient: true});
         req.options.device_uid = device_uid;
-        console.log('AUTH MODEL CHECK USER ??????????? ');
-        console.log('AUTH MODEL CHECK USER ??????????? ');
-        console.log('AUTH MODEL CHECK USER ??????????? ');
-        console.log('AUTH MODEL CHECK USER ??????????? ');
-        console.log('AUTH MODEL CHECK USER ??????????? ');
         Auth_model.check_user(req, function(e){
             callback(e);
             return true;
@@ -74,11 +69,11 @@ module.exports = {
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
             /* UNCOMMENT IF USER READ AND WRITE OWNER RWO IS SET */
-            //if(req.session.Auth.rights.type === "RWO"){
+            if(req.session.Auth.rights.type === "RWO"){
                 callback({status:200, "message":"AUTHAURIZED"});
-            //}else{
-            //    callback({status:301, "message":"UNAUTHAURIZED"});
-            //}
+            }else{
+                callback({status:301, "message":"UNAUTHAURIZED"});
+            }
         }
     },
     check_session:function(req, user_id, callback){
