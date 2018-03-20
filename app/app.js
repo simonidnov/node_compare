@@ -1,5 +1,6 @@
 //run $ mongod
 //DEBUG=broadcast_local:* npm start
+//forever start "script": "index.js",
 const express = require('express'),
     path = require('path'),
     config = require('./config/config'),
