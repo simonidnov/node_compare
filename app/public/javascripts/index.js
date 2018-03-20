@@ -30,26 +30,16 @@ var index = {
             }
         );
         var self = this;
+        console.log("init sdk");
         this.sdk.init($.proxy(function(status){
+            console.log('inited ', status);
             this.sdk.isLogged($.proxy(function(e){
-                //QRCode.toCanvas(document.getElementById('canvas'), status._id, function (error) {
-                //    if (error) console.error(error)
-                //    console.log('QRCode success!');
-                //});
-                //if(e.status === "not_connected"){
-                    this.sdk.api.get('/me', {}, function(e){
-                        $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
-                        $('.account_infos .avatar img').attr('src', e.datas.avatar);
-                        $('.account_infos .infos .label').html(e.datas.pseudo);
-                        $('.account_infos .infos .email').html(e.datas.email);
-                    });
-                //}else{
-                //    console.log(e.user);
-                //    $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.user.avatar+'" alt="avatar"/></div>');
-                //    $('.account_infos .avatar img').attr('src', e.user.avatar);
-                //    $('.account_infos .infos .label').html(e.user.pseudo);
-                //    $('.account_infos .infos .email').html(e.user.email);
-                //}
+                this.sdk.api.get('/me', {}, function(e){
+                  $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
+                  $('.account_infos .avatar img').attr('src', e.datas.avatar);
+                  $('.account_infos .infos .label').html(e.datas.pseudo);
+                  $('.account_infos .infos .email').html(e.datas.email);
+                });
                 /*
                 this.sdk.api.get('/me/members', {}, function(e){
                     console.log('/me/members :::: ', e);
@@ -124,7 +114,7 @@ var index = {
     },
     set_hornav : function(){
         if($('.hor_nav li.selected').length > 0){
-            $('.hor_nav').animate( { scrollLeft: $('.hor_nav li.selected').position().left + $('.hor_nav').scrollLeft() - 50 }, 500 );  
+            $('.hor_nav').animate( { scrollLeft: $('.hor_nav li.selected').position().left + $('.hor_nav').scrollLeft() - 50 }, 500 );
         }
     },
     parse_url : function(url){

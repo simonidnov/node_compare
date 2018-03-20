@@ -4,39 +4,10 @@ block widgets
             div.icon.icon-widgets.idkids-icons.lg
         div.subnav.widgets
             ul
-                a(href="https://okaidi.fr" target="_blank")
+              if(typeof app.locals.applications !== "undefined")
+                each apps in app.locals.applications
+                  a(href="https://"+apps.host target="_blank")
                     li
-                        div.icon.okaidi
-                        span Okaidi
-                a(href="https://obaibi.fr" target="_blank")
-                    li
-                        div.icon.obaibi
-                        span Obaibi
-                a(href="https://jacadi.fr" target="_blank")
-                    li
-                        div.icon.jacadi
-                        span Jacadi
-                a(href="https://oxybul.fr" target="_blank")
-                    li
-                        div.icon.oxybul
-                        span Oxybul
-                a(href="https://rigolocommelavie.fr" target="_blank")
-                    li
-                        div.icon.rclv
-                        span Rigolo comme la vie
-                a(href="https://njoy.fr" target="_blank")
-                    li
-                        div.icon.njoy
-                        span N'joy
-                a(href="https://bubblemag.fr" target="_blank")
-                    li
-                        div.icon.bubble
-                        span Bubble
-                a(href="https://joyvox.fr" target="_blank")
-                    li
-                        div.icon.joyvox
-                        span Joyvox
-                a(href="https://joybox.fr" target="_blank")
-                    li
-                        div.icon.joybox
-                        span Joybox
+                      div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
+                      span= apps.name
+                

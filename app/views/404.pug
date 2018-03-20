@@ -1,0 +1,7 @@
+extends header
+
+block content
+  .main.container.with_head
+      .row
+        h1= "404 page introuvable"
+        p= JSON.stringify(app.locals.applications)

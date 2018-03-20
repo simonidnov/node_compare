@@ -21,27 +21,25 @@ me.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     res.setHeader('Content-Type', 'application/json');
-    
+
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
-    
+
     if(typeof dataCheck.device_infos !== "undefined"){
         device_uid = dataCheck.device_infos.device_uid;
     }else if(typeof dataCheck.device_uid !== "undefined"){
         device_uid = dataCheck.device_uid;
     }
-    
+
     auth_helper.validate_from(dataCheck, req.get('host'), function(e){
-        console.log('validate_from ::::: ', e);
         if(!e){
             res.status(401).send({ message: "your server was not authorised", request:dataCheck, host:req.get('host'), is_ok:""});
         }else{
             // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
             if(req.url.indexOf('/from') === -1){
                 auth_helper.validate_user(dataCheck, req.get('host'), function(response){
-                    console.log("response.status validate_user ::::: ", response);
                     if(response.status === 200){
                         if(typeof response.updated_token !== "undefined"){
                             req.query.updated_token = response.updated_token;
@@ -53,11 +51,11 @@ me.use(function(req, res, next) {
                     }
                 });
             }else{
-                next();   
+                next();
             }
-        } 
-    });    
-    
+        }
+    });
+
 });
 
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
@@ -89,7 +87,7 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e); 
+                res.status(e.status).send(e);
             });
         });
     })
@@ -98,7 +96,7 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e); 
+                res.status(e.status).send(e);
             });
         });
     })
@@ -107,7 +105,7 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e); 
+                res.status(e.status).send(e);
             });
         });
     })
@@ -136,7 +134,7 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e); 
+                res.status(e.status).send(e);
             });
         });
     })
@@ -145,7 +143,7 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e); 
+                res.status(e.status).send(e);
             });
         });
     })
@@ -154,7 +152,7 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e); 
+                res.status(e.status).send(e);
             });
         });
     })

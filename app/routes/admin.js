@@ -5,6 +5,7 @@ var express = require('express'),
     Auth_helper = require('../helpers/auth_helper'),
     Apps_controller = require('../controllers/apps_controller'),
     Pages_controller = require('../controllers/pages_controller'),
+    Products_controller = require('../controllers/products_controller'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang');
@@ -315,6 +316,69 @@ admin
           });
       });
       return;
+    })
+    .get('/products', function(req, res, next) {
+      Products_controller.get(req, res, function(e){
+        products = e.datas;
+         res.render('admin/products', {
+            title: 'Admin Products',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:'products',
+            js:[
+                '/public/javascripts/admin/products.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/admin/admin.css',
+                '/public/stylesheets/admin/products.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+      });
+    })
+    .get('/products/:page', function(req, res, next) {
+      Products_controller.get(req, res, function(e){
+        products = e.datas;
+         res.render('admin/products', {
+            title: 'Admin Products',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:req.params.page,
+            js:[
+                '/public/javascripts/admin/products.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/admin/admin.css',
+                '/public/stylesheets/admin/products.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+      });
+    })
+    .get('/products/:page/:product_id', function(req, res, next) {
+      Products_controller.get(req, res, function(e){
+        products = e.datas;
+         res.render('admin/products', {
+            title: 'Admin Products',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(),
+            lang:lang,
+            page:req.params.page,
+            js:[
+                '/public/javascripts/admin/products.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js'
+            ], css:[
+                '/public/stylesheets/admin/admin.css',
+                '/public/stylesheets/admin/products.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+      });
     });
 
 module.exports = admin;

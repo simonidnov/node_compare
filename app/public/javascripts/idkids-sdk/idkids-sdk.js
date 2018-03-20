@@ -182,8 +182,10 @@ var idkids_jssdk = function(options, callback){
         }
     };
     this.logout = function(){
+        console.log('LOGOUT SESSION LOCAL SDK');
         this.api.store('idkids_local_user', '');
-    }
+        window.location.href = window.location.origin + window.location.pathname;
+    };
     this.api.options = options;
     this.init = function(callback){
         if (typeof(Unity) === 'undefined') {
@@ -203,17 +205,32 @@ var idkids_jssdk = function(options, callback){
         /* TODO ON STARTUP GET URL PARAMS THEN SET DEFAULT USER ID NEEDED THEN REDIRECT ONLY IF WEBSITE IS IDENTIFIED SERVER SIDE */
         this.api.reset_user(function(datas){
             //console.log('reset user ', datas);
+            window.location.href = window.location.origin + window.location.pathname;
         });
         this.api.get('/me/from', {}, function(e){
             callback(e);
         });
-    }
+
+        /* check uri params call action SDK tools */
+        var url = new URL(window.location.href),
+            action = url.searchParams.get("idkids-sdk-action");
+            console.log("params url action ", action);
+        switch(action){
+          case 'logout':
+            this.logout();
+            break;
+          default:
+            console.log('IDKIDS SDK TOOLKIT has returned an action not defined in your javascript sdk version. please upgrade the latest version of idkids-js-sdk on your server then try again.');
+            break;
+        }
+
+    };
     this.isLogged = function(callback){
         callback(this.api.get_user_status());
-    }
+    };
     this.template = function(template_name, params, callback){
         $.get('/templating/'+template_name, params, function(e){callback(e);});
-    }
+    };
     this.createAuthbutton = function(target, callback){
         console.log('createAuthbutton');
         if(document.getElementById(target) === null){
@@ -221,6 +238,6 @@ var idkids_jssdk = function(options, callback){
         }else{
             document.getElementById(target).innerHTML = '<div class="idkids-sdk"><a href="'+window.location.origin+'/auth?from='+window.location.origin.replace(new RegExp('/', 'g'), 'R|')+'&redirect='+this.options.callback_url.replace(new RegExp('/', 'g'), '|')+'&secret='+this.options.secret+'" class="auth_button" data-action="login"><div class="avatar"></div><div class="label">CONNEXION</div></a></div>';
         }
-    }
+    };
     callback({status:"sdk instance created"}, this.options);
 }

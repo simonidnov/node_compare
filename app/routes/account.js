@@ -33,11 +33,11 @@ account
     })
     .get('/:page', function(req, res, next) {
         res.render('account', {
-            title: 'User Account',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:req.params.page,
+            title : 'User Account',
+            user  : req.session.Auth,
+            locale: language_helper.getlocale(),
+            lang  : lang,
+            page  : req.params.page,
             js:[
                 '/public/javascripts/account.js',
                 '/node_modules/cropperjs/dist/cropper.min.js',
