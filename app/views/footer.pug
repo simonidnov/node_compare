@@ -34,7 +34,7 @@ block footer
                   if(typeof app.locals.applications !== "undefined")
                     each apps in app.locals.applications
                       li
-                        a(href="https://"+apps.host)= apps.name
+                        a(href=apps.host)= apps.name
             div.col.col-md-2
                 h3 Mon compte
                 ul
@@ -54,7 +54,7 @@ block footer
         div.row
             if(typeof app.locals.applications !== "undefined")
               each apps in app.locals.applications
-                a(href="https://"+apps.host)
+                a(href=apps.host)
                     div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
         hr
         script(src="/node_modules/jquery/dist/jquery.min.js")
