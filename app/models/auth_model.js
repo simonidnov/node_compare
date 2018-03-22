@@ -1,5 +1,6 @@
 const db = require('mongoose'),
       app = require('../app'),
+      http = require('http'),
       sha1 = require('sha1'),
       jwt = require('jsonwebtoken'),
       validator = require("email-validator"),
@@ -7,6 +8,7 @@ const db = require('mongoose'),
       Address_model = require('../models/address_model'),
       config = require('../config/config'),
       gravatar = require('gravatar'),
+      urlExists = require('url-exists'),
       user_datas = {
           email       : {type:'string', unique: true},
           password    : {type:'string'},
@@ -27,6 +29,7 @@ const db = require('mongoose'),
           relations   : {type:'Array'},
           apps        : {type:'Array'},
           tags        : {type:'Object'},
+          authorized_apps : {type:'Object'},
           facebook    : {
               id:{type:'string'},
               name:{type:'string'},
@@ -253,44 +256,52 @@ module.exports.login = function(req, datas, callback) {
                     }
 
                     /* UPDATE */
+                    var avatar = users[0].avatar;
                     if(users[0].avatar === "" || users[0].avatar == null){
                         if(datas.avatar === "" || datas.avatar == null || typeof datas.avatar == "undefined"){
-                          var avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
+                          avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
                         }else{
                           avatar = datas.avatar;
                         }
                     }else{
-                        var avatar = users[0].avatar;
+                        avatar = users[0].avatar;
                     }
-                    /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
-                    /*
-                        TO SPECIFY A NEW ADMIN OWNER FIRST TIME ADD THIS PARAMS ON UPDATE :
-                                rights  : {
-                                    "type":'RWO',
-                                    "authorizations":['me']
-                                }
-                    */
-                    User.update(
-                        {
-                            _id: users[0]._id
-                        },
-                        {
-                            $set:{
-                                token : new_token,
-                                updated : Date.now(),
-                                avatar : avatar
-                            }
-                        },
-                        function(err, user){
-                            if (err){
-                                callback({"status":"error", "code":err.code, "error":err, "message":err.message});
-                            }else{
-                                self.reset_session(req, users[0]._id, function(infos){
-                                    callback({status:200, "message":"User updated", "idkids_user":infos});
-                                });
-                            }
-                        }
-                    );
+
+                    urlExists(avatar, function(err, exists) {
+                      if(!exists){
+                        avatar = "http://www.idkids-app.com/public/images/assets/account.svg";
+                      }
+                      /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
+                      /*
+                          TO SPECIFY A NEW ADMIN OWNER FIRST TIME ADD THIS PARAMS ON UPDATE :
+                                  rights  : {
+                                      "type":'RWO',
+                                      "authorizations":['me']
+                                  }
+                      */
+                      User.update(
+                          {
+                              _id: users[0]._id
+                          },
+                          {
+                              $set:{
+                                  token : new_token,
+                                  updated : Date.now(),
+                                  avatar : avatar
+                              }
+                          },
+                          function(err, user){
+                              if (err){
+                                  callback({"status":"error", "code":err.code, "error":err, "message":err.message});
+                              }else{
+                                  self.reset_session(req, users[0]._id, function(infos){
+                                      infos.avatar = infos.avatar;
+                                      callback({status:200, "message":"User updated", "idkids_user":infos});
+                                  });
+                              }
+                          }
+                      );
+                    });
                 }
             });
             //
@@ -332,33 +343,20 @@ module.exports.register = function(datas, callback) {
     new_user_datas.device = [{
         uid     : device_uid,
         token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' }),
-        avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://')
+        avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}, true).replace('//', 'http://')
     }];
     //network : os.networkInterfaces(),
     /* TODO CHECK ARRAY SEND FORM DATA */
+    console.log("datas.body.subscribe_newsletter ", datas.body.subscribe_newsletter);
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
         new_user_datas.newsletter_services = {};
-        if(datas.body.newsletter_okaidi){
-            new_user_datas.newsletter_services.okaidi = 1;
-        }
-        if(datas.body.newsletter_obaibi){
-            new_user_datas.newsletter_services.obaibi = 1;
-        }
-        if(datas.body.newsletter_jacadi){
-            new_user_datas.newsletter_services.jacadi = 1;
-        }
-        if(datas.body.newsletter_oxybul){
-            new_user_datas.newsletter_services.oxybul = 1;
-        }
-        if(datas.body.newsletter_rclv){
-            new_user_datas.newsletter_services.rclv = 1;
-        }
-        if(datas.body.newsletter_njoy){
-            new_user_datas.newsletter_services.njoy = 1;
-        }
-        if(datas.body.newsletter_joyvox){
-            new_user_datas.newsletter_services.joyvox = 1;
+        console.log("app.locals.applications ::: ", app.locals.applications);
+        for(var i=0; i<app.locals.applications.length; i++){
+          console.log(datas.body['newsletter_'+app.locals.applications[i].short_name]);
+          if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
+              new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
+          }
         }
     }else{
         new_user_datas.newsletter = false;
@@ -382,7 +380,6 @@ module.exports.unregister = function(req, res, callback) {
     //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* DELETE where email, passe, secret and token */
-    //console.log("UNREGISTER ::::: ", req.body);
     User.remove( {"_id": req.body.id}, function(){callback(req.body);} );
 
     return req.body;
@@ -391,6 +388,23 @@ module.exports.unregister = function(req, res, callback) {
 module.exports.update = function(req, user_id, datas, callback) {
     device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
+    /*
+    console.log("datas.body.subscribe_newsletter ", datas.body.subscribe_newsletter);
+    if(datas.body.subscribe_newsletter){
+        new_user_datas.newsletter = true;
+        new_user_datas.newsletter_services = {};
+        console.log("app.locals.applications ::: ", app.locals.applications);
+        for(var i=0; i<app.locals.applications.length; i++){
+          console.log(datas.body['newsletter_'+app.locals.applications[i].short_name]);
+          if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
+              new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
+          }
+        }
+    }else{
+        new_user_datas.newsletter = false;
+        new_user_datas.newsletter_services = {};
+    }
+    */
     var self = this;
     /* UPDATE token, updated then free user session and storage */
     datas.updated = Date.now();
@@ -484,7 +498,6 @@ module.exports.reset_session = function(req, user_id, callback){
             }else{
 
                 user_infos = JSON.parse(JSON.stringify(user));
-                console.log(' °°°°°°°°°°°°°°°°°° user_infos ', user_infos);
                 user_infos.current_device = device_uid;
                 Members_model.get(user_id, null, function(e){
                     user_infos.members = e.datas;
@@ -605,7 +618,6 @@ module.exports.validAccount = function(params, callback){
 };
 module.exports.getUsersDevice = function(device_uid, callback){
     //device_uid = req.query.device_uid;
-    //console.log("getUsersDevice device_uid :::::::: ", req);
     //device_uid = machineId.machineIdSync({original: true});
     User.find(
         {
@@ -649,7 +661,7 @@ module.exports.deleteDevice = function(req, callback){
                 callback({status:304, message:"appareil inexistant", datas:err});
             }else{
                 self.reset_session(req, req.session.Auth._id, function(infos){
-                    //callback({status:200, "message":"User updated", "idkids_user":infos});
+                    infos.avatar = infos.avatar;
                     callback({status:200, message:"device supprimé", "idkids_user":infos});
                 });
             }
@@ -661,6 +673,18 @@ user_datas.getAge = function(){
     return this.birthDate;
 };
 
+function checkAvatarExist(avatar){
+  var http = require('http'),
+    options = {method: 'HEAD', host: avatar, port: 80, path: '/'},
+    req = http.request({}, function(r) {
+      if(http.status != 404){
+        return avatar;
+      }else{
+        return "http://www.idkids-app.com/public/images/assets/account.svg";
+      }
+    });
+    req.end();
+}
 
 // Load mongoose package
 //var mongoose = require('mongoose');

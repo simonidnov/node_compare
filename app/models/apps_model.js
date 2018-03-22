@@ -19,9 +19,13 @@ const db = require('mongoose'),
           tags              : {type:"Array"},
           secret            : {type:"string"},
           token             : {type:"string"},
+          is_widget         : {type:"bool"},
+          has_newsletter    : {type:"bool"},
+          has_sms           : {type:"bool"},
+          has_notifications : {type:"bool"},
           authorizations    : {
-                user_public     : {type:"boolean"},
-                user_private    : {type:"boolean"}
+                user_public     : {type:"bool"},
+                user_private    : {type:"bool"},
           },
           certificats       : {
               apple:{type:"string"},
@@ -70,18 +74,27 @@ module.exports.get = function(user_id, apps_id, callback){
     });
 }
 module.exports.create = function(user_id, datas, callback){
+    var _self = this;
     datas.secret = jwt.sign({secret:user_id}, config.secrets.global.secret);
     datas.token = jwt.sign({secret:user_id+Date.now()}, config.secrets.global.secret);
     new_apps = new Apps(datas);
     new_apps.save(function(err, infos){
-        if(err) callback({"status":405, "message":err});
-        else callback({"status":200, "datas":infos});
+        if(err){
+          callback({"status":405, "message":err});
+        }else{
+          _self.get(null, null, function(e){
+              app.locals.applications = e.datas;
+          });
+          callback({"status":200, "datas":infos});
+        }
     });
+
 }
 module.exports.update = function(user_id, apps_id, datas, callback){
 
     delete datas.options;
     delete datas._id;
+    var _self = this;
     datas.updated = Date.now();
     Apps.updateOne(
         {
@@ -91,8 +104,15 @@ module.exports.update = function(user_id, apps_id, datas, callback){
             $set : datas
         },
         function(err, infos){
-            if(err) callback({"status":405, "message":err});
-            else callback({"status":200, "apps":infos});
+            if(err){
+              callback({"status":405, "message":err});
+            }
+            else{
+              _self.get(null, null, function(e){
+                  app.locals.applications = e.datas;
+              });
+              callback({"status":200, "apps":infos});
+            }
         }
     )
 }

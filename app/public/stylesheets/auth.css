@@ -92,7 +92,7 @@ h1{
     cursor: pointer;
 }
 .select_lang:before{
-    
+
 }
 .select_lang:after, .footer_nav ul li:after{
     content: '';
@@ -116,12 +116,20 @@ h1{
 
 
 /* --------------- BRANDS --------------- */
+header{
+  margin-top:40px;
+}
+.formular{
+  margin-top:0px;
+}
 header .brands{
-    margin:0;
+    margin:auto;
     padding:0;
     display: inline-flex;
     position: absolute;
-    top: 55px;
+    top: 0;
+    bottom:0;
+    height: 30px;
 }
 header .brands li{
     width:30px;
@@ -162,7 +170,7 @@ header .logo{
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
     /*
-        -webkit-animation-timing-function: linear; 
+        -webkit-animation-timing-function: linear;
         animation-timing-function: linear;
     */
 }
@@ -256,5 +264,8 @@ header .logo{
     .auth .account_list li{
         padding-left:20px;
         padding-right:20px;
+    }
+    header{
+      margin-top:0px;
     }
 }

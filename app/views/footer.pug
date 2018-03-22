@@ -33,8 +33,9 @@ block footer
                 ul 
                   if(typeof app.locals.applications !== "undefined")
                     each apps in app.locals.applications
-                      li
-                        a(href=apps.host)= apps.name
+                      if(apps.is_widget)
+                        li
+                          a(href=apps.host)= apps.name
             div.col.col-md-2
                 h3 Mon compte
                 ul

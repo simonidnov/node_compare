@@ -453,30 +453,11 @@ block content
                         div.form-group.checkbox_relative_container(data-checkboxrelative="newsletter" style= user.newsletter === true ? "display:block" : "display:none")
                             div.checkbox_relative.array_list_inputs(data-name="newsletter_services")
                                 p !{lang[locale].keys.accept_newsletter_partners}
-                                div.line
-                                    input#newsletter_okaidi.form-control(type='checkbox', name='newsletter_okaidi', checked=((user.newsletter_services && user.newsletter_services.newsletter_okaidi === true)? true : false))
-                                    label(for="newsletter_okaidi") !{lang[locale].keys.accept_newsletter_okaidi}
-                                div.line
-                                    input#newsletter_obaibi.form-control(type='checkbox', name='newsletter_obaibi', checked=((user.newsletter_services && user.newsletter_services.newsletter_obaibi === true)? true : false))
-                                    label(for="newsletter_obaibi") !{lang[locale].keys.accept_newsletter_obaibi}
-                                div.line
-                                    input#newsletter_jacadi.form-control(type='checkbox', name='newsletter_jacadi', checked=((user.newsletter_services && user.newsletter_services.newsletter_jacadi === true)? true : false))
-                                    label(for="newsletter_jacadi") !{lang[locale].keys.accept_newsletter_jacadi}
-                                div.line
-                                    input#newsletter_oxybul.form-control(type='checkbox', name='newsletter_oxybul', checked=((user.newsletter_services && user.newsletter_services.newsletter_oxybul === true)? true : false))
-                                    label(for="newsletter_oxybul") !{lang[locale].keys.accept_newsletter_oxybul}
-                                div.line
-                                    input#newsletter_rclv.form-control(type='checkbox', name='newsletter_rclv', checked=((user.newsletter_services && user.newsletter_services.newsletter_rclv === true)? true : false))
-                                    label(for="newsletter_rclv") !{lang[locale].keys.accept_newsletter_rclv}
-                                div.line
-                                    input#newsletter_njoy.form-control(type='checkbox', name='newsletter_njoy', checked=((user.newsletter_services && user.newsletter_services.newsletter_njoy === true)? true : false))
-                                    label(for="newsletter_njoy") !{lang[locale].keys.accept_newsletter_njoy}
-                                div.line
-                                    input#newsletter_bubble.form-control(type='checkbox', name='newsletter_bubble', checked=((user.newsletter_services && user.newsletter_services.newsletter_bubble === true)? true : false))
-                                    label(for="newsletter_bubble") !{lang[locale].keys.accept_newsletter_bubble}
-                                div.line
-                                    input#newsletter_joyvox.form-control(type='checkbox', name='newsletter_joyvox', checked=((user.newsletter_services && user.newsletter_services.newsletter_joyvox === true)? true : false))
-                                    label(for="newsletter_joyvox") !{lang[locale].keys.accept_newsletter_joyvox}
+                                if(typeof app.locals.applications !== "undefined")
+                                  each apps in app.locals.applications
+                                    if(apps.has_newsletter)
+                                      input.form-control(id="newsletter_"+apps.short_name type='checkbox', name='newsletter_'+apps.short_name, checked=((user.newsletter_services && user.newsletter_services['newsletter_'+apps.short_name] === true)? true : false))
+                                      label(for="newsletter_"+apps.short_name)= apps.name+" "+apps.description
                                 div.line
                                     input#newsletter_others.form-control(type='checkbox', name='newsletter_others', checked=((user.newsletter_services && user.newsletter_services.newsletter_others === true)? true : false))
                                     label(for="newsletter_others") !{lang[locale].keys.accept_newsletter_others}
@@ -487,30 +468,12 @@ block content
                         div.form-group.checkbox_relative_container(data-checkboxrelative="sms" style= user.sms === true ? "display:block" : "display:none")
                             div.checkbox_relative.array_list_inputs(data-name="sms_services")
                                 p !{lang[locale].keys.accept_sms_partners}
-                                div.line
-                                    input#sms_okaidi.form-control(type='checkbox', name='sms_okaidi', checked=((user.sms_services && user.sms_services.sms_okaidi === true)? true : false))
-                                    label(for="sms_okaidi") !{lang[locale].keys.accept_sms_okaidi}
-                                div.line
-                                    input#sms_obaibi.form-control(type='checkbox', name='sms_obaibi', checked=((user.sms_services && user.sms_services.sms_obaibi === true)? true : false))
-                                    label(for="sms_obaibi") !{lang[locale].keys.accept_sms_obaibi}
-                                div.line
-                                    input#sms_jacadi.form-control(type='checkbox', name='sms_jacadi', checked=((user.sms_services && user.sms_services.sms_jacadi === true)? true : false))
-                                    label(for="sms_jacadi") !{lang[locale].keys.accept_sms_jacadi}
-                                div.line
-                                    input#sms_oxybul.form-control(type='checkbox', name='sms_oxybul', checked=((user.sms_services && user.sms_services.sms_oxybul === true)? true : false))
-                                    label(for="sms_oxybul") !{lang[locale].keys.accept_sms_oxybul}
-                                div.line
-                                    input#sms_rclv.form-control(type='checkbox', name='sms_rclv', checked=((user.sms_services && user.sms_services.sms_rclv === true)? true : false))
-                                    label(for="sms_rclv") !{lang[locale].keys.accept_sms_rclv}
-                                div.line
-                                    input#sms_njoy.form-control(type='checkbox', name='sms_njoy', checked=((user.sms_services && user.sms_services.sms_njoy === true)? true : false))
-                                    label(for="sms_njoy") !{lang[locale].keys.accept_sms_njoy}
-                                div.line
-                                    input#sms_bubble.form-control(type='checkbox', name='sms_bubble', checked=((user.sms_services && user.sms_services.sms_bubble === true)? true : false))
-                                    label(for="sms_bubble") !{lang[locale].keys.accept_sms_bubble}
-                                div.line
-                                    input#sms_joyvox.form-control(type='checkbox', name='sms_joyvox', checked=((user.sms_services && user.sms_services.sms_joyvox === true)? true : false))
-                                    label(for="sms_joyvox") !{lang[locale].keys.accept_sms_joyvox}
+                                if(typeof app.locals.applications !== "undefined")
+                                  each apps in app.locals.applications
+                                    if(apps.has_sms)
+                                      div.line
+                                          input.form-control(type='checkbox', id='sms_'+apps.short_name, name='sms_'+apps.short_name, checked=((user.sms_services && user.sms_services['sms_'+apps.short_name] === true)? true : false))
+                                          label(for="sms_"+apps.short_name)= apps.name+" "+apps.description
                                 div.line
                                     input#sms_others.form-control(type='checkbox', name='sms_others', checked=((user.sms_services && user.sms_services.sms_others === true)? true : false))
                                     label(for="sms_others") !{lang[locale].keys.accept_sms_others}
