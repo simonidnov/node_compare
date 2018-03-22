@@ -458,7 +458,7 @@ block content
                                     if(apps.has_newsletter)
                                       div.line
                                         input.form-control(id="newsletter_"+apps.short_name type='checkbox', name='newsletter_'+apps.short_name, checked=((user.newsletter_services && user.newsletter_services['newsletter_'+apps.short_name] === true)? true : false))
-                                        label(for="newsletter_"+apps.short_name)= apps.name+" "+apps.description
+                                        label(for="newsletter_"+apps.short_name)= "<b>"+apps.name+"</b> "+apps.short_desc
                                 div.line
                                     input#newsletter_others.form-control(type='checkbox', name='newsletter_others', checked=((user.newsletter_services && user.newsletter_services.newsletter_others === true)? true : false))
                                     label(for="newsletter_others") !{lang[locale].keys.accept_newsletter_others}
@@ -474,7 +474,7 @@ block content
                                     if(apps.has_sms)
                                       div.line
                                           input.form-control(type='checkbox', id='sms_'+apps.short_name, name='sms_'+apps.short_name, checked=((user.sms_services && user.sms_services['sms_'+apps.short_name] === true)? true : false))
-                                          label(for="sms_"+apps.short_name)= apps.name+" "+apps.description
+                                          label(for="sms_"+apps.short_name)= "<b>"+apps.name+"</b> "+apps.short_desc
                                 div.line
                                     input#sms_others.form-control(type='checkbox', name='sms_others', checked=((user.sms_services && user.sms_services.sms_others === true)? true : false))
                                     label(for="sms_others") !{lang[locale].keys.accept_sms_others}
