@@ -6,9 +6,9 @@ block content
                 span.icon.icon-more.idkids-icons
                 div.label Nouvelle Application
             h3 Mes applications
-            ul.app_list
+            ul.app_list.order_left_panel_list
                 each apps in applications
-                    a(href="/admin/apps/edit_app/"+apps._id title="éditer l'application")
+                    a(href="/admin/apps/edit_app/"+apps._id+"/" title="éditer l'application")
                         li
                             span.icon(style= "background-image:url("+apps.icon+")")
                             div.label= apps.short_name

@@ -54,7 +54,6 @@ admin
         //res.redirect(307, '/admin/dashboard');
     })
     .get('/dashboard', function(req, res, next) {
-        console.log('DASHBOARD ?????');
          res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
@@ -84,11 +83,13 @@ admin
                 page:'apps',
                 applications:applications,
                 js:[
+                    '/public/javascripts/components/jquery-ui/jquery-ui.min.js',
                     '/public/javascripts/admin/apps.js',
                     '/node_modules/cropperjs/dist/cropper.min.js',
                     '/public/javascripts/components/formular.js',
                     '/node_modules/qrcode/build/qrcode.min.js'
-                ], css:[
+                ],
+                css:[
                     '/public/stylesheets/admin/admin.css',
                     '/node_modules/cropperjs/dist/cropper.min.css',
                     '/public/stylesheets/admin/apps.css',
@@ -110,6 +111,7 @@ admin
                 page:req.params.page,
                 applications:applications,
                 js:[
+                    '/public/javascripts/components/jquery-ui/jquery-ui.min.js',
                     '/public/javascripts/admin/apps.js',
                     '/node_modules/cropperjs/dist/cropper.min.js',
                     '/public/javascripts/components/formular.js',
@@ -142,6 +144,7 @@ admin
                 edit_application:edit_application,
                 _:_,
                 js:[
+                    '/public/javascripts/components/jquery-ui/jquery-ui.min.js',
                     '/public/javascripts/admin/apps.js',
                     '/node_modules/cropperjs/dist/cropper.min.js',
                     '/public/javascripts/components/formular.js',
