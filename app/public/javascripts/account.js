@@ -150,6 +150,7 @@ var account = {
             if(e.status==="hitted" && e.action==="submit"){
                 var user_datas = account.services_form.get_datas();
                 index.sdk.api.put("/account/profile/", user_datas, function(e){
+                  console.log(e);
                 });
             }
         });

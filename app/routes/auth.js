@@ -77,15 +77,6 @@ auth.get('/', function(req, res, next) {
         //});
     })
     .get('/facebook', function(req, res, next){
-        console.log('//////////////////');
-        console.log('//////////////////');
-        console.log('//////////////////');
-        console.log('//////////////////');
-        console.log(req, res, next);
-        console.log('//////////////////');
-        console.log('//////////////////');
-        console.log('//////////////////');
-        console.log('//////////////////');
         var facebook_call = req;
         Auth_controller.login(req, req.query, function(e){
             //Auth_controller.get_user_from_device("fingerprint", function(users_device){
@@ -213,7 +204,7 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                res.redirect(307, '/account?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
+                res.redirect(307, '/account/account?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
             }
             res.render('auth/login', datas);
         });

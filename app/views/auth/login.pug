@@ -4,7 +4,6 @@ block content
         var uri_params=(!{JSON.stringify(uri_params)})
         var response=(!{JSON.stringify(response)})
         var translation=(!{JSON.stringify(lang[locale])})
-        
     script.
         window.fbAsyncInit = function() {
           FB.init({
@@ -39,12 +38,10 @@ block content
                 header
                     div.logo.idkids
                     ul.brands
-                        li.icon.okaidi
-                        li.icon.obaibi
-                        li.icon.jacadi
-                        li.icon.rclv
-                        li.icon.njoy
-                        li.icon.bubble
+                      if(typeof app.locals.applications !== "undefined")
+                        each apps in app.locals.applications
+                          if(apps.is_widget)
+                            li.icon(style="background-image:url("+apps.icon+")")
                 div#account_selection(class=typeof form === "undefined" ? "displayblock" : "displaynone")
                     h1 !{lang[locale].keys.account_picker_title}
                     ul.account_list.option_list
@@ -151,30 +148,11 @@ block content
                             div.form-group.checkbox_relative_container(data-checkboxrelative="subscribe_newsletter")
                                 div.checkbox_relative
                                     p !{lang[locale].keys.accept_newsletter_partners}
-                                    div.line
-                                        input#newsletter_okaidi.form-control(type='checkbox', name='newsletter_okaidi', checked='true')
-                                        label(for="newsletter_okaidi") !{lang[locale].keys.accept_newsletter_okaidi}
-                                    div.line
-                                        input#newsletter_obaibi.form-control(type='checkbox', name='newsletter_obaibi', checked='true')
-                                        label(for="newsletter_obaibi") !{lang[locale].keys.accept_newsletter_obaibi}
-                                    div.line
-                                        input#newsletter_jacadi.form-control(type='checkbox', name='newsletter_jacadi', checked='true')
-                                        label(for="newsletter_jacadi") !{lang[locale].keys.accept_newsletter_jacadi}
-                                    div.line
-                                        input#newsletter_oxybul.form-control(type='checkbox', name='newsletter_oxybul', checked='true')
-                                        label(for="newsletter_oxybul") !{lang[locale].keys.accept_newsletter_oxybul}
-                                    div.line
-                                        input#newsletter_rclv.form-control(type='checkbox', name='newsletter_rclv', checked='true')
-                                        label(for="newsletter_rclv") !{lang[locale].keys.accept_newsletter_rclv}
-                                    div.line
-                                        input#newsletter_njoy.form-control(type='checkbox', name='newsletter_njoy', checked='true')
-                                        label(for="newsletter_njoy") !{lang[locale].keys.accept_newsletter_njoy}
-                                    div.line
-                                        input#newsletter_bubble.form-control(type='checkbox', name='newsletter_bubble', checked='true')
-                                        label(for="newsletter_bubble") !{lang[locale].keys.accept_newsletter_bubble}
-                                    div.line
-                                        input#newsletter_joyvox.form-control(type='checkbox', name='newsletter_joyvox', checked='true')
-                                        label(for="newsletter_joyvox") !{lang[locale].keys.accept_newsletter_joyvox}
+                                    each apps in app.locals.applications
+                                      if(apps.has_newsletter)
+                                        div.line
+                                            input.form-control(id="newsletter_"+apps.short_name, type='checkbox', name='newsletter_'+apps.short_name, checked='true')
+                                            label(for="newsletter_"+apps.short_name)= apps.name+" "+apps.description
                                     p !{lang[locale].keys.accept_newsletter_more_informations}
                             div.form-group
                                 input#subscribe_remember_me.form-control(type='checkbox', name='subscribe_remember_me', checked="checked")

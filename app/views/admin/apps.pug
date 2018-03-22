@@ -24,8 +24,6 @@ block content
         div#new_app.container(style= page === "new_app" ? "display:block" : "display:none")
             div.col.col-md-6
                 div.formular.fullscreen#create_app
-                    br
-                    hr
                     h1 Créer une application
                     br
                     form.form_content(method="POST" action='/api/apps')
@@ -81,8 +79,6 @@ block content
         div.container(style= page === "edit_app" ? "display:block" : "display:none")
             div.col.col-md-6
                 div.formular.fullscreen#edit_app
-                    br
-                    hr
                     h1 Éditer l'application
                     br
                     if(typeof edit_application !== "undefined")
@@ -133,6 +129,35 @@ block content
                                 input#terms_url(type="text" minlength="5" value=edit_application.terms_url name="terms_url" required)
                                 label(for="terms_url") special terms url with http://
                             hr.separator
+                              
+                            h3 Créer un Widget pour cette application
+                            p les widgets apparaîssent dans le footer ainsi que dans le menu widget su SDK. Ne cocher que lorsque l'application doit être mise en avant par idkids-app, principalement dédié aux marques et services.
+                            div.form-group
+                                input#is_widget(type="checkbox" value=edit_application.is_widget name="is_widget" checked=((edit_application.is_widget)? true : false))
+                                label(for="is_widget") Afficher entant que Widget
+                            hr.separator
+                              
+                            h3 Activer la demande de Newsletter
+                            p Cocher la box ci-dessous pour proposer aux membres de recevoir des newsletter de la part de l'application.
+                            div.form-group
+                                input#has_newsletter(type="checkbox" value=edit_application.has_newsletter name="has_newsletter" checked=((edit_application.has_newsletter)? true : false))
+                                label(for="has_newsletter") Demander l'autorisation d'envoyer des newsletter
+                            hr.separator
+                              
+                            h3 Activer la demande de Sms
+                            p Cocher la box ci-dessous pour proposer aux membres de recevoir des sms de la part de l'application.
+                            div.form-group
+                                input#has_sms(type="checkbox" value=edit_application.has_sms name="has_sms" checked=((edit_application.has_sms)? true : false))
+                                label(for="has_sms") Demander l'autorisation d'envoyer des sms
+                            hr.separator
+                              
+                            h3 Activer la demande de Notifications
+                            p Cocher la box ci-dessous pour proposer aux membres de recevoir des notifications de la part de l'application.
+                            div.form-group
+                                input#has_notifications(type="checkbox" value=edit_application.has_notifications name="has_notifications" checked=((edit_application.has_notifications)? true : false))
+                                label(for="has_notifications") Demander l'autorisation d'envoyer des notifications
+                            hr.separator
+                              
                             div.form-group.array_list_inputs(data-name="aliases")
                                 h3 Ajouter des alias au domaine de l'application
                                 p Si votre domaine est accessible avec ou sans les www en https ou sans certificat SSL ou encore si vous utilisez le SDK sur différents sous-domaines, veuillez renseigner les possibilités ci-dessous.
