@@ -456,8 +456,9 @@ block content
                                 if(typeof app.locals.applications !== "undefined")
                                   each apps in app.locals.applications
                                     if(apps.has_newsletter)
-                                      input.form-control(id="newsletter_"+apps.short_name type='checkbox', name='newsletter_'+apps.short_name, checked=((user.newsletter_services && user.newsletter_services['newsletter_'+apps.short_name] === true)? true : false))
-                                      label(for="newsletter_"+apps.short_name)= apps.name+" "+apps.description
+                                      div.line
+                                        input.form-control(id="newsletter_"+apps.short_name type='checkbox', name='newsletter_'+apps.short_name, checked=((user.newsletter_services && user.newsletter_services['newsletter_'+apps.short_name] === true)? true : false))
+                                        label(for="newsletter_"+apps.short_name)= apps.name+" "+apps.description
                                 div.line
                                     input#newsletter_others.form-control(type='checkbox', name='newsletter_others', checked=((user.newsletter_services && user.newsletter_services.newsletter_others === true)? true : false))
                                     label(for="newsletter_others") !{lang[locale].keys.accept_newsletter_others}
