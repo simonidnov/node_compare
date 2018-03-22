@@ -6,8 +6,9 @@ block widgets
             ul
               if(typeof app.locals.applications !== "undefined")
                 each apps in app.locals.applications
-                  a(href=apps.host target="_blank")
-                    li
-                      div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
-                      span= apps.short_name
+                  if(apps.is_widget)
+                    a(href=apps.host target="_blank")
+                      li
+                        div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
+                        span= apps.short_name
                 

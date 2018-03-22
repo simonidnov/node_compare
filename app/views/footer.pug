@@ -55,7 +55,8 @@ block footer
         div.row
             if(typeof app.locals.applications !== "undefined")
               each apps in app.locals.applications
-                a(href=apps.host)
+                if(apps.is_widget)
+                  a(href=apps.host)
                     div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
         hr
         script(src="/node_modules/jquery/dist/jquery.min.js")
