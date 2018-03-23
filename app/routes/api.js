@@ -121,9 +121,13 @@ api
         });
     })
     .post('/request_validation_code', function(req, res, next){
+        console.log('request code ?');
         Auth_controller.request_validation_code(req, res, function(e){
+            console.log(e);
             if(e.status === 200){
+                console.log('validate_account');
                 Email_controller.validate_account(req, e, function(e){
+                    console.log("callback from validate_account :::: ", e);
                     res.status(e.status).send(e);
                 });
             }else{

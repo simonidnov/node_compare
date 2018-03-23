@@ -17,7 +17,7 @@ mailer.extend(emailing, config.emailing);
 emailing.set('views', path.join(__dirname, '../views'));
 emailing.set('view engine', 'pug');
 
-if(db.connection.readyState === 0){ 
+if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
 const emailSchemas = new db.Schema(email_datas),
