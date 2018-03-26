@@ -11,7 +11,20 @@ const express = require('express'),
 
 var  device_uid = machineId.machineIdSync({original: true});
 
+templating.use(function(req, res, next){
+    //ACCEPT CORS
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    //SET OUTPUT FORMAT
+    //res.setHeader('Content-Type', 'application/json');
 
+    var dataCheck = req.query;
+    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+        dataCheck = req.body;
+    }
+    next();
+});
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 templating.get('/:template', function(req, res, next) {
