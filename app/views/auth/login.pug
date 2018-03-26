@@ -84,13 +84,13 @@ block content
                     ul.switch_tab
                         li.tab.selected(data-tab="login_form") !{lang[locale].keys.login_tab_1}
                         li.tab(data-tab="subscribe_form") !{lang[locale].keys.login_tab_2}
-                    hr
-                    h3 Connectez-vous avec <b>Facebook</b> :
-                    ul.social_login.social_buttons
-                      li#facebook_login.facebook
-                        span.icon-facebook
-                        div Facebook
-                    h3 Utilisez votre <b>email</b> :
+                    //-hr
+                    //-h3 Connectez-vous avec <b>Facebook</b> :
+                    //-ul.social_login.social_buttons
+                    //-  li#facebook_login.facebook
+                    //-    span.icon-facebook
+                    //-    div Facebook
+                    //-h3 Utilisez votre <b>email</b> :
                     hr
                     div.tab_group
                         form#login_form(method="get" action='/auth/login/')
@@ -104,12 +104,13 @@ block content
                                 div.check.check_length= lang[locale].keys.input_check_length
                                 div.check.check_capital= lang[locale].keys.input_check_capital
                                 div.check.check_number= lang[locale].keys.input_check_number
-                            div.form-group
-                                input#remember_me.form-control(type='checkbox', name='remember_me', checked="checked")
-                                label(for="remember_me") !{lang[locale].keys.remember_me}
-                            div.form-group
-                                input#donot_register_device.form-control(type='checkbox', name='donot_register_device')
-                                label(for="donot_register_device") !{lang[locale].keys.donot_register_device.toString()}
+                            //- UNCHECK IF REMEMBER ME IS CODED IN API
+                            //-div.form-group
+                            //-    input#remember_me.form-control(type='checkbox', name='remember_me', checked="checked")
+                            //-    label(for="remember_me") !{lang[locale].keys.remember_me}
+                            //-div.form-group
+                            //-    input#donot_register_device.form-control(type='checkbox', name='donot_register_device')
+                            //-    label(for="donot_register_device") !{lang[locale].keys.donot_register_device.toString()}
                             div.form-group
                                 input.phantom_input.form-control(name="from" value=uri_params.from)
                                 fieldset(name="device_infos")
@@ -154,12 +155,12 @@ block content
                                             input.form-control(id="newsletter_"+apps.short_name, type='checkbox', name='newsletter_'+apps.short_name, checked='true')
                                             label(for="newsletter_"+apps.short_name)= apps.name+" "+apps.description
                                     p !{lang[locale].keys.accept_newsletter_more_informations}
-                            div.form-group
-                                input#subscribe_remember_me.form-control(type='checkbox', name='subscribe_remember_me', checked="checked")
-                                label(for="subscribe_remember_me") !{lang[locale].keys.remember_me}
-                            div.form-group
-                                input#do_not_register_device.form-control(type='checkbox', name='donot_register_device')
-                                label(for="do_not_register_device") !{lang[locale].keys.donot_register_device}
+                            //-div.form-group
+                            //-    input#subscribe_remember_me.form-control(type='checkbox', name='subscribe_remember_me', checked="checked")
+                            //-    label(for="subscribe_remember_me") !{lang[locale].keys.remember_me}
+                            //-div.form-group
+                            //-    input#do_not_register_device.form-control(type='checkbox', name='donot_register_device')
+                            //-    label(for="do_not_register_device") !{lang[locale].keys.donot_register_device}
                             div.form-group
                                 input.phantom_input.form-control(name="from" value=uri_params.from)
                                 fieldset(name="device_infos")
