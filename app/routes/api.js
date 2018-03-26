@@ -31,30 +31,24 @@ api
     .post('/', function(req, res, next) {
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
-                next();
+                res.status(200).send({title:"POST API"});
             }else{
-                //next();
                 res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
             }
         });
-        //Apps_controller.create(req, res, function(e){
-            res.status(200).send({title:"POST API"});
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
-        //});
     })
     .put('/', function(req, res, next){
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
-                next();
+                res.status(200).send({title:"PUT API"});
             }else{
                 //next();
                 res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
             }
         });
-        res.status(200).send({title:"PUT API"});
         //Apps_controller.update(req, res, function(e){
         //    res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        //    res.redirect(301, '/account/informations'+req.url.replace('/',''));
         //});
     })
     .delete('/', function(req, res, next) {
@@ -121,34 +115,30 @@ api
         });
     })
     .post('/request_validation_code', function(req, res, next){
-        console.log('request code ?');
         Auth_controller.request_validation_code(req, res, function(e){
-            console.log(e);
             if(e.status === 200){
-                console.log('validate_account');
                 Email_controller.validate_account(req, e, function(e){
-                    console.log("callback from validate_account :::: ", e);
                     res.status(e.status).send(e);
                 });
             }else{
                 res.status(e.status).send(e);
             }
         });
-        //res.status(200).send({title:"POST API request_validation_code"});
     })
     .put('/change_password', function(req, res, next){
-        /*Auth_helper.validate_admin(req, function(e){
+        /*
+        Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
                 next();
             }else{
                 //next();
                 res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
             }
-        });*/
+        });
+        */
         //res.status(200).send({title:"POST UPDATE PASSWORD IS CURRENTLY ON TODO LIST"});
         Auth_controller.update_password(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         });
     })
     .get('/users/:any', function(req, res, next){
@@ -161,7 +151,6 @@ api
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
     })
     .delete('/users/:any', function(req, res, next){
-        //TODO ADMIN OR REAL AUTH USER ONLY
         Auth_controller.unregister(req, res, function(e){
             res.status(200).send({title:"USER DELETED", datas:e});
         });
@@ -181,7 +170,6 @@ api
     .get('/send-sms', function(req, res, next){
         //textbelt key : 57652f35ce6bd73e072a37701775ee0e3dec4194VPqWleqqdvVMWkw0VLpUasUvu
         var request = require('request');
-
         request.post('https://textbelt.com/text', {
           form: {
             phone: '+33768651457',
