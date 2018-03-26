@@ -22,22 +22,216 @@
     margin:auto;
     transform: scale(.5);
 }
-
 .idkids_jssdk.loader .centered circle{
     stroke-dasharray: 300;
     stroke-dashoffset: 300;
     transform-origin: center center;
     animation: spin .8s linear infinite;
 }
-@keyframes spin { 
-    0% { 
+
+
+.idkids_jssdk .short_cuts{
+    float: right;
+    height:100%;
+}
+.idkids_jssdk .sticky .short_cuts{
+    height:100%;
+    overflow: hidden;
+}
+.idkids_jssdk .short_cuts ul{
+    padding:0;
+    margin:0;
+    display: inline-flex;
+}
+.idkids_jssdk .short_cuts ul li{
+    padding:0;
+    margin:0;
+    list-style: none;
+    height:64px;
+    min-width:64px;
+    background-color: #FFF;
+    color:#818181;
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative;
+    -webkit-transition: all .2s ease-in;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+.idkids_jssdk .short_cuts ul li .icon{
+    font-size: 40px;
+    text-align: center;
+    width:100%;
+}
+.idkids_jssdk .short_cuts ul li:hover,
+.idkids_jssdk .short_cuts ul li:active,
+.idkids_jssdk .short_cuts ul li:focus{
+    background-color: #F0F0F0;
+    color: #000;
+}
+.idkids_jssdk .short_cuts ul li .subnav{
+    position: absolute;
+    top:100%;
+    right:-20px;
+    z-index: 999;
+    background:#FFF;
+    padding: 0;
+    width:206px;
+    display: inline;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transform: rotateZ(0deg) rotateY(0deg) rotateX(0deg) perspective( 600px ); /* Safari */
+    transform: rotateZ(0deg) rotateY(0deg) rotateX(0deg) perspective( 600px );
+    transform-origin: top right;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+}
+.idkids_jssdk .short_cuts ul li .subnav:before{
+    content:'';
+    position: absolute;
+    top:-10px;
+    right:23px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ffffff transparent;
+    line-height: 0px;
+    _border-color: #000000 #000000 #ffffff #000000;
+    _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+}
+.idkids_jssdk .short_cuts ul li:hover .subnav,
+.idkids_jssdk .short_cuts ul li:focus .subnav,
+.idkids_jssdk .short_cuts ul li:active .subnav{
+    visibility: visible;
+    opacity: 1;
+    right:0px;
+    -webkit-transform: rotateZ(0deg) rotateY(0deg) rotateX(0deg); /* Safari */
+    transform: rotateZ(0deg) rotateY(0deg) rotateX(0deg);
+}
+.idkids_jssdk .short_cuts ul li .subnav ul{
+    max-height: 60vh;
+    overflow: scroll;
+    display: inline;
+    width:206px;
+    position: absolute;
+    margin-bottom:10px;
+    background: #FFF;
+    padding: 10px;
+    -moz-box-shadow: 0 2px 25px -10px #656565;
+    -webkit-box-shadow: 0 2px 25px -10px #656565;
+    -o-box-shadow: 0 2px 25px -10px #656565;
+    box-shadow: 0 2px 25px -10px #656565;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
+}
+.idkids_jssdk .short_cuts ul a{
+    text-decoration: none;
+}
+.idkids_jssdk .short_cuts ul a .icon{
+    color:#818181;
+}
+.idkids_jssdk .short_cuts ul li .subnav.widgets{
+    display: inline-flex;
+}
+.idkids_jssdk .short_cuts ul li .subnav.widgets ul{
+    display: inline-block;
+}
+.idkids_jssdk .short_cuts ul li .subnav.widgets li{
+    width: 64px;
+    height:100px;
+    margin:2px;
+    display: block;
+    float: left;
+    text-align: center;
+}
+.idkids_jssdk .short_cuts ul li .subnav.widgets li .icon{
+    width: 44px;
+    height:44px;
+    margin:10px;
+    background-color:#E3E3E3;
+}
+.idkids_jssdk .short_cuts ul li .subnav.widgets li span{
+    padding:0;
+}
+.idkids_jssdk .short_cuts ul li .subnav.account{
+    width:304px;
+    padding:0;
+    display: table;
+    -moz-box-shadow: 0 2px 25px -10px #656565;
+    -webkit-box-shadow: 0 2px 25px -10px #656565;
+    -o-box-shadow: 0 2px 25px -10px #656565;
+    box-shadow: 0 2px 25px -10px #656565;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
+}
+.idkids_jssdk .short_cuts ul li .subnav.account .account_infos{
+    padding:10px;
+    display: inline-flex;
+}
+.idkids_jssdk .short_cuts ul li .subnav .account_infos .label{
+    font-weight: bold;
+}
+.idkids_jssdk .short_cuts ul li .subnav .account_infos .email{
+    color: #818181;
+}
+.idkids_jssdk .short_cuts ul li .subnav .options{
+    display: inline-flex;
+    border-top:1px solid #E3E3E3;
+    padding-left:10px;
+    text-align: center;
+    background:#F0F0F0;
+    width: 100%;
+}
+.idkids_jssdk .avatar{
+    width:64px;
+    height:64px;
+    background:#CCC;
+    margin:10px;
+    overflow: hidden;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+}
+.idkids_jssdk .avatar.sm{
+    width:48px;
+    height:48px;
+}
+.idkids_jssdk .avatar img{
+    width: 100%;
+    height:auto;
+}
+.idkids_jssdk .short_cuts ul li .subnav .account_infos .infos{
+    width:200px;
+}
+.idkids_jssdk .short_cuts ul li ul li{
+    display: inline-flex;
+    width:100%;
+    height:32px;
+}
+.idkids_jssdk .short_cuts ul li ul li .icon{
+    width:32px;
+    height:32px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+.idkids_jssdk .short_cuts ul li ul li span{
+    line-height: 32px;
+    padding-left:10px;
+}
+
+
+@keyframes spin {
+    0% {
         transform: rotate(240deg);
         stroke-dashoffset: 50;
     }
-    50% { 
+    50% {
         stroke-dashoffset: 200;
     }
-    100% { 
+    100% {
         transform: rotate(600deg);
         stroke-dashoffset: 50;
     }

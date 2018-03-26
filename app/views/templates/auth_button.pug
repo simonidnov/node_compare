@@ -7,8 +7,9 @@ div.subnav.account
         div.infos
             div.label Mon Compte
             div.email
-            a(href="/account/account").btn.btn-success Mon compte
+            a(href="https://www.idkids-app.com/account/account").btn.btn-success Mon compte
+            div= JSON.stringify(user)
     div.other_accounts
     div.options
-        a.btn.btn-default.btn-sm(href="/auth") Ajouter un compte
-        a.btn.btn-default.btn-sm(href="/auth/logout") Déconnexion
+        a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
+        a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth/logout") Déconnexion
