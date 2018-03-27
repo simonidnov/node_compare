@@ -22,6 +22,9 @@ var express = require('express'),
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {
+  var host = req.get('host');
+  var origin = req.get('origin');
+  console.log('origin --------------------------------------------------------------- ', origin);
         //req.query.device_uid = device_uid;
         //console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
         /*
@@ -63,7 +66,8 @@ auth.get('/', function(req, res, next) {
                     js:[
                         '/public/javascripts/login.js',
                         '/public/javascripts/components/formular.js'
-                    ], css:[
+                    ],
+                    css:[
                         '/public/stylesheets/components/formular.css',
                         '/public/stylesheets/auth.css',
                     ]

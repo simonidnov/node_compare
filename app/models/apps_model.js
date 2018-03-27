@@ -48,23 +48,33 @@ module.exports = {
     attributes: apps_datas
 };
 module.exports.validate = function(secret, host, callback){
-    var query = {
-        host:host
-    };
+  /*
+  ,
+  $or:{
+      aliases:{$indexOfArray: [host]},
+      secret:secret
+  }
+  */
+  console.log('*************************');
+  console.log('*************************');
+  console.log('*************************');
+  console.log('*************************');
+  console.log(secret, host);
+  console.log('*************************');
+  console.log('*************************');
+  console.log('*************************');
+  console.log('*************************');
     Apps.find(
         {
-            host:host,
-            secret:secret,
-            $or:{
-                aliases:{$indexOfArray: [host]},
-                secret:secret
-            }
+            secret:secret
         },
         function(err, infos){
             if(err) callback({status:405, datas:err});
             else callback({status:200, datas:infos});
         }
     );
+
+    //callback({status:200, secret:secret});
 }
 module.exports.get = function(user_id, apps_id, callback){
     var query = {};

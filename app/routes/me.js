@@ -33,9 +33,9 @@ me.use(function(req, res, next) {
         device_uid = dataCheck.device_uid;
     }
 
-    auth_helper.validate_from(dataCheck, req.get('host'), function(e){
+    auth_helper.validate_from(dataCheck, req.get('origin'), function(e){
         if(!e){
-            res.status(401).send({ message: "your server was not authorised", request:dataCheck, host:req.get('host'), is_ok:""});
+            res.status(401).send({ message: "your server was not authorised", secret:dataCheck.options.secret, host:req.get('origin'), is_ok:""});
         }else{
             // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
             if(req.url.indexOf('/from') === -1){
@@ -213,6 +213,9 @@ me.get('/', function(req, res, next) {
     })
     /* ------------ FROM VALIDATION ----------- */
     .get('/from', function(req, res, next) {
-        res.send({ status:200, message: "website authorised", updated_token:req.query.updated_token, host:req.get('host')});
+        Apps_controller.validate(req.query.options.secret, req.get('origin'), function(e){
+            res.status(e.status).send(e);
+        });
+        //res.status(200).send({status:"me from callback", origin:req.get('origin'), options:req.query.options.secret});
     });
 module.exports = me;

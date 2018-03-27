@@ -13,17 +13,18 @@ module.exports = {
             callback(false);
             return false;
         }
-        if(typeof req.options.secret === "undefined" || typeof req.options.from_origin === "undefined"){
+        if(typeof req.options.secret === "undefined" || typeof host === "undefined"){
             callback(false);
             return false;
         }
-        if(req.options.from_origin === "localhost:3000" || req.options.from_origin.indexOf('idkids-app.com') !== -1){
+        if(req.options.from_origin === "localhost:3000" || host !== -1){
             // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
             callback(true);
             return true;
         }
-        Apps_model.validate(req.options.secret, req.options.from_origin, function(e){
+        Apps_model.validate(req.options.secret, host, function(e){
             /* TODO CHECK RESULT LENGTH OR TRUE */
+            console.log('validate host ?');
             if(e.datas.length === 0){
                 callback(false);
             }else{
