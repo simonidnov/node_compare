@@ -10,7 +10,6 @@ exports.get = function(req, datas, callback) {
 // check user login then return user_infos
 exports.create = function(req, datas, callback) {
     Products_model.create(req.session.Auth._id, req.body, function(e){
-        console.log("products create callbak ", e);
         callback(e);
     });
 };
@@ -22,7 +21,6 @@ exports.update = function(req, datas, callback) {
 };
 // check user register then return user_infos
 exports.deleting = function(req, res, callback) {
-  console.log('deleteing product ', req.body._id);
     Products_model.deleting(req.session.Auth._id, req.body._id, function(e){
         callback(e);
     });

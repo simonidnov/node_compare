@@ -30,7 +30,6 @@ product
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
                 Products_controller.create(req, res, function(e){
-                    console.log("Products_controller API callback sattus ? ", e);
                     res.status(e.status).send(e.datas);
                 });
             }else{
