@@ -21,7 +21,7 @@ var express = require('express'),
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {
-        var referer = req.headers.referer;
+        var referer = getReferer(req);
         //req.query.device_uid = device_uid;
         //console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
         /*
@@ -111,7 +111,7 @@ auth.get('/', function(req, res, next) {
     })
     .get('/fingerprint/:device_uid', function(req, res, next) {
         //req.query.device_uid = device_uid;
-        var referer = req.headers.referer;
+        var referer = getReferer(req);
         //req.get('origin');
         Auth_controller.get_user_from_device(req.params.device_uid, function(users_device){
             Auth_controller.login(req, req.query, function(e){
@@ -152,7 +152,7 @@ auth.get('/', function(req, res, next) {
 
     })
     .post('/login', function(req, res, next) {
-        var referer = req.headers.referer;
+        var referer = getReferer(req);
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
                 res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
@@ -190,7 +190,7 @@ auth.get('/', function(req, res, next) {
     })
     .get('/:form_name/*', function(req, res, next) {
         //req.query.device_uid = device_uid;
-        var referer = req.headers.referer;
+        var referer = getReferer(req);
         //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
             var datas = {
@@ -237,3 +237,11 @@ auth.get('/', function(req, res, next) {
     });
 
 module.exports = auth;
+
+function getReferer(req){
+  var referer = req.headers.referer;
+  if(typeof referer === "undefined" || referer.indexOf('/auth') !== -1){
+    referer = "/account/account";
+  }
+  return referer;
+}

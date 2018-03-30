@@ -21,7 +21,7 @@ block content
               div.formular.fullscreen#create_product
                   h1 Créer un produit
                   br
-                  form.form_content(method="POST" action='/api/products')
+                  form.form_content(method="POST" action='/products')
                     div.form-group.material_input.minlength
                         input#label(type="text" name="label" minlength="4" required)
                         label(for="label") Label * uniq
@@ -42,14 +42,31 @@ block content
                 h1 Éditer le produit
                 br
                 if(typeof edit_product !== "undefined")
-                  form.form_content(method="PUT" action="/api/products" data-id=edit_product._id)
+                  form.form_content(method="PUT" action="/products" data-id=edit_product._id)
+                    div
+                        input#thumb_cropper.image_cropper.invisible(type="file" data-width="512" data-height="512" data-target="thumb" name="thumb_cropper")
+                        label(for="thumb_cropper") Thumb 512*512px
+                        br
+                        img#thumb_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="thumb" src=edit_product.thumb)
+                        input#thumb.invisible(type="text" name="thumb" value=edit_product.thumb)
+                    hr.separator
+                    div
+                        input#picture_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="picture" name="picture_cropper")
+                        label(for="picture_cropper") Picture 1024*1024px
+                        br
+                        img#picture_cropper_preview.preview.cropper_preview(width="500" height="250" data-for="picture" src=edit_product.picture)
+                        input#picture.invisible(type="text" name="picture" value=edit_product.picture)
+                    hr.separator
                     input#_id.invisible(type="text" name="_id" value=edit_product._id)
                     div.form-group.material_input.minlength
                         input#label(type="text" name="label" minlength="4" value=edit_product.label required)
                         label(for="label") Label * uniq
                     div.form-group.material_input.minlength
-                        textarea#description(type="text" name="description" maxlength="255" minlength="75" value=edit_product.description required)= edit_page.description
+                        textarea#description(type="text" name="description" maxlength="255" minlength="75" value=edit_product.description required)= edit_product.description
                         label(for="description") description (255 max char)
+                    div.form-group.material_input
+                        input#price(type="number" name="price" step="0.01" required value=edit_product.price)
+                        label(for="price") price EUR
                     div.form-group.material_input.minlength
                         input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_product.keywords required)
                         label(for="keywords") keywords (75 max char)

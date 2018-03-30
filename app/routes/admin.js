@@ -322,23 +322,24 @@ admin
     })
     .get('/products', function(req, res, next) {
       Products_controller.get(req, res, function(e){
-        products = e.datas;
-         res.render('admin/products', {
-            title: 'Admin Products',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:'products',
-            js:[
-                '/public/javascripts/admin/products.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
-            ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/products.css',
-                '/public/stylesheets/components/formular.css'
-            ]
-        });
+          products = e.datas;
+          res.render('admin/products', {
+              title: 'Admin Products',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(),
+              lang: lang,
+              page: 'products',
+              products: products,
+              js:[
+                  '/public/javascripts/admin/products.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/products.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
       });
     })
     .get('/products/:page', function(req, res, next) {
@@ -350,6 +351,7 @@ admin
             locale:language_helper.getlocale(),
             lang:lang,
             page:req.params.page,
+            products: products,
             js:[
                 '/public/javascripts/admin/products.js',
                 '/public/javascripts/components/formular.js',
@@ -362,24 +364,32 @@ admin
         });
       });
     })
-    .get('/products/:page/:product_id', function(req, res, next) {
+    .get('/products/:page/:_id', function(req, res, next) {
       Products_controller.get(req, res, function(e){
         products = e.datas;
-         res.render('admin/products', {
-            title: 'Admin Products',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:req.params.page,
-            js:[
-                '/public/javascripts/admin/products.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
-            ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/products.css',
-                '/public/stylesheets/components/formular.css'
-            ]
+        req.body = {_id:req.params._id};
+        Products_controller.get(req, res, function(e){
+           product_datas = e.datas[0];
+           res.render('admin/products', {
+              title: 'Admin Products',
+              user : req.session.Auth,
+              locale:language_helper.getlocale(),
+              lang:lang,
+              page:req.params.page,
+              products: products,
+              edit_product : product_datas,
+              js:[
+                  '/public/javascripts/admin/products.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/cropperjs/dist/cropper.min.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/products.css',
+                  '/node_modules/cropperjs/dist/cropper.min.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
         });
       });
     });

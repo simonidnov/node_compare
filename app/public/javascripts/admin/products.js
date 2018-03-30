@@ -6,7 +6,7 @@ var products_page = {
         this.create_form();
     },
     create_form : function(){
-        this.create_app_form = new formular("#create_app", function(e){
+        this.create_product_form = new formular("#create_product", function(e){
             if(e.status === "hitted" && e.action=== "submit"){
                 var form_datas = {};
                 $.each($("#create_product form").serializeArray(), function(index, serie){
@@ -17,14 +17,14 @@ var products_page = {
                 });
             }
         });
-        this.create_app_form.init();
-        this.edit_app_form = new formular("#edit_app", function(e){
+        this.create_product_form.init();
+        this.edit_product_form = new formular("#edit_product", function(e){
             if(e.status === "hitted"){
                 switch(e.action){
                     case "submit":
-                        var form_datas = applications_page.edit_app_form.get_datas();
+                        var form_datas = products_page.edit_product_form.get_datas();
                         //{};
-                        index.sdk.api.put($("#edit_app form").attr('action'), form_datas, function(e){
+                        index.sdk.api.put($("#edit_product form").attr('action'), form_datas, function(e){
                             console.log(e);
                             //window.location.href= "/admin/apps/";
                         });
@@ -32,26 +32,14 @@ var products_page = {
                     case "delete":
 
                         var form_datas = {};
-                        index.sdk.api.deleting($("#edit_app form").attr('action'), {_id:$("#edit_app form").attr('data-id')}, function(e){
+                        index.sdk.api.deleting($("#edit_product form").attr('action'), {_id:$("#edit_product form").attr('data-id')}, function(e){
                             console.log(e);
                         });
                         break;
                 }
             }
         });
-        this.edit_app_form.init();
-        console.log("this.edit_app_form ::: ", this.edit_app_form);
-        $( ".order_left_panel_list" ).sortable({
-            update: function( event, ui ) {
-              $.each($('.app_list li'), function(order, app){
-                //console.log($(app).attr('data-id'), " index order ", order);
-                index.sdk.api.put("/api/apps", {_id:$(app).attr('data-id'), order:order}, function(e){
-                    console.log(e);
-                    //window.location.href= "/admin/apps/";
-                });
-              });
-            }
-        });
+        this.edit_product_form.init();
         //$( "#sortable" ).disableSelection();
     }
 }

@@ -13,18 +13,18 @@ module.exports = {
             callback(false);
             return false;
         }
-        if(typeof req.options.secret === "undefined" || typeof host === "undefined"){
+        if(typeof req.options.secret === "undefined"){
             callback(false);
             return false;
         }
-        if(req.options.from_origin === "localhost:3000" || host !== -1){
+        if(req.options.from_origin === "http://localhost:3000" || host !== -1 || req.options.from_origin === "http://127.0.0.1:3000"){
             // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
             callback(true);
             return true;
         }
         Apps_model.validate(req.options.secret, host, function(e){
             /* TODO CHECK RESULT LENGTH OR TRUE */
-            console.log('validate host ?');
+            console.log('validate host ? ', e);
             if(e.datas.length === 0){
                 callback(false);
             }else{

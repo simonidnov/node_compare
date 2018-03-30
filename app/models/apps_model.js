@@ -74,7 +74,7 @@ module.exports.get = function(user_id, apps_id, callback){
         if(err){
             callback({status:405, datas:err});
         }else{
-            app.locals.applications = e.datas;
+            app.locals.applications = infos;
             callback({status:200, datas:infos});
         }
     }).sort( { order: 1 } );

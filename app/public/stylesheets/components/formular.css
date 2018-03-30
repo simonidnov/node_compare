@@ -874,6 +874,8 @@ input[type="color"].small{
     background-repeat: no-repeat;
     background-size: 64px 64px;
     background-position: center center;
+    max-width: 100%;
+    height:auto;
 }
 
 
