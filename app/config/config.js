@@ -20,7 +20,7 @@ module.exports = {
         'transportMethod': 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
         'auth': {
             'user': 'idnovant.it@gmail.com',
-            'pass': 'AlloRaki1'
+            'pass': 'Idn#2018'
         },
     	'tls': {
     	    'rejectUnauthorized': false
