@@ -1,9 +1,9 @@
 extends ../layout
 block content
     script.
-        var uri_params=(!{JSON.stringify(uri_params)})
-        var response=(!{JSON.stringify(response)})
-        var translation=(!{JSON.stringify(lang[locale])})
+        var uri_params   = (!{JSON.stringify(uri_params)})
+        var response     = (!{JSON.stringify(response)})
+        var translation  = (!{JSON.stringify(lang[locale])})
     script.
         window.fbAsyncInit = function() {
           FB.init({

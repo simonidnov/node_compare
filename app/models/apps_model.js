@@ -23,6 +23,7 @@ const db = require('mongoose'),
           has_newsletter    : {type:"bool"},
           has_sms           : {type:"bool"},
           has_notifications : {type:"bool"},
+          order             : {type:"Number"},
           authorizations    : {
                 user_public     : {type:"bool"},
                 user_private    : {type:"bool"},
@@ -55,15 +56,6 @@ module.exports.validate = function(secret, host, callback){
       secret:secret
   }
   */
-  console.log('*************************');
-  console.log('*************************');
-  console.log('*************************');
-  console.log('*************************');
-  console.log(secret, host);
-  console.log('*************************');
-  console.log('*************************');
-  console.log('*************************');
-  console.log('*************************');
     Apps.find(
         {
             secret:secret
@@ -79,9 +71,13 @@ module.exports.validate = function(secret, host, callback){
 module.exports.get = function(user_id, apps_id, callback){
     var query = {};
     Apps.find(query, function(err, infos){
-        if(err) callback({status:405, datas:err});
-        else callback({status:200, datas:infos});
-    });
+        if(err){
+            callback({status:405, datas:err});
+        }else{
+            app.locals.applications = e.datas;
+            callback({status:200, datas:infos});
+        }
+    }).sort( { order: 1 } );
 }
 module.exports.create = function(user_id, datas, callback){
     var _self = this;
@@ -93,7 +89,7 @@ module.exports.create = function(user_id, datas, callback){
           callback({"status":405, "message":err});
         }else{
           _self.get(null, null, function(e){
-              app.locals.applications = e.datas;
+
           });
           callback({"status":200, "datas":infos});
         }
@@ -101,7 +97,6 @@ module.exports.create = function(user_id, datas, callback){
 
 }
 module.exports.update = function(user_id, apps_id, datas, callback){
-
     delete datas.options;
     delete datas._id;
     var _self = this;

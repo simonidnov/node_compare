@@ -9,7 +9,7 @@ block content
             ul.app_list.order_left_panel_list
                 each apps in applications
                     a(href="/admin/apps/edit_app/"+apps._id+"/" title="éditer l'application")
-                        li
+                        li(data-id=apps._id)
                             span.icon(style= "background-image:url("+apps.icon+")")
                             div.label= apps.short_name
         div#apps.container(style= page === "apps" ? "display:block" : "display:none")

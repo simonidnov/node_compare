@@ -16,15 +16,12 @@ var express = require('express'),
         res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
         //SET OUTPUT FORMAT
         //res.setHeader('Content-Type', 'application/json');
-        console.log('WE ARE ON AUTH ROUTER');
         next();
     });
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {
-  var host = req.get('host');
-  var origin = req.get('origin');
-  console.log('origin --------------------------------------------------------------- ', origin);
+        var referer = req.headers.referer;
         //req.query.device_uid = device_uid;
         //console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
         /*
@@ -63,6 +60,7 @@ auth.get('/', function(req, res, next) {
                     lang:lang,
                     uri_params : uri_helper.get_params(req),
                     response:e,
+                    referer:referer,
                     js:[
                         '/public/javascripts/login.js',
                         '/public/javascripts/components/formular.js'
@@ -74,14 +72,16 @@ auth.get('/', function(req, res, next) {
                 };
                 datas.user_session = req.session.Auth;
                 if(typeof e.user !== "undefined"){
-                    res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                    res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
                 }
                 res.render('auth/login', datas);
             });
         //});
     })
     .get('/facebook', function(req, res, next){
-        var facebook_call = req;
+        var facebook_call = req,
+            referer = req.headers.referer;
+        //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
             //Auth_controller.get_user_from_device("fingerprint", function(users_device){
             //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
@@ -104,14 +104,15 @@ auth.get('/', function(req, res, next) {
             };
             datas.user_session = req.session.Auth;
             if(typeof e.user !== "undefined"){
-                res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
             }
             res.render('auth/login', datas);
         });
     })
     .get('/fingerprint/:device_uid', function(req, res, next) {
         //req.query.device_uid = device_uid;
-
+        var referer = req.headers.referer;
+        //req.get('origin');
         Auth_controller.get_user_from_device(req.params.device_uid, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 //Auth_controller.get_user_from_device("fingerprint", function(users_device){
@@ -135,7 +136,7 @@ auth.get('/', function(req, res, next) {
                 };
                 datas.user_session = req.session.Auth;
                 if(typeof e.user !== "undefined"){
-                    res.redirect(307, '/account?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                    res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
                 }
                 res.render('auth/login', datas);
             });
@@ -151,10 +152,10 @@ auth.get('/', function(req, res, next) {
 
     })
     .post('/login', function(req, res, next) {
-
+        var referer = req.headers.referer;
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
-                res.redirect(307, '/account/?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
                 //res.redirect(307, '/account/?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device);
             }else{
                 var user_device = [];
@@ -178,7 +179,6 @@ auth.get('/', function(req, res, next) {
         });
     })
     .put('/login', function(req, res, next) {
-
         Auth_controller.update(req, res, function(){
             res.send('login put params');
         });
@@ -190,6 +190,8 @@ auth.get('/', function(req, res, next) {
     })
     .get('/:form_name/*', function(req, res, next) {
         //req.query.device_uid = device_uid;
+        var referer = req.headers.referer;
+        //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
             var datas = {
                 title: 'Mon compte',
@@ -208,7 +210,7 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                res.redirect(307, '/account/account?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
+                res.redirect(307, referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
             }
             res.render('auth/login', datas);
         });

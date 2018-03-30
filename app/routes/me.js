@@ -213,9 +213,9 @@ me.get('/', function(req, res, next) {
     })
     /* ------------ FROM VALIDATION ----------- */
     .get('/from', function(req, res, next) {
-        Apps_controller.validate(req.query.options.secret, req.get('origin'), function(e){
-            res.status(e.status).send(e);
-        });
-        //res.status(200).send({status:"me from callback", origin:req.get('origin'), options:req.query.options.secret});
+        //Apps_controller.validate(req.query.options.secret, req.get('origin'), function(e){
+        //    res.status(e.status).send(e);
+        //});
+        res.status(200).send({status:"me from callback", origin:req.get('origin'), options:req.query.options.secret});
     });
 module.exports = me;

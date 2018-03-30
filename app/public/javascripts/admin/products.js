@@ -1,7 +1,7 @@
-$(document).ready(function(){applications_page.init();});
-var applications_page = {
-    create_app_form : null,
-    edit_app_form : null,
+$(document).ready(function(){products_page.init();});
+var products_page = {
+    create_product_form : null,
+    edit_product_form : null,
     init:function(){
         this.create_form();
     },
@@ -9,11 +9,11 @@ var applications_page = {
         this.create_app_form = new formular("#create_app", function(e){
             if(e.status === "hitted" && e.action=== "submit"){
                 var form_datas = {};
-                $.each($("#create_app form").serializeArray(), function(index, serie){
+                $.each($("#create_product form").serializeArray(), function(index, serie){
                     form_datas[serie.name] = serie.value;
                 });
-                index.sdk.api.post($("#create_app form").attr('action'), form_datas, function(e){
-                    window.location.reload();
+                index.sdk.api.post($("#create_product form").attr('action'), form_datas, function(e){
+                    // window.location.reload();
                 });
             }
         });
@@ -25,8 +25,8 @@ var applications_page = {
                         var form_datas = applications_page.edit_app_form.get_datas();
                         //{};
                         index.sdk.api.put($("#edit_app form").attr('action'), form_datas, function(e){
-                            //console.log(e);
-                            window.location.href= "/admin/apps/";
+                            console.log(e);
+                            //window.location.href= "/admin/apps/";
                         });
                         break;
                     case "delete":
@@ -40,7 +40,7 @@ var applications_page = {
             }
         });
         this.edit_app_form.init();
-        //console.log("this.edit_app_form ::: ", this.edit_app_form);
+        console.log("this.edit_app_form ::: ", this.edit_app_form);
         $( ".order_left_panel_list" ).sortable({
             update: function( event, ui ) {
               $.each($('.app_list li'), function(order, app){
