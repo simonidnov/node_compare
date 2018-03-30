@@ -123,6 +123,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+
         });
         return;
     })
@@ -203,7 +204,6 @@ admin
         });
     })
     .get('/settings', function(req, res, next) {
-          console.log('settings');
          res.render('admin/settings', {
             title: 'Admin Settings',
             user : req.session.Auth,
@@ -222,7 +222,6 @@ admin
         });
     })
     .get('/translations', function(req, res, next) {
-      console.log('translations');
          res.render('admin/translations', {
             title: 'Admin translations',
             user : req.session.Auth,
@@ -391,6 +390,50 @@ admin
               ]
           });
         });
+      });
+    })
+    .get('/orders', function(req, res, next) {
+      Orders_controller.get(req, res, function(e){
+          orders = e.datas;
+          res.render('admin/orders', {
+              title: 'Admin Orders',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'orders',
+              orders: orders,
+              js:[
+                  '/public/javascripts/admin/orders.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/orders.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
+      });
+    })
+    .get('/baskets', function(req, res, next) {
+      Baskets_controller.get(req, res, function(e){
+          baskets = e.datas;
+          res.render('admin/baskets', {
+              title: 'Admin Baskets',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'baskets',
+              baskets: baskets,
+              js:[
+                  '/public/javascripts/admin/baskets.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/baskets.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
       });
     });
 
