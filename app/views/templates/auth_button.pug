@@ -1,15 +1,33 @@
-div#account_infos
+if(typeof user === "undefined" || user === null)
+  div#account_infos
     div.icon.icon-account_1.idkids-icons.lg
-div.subnav.account
-    div.account_infos
-        div.avatar
-            img(src)
-        div.infos
-            div.label Mon Compte
-            div.email
-            a(href="https://www.idkids-app.com/account/account").btn.btn-success Mon compte
-            div= JSON.stringify(user)
-    div.other_accounts
-    div.options
-        a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
-        a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth/logout") Déconnexion
+  div.subnav.account
+      div.account_infos
+          div.avatar
+              img(src="https://www.idkids-app.com/public/images/assets/account.svg")
+          div.infos
+              div.label Mon Compte
+              div.email Vous n'êtes pas connecté
+              a(href="http://127.0.0.1:3000/auth").btn.btn-success Me connecter
+      div.other_accounts
+      div.options
+          a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-warning(href="https://www.idkids-app.com/auth") Créer un compte
+else
+  div#account_infos
+    div.avtar.sm
+      img(src=user.avatar)
+  div.subnav.account
+      div.account_infos
+          div.avatar
+              img(src=user.avatar)
+          div.infos
+              div.label= user.pseudo
+              div.email= user.email
+              a(href="http://127.0.0.1:3000/account/account").btn.btn-success Mon compte
+      div.other_accounts
+      div.options
+          a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-danger(href="https://www.idkids-app.com/auth/logout") Déconnexion
+  
+      

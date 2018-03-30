@@ -2,18 +2,18 @@ extends admin_header
 block content
     div.admin.users
         div.shutter
-            h3 Filtrer les utilisateurs
+            h3= app.locals.admin_lang[locale].keys['USERS_FILTERS_TITLE']
             div.formular.fullscreen#users_filter
                 form
                     div.form-group
                         input#male.form-control(type='checkbox', name='male')
-                        label(for="male") Homme
+                        label(for="male")= app.locals.admin_lang[locale].keys['USERS_FILTERS_MALE']
                     div.form-group
                         input#female.form-control(type='checkbox', name='female')
-                        label(for="female") Femme
+                        label(for="female")= app.locals.admin_lang[locale].keys['USERS_FILTERS_FEMALE']
                     div.form-group
                         input#is_newsletter.form-control(type='checkbox', name='is_newsletter')
-                        label(for="is_newsletter") Accepte la newsletter
+                        label(for="is_newsletter")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_NEWSLETTER']
                     div.form-group.checkbox_relative_container(data-checkboxrelative="is_newsletter")
                         div.checkbox_relative
                             div.line
@@ -42,7 +42,7 @@ block content
                                 label(for="newsletter_joyvox") !{lang[locale].keys.accept_newsletter_joyvox}
                     div.form-group
                         input#app_user.form-control(type='checkbox', name='app_user')
-                        label(for="app_user") utilise une application
+                        label(for="app_user")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_APPS']
                     div.form-group.checkbox_relative_container(data-checkboxrelative="app_user")
                         div.checkbox_relative
                             div.line
@@ -50,7 +50,7 @@ block content
                                 label(for="app_user_okaidi") Okaidi
                     div.form-group
                         input#has_kid.form-control(type='checkbox', name='has_kid')
-                        label(for="has_kid") Au moins un enfant
+                        label(for="has_kid")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_KIDS']
                     div.form-group.checkbox_relative_container(data-checkboxrelative="has_kid")
                         div.checkbox_relative
                             div.form-group
@@ -67,7 +67,7 @@ block content
                                 label(for='max_age') âge maximum requis
                     div.form-group
                         input#has_geolocation.form-control(type='checkbox', name='has_geolocation')
-                        label(for="has_geolocation") Géolocatlisation
+                        label(for="has_geolocation")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_GEOLOCATION']
                     div.form-group.checkbox_relative_container(data-checkboxrelative="has_geolocation")
                         div.checkbox_relative
                             div.form-group.material_input
@@ -78,7 +78,7 @@ block content
                                 label(for='geolocation_distance') Indiqueez la distance de l'utilisateur requis
                     div.form-group
                         input#is_active.form-control(type='checkbox', name='is_active')
-                        label(for="is_active") Utilisateurs actifs
+                        label(for="is_active")= app.locals.admin_lang[locale].keys['USERS_FILTERS_IS_ACTIVE']
                     div.form-group.checkbox_relative_container(data-checkboxrelative="is_active")
                         div.checkbox_relative
                             div.form-group.radio_list
@@ -95,20 +95,20 @@ block content
                                 label(for='one_month') 1 mois
                     div.form-group
                         input#has_fidelity.form-control(type='checkbox', name='has_fidelity')
-                        label(for="has_fidelity") Carte de fidélité
+                        label(for="has_fidelity")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_FIDELITY_CARD']
                     div.form-group
                         input#has_basket.form-control(type='checkbox', name='has_basket')
-                        label(for="has_basket") Panier en cours
+                        label(for="has_basket")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_BASKET']
                     div.form-group
                         input#has_orders.form-control(type='checkbox', name='has_orders')
-                        label(for="has_orders") Paiements
+                        label(for="has_orders")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_ORDERS']
                     div.form-group
                         input#has_return.form-control(type='checkbox', name='has_return')
-                        label(for="has_return") Retours
+                        label(for="has_return")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_FEEDBACK']
                     div.form-group
-                        div.btn.btn-success Appliquer les filtres
+                        div.btn.btn-success= app.locals.admin_lang[locale].keys['USERS_APPLY_FILTERS_CTA']
         div#users.container
-            h1 UTILISATEURS
+            h1= app.locals.admin_lang[locale].keys['USERS_TITLE']
             ul.users_list.col_options_list
                 each user in users
                     li(data-memberid=user._id)
@@ -120,8 +120,19 @@ block content
                         ul.options
                             li.primary(data-farniente="template" data-edittemplate="member_edit_template" data-post="/me/members" data-value=user._id)
                                 div.icon.icon-pencil.idkids-icons
-                                div.label Éditer
+                                div.label= app.locals.admin_lang[locale].keys['EDIT_CTA']
                             li.danger(data-farniente="delete" data-url="/api/users/"+user._id data-type="delete" data-id=user._id)
                                 div.icon.icon-trash.idkids-icons
-                                div.label Supprimer
+                                div.label= app.locals.admin_lang[locale].keys['DELETE_CTA']
+            div.col-md-4
+              h2= app.locals.admin_lang[locale].keys['USERS_GROUPS_TITLE']
+              p= app.locals.admin_lang[locale].keys['USERS_GROUPS_MESSAGE']
+              div.formular.fullscreen#users_groups
+                  form
+                      div.form-group.material_input
+                          input#label.form-control(type='text', name='label')
+                          label(for="label")= app.locals.admin_lang[locale].keys['USERS_GROUPS_NEW_LABEL']
+                      div.form-group
+                          div.btn.btn-success= app.locals.admin_lang[locale].keys['USERS_GROUPS_NEW_CTA']
+            
             

@@ -38,7 +38,7 @@ admin
         return res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'dashboard',
             js:[
@@ -57,7 +57,7 @@ admin
          res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'dashboard',
             js:[
@@ -78,7 +78,7 @@ admin
             res.status(e.status).render('admin/apps', {
                 title: 'Admin Dashboard',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:'apps',
                 applications:applications,
@@ -106,7 +106,7 @@ admin
             res.render('admin/apps', {
                 title: 'Application',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:req.params.page,
                 applications:applications,
@@ -123,6 +123,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+
         });
         return;
     })
@@ -136,7 +137,7 @@ admin
             res.render('admin/apps', {
                 title: 'Admin Dashboard',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:req.params.page,
                 applications:applications,
@@ -165,7 +166,7 @@ admin
             res.render('admin/users', {
                 title: 'Admin Users',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:'users',
                 users:e.users,
@@ -188,7 +189,7 @@ admin
          res.render('admin/notifications', {
             title: 'Admin Notifications',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'notifications',
             js:[
@@ -203,11 +204,10 @@ admin
         });
     })
     .get('/settings', function(req, res, next) {
-          console.log('settings');
          res.render('admin/settings', {
             title: 'Admin Settings',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'settings',
             js:[
@@ -222,11 +222,10 @@ admin
         });
     })
     .get('/translations', function(req, res, next) {
-      console.log('translations');
          res.render('admin/translations', {
             title: 'Admin translations',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'translations',
             js:[
@@ -246,7 +245,7 @@ admin
          res.render('admin/pages', {
             title: 'Admin Pages',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'pages',
             js:[
@@ -268,7 +267,7 @@ admin
             res.render('admin/pages', {
                 title: 'Admin Pages',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:req.params.page,
                 pages:pages,
@@ -295,7 +294,7 @@ admin
           res.render('admin/pages', {
               title: 'Admin Pages',
               user : req.session.Auth,
-              locale:language_helper.getlocale(),
+              locale:language_helper.getlocale(req),
               lang:lang,
               page:req.params.page,
               pages:pages,
@@ -322,23 +321,24 @@ admin
     })
     .get('/products', function(req, res, next) {
       Products_controller.get(req, res, function(e){
-        products = e.datas;
-         res.render('admin/products', {
-            title: 'Admin Products',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:'products',
-            js:[
-                '/public/javascripts/admin/products.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
-            ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/products.css',
-                '/public/stylesheets/components/formular.css'
-            ]
-        });
+          products = e.datas;
+          res.render('admin/products', {
+              title: 'Admin Products',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'products',
+              products: products,
+              js:[
+                  '/public/javascripts/admin/products.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/products.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
       });
     })
     .get('/products/:page', function(req, res, next) {
@@ -347,9 +347,10 @@ admin
          res.render('admin/products', {
             title: 'Admin Products',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:req.params.page,
+            products: products,
             js:[
                 '/public/javascripts/admin/products.js',
                 '/public/javascripts/components/formular.js',
@@ -362,25 +363,77 @@ admin
         });
       });
     })
-    .get('/products/:page/:product_id', function(req, res, next) {
+    .get('/products/:page/:_id', function(req, res, next) {
       Products_controller.get(req, res, function(e){
         products = e.datas;
-         res.render('admin/products', {
-            title: 'Admin Products',
-            user : req.session.Auth,
-            locale:language_helper.getlocale(),
-            lang:lang,
-            page:req.params.page,
-            js:[
-                '/public/javascripts/admin/products.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
-            ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/admin/products.css',
-                '/public/stylesheets/components/formular.css'
-            ]
+        req.body = {_id:req.params._id};
+        Products_controller.get(req, res, function(e){
+           product_datas = e.datas[0];
+           res.render('admin/products', {
+              title: 'Admin Products',
+              user : req.session.Auth,
+              locale:language_helper.getlocale(req),
+              lang:lang,
+              page:req.params.page,
+              products: products,
+              edit_product : product_datas,
+              js:[
+                  '/public/javascripts/admin/products.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/cropperjs/dist/cropper.min.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/products.css',
+                  '/node_modules/cropperjs/dist/cropper.min.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
         });
+      });
+    })
+    .get('/orders', function(req, res, next) {
+      Orders_controller.get(req, res, function(e){
+          orders = e.datas;
+          res.render('admin/orders', {
+              title: 'Admin Orders',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'orders',
+              orders: orders,
+              js:[
+                  '/public/javascripts/admin/orders.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/orders.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
+      });
+    })
+    .get('/baskets', function(req, res, next) {
+      Baskets_controller.get(req, res, function(e){
+          baskets = e.datas;
+          res.render('admin/baskets', {
+              title: 'Admin Baskets',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'baskets',
+              baskets: baskets,
+              js:[
+                  '/public/javascripts/admin/baskets.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/baskets.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
       });
     });
 

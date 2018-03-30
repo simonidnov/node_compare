@@ -13,7 +13,7 @@ var applications_page = {
                     form_datas[serie.name] = serie.value;
                 });
                 index.sdk.api.post($("#create_app form").attr('action'), form_datas, function(e){
-                    // window.location.reload();
+                    window.location.reload();
                 });
             }
         });
@@ -25,8 +25,8 @@ var applications_page = {
                         var form_datas = applications_page.edit_app_form.get_datas();
                         //{};
                         index.sdk.api.put($("#edit_app form").attr('action'), form_datas, function(e){
-                            console.log(e);
-                            //window.location.href= "/admin/apps/";
+                            //console.log(e);
+                            window.location.href= "/admin/apps/";
                         });
                         break;
                     case "delete":
@@ -40,9 +40,17 @@ var applications_page = {
             }
         });
         this.edit_app_form.init();
-        console.log("this.edit_app_form ::: ", this.edit_app_form);
+        //console.log("this.edit_app_form ::: ", this.edit_app_form);
         $( ".order_left_panel_list" ).sortable({
-          update: function( event, ui ) {console.log('update ', event);}
+            update: function( event, ui ) {
+              $.each($('.app_list li'), function(order, app){
+                //console.log($(app).attr('data-id'), " index order ", order);
+                index.sdk.api.put("/api/apps", {_id:$(app).attr('data-id'), order:order}, function(e){
+                    console.log(e);
+                    //window.location.href= "/admin/apps/";
+                });
+              });
+            }
         });
         //$( "#sortable" ).disableSelection();
     }

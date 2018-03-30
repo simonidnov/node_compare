@@ -8,7 +8,6 @@ block content
                     h1 Mon profil
                     form.form_content(method="POST" action='/account/profile/')
                         p Informations de votre profil public
-                        
                         div.form_group
                             input#avatar_cropper.image_cropper.invisible(type="file" data-width="256" data-height="256" data-target="avatar" name="avatar_cropper")
                             label(for="avatar_cropper") Avatar 256*256
@@ -593,7 +592,6 @@ block content
                                         div.label= device.ua_parser.os.name+" "+device.ua_parser.browser.name+" "+device.ua_parser.browser.major
                                     div.arch= device.uid
                                     div#delete_device.delete_device.btn.btn-sm.btn-warning(data-device_uid=device.uid) supprimer
-                   
                    
         div.row#fidelity(style= page === "fidelity" ? "display:block" : "display:none")
             h1 fidelity

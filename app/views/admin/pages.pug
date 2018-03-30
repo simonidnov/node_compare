@@ -5,7 +5,7 @@ block content
             a.shutter_action(href="/admin/pages/new_page" title="ajouter une application")
                 span.icon.icon-more.idkids-icons
                 div.label Nouvelle Page
-            h3 Liste des pages
+            h3= app.locals.admin_lang[locale].keys['PAGES_LEFT_PANEL']
             ul.app_list
                 each page in pages
                     a(href="/admin/pages/edit_page/"+page._id title="éditer la page")
@@ -14,43 +14,9 @@ block content
         div#pages.container(style= page === "pages" ? "display:block" : "display:none")
             div.article
                 div.col.col-md-6
-                    h1 Qu'est ce qu'une page
-                    p Les pages sont des outils de communication que vous pouvez requêter depuis l'API idkids.
-                    h2 Pourquoi créer des pages
-                    p Les pages sont principalement utilisées sur l'account, cependant les sites reconnus par le SDK peuvent requêter différents contenus directement via l'API. des pages telles que les mentions légales peuvent ainsi être diffusées par les applications et sont mises à jour une seule fois pour l'ensemble des apps intégrant le SDK IDKIDS
-                    h2 Comment requêter une page
-                    p après avoir intégré le SDK sur votgre site, vous pouvez requêter des pages soit côté client avec un appel XHTML classique, soit côté serveur en vous appuyant sur la technologie que vous utilisez par exemple en CURL.
-                div.col.col-md-3
-                    h2 Dernières mises à jour
-                    code
-                        xmp.
-                          <?xml version=«1.0» encoding=«UTF-8» ?>
-                          <OrdersList>
-                            <SendOrder date=«1486019811» nomber=«63723» price_sum=«6940» weight_sum=«800»>
-                              <UserInfo>
-                                <family>Громович</family>
-                                <name>Алексей</name>
-                                <patronymic>Алексеевич</patronymic>
-                                <phone>79252458485</phone>
-                                <email>grmvch@gmail.com</email>
-                              </UserInfo>
-                              <Delivery>
-                                <transport_companies>4</transport_companies>
-                                <city_id>0a7e138b-7c55-4745-8a75-0441df4d3432</city_id>
-                                <delivery_points_id>900305</delivery_points_id>
-                                <price_delivery>400</price_delivery>
-                              </Delivery>
-                              <Commentary></Commentary>
-                              <Items>
-                                <Item article_product=«00122000» title=«Сноубордический рюкзак DAKINE HELI PRO 20L BOZEMAN» count=«1» price=«6940»/>
-                              </Items>
-                            </SendOrder>
-                          </OrdersList>
-                    code.script
-                        xmp.
-                            for(var i =0; i<8 i++){
-                                console.log(i);
-                            }
+                    h1= app.locals.admin_lang[locale].keys['PAGES_TITLE']
+                    p= app.locals.admin_lang[locale].keys['PAGES_MESSAGE']
+                
         div.container(style= page === "new_page" ? "display:block" : "display:none")
             div.col.col-md-6
               div.formular.fullscreen#create_page
@@ -88,5 +54,5 @@ block content
                         input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_page.keywords required)
                         label(for="keywords") keywords (75 max char)
                     div.form-group.buttons.inline
-                        div.btn.btn-success.btn-lg(data-action="submit") Enregistrer
-                        div.btn.btn-danger.btn-lg(data-action="delete") Supprimer
+                        div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
+                        div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']

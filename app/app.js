@@ -14,6 +14,7 @@ const express = require('express'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
     admin = require('./routes/admin'),
+    products = require('./routes/products'),
     redirect = require('./routes/redirect'),
     validation = require('./routes/validation'),
     api = require('./routes/api'),
@@ -31,6 +32,9 @@ app = module.exports = express();
 Apps_controller.get(null, null, function(e){
     app.locals.applications = e.datas;
 });
+app.locals.auth_lang = require('./public/languages/auth_lang');
+app.locals.api_lang = require('./public/languages/api_lang');
+app.locals.admin_lang = require('./public/languages/admin_lang');
 /* END DEFINED GLOBAL STATIC APP VARS */
 
 
@@ -91,6 +95,7 @@ app.use('/validation', validation);
 app.use('/templating', templating);
 app.use('/redirect', redirect);
 app.use('/auth', auth);
+app.use('/products', products);
 app.use('/', index);
 
 // catch 404 and forward to error handler

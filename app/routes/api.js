@@ -72,6 +72,20 @@ api
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         });
     })
+    .get('/apps/:action', function(req, res, next) {
+        console.log("req.body :::::: ", req);
+        switch(action){
+          case 'valid_sdk':
+            Apps_controller.validate(req, res, function(e){
+                res.status(e.status).send(e);
+                //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            });
+            break;
+          default:
+            res.status(200).send({"status":"Hello", "title":"action non définie", "message":"votre requête n'est pas reconnue par l\'api"});
+            break;
+        }
+    })
     .post('/apps', function(req, res, next) {
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(e);

@@ -35,11 +35,11 @@ html
                             div.infos
                                 div.label= user.pseudo
                                 div.email= user.email
-                                a(href="/account/account").btn.btn-success Mon compte
+                                a(href="/account/account").btn.btn-success= app.locals.auth_lang[locale].keys['account_widget_account']
                         div.other_accounts
                         div.options
-                            a.btn.btn-default.btn-sm(href="/auth") Ajouter un compte
-                            a.btn.btn-default.btn-sm(href="/auth/logout") Déconnexion
+                            a.btn.btn-default.btn-sm(href="/auth")= app.locals.auth_lang[locale].keys['account_widget_add_account']
+                            a.btn.btn-default.btn-sm(href="/auth/logout")= app.locals.auth_lang[locale].keys['account_widget_logout']
         include admin_nav.pug
     div.admin_content
         block content

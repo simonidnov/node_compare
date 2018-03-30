@@ -5,16 +5,17 @@ block content
             ul
                 li 
                     span.icon.icon-widgets.idkids-icons
-                    div.label Applications
+                    div.label= app.locals.admin_lang[locale].keys['APPS_NAV']
                 li 
                     span.icon.icon-pencil.idkids-icons
-                    div.label Pages
+                    div.label= app.locals.admin_lang[locale].keys['PAGES_NAV']
                 li 
                     span.icon.icon-account.idkids-icons
-                    div.label Utilisateurs
+                    div.label= app.locals.admin_lang[locale].keys['USERS_NAV']
                 li 
                     span.icon.icon-notifications.idkids-icons
-                    div.label Notification
+                    div.label= app.locals.admin_lang[locale].keys['NOTIFICATIONS_NAV']
         div.container
             div.article
-                h1 Paramètres
+                h1= app.locals.admin_lang[locale].keys['SETTINGS_TITLE']
+                p= app.locals.admin_lang[locale].keys['SETTINGS_MESSAGE']

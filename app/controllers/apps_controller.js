@@ -7,6 +7,12 @@ exports.get = function(req, datas, callback) {
         callback(e);
     });
 };
+exports.validate = function(secret, origin, callback){
+  //console.log(req);
+  Apps_model.validate(secret, origin, function(e){
+      callback(e);
+  });
+}
 exports.getApps = function(req, datas, callback) {
     Apps_model.get(req, datas, function(e){
         return e.datas;

@@ -2,19 +2,23 @@ block navigation
     nav.hor_nav
         ul
             a(href="/admin/")
-                li(class= page === "dashboard" ? "selected" : "" data-for="dashboard")= "Dashboard"
+                li(class= page === "dashboard" ? "selected" : "" data-for="dashboard")= app.locals.admin_lang[locale].keys['DASHBOARD_NAV']
             a(href="/admin/apps/")
-                li(class= page === "apps" ? "selected" : "" data-for="apps")= "Applications"
+                li(class= page === "apps" ? "selected" : "" data-for="apps")= app.locals.admin_lang[locale].keys['APPS_NAV']
             a(href="/admin/products/")
-                li(class= page === "products" ? "selected" : "" data-for="products")= "Products"
+                li(class= page === "products" ? "selected" : "" data-for="products")= app.locals.admin_lang[locale].keys['PRODUCTS_NAV']
+            a(href="/admin/orders/")
+                li(class= page === "orders" ? "selected" : "" data-for="orders")= app.locals.admin_lang[locale].keys['ORDERS_NAV']
+            a(href="/admin/baskets/")
+                li(class= page === "baskets" ? "selected" : "" data-for="baskets")= app.locals.admin_lang[locale].keys['BASKETS_NAV']
             a(href="/admin/pages/")
-                li(class= page === "pages" ? "selected" : "" data-for="pages")= "Pages"
+                li(class= page === "pages" ? "selected" : "" data-for="pages")= app.locals.admin_lang[locale].keys['PAGES_NAV']
             a(href="/admin/users/")
-                li(class= page === "users" ? "selected" : "" data-for="users")= "Utilisateurs"
+                li(class= page === "users" ? "selected" : "" data-for="users")= app.locals.admin_lang[locale].keys['USERS_NAV']
             a(href="/admin/notifications/")
-                li(class= page === "notifications" ? "selected" : "" data-for="newsletters")= "Notifications"
+                li(class= page === "notifications" ? "selected" : "" data-for="newsletters")= app.locals.admin_lang[locale].keys['NOTIFICATIONS_NAV']
             a(href="/admin/settings/")
-                li(class= page === "settings" ? "selected" : "" data-for="settings")= "Paramètres"
+                li(class= page === "settings" ? "selected" : "" data-for="settings")= app.locals.admin_lang[locale].keys['SETTINGS_NAV']
             a(href="/admin/translations/")
-                li(class= page === "translations" ? "selected" : "" data-for="translations")= "Traductions"
+                li(class= page === "translations" ? "selected" : "" data-for="translations")= app.locals.admin_lang[locale].keys['TRANSLATIONS_NAV']
             
