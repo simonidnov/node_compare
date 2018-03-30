@@ -28,7 +28,7 @@ templating.use(function(req, res, next){
 /* GET home page. */
 templating.get('/:template', function(req, res, next) {
     res.render('templates/'+req.params.template, {
-        locale:language_helper.getlocale(),
+        locale:language_helper.getlocale(req),
         lang:lang,
         query:req.query,
         _:_und

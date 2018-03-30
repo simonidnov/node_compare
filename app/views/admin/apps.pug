@@ -4,8 +4,8 @@ block content
         div.shutter
             a.shutter_action(href="/admin/apps/new_app" title="ajouter une application")
                 span.icon.icon-more.idkids-icons
-                div.label Nouvelle Application
-            h3 Mes applications
+                div.label= app.locals.admin_lang[locale].keys['APPS_NEW_BUTTON']
+            h3= app.locals.admin_lang[locale].keys['APPS_LEFT_PANEL']
             ul.app_list.order_left_panel_list
                 each apps in applications
                     a(href="/admin/apps/edit_app/"+apps._id+"/" title="éditer l'application")
@@ -14,17 +14,12 @@ block content
                             div.label= apps.short_name
         div#apps.container(style= page === "apps" ? "display:block" : "display:none")
             div.col.col-md-6
-                h1 Qu'est ce qu'une application
-                p Les applications sont des domaines ou des applications natives reconnues par l'authentification Idkids.
-                h2 Pourquoi créer une application
-                p Pour utiliser le SDK idkids sur un nouveau nom de domaine ou dans une nouvelle application, vous devez créer une nouvelle app.<br/>Une fois créée vous trouverez un script à intégrer sur votre site ou application pour pouvoir utiliser les ressources des comptes utilsateurs IDKIDS.
-            div.col.col-md-4
-                h2 dernières mises à jour
-                p hello
+                h1= app.locals.admin_lang[locale].keys['APPS_TITLE']
+                p= app.locals.admin_lang[locale].keys['APPS_MESSAGE']
         div#new_app.container(style= page === "new_app" ? "display:block" : "display:none")
             div.col.col-md-6
                 div.formular.fullscreen#create_app
-                    h1 Créer une application
+                    h1= app.locals.admin_lang[locale].keys['APPS_CREATE_TITLE']
                     br
                     form.form_content(method="POST" action='/api/apps')
                         div
@@ -75,11 +70,11 @@ block content
                             input#terms_url(type="text" minlength="20" maxlength="50" name="terms_url" required)
                             label(for="terms_url") special terms url with http://
                         div.form-group
-                            div.btn.btn-success.btn-lg(data-action="submit") Ajouter
+                            div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['APPS_CREATE_CTA']
         div.container(style= page === "edit_app" ? "display:block" : "display:none")
             div.col.col-md-6
                 div.formular.fullscreen#edit_app
-                    h1 Éditer l'application
+                    h1= app.locals.admin_lang[locale].keys['APPS_EDIT_TITLE']
                     br
                     if(typeof edit_application !== "undefined")
                         form.form_content(method="PUT" action='/api/apps' data-id=edit_application._id)
@@ -115,7 +110,7 @@ block content
                                 input#redirect_url(type="text" name="redirect_url" minlength="4" value=edit_application.redirect_url required)
                                 label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
                             div.form-group
-                                a.hyperlink(href="#") > En savoir plus sur l'url de redirection
+                                a.hyperlink(href="#") En savoir plus sur l'url de redirection
                             div.form-group.material_input.minlength
                                 textarea#description(type="text" minlength="50" maxlength="250" name="description" required)= edit_application.description
                                 label(for="description") description
@@ -162,14 +157,14 @@ block content
                                 h3 Ajouter des alias au domaine de l'application
                                 p Si votre domaine est accessible avec ou sans les www en https ou sans certificat SSL ou encore si vous utilisez le SDK sur différents sous-domaines, veuillez renseigner les possibilités ci-dessous.
                                 ul.array_list_menu
-                                    li.add_input_array_button Ajouter +
+                                    li.add_input_array_button= app.locals.admin_lang[locale].keys['ADD_CTA']
                                 ul.array_list_inputs
                                     if(typeof edit_application.aliases !== "undefined")
                                         each alias in _.keys(edit_application.aliases)
                                             li.form-group.material_input.minlength
                                                 input(type="text" minlength="5" name=alias value=edit_application.aliases[alias])
                                                 label Entrez l'url de l'alias
-                                                div.delete_input_array_button Supprimer
+                                                div.delete_input_array_button= app.locals.admin_lang[locale].keys['DELETE_CTA']
                             hr.separator
                             div.form-group.material_input
                                 input#secret(type="text" value=edit_application.secret name="terms_url" disabled)
@@ -178,5 +173,5 @@ block content
                                 input#token(type="text" value=edit_application.token name="terms_url" disabled)
                                 label(for="token") token
                             div.form-group.buttons.inline
-                                div.btn.btn-success.btn-lg(data-action="submit") Enregistrer
-                                div.btn.btn-danger.btn-lg(data-action="delete") Supprimer
+                                div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
+                                div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']

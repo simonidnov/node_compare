@@ -4,6 +4,9 @@
         "label":"Français (France)",
         "timezone":"",
         "keys":{
+            "account_widget_account":"Mon compte",
+            "account_widget_add_account":"Ajouter un compte",
+            "account_widget_logout":"Me deconnecter",
             "email_holder":"Entrez votre email",
             "email_error":"Votre email semble invalide.",
             "password_holder":"Entrez votre mot de passe.",
@@ -114,6 +117,8 @@
             "lost_password_cta":"Recevoir un nouveau mot de passe",
             "connected_status":"connecté",
             "not_connected_status":"hors ligne",
+            "account_nav_basket":"Mon panier",
+            "account_nav_orders":"Mes commandes",
             "account_nav_account":"Mon compte",
             "account_nav_services":"Mes services",
             "account_nav_services":"Mes services",

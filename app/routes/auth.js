@@ -56,7 +56,7 @@ auth.get('/', function(req, res, next) {
                 var datas = {
                     title: 'Mon compte',
                     datas: req.query,
-                    locale:language_helper.getlocale(),
+                    locale:language_helper.getlocale(req),
                     lang:lang,
                     uri_params : uri_helper.get_params(req),
                     response:e,
@@ -89,7 +89,7 @@ auth.get('/', function(req, res, next) {
             var datas = {
                 title: 'Mon compte',
                 datas: req.query,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 uri_params : uri_helper.get_params(req),
                 response:e,
@@ -121,7 +121,7 @@ auth.get('/', function(req, res, next) {
                 var datas = {
                     title: 'Mon compte',
                     datas: req.query,
-                    locale:language_helper.getlocale(),
+                    locale:language_helper.getlocale(req),
                     lang:lang,
                     uri_params : uri_helper.get_params(req),
                     users_device:users_device.users_device,
@@ -162,7 +162,7 @@ auth.get('/', function(req, res, next) {
                 var datas = {
                     title: 'Mon compte',
                     datas: req.query,
-                    locale:language_helper.getlocale(),
+                    locale:language_helper.getlocale(req),
                     lang:lang,
                     uri_params : uri_helper.get_params(req),
                     response:e,
@@ -197,7 +197,7 @@ auth.get('/', function(req, res, next) {
                 title: 'Mon compte',
                 datas: req.query,
                 response:e,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 uri_params:uri_helper.get_params(req),
                 form:req.params.form_name,

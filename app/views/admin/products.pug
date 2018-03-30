@@ -5,7 +5,7 @@ block content
             a.shutter_action(href="/admin/products/new_product" title="ajouter un produit")
                 span.icon.icon-more.idkids-icons
                 div.label Nouveau produit
-            h3 Liste des produits
+            h3= app.locals.admin_lang[locale].keys['PRODUCTS_LEFT_PANEL']
             ul.app_list
                 each product in products
                     a(href="/admin/products/edit_product/"+product._id title="éditer le produit")
@@ -14,12 +14,12 @@ block content
         div#produits.container(style= page === "products" ? "display:block" : "display:none")
             div.article
                 div.col.col-md-6
-                    h1 Créer des produits dématérialisés
-                    p cette page est dédiée à la création de pages produits dématérialisés. Vous y trouverez des modules pour créer et manager vos produits et des formulaires pour y injecter vos sources.    
+                    h1= app.locals.admin_lang[locale].keys['PRODUCTS_TITLE']
+                    p= app.locals.admin_lang[locale].keys['PRODUCTS_MESSAGE']    
         div.container(style= page === "new_product" ? "display:block" : "display:none")
             div.col.col-md-6
               div.formular.fullscreen#create_product
-                  h1 Créer un produit
+                  h1= app.locals.admin_lang[locale].keys['PRODUCTS_CREATE_TITLE']
                   br
                   form.form_content(method="POST" action='/products')
                     div.form-group.material_input.minlength
@@ -39,7 +39,7 @@ block content
         div.container(style= page === "edit_product" ? "display:block" : "display:none")
             div.col.col-md-6
               div.formular.fullscreen#edit_product
-                h1 Éditer le produit
+                h1= app.locals.admin_lang[locale].keys['PRODUCTS_EDIT_TITLE']
                 br
                 if(typeof edit_product !== "undefined")
                   form.form_content(method="PUT" action="/products" data-id=edit_product._id)
@@ -51,8 +51,8 @@ block content
                         input#thumb.invisible(type="text" name="thumb" value=edit_product.thumb)
                     hr.separator
                     div
-                        input#picture_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="1024" data-target="picture" name="picture_cropper")
-                        label(for="picture_cropper") Picture 1024*1024px
+                        input#picture_cropper.image_cropper.invisible(type="file" data-width="1024" data-height="512" data-target="picture" name="picture_cropper")
+                        label(for="picture_cropper") Picture 1024*512px
                         br
                         img#picture_cropper_preview.preview.cropper_preview(width="500" height="250" data-for="picture" src=edit_product.picture)
                         input#picture.invisible(type="text" name="picture" value=edit_product.picture)
@@ -71,5 +71,5 @@ block content
                         input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_product.keywords required)
                         label(for="keywords") keywords (75 max char)
                     div.form-group.buttons.inline
-                        div.btn.btn-success.btn-lg(data-action="submit") Enregistrer
-                        div.btn.btn-danger.btn-lg(data-action="delete") Supprimer
+                        div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
+                        div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']

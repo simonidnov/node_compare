@@ -35,7 +35,7 @@ account
         res.render('account', {
             title : 'User Account',
             user  : req.session.Auth,
-            locale: language_helper.getlocale(),
+            locale: language_helper.getlocale(req),
             lang  : lang,
             page  : req.params.page,
             js:[
@@ -56,7 +56,7 @@ account
         res.render('account', {
             title: 'User Account',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:"member",
             member_infos:_.where(req.session.Auth.members, {_id:req.params.member_id})[0],
@@ -78,7 +78,7 @@ account
         res.render('account', {
             title: 'Edit address',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:"addresses",
             address_infos:_.where(req.session.Auth.address, {_id:req.params.address_id})[0],

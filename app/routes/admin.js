@@ -38,7 +38,7 @@ admin
         return res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'dashboard',
             js:[
@@ -57,7 +57,7 @@ admin
          res.render('admin/dashboard', {
             title: 'Admin Dashboard',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'dashboard',
             js:[
@@ -78,7 +78,7 @@ admin
             res.status(e.status).render('admin/apps', {
                 title: 'Admin Dashboard',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:'apps',
                 applications:applications,
@@ -106,7 +106,7 @@ admin
             res.render('admin/apps', {
                 title: 'Application',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:req.params.page,
                 applications:applications,
@@ -136,7 +136,7 @@ admin
             res.render('admin/apps', {
                 title: 'Admin Dashboard',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:req.params.page,
                 applications:applications,
@@ -165,7 +165,7 @@ admin
             res.render('admin/users', {
                 title: 'Admin Users',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:'users',
                 users:e.users,
@@ -188,7 +188,7 @@ admin
          res.render('admin/notifications', {
             title: 'Admin Notifications',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'notifications',
             js:[
@@ -207,7 +207,7 @@ admin
          res.render('admin/settings', {
             title: 'Admin Settings',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'settings',
             js:[
@@ -226,7 +226,7 @@ admin
          res.render('admin/translations', {
             title: 'Admin translations',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'translations',
             js:[
@@ -246,7 +246,7 @@ admin
          res.render('admin/pages', {
             title: 'Admin Pages',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:'pages',
             js:[
@@ -268,7 +268,7 @@ admin
             res.render('admin/pages', {
                 title: 'Admin Pages',
                 user : req.session.Auth,
-                locale:language_helper.getlocale(),
+                locale:language_helper.getlocale(req),
                 lang:lang,
                 page:req.params.page,
                 pages:pages,
@@ -295,7 +295,7 @@ admin
           res.render('admin/pages', {
               title: 'Admin Pages',
               user : req.session.Auth,
-              locale:language_helper.getlocale(),
+              locale:language_helper.getlocale(req),
               lang:lang,
               page:req.params.page,
               pages:pages,
@@ -326,7 +326,7 @@ admin
           res.render('admin/products', {
               title: 'Admin Products',
               user : req.session.Auth,
-              locale: language_helper.getlocale(),
+              locale: language_helper.getlocale(req),
               lang: lang,
               page: 'products',
               products: products,
@@ -348,7 +348,7 @@ admin
          res.render('admin/products', {
             title: 'Admin Products',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:req.params.page,
             products: products,
@@ -373,7 +373,7 @@ admin
            res.render('admin/products', {
               title: 'Admin Products',
               user : req.session.Auth,
-              locale:language_helper.getlocale(),
+              locale:language_helper.getlocale(req),
               lang:lang,
               page:req.params.page,
               products: products,

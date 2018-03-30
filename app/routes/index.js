@@ -17,7 +17,7 @@ router.get('/:page_url', function(req, res, next) {
         res.render('index', {
             title: 'Welcome',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:req.params.page_name,
             page_datas:e.datas,
@@ -32,7 +32,7 @@ router.get('/:page_url', function(req, res, next) {
         res.render('404', {
             title: '404',
             user : req.session.Auth,
-            locale:language_helper.getlocale(),
+            locale:language_helper.getlocale(req),
             lang:lang,
             page:req.params.page_name,
             page_datas:e.datas,
