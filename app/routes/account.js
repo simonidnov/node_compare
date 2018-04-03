@@ -99,7 +99,7 @@ account
     .post('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
-                res.redirect(301, '/account/'+req.url.replace('/',''));
+                res.redirect(200, e.datas);
             }else{
                 res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
             }
@@ -108,7 +108,7 @@ account
     .put('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
-                res.send(e.status, '/account/'+req.url.replace('/',''));
+                res.send(e.status, e.datas);
             }else{
                 res.send(e.status, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
             }
