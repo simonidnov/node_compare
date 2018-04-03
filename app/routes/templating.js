@@ -27,12 +27,20 @@ templating.use(function(req, res, next){
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 templating.get('/:template', function(req, res, next) {
-    res.render('templates/'+req.params.template, {
+    console.log("req.query ", req.query);
+    var datas= {
         locale:language_helper.getlocale(req),
         lang:lang,
         query:req.query,
         _:_und
-    });
+    };
+    if(typeof req.session.Auth !== "undefined"){
+      datas.user = req.session.Auth;
+      if(typeof req.query.member_id !== "undefined"){
+        datas.member = _und.where(datas.user.members, {_id:req.query.member_id})[0];
+      }
+    }
+    res.render('templates/'+req.params.template, datas);
     //res.render('templates/'+req.params.template, req.query);
 });
 

@@ -61,7 +61,10 @@ var account = {
                                             data_form.avatar = $('#member_edit_form #child_avatar').attr('data-path');
                                         }
                                         index.sdk.api.put("/me/members", data_form, function(e){
-                                            console.log(e);
+                                            if(e.status === 200){
+                                              target.removeClass('editable');
+                                              $('#member_edit_form').remove();
+                                            }
                                         });
                                         break;
                                     default:
@@ -123,7 +126,6 @@ var account = {
         }).init();
         this.security_form = new formular('#security_form', function(e){
             if(e.status === "hitted" && e.action === "submit"){
-                console.log('call update password XHTTP');
                 index.sdk.api.put("/api/change_password/", {
                     user_id:$('#security_form #user_id').val(),
                     password:$('#security_form #change_password_old').val(),

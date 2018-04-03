@@ -1,5 +1,5 @@
 //run $ mongod
-//DEBUG=broadcast_local:* npm start
+//DEBUG=idkids_app:* npm start
 //forever start "script": "index.js",
 const express = require('express'),
     path = require('path'),
