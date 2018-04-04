@@ -67,7 +67,7 @@ api
         //});
     })
     .get('/apps', function(req, res, next) {
-        Apps_controller.get(req, res, function(e){
+        Apps_controller.get(req, {}, function(e){
             res.status(e.status).send(e);
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
         });

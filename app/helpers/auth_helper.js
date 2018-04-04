@@ -24,11 +24,21 @@ module.exports = {
         }
         Apps_model.validate(req.options.secret, host, function(e){
             /* TODO CHECK RESULT LENGTH OR TRUE */
-            console.log('validate host ? ', e);
             if(e.datas.length === 0){
                 callback(false);
             }else{
                 callback(true);
+            }
+        });
+    },
+    validate_origin:function(req, host, callback) {
+      console.log("validate_origin ::: ", req.options.secret, host);
+        Apps_model.validate(req.options.secret, host, function(e){
+            /* TODO CHECK RESULT LENGTH OR TRUE */
+            if(e.datas.length === 0){
+                callback(false);
+            }else{
+                callback(e.datas[0]);
             }
         });
     },

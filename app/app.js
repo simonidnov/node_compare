@@ -29,7 +29,7 @@ const express = require('express'),
 app = module.exports = express();
 
 /* DEFINE STATIC GLOBAL APP SPEC HERE ACCESS IN ALL CONTROLLER INSIDE app.locals NEED TO REBOOT SERVER TO REFRESH */
-Apps_controller.get(null, null, function(e){
+Apps_controller.get(null, {}, function(e){
     app.locals.applications = e.datas;
 });
 app.locals.auth_lang = require('./public/languages/auth_lang');

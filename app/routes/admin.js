@@ -4,6 +4,8 @@ var express = require('express'),
     Auth_model = require('../models/auth_model'),
     Auth_helper = require('../helpers/auth_helper'),
     Apps_controller = require('../controllers/apps_controller'),
+    Basket_controller = require('../controllers/basket_controller'),
+    Orders_controller = require('../controllers/orders_controller'),
     Pages_controller = require('../controllers/pages_controller'),
     Products_controller = require('../controllers/products_controller'),
     language_helper = require('../helpers/languages_helper'),
@@ -73,7 +75,7 @@ admin
     })
     .get('/apps', function(req, res, next) {
         var applications = [];
-        Apps_controller.get(req, res, function(e){
+        Apps_controller.get(req, {}, function(e){
             applications = e.datas;
             res.status(e.status).render('admin/apps', {
                 title: 'Admin Dashboard',
@@ -101,7 +103,7 @@ admin
     })
     .get('/apps/:page', function(req, res, next) {
         var applications = null;
-        Apps_controller.get(req, res, function(e){
+        Apps_controller.get(req, {}, function(e){
             applications = e.datas;
             res.render('admin/apps', {
                 title: 'Application',
@@ -130,7 +132,7 @@ admin
     .get('/apps/:page/:_id', function(req, res, next) {
         var applications = null;
         var edit_application = null;
-        Apps_controller.get(req, res, function(e){
+        Apps_controller.get(req, {}, function(e){
             applications = e.datas;
             //application = _.where(applications, {_id:"5a2eb38289fda770c4af9312"})[0];
             edit_application = _.where(JSON.parse(JSON.stringify(applications)), {_id:req.params._id})[0];
@@ -415,7 +417,7 @@ admin
       });
     })
     .get('/baskets', function(req, res, next) {
-      Baskets_controller.get(req, res, function(e){
+      Basket_controller.get(req, res, function(e){
           baskets = e.datas;
           res.render('admin/baskets', {
               title: 'Admin Baskets',

@@ -65,7 +65,11 @@ const db = require('mongoose'),
           created     : {type:'Date', default: Date.now},
           updated     : {type:'Date', default: Date.now},
           public_locale : {type:'Boolean'},
-          public_profile : {type:'Object'}
+          public_profile : {type:'Boolean'},
+          public_kids : {type:'Boolean'},
+          public_created : {type:'Boolean'},
+          public_gamification : {type:'Boolean'},
+          public_interest : {type:'Boolean'}
       },
       machineId = require('node-machine-id'),
       ua_parser = require('ua-parser-js');

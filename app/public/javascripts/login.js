@@ -5,6 +5,12 @@ $(function(){
 var login = {
     form : null,
     init:function(){
+        if(typeof current_app !== "undefined" && current_app !== null){
+            console.log("current app is set " + current_app.name);
+        }
+        if(typeof referer !== "undefined"){
+            console.log("referer " + referer);
+        }
         if(response.status === "error" && response.code == 11){
             $('#email').parent().addClass('invalid');
         }else if(response.status === "error" && response.code == 13){
@@ -14,13 +20,14 @@ var login = {
         this.add_account();
         this.form = new formular('#auth_form', function(e){
             $('.formular.auth').css({
-                height:($('.displayblock').height()+140)+"px"
+                height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"
             });
         }).init();
         window.addEventListener('popstate', this.navigate);
         this.set_listeners();
         if(this.parse_url(window.location.pathname.replace('/auth')).length === 0){
             this.sdk.api.get_device_uid(function(e){
+              console.log('this.sdk.api.get_device_uid ', e);
                 if(e.status === 200){
                     //window.location.href="/auth/fingerprint/"+e.device_uid;
                 }
@@ -137,12 +144,14 @@ var login = {
                         $('#email').val(params.email);
                     }else{
                         $('#email').val("");
+                        $('#password').val("");
                     }
                     break;
                 case 'subscribe':
                     $('#account_selection').addClass('displaynone').removeClass('displayblock');
                     $('#account_forms').removeClass('displaynone').addClass('displayblock');
                     $('#email').val("");
+                    $('#password').val("");
                     break;
                 default:
                     $('#account_selection').removeClass('displaynone').addClass('displayblock');
@@ -154,7 +163,7 @@ var login = {
             $('#account_forms').addClass('displaynone').removeClass('displayblock');
         }
         $('.formular.auth').css({
-            height:($('.displayblock').height()+140)+"px"
+            height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"
         });
         //setTimeout(function(){
         //    $('.formular.auth').css({'height': ($('.displayblock').height()+140)+"px"});
