@@ -8,7 +8,7 @@ var idkids_jssdk = function(options, callback){
         user : null,
         options:null,
         config : {
-          url:"http://127.0.0.1:3000"
+          url:window.location.origin
         },
         get : function(request, params, callback) {
             this.call('GET', request, params, callback);
