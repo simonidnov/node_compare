@@ -70,6 +70,35 @@ block content
                     div.form-group.material_input.minlength
                         input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_product.keywords required)
                         label(for="keywords") keywords (75 max char)
+                    hr.separator
+                      
                     div.form-group.buttons.inline
                         div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
                         div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                  
+                  hr.separator
+                  h3 Liste des médias en téléchargement
+                  br
+                  each media in edit_product.medias
+                    if typeof media[0] !== "undefined" && media[0] !== null
+                      case media[0].mimetype
+                          when 'audio/mp3'
+                            div.media(data-filename=media[0].filename, data-productid=edit_product._id)
+                              audio(controls='', autoplay=false)
+                                source(src='/'+media[0].path, type='audio/mpeg')
+                              div= media[0].originalname
+                              div.form-group.buttons.inline
+                                div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                          default
+                            div default
+                      
+                  
+                  hr.separator
+                  h3 Media upload
+                  div ajouter les médias à télécharger lors de l'achat du produit ci-dessous
+                  br
+                  form#media_upload.dropzone(method="POST" action="/products/medias" data-id=edit_product._id)
+                    div.form-group
+                        input#product_id.invisible(type="text" name="product_id" value=edit_product._id)
+                        div#dZUpload
+                        div.dz-default

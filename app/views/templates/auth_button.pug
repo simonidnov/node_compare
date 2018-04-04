@@ -4,29 +4,29 @@ if(typeof query.user === "undefined" || query.user === null || query.user === ""
   div.subnav.account
       div.account_infos
           div.avatar
-              img(src="https://www.idkids-app.com/public/images/assets/account.svg")
+              img(src=app.locals.settings.host+"/public/images/assets/account.svg")
           div.infos
               div.label= "Mon Compte"
               div.email Vous n'êtes pas connecté
-              a(href="http://127.0.0.1:3000/auth?secret="+query.options.secret id="idkids_sdk_login_button").btn.btn-success Me connecter
+              a(href=app.locals.settings.host+"/auth?secret="+query.options.secret id="idkids_sdk_login_button").btn.btn-success Me connecter
       div.other_accounts
       div.options
-          a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-warning(href="https://www.idkids-app.com/auth") Créer un compte
+          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth") Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth") Créer un compte
 else
   div#account_infos
       div.icon.icon-account_1.idkids-icons.lg
   div.subnav.account
       div.account_infos
           div.avatar
-              img(src=((query.user.avatar !== "")? query.user.avatar : "https://www.idkids-app.com/public/images/assets/account.svg"))
+              img(src=((query.user.avatar !== "")? query.user.avatar : app.locals.settings.host+"/public/images/assets/account.svg"))
           div.infos
               div.label= query.user.pseudo
               div.email= query.user.email
-              a(href="http://127.0.0.1:3000/account/account").btn.btn-success Mon compte
+              a(href=app.locals.settings.host+"/account/account").btn.btn-success Mon compte
       div.other_accounts
       div.options
-          a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth?secret="+query.options.secret) Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-danger(href="https://www.idkids-app.com/auth/logout?secret="+query.options.secret) Déconnexion
+          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-danger(href=app.locals.settings.host+"/auth/logout?secret="+query.options.secret) Déconnexion
   
       

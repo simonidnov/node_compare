@@ -17,7 +17,7 @@ module.exports = {
             callback(false);
             return false;
         }
-        if(req.options.from_origin === "http://localhost:3000" || host !== -1 || req.options.from_origin === "http://127.0.0.1:3000"){
+        if(req.options.from_origin === "http://localhost:3000" || host !== -1 || req.options.from_origin === app.locals.settings.host){
             // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
             callback(true);
             return true;
@@ -32,7 +32,6 @@ module.exports = {
         });
     },
     validate_origin:function(req, host, callback) {
-      console.log("validate_origin ::: ", req.options.secret, host);
         Apps_model.validate(req.options.secret, host, function(e){
             /* TODO CHECK RESULT LENGTH OR TRUE */
             if(e.datas.length === 0){
