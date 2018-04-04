@@ -58,8 +58,20 @@ block content
                         if(typeof user_session !== "undefined")
                             if current_app !== null && typeof current_app !== "undefined"
                               a(href=current_app.redirect_url title="Accéder à l'application")
-                            if referer !== null && typeof referer !== "undefined"
+                                li(data-userid=user_session._id)
+                                    img.avatar(src=user_session.avatar)
+                                    div.option_infos
+                                        div.label= user_session.pseudo
+                                        div.email= user_session.email
+                                        div.status.success= lang[locale].keys.connected_status
+                            else if referer !== null && typeof referer !== "undefined"
                               a(href=referer title="Accéder à l'application")
+                                li(data-userid=user_session._id)
+                                    img.avatar(src=user_session.avatar)
+                                    div.option_infos
+                                        div.label= user_session.pseudo
+                                        div.email= user_session.email
+                                        div.status.success= lang[locale].keys.connected_status
                             else
                               a(href="/account/" title="Accéder à mon compte")
                                 li(data-userid=user_session._id)

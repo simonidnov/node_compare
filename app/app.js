@@ -23,14 +23,19 @@ const express = require('express'),
     me = require('./routes/me'),
     address = require('./routes/address'),
     account = require('./routes/account'),
+    settings = require("./routes/settings"),
     session = require("express-session"),
     Apps_controller = require('./controllers/apps_controller');
+    Settings_model = require('./models/settings_model');
 
 app = module.exports = express();
 
 /* DEFINE STATIC GLOBAL APP SPEC HERE ACCESS IN ALL CONTROLLER INSIDE app.locals NEED TO REBOOT SERVER TO REFRESH */
 Apps_controller.get(null, {}, function(e){
     app.locals.applications = e.datas;
+});
+Settings_model.get(null, {}, function(e){
+    app.locals.settings = e;
 });
 app.locals.auth_lang = require('./public/languages/auth_lang');
 app.locals.api_lang = require('./public/languages/api_lang');
@@ -73,6 +78,9 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(__dirname + '/public')
+//TODO SET USE ONLY WITH AUTHORISATION ON UPLOADS FOLDER
+app.use("/uploads", express.static(path.join(__dirname, './uploads')));
+
 app.use("/public", express.static(path.join(__dirname, 'public')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules')));
 
@@ -96,6 +104,7 @@ app.use('/templating', templating);
 app.use('/redirect', redirect);
 app.use('/auth', auth);
 app.use('/products', products);
+app.use('/settings', settings);
 app.use('/', index);
 
 // catch 404 and forward to error handler

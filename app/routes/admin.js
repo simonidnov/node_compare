@@ -215,10 +215,12 @@ admin
             js:[
                 '/public/javascripts/admin/settings.js',
                 '/public/javascripts/components/formular.js',
+                '/node_modules/cropperjs/dist/cropper.min.js',
                 '/node_modules/qrcode/build/qrcode.min.js'
             ], css:[
                 '/public/stylesheets/admin/admin.css',
                 '/public/stylesheets/admin/settings.css',
+                '/node_modules/cropperjs/dist/cropper.min.css',
                 '/public/stylesheets/components/formular.css'
             ]
         });
@@ -334,7 +336,7 @@ admin
               js:[
                   '/public/javascripts/admin/products.js',
                   '/public/javascripts/components/formular.js',
-                  '/node_modules/qrcode/build/qrcode.min.js'
+                  '/node_modules/dropzone/dist/dropzone.min.js'
               ], css:[
                   '/public/stylesheets/admin/admin.css',
                   '/public/stylesheets/admin/products.css',
@@ -355,8 +357,7 @@ admin
             products: products,
             js:[
                 '/public/javascripts/admin/products.js',
-                '/public/javascripts/components/formular.js',
-                '/node_modules/qrcode/build/qrcode.min.js'
+                '/public/javascripts/components/formular.js'
             ], css:[
                 '/public/stylesheets/admin/admin.css',
                 '/public/stylesheets/admin/products.css',
@@ -383,12 +384,13 @@ admin
                   '/public/javascripts/admin/products.js',
                   '/public/javascripts/components/formular.js',
                   '/node_modules/cropperjs/dist/cropper.min.js',
-                  '/node_modules/qrcode/build/qrcode.min.js'
+                  '/node_modules/dropzone/dist/dropzone.min.js'
               ], css:[
                   '/public/stylesheets/admin/admin.css',
                   '/public/stylesheets/admin/products.css',
                   '/node_modules/cropperjs/dist/cropper.min.css',
-                  '/public/stylesheets/components/formular.css'
+                  '/public/stylesheets/components/formular.css',
+                  '/node_modules/dropzone/dist/dropzone.min.css'
               ]
           });
         });

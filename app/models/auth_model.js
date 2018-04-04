@@ -500,7 +500,6 @@ module.exports.reset_session = function(req, user_id, callback){
             if (err){
                 callback({"status":401, "code":err.code, "error":err, "message":err.message});
             }else{
-
                 user_infos = JSON.parse(JSON.stringify(user));
                 user_infos.current_device = device_uid;
                 Members_model.get(user_id, null, function(e){

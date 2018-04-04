@@ -3,9 +3,13 @@ var idkids_jssdk = function(options, callback){
     this.options = options;
     this.callback = callback;
     this.inited = false;
+
     this.api = {
         user : null,
         options:null,
+        config : {
+          url:"http://127.0.0.1:3000"
+        },
         get : function(request, params, callback) {
             this.call('GET', request, params, callback);
         },
@@ -20,6 +24,7 @@ var idkids_jssdk = function(options, callback){
             this.call('DELETE', request, params, callback);
         },
         call : function(method, request, params, callback){
+          console.log('callback ', callback);
             this.show_loader();
             this.add_params(params, $.proxy(function(new_params){
                 params = new_params;
@@ -28,7 +33,7 @@ var idkids_jssdk = function(options, callback){
                     dataType = 'json';
                     params = JSON.stringify(params);
                 }
-                jQuery.ajax(request, {
+                jQuery.ajax(this.config.url+request, {
                     method: method,
                     contentType: 'application/json',
                     dataType: dataType,
@@ -120,9 +125,8 @@ var idkids_jssdk = function(options, callback){
                 this.store('idkids_local_user', jeton);
 
                 this.set_user();
+                window.history.pushState({"pageTitle":document.title},document.title, window.location.origin + window.location.pathname);
                 callback(jeton);
-                //window.location.href =window.location.pathname;
-                //window.location.reload(window.location.pathname+'/');
             }
         },
         set_user : function(){
@@ -182,7 +186,6 @@ var idkids_jssdk = function(options, callback){
         }
     };
     this.logout = function(){
-        console.log('LOGOUT SESSION LOCAL SDK');
         this.api.store('idkids_local_user', '');
         window.location.href = window.location.origin + window.location.pathname;
     };
@@ -198,23 +201,15 @@ var idkids_jssdk = function(options, callback){
                 },
             };
         }
-        //var sdkel;
-        //if(document.getElementById('idkids-dsk') === null){ return false; }
-        /* TODO REQUEST SECRET FROM SERVER URL THEN RETURN INITED OR NOT IDENTIFIED */
         this.api.get_device_uid(function(e){console.log('device uid ', e);});
-        /* TODO ON STARTUP GET URL PARAMS THEN SET DEFAULT USER ID NEEDED THEN REDIRECT ONLY IF WEBSITE IS IDENTIFIED SERVER SIDE */
         this.api.reset_user(function(datas){
-            //console.log('reset user ', datas);
-            window.location.href = window.location.origin + window.location.pathname;
         });
-        this.api.get('/me/from', {}, function(e){
+        this.api.get('/me/from', {secret:{}}, function(e){
             callback(e);
         });
-
         /* check uri params call action SDK tools */
         var url = new URL(window.location.href),
             action = url.searchParams.get("idkids-sdk-action");
-            console.log("params url action ", action);
         switch(action){
           case 'logout':
             this.logout();
@@ -223,21 +218,31 @@ var idkids_jssdk = function(options, callback){
             console.log('IDKIDS SDK TOOLKIT has returned an action not defined in your javascript sdk version. please upgrade the latest version of idkids-js-sdk on your server then try again.');
             break;
         }
-
     };
     this.isLogged = function(callback){
         callback(this.api.get_user_status());
     };
     this.template = function(template_name, params, callback){
-        $.get('/templating/'+template_name, params, function(e){callback(e);});
+        $.get(this.api.config.url+'/templating/'+template_name, params, function(e){callback(e);});
     };
     this.createAuthbutton = function(target, callback){
-        console.log('createAuthbutton');
         if(document.getElementById(target) === null){
             callback({"status":"error", "message":"TARGET_ID_TAG_ELEMENT_NOT_FOUND"});
         }else{
-            document.getElementById(target).innerHTML = '<div class="idkids-sdk"><a href="'+window.location.origin+'/auth?from='+window.location.origin.replace(new RegExp('/', 'g'), 'R|')+'&redirect='+this.options.callback_url.replace(new RegExp('/', 'g'), '|')+'&secret='+this.options.secret+'" class="auth_button" data-action="login"><div class="avatar"></div><div class="label">CONNEXION</div></a></div>';
+            var _self = this;
+            this.template("auth_button", {user:this.api.user, options:this.options}, function(temp){
+              document.getElementById(target).innerHTML = temp;
+              callback({"status":"success", "message":"AUTH_BUTTON_CREATED"});
+            });
         }
     };
-    callback({status:"sdk instance created"}, this.options);
+    this.validInitedApp = function(callback){
+        this.api.get(this.api.config.url+'/api/apps/validate',
+        {
+          secret:this.options.secret
+        },
+        function(e){
+            callback(e);
+        });
+    }
 }

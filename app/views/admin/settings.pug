@@ -16,6 +16,33 @@ block content
                     span.icon.icon-notifications.idkids-icons
                     div.label= app.locals.admin_lang[locale].keys['NOTIFICATIONS_NAV']
         div.container
-            div.article
-                h1= app.locals.admin_lang[locale].keys['SETTINGS_TITLE']
-                p= app.locals.admin_lang[locale].keys['SETTINGS_MESSAGE']
+            div.col.col-md-6
+                div.formular.fullscreen#update_settings
+                  h1= app.locals.admin_lang[locale].keys['SETTINGS_TITLE']
+                  p= app.locals.admin_lang[locale].keys['SETTINGS_MESSAGE']
+                  form.form_content(method="PUT" action='/settings')
+                      div
+                          input#icon_cropper.image_cropper.invisible(type="file" data-width="512" data-height="512" data-target="icon" name="icon_cropper")
+                          label(for="icon_cropper") Icon 512*512px
+                          br
+                          img#icon_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="icon" src=app.locals.settings.icon)
+                          input#icon.invisible(type="text" name="icon" value=app.locals.settings.icon)
+                      hr.separator
+                      div
+                          input#logo_cropper.image_cropper.invisible(type="file" data-width="512" data-height="205" data-target="logo" name="logo_cropper")
+                          label(for="logo_cropper") Logo 512*205px
+                          br
+                          img#logo_cropper_preview.cropper_preview(width="230" height="90" data-for="logo" src=app.locals.settings.logo)
+                          input#logo.invisible(type="text" name="logo" value=app.locals.settings.logo)
+                      hr.separator
+                      div.form-group.material_input.minlength
+                          input#label(type="text" name="label" minlength="4" value=app.locals.settings.label required)
+                          label(for="label") Label
+                      div.form-group.material_input.minlength
+                          input#host(type="text" name="host" minlength="4" value=app.locals.settings.host required)
+                          label(for="host") host ex : http://account.idkids-app.com
+                      div.form-group.material_input.minlength
+                          textarea#description(type="text" minlength="50" maxlength="250" name="description" required)= app.locals.settings.description
+                          label(for="description") description
+                      div.form-group
+                          div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
