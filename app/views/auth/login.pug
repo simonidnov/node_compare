@@ -1,9 +1,13 @@
 extends ../layout
 block content
     script.
-        var uri_params   = (!{JSON.stringify(uri_params)})
-        var response     = (!{JSON.stringify(response)})
-        var translation  = (!{JSON.stringify(lang[locale])})
+        var uri_params   = (!{JSON.stringify(uri_params)});
+        var response     = (!{JSON.stringify(response)});
+        var translation  = (!{JSON.stringify(lang[locale])});
+        if(typeof current_app !== "undefined"){
+          var current_app  = (!{JSON.stringify(current_app)});
+        }
+        var referer  = "#{referer}";
     script.
         window.fbAsyncInit = function() {
           FB.init({
@@ -42,11 +46,22 @@ block content
                         each apps in app.locals.applications
                           if(apps.is_widget)
                             li.icon(style="background-image:url("+apps.icon+")")
+                div.app_infos
+                    if current_app !== null && typeof current_app !== "undefined"
+                      div.row
+                        img(src=current_app.icon, height="50")
+                        img(src=current_app.logo, height="50")
+                        div= "Me connecter sur "+current_app.name
                 div#account_selection(class=typeof form === "undefined" ? "displayblock" : "displaynone")
                     h1 !{lang[locale].keys.account_picker_title}
                     ul.account_list.option_list
                         if(typeof user_session !== "undefined")
-                            a(href="/account/" title="Accéder à mon compte")
+                            if current_app !== null && typeof current_app !== "undefined"
+                              a(href=current_app.redirect_url title="Accéder à l'application")
+                            if referer !== null && typeof referer !== "undefined"
+                              a(href=referer title="Accéder à l'application")
+                            else
+                              a(href="/account/" title="Accéder à mon compte")
                                 li(data-userid=user_session._id)
                                     img.avatar(src=user_session.avatar)
                                     div.option_infos
@@ -120,6 +135,8 @@ block content
                                     input.phantom_input.form-control(name="appVersion")
                                     input.phantom_input.form-control(name="userAgent")
                                     input.phantom_input.form-control(name="vendor")
+                                    if current_app !== null && typeof current_app !== "undefined"
+                                      input.phantom_input.form-control(name="app_id" value=current_app._id)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.login_cta
                         form#subscribe_form(method="post" action='/auth/login/')
@@ -170,6 +187,10 @@ block content
                                     input.phantom_input.form-control(name="appVersion")
                                     input.phantom_input.form-control(name="userAgent")
                                     input.phantom_input.form-control(name="vendor")
+                                    if current_app !== null && typeof current_app !== "undefined"
+                                      input.phantom_input.form-control(name="app_id" value=current_app._id)
+                                    if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
+                                      input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.subscribe_cta
                         form#lost_form(method="post" action='/auth/lost_password/')
@@ -185,6 +206,10 @@ block content
                                     input.phantom_input.form-control(name="appVersion")
                                     input.phantom_input.form-control(name="userAgent")
                                     input.phantom_input.form-control(name="vendor")
+                                    if current_app !== null && typeof current_app !== "undefined"
+                                      input.phantom_input.form-control(name="app_id" value=current_app._id)
+                                    if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
+                                      input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.lost_password_cta
                     if(response.status === "error" && typeof response.message !== "undefined")

@@ -27,7 +27,6 @@ templating.use(function(req, res, next){
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 templating.get('/:template', function(req, res, next) {
-    console.log("req.query ", req.query);
     var datas= {
         locale:language_helper.getlocale(req),
         lang:lang,

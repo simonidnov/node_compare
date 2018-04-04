@@ -23,21 +23,21 @@ block content
                         hr
                         p Je souhaites que les données suivantes soient visible publiquement
                         div.form-group.inline
-                            input#public_locale.form-control(type='checkbox' name='public_profile' value='public_locale' checked=((user.public_profile && user.public_profile.indexOf('public_locale') === -1)? false : true))
+                            input#public_locale.form-control(type='checkbox' name='public_locale' checked=user.public_locale)
                             label(for="public_locale") Ma ville, ma région et mon pays <b>(votre adresses postale exacte ne sera pas visible)</b>
                         div.form-group.inline
-                            input#public_kids.form-control(type='checkbox' name='public_profile' value='public_kids' checked=((user.public_profile && user.public_profile.indexOf('public_kids') === -1)? false : true))
+                            input#public_kids.form-control(type='checkbox' name='public_kids' checked=user.public_kids)
                             label(for="public_kids") Pseudo et l'âge de mes enfants
                         div.form-group.inline
-                            input#public_gamification.form-control(type='checkbox' name='public_profile' value='public_gamification' checked=((user.public_profile && user.public_profile.indexOf('public_gamification') === -1)? false : true))
+                            input#public_gamification.form-control(type='checkbox' name='public_gamification' checked=user.public_gamification)
                             label(for="public_gamification") Partager mes badges et succès
                         div.form-group.inline
-                            input#public_created.form-control(type='checkbox' name='public_profile' value='public_created' checked=((user.public_profile && user.public_profile.indexOf('public_created') === -1)? false : true))
+                            input#public_created.form-control(type='checkbox' name='public_created' checked=user.public_created)
                             label(for="public_created") Date d'inscrition et ancienneté
                         div.form-group.inline
-                            input#public_interest.form-control(type='checkbox' name='public_profile' value='public_interest' checked=((user.public_profile && user.public_profile.indexOf('public_interest') === -1)? false : true))
+                            input#public_interest.form-control(type='checkbox' name='public_profile' checked=user.public_interest)
                             label(for="public_interest") !{lang[locale].keys.public_interest_check}
-                        button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
+                        button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.save_cta
                 div.formular#private_datas
                     h1 Civilité
                     form.form_content(method="POST" action='/account/profile/')

@@ -267,7 +267,12 @@ header .logo{
     background-image:url(../images/assets/icon_bubble.svg);
 }
 
-
+.app_infos{
+}
+.app_infos .row{
+  padding: 10px;
+  padding-left: 40px;
+}
 @media screen and (max-width: 420px) {
     .auth .account_list li{
         padding-left:20px;

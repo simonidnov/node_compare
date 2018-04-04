@@ -1,15 +1,22 @@
 block notifs
     li#notifications
         a(href="#")
+            div.indice 0
             div.icon.icon-notifications.idkids-icons.lg
         div.subnav
             ul
                 li
-                    div.icon.idkids-icons.icon-basket
-                    span Mon panier (0)
+                    a(href="/account/basket")
+                      div.icon.idkids-icons.icon-basket
+                      span Mon panier
+                      span(id="total_basket") (0)  
                 li
-                    div.icon.idkids-icons.icon-delivery
-                    span Mes livraisons (0)
+                    a(href="/account/orders")
+                      div.icon.idkids-icons.icon-delivery
+                      span Mes Commandes
+                      span(id="total_orders") (0)
                 li
-                    div.icon.idkids-icons.icon-email
-                    span Mes messages (0)
+                    a(href="/account/messages")
+                      div.icon.idkids-icons.icon-email
+                      span Mes messages
+                      span(id="total_messages") (0)

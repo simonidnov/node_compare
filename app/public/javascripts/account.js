@@ -112,8 +112,15 @@ var account = {
     },
     create_forms : function(){
         this.public_form = new formular("#public_datas", function(e){
-        }).init();
-        this.public_form = new formular("#add_kid", function(e){
+          if(e.status==="hitted" && e.action==="submit"){
+              var public_datas = account.public_form.get_datas();
+              index.sdk.api.put("/account/profile/", public_datas, function(e){
+                console.log(e);
+              });
+          }
+        });
+        this.public_form.init();
+        this.kid_form = new formular("#add_kid", function(e){
             if(e.status === "hitted" && e.action === "submit"){
                 var form_datas = {};
                 $.each($("#add_kid form").serializeArray(), function(index, serie){

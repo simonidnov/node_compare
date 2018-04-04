@@ -68,13 +68,15 @@ module.exports.validate = function(secret, host, callback){
 
     //callback({status:200, secret:secret});
 }
-module.exports.get = function(user_id, apps_id, callback){
-    var query = {};
+module.exports.get = function(user_id, query, callback){
+    var query = query;
     Apps.find(query, function(err, infos){
         if(err){
             callback({status:405, datas:err});
         }else{
-            app.locals.applications = infos;
+            if(typeof query === "undefined" || query === null || Object.keys(query).length === 0){
+              app.locals.applications = infos;
+            }
             callback({status:200, datas:infos});
         }
     }).sort( { order: 1 } );
@@ -88,7 +90,7 @@ module.exports.create = function(user_id, datas, callback){
         if(err){
           callback({"status":405, "message":err});
         }else{
-          _self.get(null, null, function(e){
+          _self.get(null, {}, function(e){
 
           });
           callback({"status":200, "datas":infos});
@@ -113,7 +115,7 @@ module.exports.update = function(user_id, apps_id, datas, callback){
               callback({"status":405, "message":err});
             }
             else{
-              _self.get(null, null, function(e){
+              _self.get(null, {}, function(e){
                   app.locals.applications = e.datas;
               });
               callback({"status":200, "apps":infos});

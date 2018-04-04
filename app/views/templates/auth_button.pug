@@ -1,4 +1,4 @@
-if(typeof user === "undefined" || user === null)
+if(typeof query.user === "undefined" || query.user === null || query.user === "")
   div#account_infos
     div.icon.icon-account_1.idkids-icons.lg
   div.subnav.account
@@ -6,28 +6,27 @@ if(typeof user === "undefined" || user === null)
           div.avatar
               img(src="https://www.idkids-app.com/public/images/assets/account.svg")
           div.infos
-              div.label Mon Compte
+              div.label= "Mon Compte"
               div.email Vous n'êtes pas connecté
-              a(href="http://127.0.0.1:3000/auth").btn.btn-success Me connecter
+              a(href="http://127.0.0.1:3000/auth?secret="+query.options.secret id="idkids_sdk_login_button").btn.btn-success Me connecter
       div.other_accounts
       div.options
           a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
           a.btn.btn-default.btn-sm.btn-warning(href="https://www.idkids-app.com/auth") Créer un compte
 else
   div#account_infos
-    div.avtar.sm
-      img(src=user.avatar)
+      div.icon.icon-account_1.idkids-icons.lg
   div.subnav.account
       div.account_infos
           div.avatar
-              img(src=user.avatar)
+              img(src=((query.user.avatar !== "")? query.user.avatar : "https://www.idkids-app.com/public/images/assets/account.svg"))
           div.infos
-              div.label= user.pseudo
-              div.email= user.email
+              div.label= query.user.pseudo
+              div.email= query.user.email
               a(href="http://127.0.0.1:3000/account/account").btn.btn-success Mon compte
       div.other_accounts
       div.options
-          a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth") Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-danger(href="https://www.idkids-app.com/auth/logout") Déconnexion
+          a.btn.btn-default.btn-sm(href="https://www.idkids-app.com/auth?secret="+query.options.secret) Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-danger(href="https://www.idkids-app.com/auth/logout?secret="+query.options.secret) Déconnexion
   
       
