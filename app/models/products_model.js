@@ -1,6 +1,7 @@
 // GOOGLE API KEY : AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs
 const db = require('mongoose'),
       config = require('../config/config'),
+      language_helper  = require('../helpers/languages_helper');
       products_datas = {
           label             : {type:"string", unique: true},
           description       : {type:"string"},
@@ -13,10 +14,11 @@ const db = require('mongoose'),
           type              : {type:"string", "enum": ["physical", "demateralized"]},
           attributs         : {type:"Object"},
           medias            : {type:"Array"},
+          phonetik          : {type:"Array"},
           created           : {type:"Date", "default": Date.now},
           updated           : {type:"Date", "default": Date.now}
       },
-      fs = require('fs');;
+      fs = require('fs');
 
 if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
@@ -27,9 +29,23 @@ const productsSchemas = new db.Schema(products_datas),
 module.exports = {
     attributes: products_datas
 };
-module.exports.get = function(user_id, query, callback){
-    Products.find(query, function(err, infos){
+module.exports.get = function(user_id, req, callback){
+    var query = {},
+        self = this;
+
+    if(typeof req.label !== "undefined"){
+      query = {
+
+      }
+      //$where: "language_helper.wordlab(this.label) == language_helper.wordlab(req.label)" };
+    }
+    Products.find({
+        $where: function() {
+            return ( language_helper.wordlab(this.label) === language_helper.wordlab(req.label) );
+        }
+    }, function(err, infos){
         if(err){
+            console.log("err ::::::: ", err);
             callback({status:304, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
         }else{
             callback({status:200, datas:infos});
@@ -66,6 +82,18 @@ module.exports.update = function(user_id, products_id, datas, callback){
         }
     )
 };
+module.exports.getFile = function(req, res, callback){
+    fs.readFile('./uploads/'+req.params.filename, function read(err, data) {
+        if (err) {
+            throw err;
+        }
+        content = data;
+
+        // Invoke the next step here however you like
+        callback({status:200, datas:content});   // Put all of the code here (not the best solution)
+        //processFile();          // Or put the next step in a function and invoke it
+    });
+}
 module.exports.addFile = function(product_id, file, callback){
     Products.updateOne(
         {

@@ -3,7 +3,7 @@ const Products_model = require('../models/products_model'),
 
 // check user login then return user_infos
 exports.get = function(req, datas, callback) {
-    Products_model.get(req.session.Auth._id, req.body, function(e){
+    Products_model.get(null, req.query, function(e){
         callback(e);
     });
 };
@@ -25,6 +25,11 @@ exports.addFile = function(req, file, callback) {
         callback(e);
     });
 };
+exports.getFile = function(req, res, callback) {
+    Products_model.getFile(req, res, function(e){
+        callback(e);
+    });
+}
 exports.removeFile = function(req, res, callback) {
     Products_model.removeFile(req.body.product_id, req.body.filename, function(e){
         callback(e);

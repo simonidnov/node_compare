@@ -1,5 +1,6 @@
 var express = require('express'),
     Mime = require('mime'),
+    path = require('path'),
     crypto = require('crypto'),
     product = express.Router(),
     Products_controller = require('../controllers/products_controller'),
@@ -71,6 +72,33 @@ product
             }else{
                 res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
             }
+        });
+    })
+    .get('/medias/:filename', function(req, res, next){
+      Auth_helper.has_media_right(req, function(e){
+          if(e.status === 200){
+
+            res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
+                if (err) {
+                  //res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers", err:err});
+                  //next(err);
+                } else {
+                  //res.status(200).send({"message":"le fichier est autorisé à la lecture", filename:req.params.filename});
+                }
+            });
+
+            /* TODO CHECK ORDERS USER KEY THEN AUTHORIZE OR NOT DIRECTLY ON HAS MEDIA RIGHT ?
+            Products_controller.getFile(req, res, function(e){
+              if(e.status === 200){
+                res.status(e.status).send(e);
+              }else{
+                res.status(e.status).send(e);
+              }
+            });
+            */
+          }else{
+            res.status(e.status).send(e);
+          }
         });
     })
     .post('/medias', upload.single('file'), function(req, res, next){

@@ -73,7 +73,7 @@ auth.get('/', function(req, res, next) {
             var expires = res.expires ? res.expires : 0;
         });
         */
-        console.log('req.query ::::::::::::::::::::::::::: ', req.query);
+        //console.log('req.query ::::::::::::::::::::::::::: ', req.query);
         //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 //Auth_controller.get_user_from_device("fingerprint", function(users_device){
@@ -184,7 +184,6 @@ auth.get('/', function(req, res, next) {
 
     })
     .post('/login', function(req, res, next) {
-        console.log('req.query :::::::: ', e);
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
                 res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);

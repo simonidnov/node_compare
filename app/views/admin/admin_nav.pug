@@ -7,10 +7,10 @@ block navigation
                 li(class= page === "apps" ? "selected" : "" data-for="apps")= app.locals.admin_lang[locale].keys['APPS_NAV']
             a(href="/admin/products/")
                 li(class= page === "products" ? "selected" : "" data-for="products")= app.locals.admin_lang[locale].keys['PRODUCTS_NAV']
-            a(href="/admin/orders/")
-                li(class= page === "orders" ? "selected" : "" data-for="orders")= app.locals.admin_lang[locale].keys['ORDERS_NAV']
             a(href="/admin/baskets/")
                 li(class= page === "baskets" ? "selected" : "" data-for="baskets")= app.locals.admin_lang[locale].keys['BASKETS_NAV']
+            a(href="/admin/orders/")
+                li(class= page === "orders" ? "selected" : "" data-for="orders")= app.locals.admin_lang[locale].keys['ORDERS_NAV']
             a(href="/admin/pages/")
                 li(class= page === "pages" ? "selected" : "" data-for="pages")= app.locals.admin_lang[locale].keys['PAGES_NAV']
             a(href="/admin/users/")

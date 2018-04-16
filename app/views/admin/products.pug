@@ -85,14 +85,24 @@ block content
                           when 'audio/mp3'
                             div.media(data-filename=media[0].filename, data-productid=edit_product._id)
                               audio(controls='', autoplay=false)
-                                source(src='/'+media[0].path, type='audio/mpeg')
+                                source(src='/products/medias/'+media[0].filename, type='audio/mpeg')
                               div= media[0].originalname
                               div.form-group.buttons.inline
                                 div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                          when 'image/png'
+                            div.media(data-filename=media[0].filename, data-productid=edit_product._id)
+                              img(src='/products/medias/'+media[0].filename, height="80")
+                              div= media[0].originalname
+                              div.form-group.buttons.inline
+                                  div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
                           default
-                            div default
-                      
-                  
+                            div.media(data-filename=media[0].filename, data-productid=edit_product._id)
+                              div= "default"+media[0].mimetype
+                              div= media[0].originalname
+                              div.form-group.buttons.inline
+                                div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                            
+                            
                   hr.separator
                   h3 Media upload
                   div ajouter les médias à télécharger lors de l'achat du produit ci-dessous

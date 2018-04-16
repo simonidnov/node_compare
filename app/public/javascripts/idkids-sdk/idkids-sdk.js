@@ -57,7 +57,9 @@ var idkids_jssdk = function(options, callback){
                         }
                     }*/
                     if(typeof e.response_display !== "undefined"){
-                        e.response_display.type ="modal";
+                        if(typeof e.response_display.type === "undefined"){
+                          e.response_display.type ="modal";
+                        }
                         var pop = new popeye(
                             $('body'),
                             e.response_display,

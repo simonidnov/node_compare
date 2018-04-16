@@ -82,11 +82,30 @@ module.exports = {
             if(req.session.Auth.rights.type === "RWO"){
                 callback({status:200, "message":"AUTHAURIZED"});
             }else{
-                callback({status:301, "message":"UNAUTHAURIZED"});
+                callback({status:401, "message":"UNAUTHAURIZED"});
             }
         }
     },
     check_session:function(req, user_id, callback){
         Auth_model.reset_session(req, user_id, callback);
+    },
+    has_media_right:function(req, callback){
+        if(typeof req.session.Auth === "undefined" || typeof req.session.Auth.rights === "undefined"){
+            //TODO CHECK IF USER HAS MEDIA RIGHT KEY
+            callback({status:401, "message":"UNAUTHAURIZED"});
+        }else{
+            /* UNCOMMENT IF USER READ AND WRITE OWNER RWO IS SET */
+            switch(req.session.Auth.rights.type){
+              case 'RWO':
+                callback({status:200, "message":"AUTHAURIZED"});
+                break;
+              case 'RW':
+                callback({status:200, "message":"AUTHAURIZED"});
+                break;
+              default:
+                callback({status:401, "message":"UNAUTHAURIZED"});
+                break;
+            }
+        }
     }
 }

@@ -39,8 +39,8 @@ function popeye(target, datas, callback){
         }, this),400);
     }
 }
-/* POPEYE SAMPLE MODAL 
-    var pop = new popeye($('body'), 
+/* POPEYE SAMPLE MODAL
+    var pop = new popeye($('body'),
         {
             type:"modal",
             color:"lightseagreen",
@@ -61,8 +61,8 @@ function popeye(target, datas, callback){
         }
     ).init();
 */
-/* POPEYE SAMPLE TOAST 
-    var pop = new popeye($('body'), 
+/* POPEYE SAMPLE TOAST
+    var pop = new popeye($('body'),
         {
             type:"toast",
             color:"lightseagreen",

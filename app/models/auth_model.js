@@ -506,7 +506,11 @@ module.exports.reset_session = function(req, user_id, callback){
                     user_infos.members = e.datas;
                     Address_model.get(user_id, null, function(e){
                         user_infos.address = e.datas;
-                        req.session.Auth = user_infos;
+                        //TODO FIX SSL
+                        console.log("req.get('host') :::::::::::::::::::::::::::::::::::::::::::::::: ", req);
+                        //if(req.get('origin').replace('http://', '').replace('https://', '') === app.locals.settings.host.replace('http://', '').replace('https://', '')){
+                          req.session.Auth = user_infos;
+                        //}
                         callback({status:200, "message":"Session Updated", "datas":user_infos});
                     });
                 });

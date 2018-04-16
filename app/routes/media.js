@@ -17,5 +17,5 @@ media.get('/', function(req, res, next) {
     .post('/base64', upload.single('base64'), function(req, res, next){
         res.status(200).send({status:200, message:"file upload success", path:"/"+req.file.path, file:req.file});
     });
-    
+
 module.exports = media;

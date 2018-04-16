@@ -79,7 +79,7 @@ app.set('view engine', 'pug');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(__dirname + '/public')
 //TODO SET USE ONLY WITH AUTHORISATION ON UPLOADS FOLDER
-app.use("/uploads", express.static(path.join(__dirname, './uploads')));
+app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
 app.use("/public", express.static(path.join(__dirname, 'public')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules')));
