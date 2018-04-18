@@ -1,6 +1,6 @@
 // GOOGLE API KEY : AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs
 const db = require('mongoose'),
-      products_controller = require('products_controller'),
+      products_controller = require('../controllers/products_controller'),
       config = require('../config/config'),
       _ = require('underscore'),
       basket_datas = {
@@ -31,104 +31,116 @@ const basketSchemas = new db.Schema(basket_datas),
 module.exports = {
     attributes: basket_datas
 };
-module.exports.get = function(req, res, callback) {
+module.exports.get = function(datas, res, callback) {
     //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
     var query = {};
-    if(req.isAdmin && typeof req.query.basket_id !== "undefined"){
-        query = {_id : req.query.basket_id};
-    }else if(typeof req.query.user_id !== "undefined"){
-        query = {user_id : req.query.user_id};
+    if(datas.isAdmin && typeof datas.basket_id !== "undefined"){
+        query = {_id : datas.basket_id};
+    }else if(typeof datas.options.user_id !== "undefined"){
+        query = {user_id : datas.options.user_id};
     }else{
-        callback({status:405, message:"NOT_LOGGED_IN"});
+        callback({status:401, message:"NOT_LOGGED_IN"});
         return false;
     }
     Baskets.find(query, function(err, infos){
         if(err){
-            callback({status:405, datas:err});
+            callback({status:401, datas:err});
         }else{
             callback({status:200, datas:infos});
         }
     });
 }
-module.exports.create = function(req, res, callback) {
+module.exports.create = function(datas, res, callback) {
   //TODO on check si le produit existe....
-  products_controller.get(res, res, function(e){
-
-  });
-  next();
-}, function(){
-    var _self = this;
-    /* TODO CHECK ALL REFERENCE OF jwt.sign IN PROJECT, THERE IS NO WAY TO PUT IT HERE */
-    //datas.secret = jwt.sign({secret:user_id}, config.secrets.global.secret);
-    //datas.token = jwt.sign({secret:user_id+Date.now()}, config.secrets.global.secret);
-    if(typeof req.body.user_id === "undefined") {
-      callback({"status":405, "message":"user not defined"});
-      return false;
-    }
-    /* TODO CHECK IF USER ALREADY HAS A BASKET NOT VALIDATED */
-    this.get(req, res, function(e){
-      if(e.status === 200 && e.datas.length > 0){
-        var basket = e.datas;
-        // l'utilisateur à déjà un panier en cours
-        /* ON AJOUTE LES PRODUITS DANS LA LISTE ET ON FAIT UN ARRAY MERGE sur products */
-        if(typeof req.query.product_id !== "undefined"){
-          var already_exist = _.where(basket.products, {product_id:req.query.product_id});
-          if(already_exist.length > 0) {
-            /* LE PRODUIT EST DEJA DANS LE PANIER on incrémente la quantité ?*/
-            already_exist.quantity.length++;
-            // on met à jour les totaux...
-            already_exist.total = already_exist.price*already_exist.quantity;
-            // on met à jour la date de checking du produit...
-            already_exist.updated = Date.now();
-          }else {
-            // on push le nouveau produit dans products.
-            basket.products.push({
-              product_id : req.query.product_id,
-              quantity   : req.query.quantity,
-              datas      : req.query.datas, // push all products datas prperties
-              price      : 0, // TODO GET PRODUCT PRICE UPDATED
-              total      : 0, // TODO GET PRODUCT PRICE UPDATED * quantity
-              created    : Date.now(), // date d'jout au panier
-              updated    : Date.now()
-            });
-          }
-
-          /* ON MET A JOUR LE PANIER APRES LES TRAITEMENTS DE L'OBJET BASKET */
-          basket.updated = Date.now();
-          Baskets.updateOne(
-              {
-                  _id  : basket._id
-              },
-              {
-                  $set : basket
-              },
-              function(err, infos){
-                  if(err){
-                    callback({"status":405, "message":err});
-                  }
-                  else{
-                    callback({"status":200, "apps":infos});
-                  }
-              }
-          )
-        }
-      }else{
-        // on crée un nouveau panier...
-        next();
+  var _self = this,
+      product_infos = null;
+  products_controller.get(datas, res, function(e){
+    if(e.status === 200){
+      product_infos = e.datas[0];
+      if(typeof datas.options.user_id === "undefined") {
+        callback({"status":405, "message":"user not defined"});
+        return false;
       }
-    });
-}, function(req, res, callback) {
+      /* TODO CHECK IF USER ALREADY HAS A BASKET NOT VALIDATED */
+      _self.get(datas, res, function(e){
+        if(e.status === 200 && e.datas.length > 0){
+          var basket = e.datas[0];
+          // l'utilisateur à déjà un panier en cours
+          /* ON AJOUTE LES PRODUITS DANS LA LISTE ET ON FAIT UN ARRAY MERGE sur products */
+          if(typeof datas.product_id !== "undefined"){
+            var already_exist = _.where(basket.products, {product_id:datas.product_id});
+            if(already_exist.length > 0) {
+              already_exist = already_exist[0];
+              /* LE PRODUIT EST DEJA DANS LE PANIER on incrémente la quantité ?*/
+              already_exist.quantity++;
+              // on met à jour les totaux...
+              already_exist.total = parseFloat(already_exist.price) * parseInt(already_exist.quantity);
+              // on met à jour la date de checking du produit...
+              already_exist.updated = Date.now();
+            }else {
+              // on push le nouveau produit dans products.
+              basket.products.push({
+                product_id : datas.product_id,
+                datas      : datas.datas, // push all products datas prperties
+                price      : product_infos.price, // TODO GET PRODUCT PRICE UPDATED
+                total      : (parseFloat(product_infos.price) * parseInt(datas.quantity)).toFixed(2), // TODO GET PRODUCT PRICE UPDATED * quantity
+                created    : Date.now(), // date d'jout au panier
+                updated    : Date.now()
+              });
+            }
 
-    /* ELSE CREATE BASKET */
-    new_basket = new Baskets(datas);
-    new_basket.save(function(err, infos) {
-        if(err) {
-          callback({"status":405, "message":err});
+            /* ON MET A JOUR LE PANIER APRES LES TRAITEMENTS DE L'OBJET BASKET */
+            basket.updated = Date.now();
+            Baskets.updateOne(
+                {
+                    _id  : basket._id
+                },
+                {
+                    $set : basket
+                },
+                function(err, infos){
+                    if(err){
+                      callback({"status":405, "message":err});
+                    }
+                    else{
+                      callback({"status":200, "datas":infos});
+                    }
+                }
+            );
+          }
         }else {
-          callback({"status":200, "datas":infos});
+          var data_set = {
+              user_id        : datas.options.user_id,
+              products       : [
+                  {
+                    product_id : datas.product_id,
+                    quantity   : datas.quantity,
+                    datas      : datas.datas, // push all products datas prperties
+                    price      : product_infos.price,
+                    total      : (parseFloat(product_infos.price)*parseFloat(datas.quantity)).toFixed(2),
+                    created    : Date.now(), // date d'jout au panier
+                    updated    : Date.now()
+                  }
+              ],
+              total          : (parseFloat(product_infos.price)*parseFloat(datas.quantity)).toFixed(2),
+              created        : Date.now(),
+              updated        : Date.now()
+          }
+          /* ELSE CREATE BASKET */
+          new_basket = new Baskets(data_set);
+          new_basket.save(function(err, infos) {
+              if(err) {
+                callback({"status":405, "message":err});
+              }else {
+                callback({"status":200, "datas":infos});
+              }
+          });
         }
-    });
-
+      });
+    }else{
+      callback(e);
+    }
+  });
 }
 module.exports.update = function(req, res, callback){
     delete datas.options;

@@ -3,13 +3,13 @@ const Basket_model = require('../models/basket_model'),
 
 // check user login then return user_infos
 exports.get = function(req, res, callback) {
-    Basket_model.get(req, res, function(e){
+    Basket_model.get(req.query, res, function(e){
         callback(e);
     });
 };
 // check user login then return user_infos
-exports.create = function(req, res, callback) {
-    Basket_model.create(req, res, function(e){
+exports.create = function(datas, res, callback) {
+    Basket_model.create(datas, res, function(e){
         callback(e);
     });
 };

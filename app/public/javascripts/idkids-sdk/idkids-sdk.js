@@ -8,23 +8,43 @@ var idkids_jssdk = function(options, callback){
         user : null,
         options:null,
         config : {
-          url:window.location.origin
+          url:"http://127.0.0.1:3000"
         },
         get : function(request, params, callback) {
             this.call('GET', request, params, callback);
         },
         post : function(request, params, callback) {
-            this.call('POST', request, params, callback);
+            //this.call('POST', request, params, callback);
+            this.add_params(params, $.proxy(function(params){
+              $.post(this.config.url+request, {
+                  Accept: "text/plain; charset=utf-8",
+                  method: "POST",
+                  xhrFields: {
+                     withCredentials: false
+                  },
+                  contentType: 'application/jsonp; charset=utf-8',
+                  dataType: "json",
+                  data: params
+              })
+              .done($.proxy(function(e) {
+                  callback(e);
+              }, this))
+              .fail(function(e) {
+                  console.log('fail ', e);
+              })
+              .always($.proxy(function(e) {
+                  this.hide_loader();
+                  this.check_response(e);
+              },this));
+            }, this));
         },
         put : function(request, params, callback) {
             this.call('PUT', request, params, callback);
         },
         deleting : function(request, params, callback) {
-            console.log("this ", this);
             this.call('DELETE', request, params, callback);
         },
         call : function(method, request, params, callback){
-          console.log('callback ', callback);
             this.show_loader();
             this.add_params(params, $.proxy(function(new_params){
                 params = new_params;
@@ -33,9 +53,14 @@ var idkids_jssdk = function(options, callback){
                     dataType = 'json';
                     params = JSON.stringify(params);
                 }
+                console.log('----------- WITHOUT CREDENTIAL ------------');
                 jQuery.ajax(this.config.url+request, {
+                    Accept: "text/plain; charset=utf-8",
+                    xhrFields: {
+                       withCredentials: false
+                    },
                     method: method,
-                    contentType: 'application/json',
+                    contentType: 'application/jsonp; charset=utf-8',
                     dataType: dataType,
                     data: params
                 })
@@ -56,20 +81,21 @@ var idkids_jssdk = function(options, callback){
                             e.message = e.responseJSON.message;
                         }
                     }*/
-                    if(typeof e.response_display !== "undefined"){
-                        if(typeof e.response_display.type === "undefined"){
-                          e.response_display.type ="modal";
-                        }
-                        var pop = new popeye(
-                            $('body'),
-                            e.response_display,
-                            function(e){
-                            }
-                        ).init();
-                    }
                     /* TODO CHECK IF HAS MESSAGE THEN DISPLAY POPIN MESSAGE OR TOAST ? */
+                    this.check_response(e);
                 },this));
             }, this));
+        },
+        check_response : function(e){
+          if(typeof e.response_display !== "undefined"){
+              e.response_display.type ="modal";
+              var pop = new popeye(
+                  $('body'),
+                  e.response_display,
+                  function(e){
+                  }
+              ).init();
+          }
         },
         get_user_status : function(){
             this.set_user();
@@ -98,6 +124,7 @@ var idkids_jssdk = function(options, callback){
         },
         add_params : function(params, callback){
             params.options = this.options;
+            //DEFAULT PUSH THIS OPTIONS TRY TO RM CAUSE TO LONG FOR URI REQUEST GET -> this.options;
             params.options.from_origin   = window.location.origin;
             if(this.user){
                 params.options.user_token    = this.user.token;
@@ -161,15 +188,19 @@ var idkids_jssdk = function(options, callback){
                     callback(
                         {
                             status : 200,
-                            device_uid : result,
-                            platform : navigator.platform,
-                            appCodeName : navigator.appCodeName,
-                            appName : navigator.appName,
-                            appVersion : navigator.appVersion,
-                            userAgent : navigator.userAgent,
-                            vendor : navigator.vendor
+                            device_uid : result
                         }
-                    ); //a hash, representing your device fingerprint
+                    );
+                    /* REMOVE FROM RESULT LIGHTER REQUESTS
+                    ,
+                    platform : navigator.platform,
+                    appCodeName : navigator.appCodeName,
+                    appName : navigator.appName,
+                    appVersion : navigator.appVersion,
+                    userAgent : navigator.userAgent,
+                    vendor : navigator.vendor
+                    */
+                    //a hash, representing your device fingerprint
                     //console.log(result, components); // an array of FP components
                 });
             }else{
@@ -220,6 +251,7 @@ var idkids_jssdk = function(options, callback){
             console.log('IDKIDS SDK TOOLKIT has returned an action not defined in your javascript sdk version. please upgrade the latest version of idkids-js-sdk on your server then try again.');
             break;
         }
+        this.reset_listeners();
     };
     this.isLogged = function(callback){
         callback(this.api.get_user_status());
@@ -238,6 +270,17 @@ var idkids_jssdk = function(options, callback){
             });
         }
     };
+    this.createNotificationButton = function(target, callback){
+        if(document.getElementById(target) === null){
+            callback({"status":"error", "message":"TARGET_ID_TAG_ELEMENT_NOT_FOUND"});
+        }else{
+            var _self = this;
+            this.template("notif_button", {user:this.api.user, options:this.options}, function(temp){
+              document.getElementById(target).innerHTML = temp;
+              callback({"status":"success", "message":"AUTH_BUTTON_CREATED"});
+            });
+        }
+    };
     this.validInitedApp = function(callback){
         this.api.get(this.api.config.url+'/api/apps/validate',
         {
@@ -246,5 +289,27 @@ var idkids_jssdk = function(options, callback){
         function(e){
             callback(e);
         });
+    }
+    this.reset_listeners = function(){
+      var self = this;
+      $('[data-idkidssdk]').off('click').on('click', function(e){
+        switch($(this).attr('data-idkidssdk')){
+          case 'add_basket':
+            // TODO call api add_basket
+            self.api.post('/basket',
+              {
+                product_id : $(this).attr('data-productid'),
+                quantity : $(this).attr('data-quantity')
+              },
+              function(e){
+                console.log('AJOUT AU PANIER AVEC SUCCES ? ', e);
+              }
+            );
+            break;
+          default:
+            console.log('action not reconized by idkids sdk, please upgrade your sdk version');
+            break;
+        }
+      });
     }
 }

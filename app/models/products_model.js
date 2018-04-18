@@ -33,13 +33,14 @@ const Products = db.model('Products', productsSchemas);
 module.exports = {
     attributes: products_datas
 };
-module.exports.get = function(req, res, callback){
-    var query = req.body,
+module.exports.get = function(datas, res, callback){
+    var query = {},
         self = this;
-
-    if(typeof req.query.phonetik !== "undefined"){
-      query.phonetik = {$in:language_helper.wordlab(req.query.phonetik).split('-')};
-      delete req.query.phonetik;
+    if(typeof datas.product_id !== "undefined"){
+      query._id = datas.product_id;
+    }
+    if(typeof datas.phonetik !== "undefined"){
+      query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
     }
     Products.find(query, function(err, infos){
         if(err){
@@ -94,6 +95,18 @@ module.exports.update = function(user_id, products_id, datas, callback){
         }
     )
 };
+module.exports.delete = function(user_id, products_id, callback){
+    Products.deleteOne(
+        {
+            _id     : products_id
+        },
+        function(err, infos){
+            if(err) callback({"status":304, "datas":{title:"PRODUCT_DELETED_ERROR", "message":"PRODUCT_DELETED_ERROR_MESSAGE", "media":"PRODUCT_DELETED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+            else callback({"status":200, "datas":{infos:infos, title:"PRODUCT_DELETED", "message":"PRODUCT_DELETED_MESSAGE", "media":"PRODUCT_DELETED_MEDIA"}});
+        }
+    )
+};
+/* ----------------------- PRODUCT FILE PROCESS -------------------------- */
 module.exports.getFile = function(req, res, callback){
     fs.readFile('./uploads/'+req.params.filename, function read(err, data) {
         if (err) {
@@ -159,15 +172,4 @@ module.exports.removeFile = function(product_id, filename, callback){
         callback({"status":403, "datas":{title:"PRODUCT_UPDATED_ERROR", "message":"PRODUCT_UPDATED_ERROR_MESSAGE", "media":"PRODUCT_UPDATED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
       }
     });
-};
-module.exports.deleting = function(user_id, products_id, callback){
-    Products.deleteOne(
-        {
-            _id     : products_id
-        },
-        function(err, infos){
-            if(err) callback({"status":304, "datas":{title:"PRODUCT_DELETED_ERROR", "message":"PRODUCT_DELETED_ERROR_MESSAGE", "media":"PRODUCT_DELETED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
-            else callback({"status":200, "datas":{infos:infos, title:"PRODUCT_DELETED", "message":"PRODUCT_DELETED_MESSAGE", "media":"PRODUCT_DELETED_MEDIA"}});
-        }
-    )
 };

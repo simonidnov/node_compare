@@ -10,6 +10,7 @@ const express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     index = require('./routes/index'),
+    basket = require('./routes/basket'),
     users = require('./routes/users'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
@@ -20,6 +21,7 @@ const express = require('express'),
     api = require('./routes/api'),
     templating = require('./routes/templating'),
     auth = require('./routes/auth'),
+    checking_session = require('./routes/checking_session'),
     me = require('./routes/me'),
     address = require('./routes/address'),
     account = require('./routes/account'),
@@ -63,14 +65,13 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(session({
     secret: "secret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         secure: false,
         httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -105,8 +106,10 @@ router.use('/validation', validation);
 router.use('/templating', templating);
 router.use('/redirect', redirect);
 router.use('/auth', auth);
+router.use('/checking_session', checking_session);
 router.use('/products', products);
 router.use('/settings', settings);
+router.use('/basket', basket);
 router.use('/', index);
 
 app.use('/', router);

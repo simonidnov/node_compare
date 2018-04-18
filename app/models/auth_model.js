@@ -298,6 +298,7 @@ module.exports.login = function(req, datas, callback) {
                               if (err){
                                   callback({"status":"error", "code":err.code, "error":err, "message":err.message});
                               }else{
+                                  console.log('RESET SESSION #1');
                                   self.reset_session(req, users[0]._id, function(infos){
                                       infos.avatar = infos.avatar;
                                       callback({status:200, "message":"User updated", "idkids_user":infos});
@@ -371,6 +372,7 @@ module.exports.register = function(datas, callback) {
     new_user.save(function(err, usr){
         if(err) callback({"status":"error", "message":err});
         else{
+          console.log('RESET SESSION #2');
           self.reset_session(datas, usr._id, function(infos){
               callback({"status":"success", "user":usr});
           });
@@ -392,23 +394,6 @@ module.exports.unregister = function(req, res, callback) {
 module.exports.update = function(req, user_id, datas, callback) {
     device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
-    /*
-    console.log("datas.body.subscribe_newsletter ", datas.body.subscribe_newsletter);
-    if(datas.body.subscribe_newsletter){
-        new_user_datas.newsletter = true;
-        new_user_datas.newsletter_services = {};
-        console.log("app.locals.applications ::: ", app.locals.applications);
-        for(var i=0; i<app.locals.applications.length; i++){
-          console.log(datas.body['newsletter_'+app.locals.applications[i].short_name]);
-          if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
-              new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
-          }
-        }
-    }else{
-        new_user_datas.newsletter = false;
-        new_user_datas.newsletter_services = {};
-    }
-    */
     var self = this;
     /* UPDATE token, updated then free user session and storage */
     datas.updated = Date.now();
@@ -418,16 +403,17 @@ module.exports.update = function(req, user_id, datas, callback) {
     //User.findOne({ _id: 'bourne' }, function (err, doc){
     User.update(
         {
-            _id:user_id
+            _id: user_id
         }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
         {
-            $set : datas
+            $set: datas
         }, // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
         function(err, infos){
             if(err){
                 callback({status:401, "message":"Impossible de mettre à jour le token WHY ?", "datas":err});
             } else {
                 /* TODO RESET SESSION USER FUNCTION */
+                console.log('RESET SESSION #3');
                 self.reset_session(req, user_id, function(){
                     callback({status:200, "message":"User updated", "datas":infos});
                 });
@@ -491,7 +477,25 @@ module.exports.check_user = function(req, callback){
         }
     );
 }
+module.exports.checking_session = function(req, user_id, callback){
+  var self = this;
+  User.findOne(
+      {
+          _id: req.query._id,
+          token: req.query.token,
+          secret: req.query.secret
+      },
+      function(err, user){
+          if (err){
+              callback({"status":401, "code":err.code, "error":err, "message":err.message});
+          }else{
+              self.reset_session(req, req.query._id, callback);
+          }
+      }
+    );
+}
 module.exports.reset_session = function(req, user_id, callback){
+    console.log('------------------------ RESET SESSION -----------------------------');
     User.findOne(
         {
             _id: user_id
@@ -507,7 +511,6 @@ module.exports.reset_session = function(req, user_id, callback){
                     Address_model.get(user_id, null, function(e){
                         user_infos.address = e.datas;
                         //TODO FIX SSL
-                        console.log("req.get('host') :::::::::::::::::::::::::::::::::::::::::::::::: ", req);
                         //if(req.get('origin').replace('http://', '').replace('https://', '') === app.locals.settings.host.replace('http://', '').replace('https://', '')){
                           req.session.Auth = user_infos;
                         //}
@@ -667,6 +670,7 @@ module.exports.deleteDevice = function(req, callback){
             if(err || users.length === 0){
                 callback({status:304, message:"appareil inexistant", datas:err});
             }else{
+                console.log('RESET SESSION #4');
                 self.reset_session(req, req.session.Auth._id, function(infos){
                     infos.avatar = infos.avatar;
                     callback({status:200, message:"device supprimé", "idkids_user":infos});

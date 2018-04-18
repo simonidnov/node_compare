@@ -12,7 +12,7 @@ exports.create = function(req, datas, callback) {
     Address_model.create(req.body.user_id, req.body, function(e){
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         auth_helper.check_session(req, req.body.user_id, function(){
-            callback(e); 
+            callback(e);
         });
     });
 };
@@ -22,7 +22,7 @@ exports.update = function(req, datas, callback) {
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         auth_helper.check_session(req, req.body.options.user_id, function(){
             e.updated_token = req.query.updated_token;
-            callback(e); 
+            callback(e);
         });
     });
 };
@@ -32,7 +32,7 @@ exports.delete = function(req, callback) {
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         auth_helper.check_session(req, req.body.options.user_id, function(){
             e.updated_token = req.query.updated_token;
-            callback(e); 
+            callback(e);
         });
     });
 };

@@ -9,12 +9,27 @@ var express = require('express'),
 basket.use(function(req, res, next){
     //ACCEPT CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
+    //res.setHeader("Content-Type: application/json", true);
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+
+    res.setHeader('Content-Type', 'application/json');
+
     Auth_helper.validate_admin(req, function(e){
-      (e.status === 200)? req.isAdmin = true : req.isAdmin = false;
+      if(e.status === 200){
+        req.body.isAdmin = true;
+        req.query.isAdmin = true;
+      }else {
+        req.body.isAdmin = false;
+        req.query.isAdmin = false;
+      }
     });
-    Auth_helper.validate_user(req, function(e){
+    var dataCheck = req.query;
+    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+        dataCheck = req.body.data;
+    }
+    //dataCheck.options = dataCheck;
+    Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
       if(e.status === 200) {
         next();
       }else {
@@ -26,23 +41,25 @@ basket.use(function(req, res, next){
 basket
     .get('/', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
+            console.log(e);
             res.status(e.status).send(e.datas);
         });
     })
     .post('/', function(req, res, next) {
-        Products_controller.create(req, res, function(e){
-            res.status(e.status).send(e.datas);
+        Basket_controller.create(req.body.data, res, function(e){
+            console.log("Basket_controller.create POST ::::: ", e);
+            res.status(e.status).send({status:e.status, response_display:{title:"Ajouté", message:"Votre produit a bien été ajouté dans votre panier."}});
         });
     })
     .put('/', function(req, res, next) {
-        Products_controller.update(req, res, function(e){
+        Basket_controller.update(req.body.data, res, function(e){
             res.status(e.status).send(e.datas);
         });
     })
     .delete('/', function(req, res, next) {
-        Products_controller.deleting(req, res, function(e){
+        Basket_controller.deleting(req.body.data, res, function(e){
             res.status(e.status).send(e.datas);
         });
     });
 
-module.exports = product;
+module.exports = basket;

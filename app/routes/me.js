@@ -16,9 +16,13 @@ var device_uid = null;
 //machineId.machineIdSync({original: true})
 me.use(function(req, res, next) {
     //ACCEPT CORS
+    res.setHeader('Access-Control-Allow-Credentials', false);
+    //console.log('------------------ req.get(origin) ::::::::: ', req.get('origin'));
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    //res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader("Access-Control-Allow-Methods", "OPTIONS,GET,PUT,POST,DELETE");
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+
     //SET OUTPUT FORMAT
     res.setHeader('Content-Type', 'application/json');
 

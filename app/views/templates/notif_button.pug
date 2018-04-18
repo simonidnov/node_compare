@@ -1,0 +1,21 @@
+li#notifications
+    a(href="#")
+        div.indice 0
+        div.icon-notifications.idkids-icons.lg
+    div.subnav
+        ul
+            li
+                a(href=app.locals.settings.host+"/account/basket" target="_blank")
+                  div.idkids-icons.icon-basket
+                  span Mon panier
+                  span(id="total_basket") (0)  
+            li
+                a(href=app.locals.settings.host+"/account/orders" target="_blank")
+                  div.idkids-icons.icon-delivery
+                  span Mes Commandes
+                  span(id="total_orders") (0)
+            li
+                a(href=app.locals.settings.host+"/account/messages" target="_blank")
+                  div.idkids-icons.icon-email
+                  span Mes messages
+                  span(id="total_messages") (0)

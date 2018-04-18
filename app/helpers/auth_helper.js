@@ -8,7 +8,6 @@ const db = require('mongoose'),
 
 module.exports = {
     validate_from:function(req, host, callback) {
-      console.log('?????????????????????????????????????????? VALIDATE FROM ?????????????????????????????????????????');
       //callback(true);
         if(typeof req.options === "undefined"){
             callback(false);
@@ -43,70 +42,67 @@ module.exports = {
             }
         });
     },
-    validate_user:function(req, host, callback) {
-      console.log('?????????????????????????????????????????? VALIDATE USER ?????????????????????????????????????????');
+    validate_user : function(req, host, callback) {
+      //var datas = req.query;
       /* check user id */
         if(typeof req.options.user_id === "undefined"){
             callback({status:401, "message":"UNAUTHARISED need valid user ID"});
-            return false;
-        }
-        /* check user device */
-        if(typeof req.options.user_secret === "undefined"){
-            callback({status:401, "message":"UNAUTHARISED need valid user secret"});
-            return false;
-        }
-        /* check user token */
-        if(typeof req.options.user_token === "undefined"){
-            callback({status:401, "message":"UNAUTHARISED need valid user token"});
-            return false;
-        }
-        /* TOFO VERIFY TOKEN FROM USER SECRET */
-        //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
-        /* match user token + device */
+        }else{
+          /* check user device */
+          if(typeof req.options.user_secret === "undefined"){
+              callback({status:401, "message":"UNAUTHARISED need valid user secret"});
+          }else{
+            /* check user token */
+            if(typeof req.options.user_token === "undefined"){
+                callback({status:401, "message":"UNAUTHARISED need valid user token"});
+            }else{
+              /* TODO VERIFY TOKEN FROM USER SECRET */
+              //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
+              /* match user token + device */
 
-        //db.connect(config.database.users, {useMongoClient: true});
-        req.options.device_uid = device_uid;
-        Auth_model.check_user(req, function(e){
-            callback(e);
-            return true;
-        });
+              //db.connect(config.database.users, {useMongoClient: true});
+              req.options.device_uid = device_uid;
+              Auth_model.check_user(req, function(e){
+                  callback(e);
+              });
+            }
+          }
+        }
     },
-    validate_session:function(req, callback){
-      console.log('?????????????????????????????????????????? VALIDATE SESSION ?????????????????????????????????????????');
-      //console.log('validate_session ', req.session.Auth);
+    validate_session : function(req, callback) {
         if(typeof req.session.Auth === "undefined"){
-            console.log('WHAT THE FCK');
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
-            console.log('GREAT SESSION');
             callback({status:200, "message":"AUTHAURIZED"});
         }
     },
     validate_admin:function(req, callback){
-      console.log('?????????????????????????????????????????? VALIDATE ADMIN ?????????????????????????????????????????');
-      console.log('validate admin ', req.session.Auth.rights);
+        if(typeof req.session === "undefined"){
+          callback({status:401, "message":"UNAUTHAURIZED"});
+          return;
+        }
+        if(typeof req.session.Auth === "undefined"){
+          callback({status:401, "message":"UNAUTHAURIZED"});
+          return;
+        }
         if(typeof req.session.Auth.rights === "undefined"){
             console.log('not admin');
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
             /* UNCOMMENT IF USER READ AND WRITE OWNER RWO IS SET */
             if(req.session.Auth.rights.type === "RWO"){
-                console.log('IS ADMIN TRUE');
                 callback({status:200, "message":"AUTHAURIZED"});
             }else{
-                console.log('not admin');
                 callback({status:401, "message":"UNAUTHAURIZED"});
             }
         }
     },
     check_session:function(req, user_id, callback){
-      console.log('?????????????????????????????????????????? CHECK SESSION ?????????????????????????????????????????');
       Auth_model.reset_session(req, user_id, callback);
     },
     has_media_right:function(req, callback){
-      console.log('?????????????????????????????????????????? HAS MEDIA RIGHT ?????????????????????????????????????????');
       if(typeof req.session.Auth === "undefined" || typeof req.session.Auth.rights === "undefined"){
-            //TODO CHECK IF USER HAS MEDIA RIGHT KEY
+            //TODO CHECK IF USER HAS MEDIA RIGHT KEY CHECKOUT BASKET AND ORDERS SET META USER RIGHT
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
             /* UNCOMMENT IF USER READ AND WRITE OWNER RWO IS SET */

@@ -32,14 +32,14 @@ product.use(function(req, res, next){
 product
     .get('/', function(req, res, next) {
         //res.status(200).send({title:"API"});
-        Products_controller.get(req, res, function(e){
+        Products_controller.get(req.query, res, function(e){
             res.status(e.status).send(e.datas);
         });
     })
     .post('/', function(req, res, next) {
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
-                Products_controller.create(req, res, function(e){
+                Products_controller.create(req.body, res, function(e){
                     res.status(e.status).send(e.datas);
                 });
             }else{
@@ -50,7 +50,7 @@ product
     .put('/', function(req, res, next){
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
-                Products_controller.update(req, res, function(e){
+                Products_controller.update(req.body, res, function(e){
                     res.status(e.status).send(e.datas);
                 });
             }else{
@@ -61,7 +61,7 @@ product
     .delete('/', function(req, res, next) {
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
-                Products_controller.deleting(req, res, function(e){
+                Products_controller.delete(req.body, res, function(e){
                     res.status(e.status).send(e.datas);
                 });
             }else{

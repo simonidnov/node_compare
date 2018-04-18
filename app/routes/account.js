@@ -17,12 +17,14 @@ account.use(function(req, res, next){
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     // TODO : VALIDATE SESSION USER
+    console.log('SESSION TRY TO BEING VALIDATED');
     Auth_helper.validate_session(req, function(e){
+        /* TODO SEND ORIGIN FOR RESIRECTION AFTER CHECKING */
         if(e.status === 200){
             next();
         }else{
-            console.log('invalid session');
-            res.redirect(301, '/auth');
+            console.log("BEFORE CHECKING SESSION :::: req.protocol + '://' + req.get('host') + req.originalUrl :::::::::::::::: ", req.protocol + '://' + req.get('host') + req.originalUrl);
+            res.redirect(301, '/checking_session');
         }
     });
 });
