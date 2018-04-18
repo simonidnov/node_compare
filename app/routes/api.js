@@ -33,7 +33,7 @@ api
             if(e.status === 200){
                 res.status(200).send({title:"POST API"});
             }else{
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
     })
@@ -43,7 +43,7 @@ api
                 res.status(200).send({title:"PUT API"});
             }else{
                 //next();
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
         //Apps_controller.update(req, res, function(e){
@@ -57,7 +57,7 @@ api
                 next();
             }else{
                 //next();
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
         res.status(200).send({title:"DELETE API"});
@@ -146,7 +146,7 @@ api
                 next();
             }else{
                 //next();
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
         */

@@ -79,7 +79,6 @@ var account = {
         });
         this.init_map();
         $(window).on('change', function(){
-
             console.log('change ', window.location);
         });
     },

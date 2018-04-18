@@ -732,7 +732,7 @@ Todo.find(function (err, todos) {
 // Get ONLY completed tasks
 //Todo.find({completed: true }, callback);
 // Get all tasks ending with `JS`
-//Todo.find({name: /^Simon/ }, callback);
+//Todo.find({name: /^JS/ }, callback);
 
 /*var oneYearAgo = new Date();
 oneYearAgo.setYear(oneYearAgo.getFullYear() - 1);

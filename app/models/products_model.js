@@ -6,6 +6,7 @@ const db = require('mongoose'),
           label             : {type:"string", unique: true},
           description       : {type:"string"},
           keywords          : {type:"string"},
+          phonetik          : {type:[]},
           thumb             : {type:"string"},
           picture           : {type:"string"},
           details           : {type:"string"},
@@ -14,7 +15,6 @@ const db = require('mongoose'),
           type              : {type:"string", "enum": ["physical", "demateralized"]},
           attributs         : {type:"Object"},
           medias            : {type:"Array"},
-          phonetik          : {type:"Array"},
           created           : {type:"Date", "default": Date.now},
           updated           : {type:"Date", "default": Date.now}
       },
@@ -23,29 +23,26 @@ const db = require('mongoose'),
 if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
-const productsSchemas = new db.Schema(products_datas),
-      Products = db.model('Products', productsSchemas);
+const productsSchemas = new db.Schema(products_datas);
+      productsSchemas.pre('find', function(next) {
+        next();
+      });
+
+const Products = db.model('Products', productsSchemas);
 
 module.exports = {
     attributes: products_datas
 };
-module.exports.get = function(user_id, req, callback){
-    var query = {},
+module.exports.get = function(req, res, callback){
+    var query = req.body,
         self = this;
 
-    if(typeof req.label !== "undefined"){
-      query = {
-
-      }
-      //$where: "language_helper.wordlab(this.label) == language_helper.wordlab(req.label)" };
+    if(typeof req.query.phonetik !== "undefined"){
+      query.phonetik = {$in:language_helper.wordlab(req.query.phonetik).split('-')};
+      delete req.query.phonetik;
     }
-    Products.find({
-        $where: function() {
-            return ( language_helper.wordlab(this.label) === language_helper.wordlab(req.label) );
-        }
-    }, function(err, infos){
+    Products.find(query, function(err, infos){
         if(err){
-            console.log("err ::::::: ", err);
             callback({status:304, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
         }else{
             callback({status:200, datas:infos});
@@ -56,6 +53,13 @@ module.exports.create = function(user_id, datas, callback){
     //datas.user = user._id;
     delete datas.options;
     delete datas.device_infos;
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    var a = language_helper.wordlab(datas.label+" "+datas.description).split('-');
+    datas.phonetik = a.filter( onlyUnique );
+    //datas.phonetik = language_helper.wordlab(datas.label+" "+datas.description).split('-');
     new_product = new Products(datas);
     new_product.save(function(err, infos){
         if(err){
@@ -67,14 +71,22 @@ module.exports.create = function(user_id, datas, callback){
 };
 module.exports.update = function(user_id, products_id, datas, callback){
     delete datas.options;
+    delete datas.device_infos;
     delete datas._id;
     datas.updated = Date.now();
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    var a = language_helper.wordlab(datas.label+" "+datas.description).split('-'),
+        phonetik = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
+
     Products.updateOne(
         {
-            _id  : products_id
+            _id: products_id
         },
         {
-            $set : datas
+            $set: datas,
+            phonetik : phonetik
         },
         function(err, infos){
             if(err) callback({"status":304, "datas":{title:"PRODUCT_UPDATED_ERROR", "message":"PRODUCT_UPDATED_ERROR_MESSAGE", "media":"PRODUCT_UPDATED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});

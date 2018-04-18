@@ -3,7 +3,7 @@ const Products_model = require('../models/products_model'),
 
 // check user login then return user_infos
 exports.get = function(req, datas, callback) {
-    Products_model.get(null, req.query, function(e){
+    Products_model.get(req, datas, function(e){
         callback(e);
     });
 };

@@ -22,8 +22,8 @@ else
               img(src=((query.user.avatar !== "")? query.user.avatar : app.locals.settings.host+"/public/images/assets/account.svg"))
           div.infos
               div.label= query.user.pseudo
-              div.email= query.user.email
-              a(href=app.locals.settings.host+"/account/account").btn.btn-success Mon compte
+              //- div.email= query.user.email
+              a(href=app.locals.settings.host+"/account/account" target="_blank").btn.btn-success Mon compte
       div.other_accounts
       div.options
           a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Ajouter un compte

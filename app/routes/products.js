@@ -26,11 +26,6 @@ product.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-
-    var dataCheck = req.query;
-    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
-        dataCheck = req.body;
-    }
     next();
 });
 /* GET home page. */
@@ -48,7 +43,7 @@ product
                     res.status(e.status).send(e.datas);
                 });
             }else{
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS');
             }
         });
     })
@@ -59,7 +54,7 @@ product
                     res.status(e.status).send(e.datas);
                 });
             }else{
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS');
             }
         });
     })
@@ -70,7 +65,7 @@ product
                     res.status(e.status).send(e.datas);
                 });
             }else{
-                res.redirect(301, '/auth?message="Vous n\'avez pas de droits administrateur sur la plateforme IDKIDS account"');
+                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS');
             }
         });
     })

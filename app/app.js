@@ -26,7 +26,8 @@ const express = require('express'),
     settings = require("./routes/settings"),
     session = require("express-session"),
     Apps_controller = require('./controllers/apps_controller');
-    Settings_model = require('./models/settings_model');
+    Settings_model = require('./models/settings_model'),
+    router = express.Router();
 
 app = module.exports = express();
 
@@ -78,7 +79,6 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(__dirname + '/public')
-//TODO SET USE ONLY WITH AUTHORISATION ON UPLOADS FOLDER
 app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
 app.use("/public", express.static(path.join(__dirname, 'public')));
@@ -90,22 +90,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', users);
-app.use('/admin', admin);
-app.use('/admin/:any', admin);
-app.use('/me', me);
-app.use('/api', api);
-app.use('/media', media);
-app.use('/gmail', gmail);
-app.use('/account', account);
-app.use('/address', address);
-app.use('/validation', validation);
-app.use('/templating', templating);
-app.use('/redirect', redirect);
-app.use('/auth', auth);
-app.use('/products', products);
-app.use('/settings', settings);
-app.use('/', index);
+
+router.use('/admin', admin);
+router.use('/admin/:any', admin);
+router.use('/users', users);
+router.use('/me', me);
+router.use('/api', api);
+router.use('/media', media);
+router.use('/gmail', gmail);
+router.use('/account', account);
+router.use('/account/:any', account);
+router.use('/address', address);
+router.use('/validation', validation);
+router.use('/templating', templating);
+router.use('/redirect', redirect);
+router.use('/auth', auth);
+router.use('/products', products);
+router.use('/settings', settings);
+router.use('/', index);
+
+app.use('/', router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

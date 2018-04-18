@@ -14,7 +14,7 @@ module.exports = {
         }
     },
     wordlab : function(paragraph){
-      if(typeof paragraph === "undefined"){console.log("paragraph ----> ", paragraph); return "";}
+      if(typeof paragraph === "undefined"){ return ""; }
       var paragraph = paragraph.toLowerCase().split(' '),
           queryString = "",
           self = this;
@@ -25,8 +25,20 @@ module.exports = {
       return queryString;
     },
     syllab : function (s) {
-      var a = s.toLowerCase().split('');
-      (a[a.length-1] === "s")? delete a.splice(a.length-1,a.length) : a=a;
+      var a = s.toLowerCase();
+      // CHECK LES NOMS COMPOSES AVEC TRAIT D'function
+      if(a.split('-').length > 0){
+        var w=a.split("-"),
+            m="";
+        for(var i = 0; i<w.length; i++){
+          (w[i].slice(-1) === "s")? w[i]=w[i].substring(0, w[i].length - 1) : w[i]=w[i];
+          m+=w[i];
+        }
+        a=m;
+      }
+      (a.slice(-1) === "s")? a = a.substring(0, a.length - 1) : a=a;
+      a=a.split('');
+
       var f = a.shift(),
            r = '',
            codes = {
