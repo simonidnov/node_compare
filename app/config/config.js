@@ -14,10 +14,10 @@ module.exports = {
     'emailing': {
         'from': 'idnovant.it@gmail.com',
         'host': 'smtp.gmail.com', // hostname
-	'secure':true, 
-        'secureConnection': true, // use SSL 
-        'port': 465, // port for secure SMTP 
-        'transportMethod': 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
+	'secure':true,
+        'secureConnection': true, // use SSL
+        'port': 465, // port for secure SMTP
+        'transportMethod': 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
         'auth': {
             'user': 'idnovant.it@gmail.com',
             'pass': 'Idn#2018'
