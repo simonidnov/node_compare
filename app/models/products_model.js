@@ -6,6 +6,12 @@ const db = require('mongoose'),
           label             : {type:"string", unique: true},
           description       : {type:"string"},
           keywords          : {type:"string"},
+          category          : {type:"string"},
+          sub_category      : {type:"string"},
+          extra_category    : {type:"string"},
+          public_target     : {type:"string"},
+          typology          : {type:"string"},
+          app_id            : {type:"string"},
           phonetik          : {type:[]},
           thumb             : {type:"string"},
           picture           : {type:"string"},
@@ -74,6 +80,11 @@ module.exports.update = function(user_id, products_id, datas, callback){
     delete datas.options;
     delete datas.device_infos;
     delete datas._id;
+    console.log(datas);
+    console.log(datas.category);
+    console.log(datas.sub_category);
+    console.log(datas.extra_category);
+    console.log(datas.app_id);
     datas.updated = Date.now();
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;

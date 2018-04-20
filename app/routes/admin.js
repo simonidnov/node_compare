@@ -18,7 +18,6 @@ admin.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
-    console.log('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::');
     Auth_helper.validate_session(req, function(e){
         console.log ('has session ??????? ', e);
         if(e.status === 200){
@@ -367,7 +366,7 @@ admin
       Products_controller.get(req, res, function(e){
         products = e.datas;
         req.body._id = req.params._id;
-        Products_controller.get(req, res, function(e){
+        Products_controller.get({product_id:req.body._id}, req, function(e){
            product_datas = e.datas[0];
            res.render('admin/products', {
               title: 'Admin Products',

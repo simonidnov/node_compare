@@ -8,20 +8,20 @@ exports.get = function(req, res, callback) {
     });
 };
 // check user login then return user_infos
-exports.create = function(datas, res, callback) {
-    Products_model.create(req.session.Auth._id, datas, function(e){
+exports.create = function(req, res, callback) {
+    Products_model.create(req.session.Auth._id, req, function(e){
         callback(e);
     });
 };
 // check user logout then return user_infos
-exports.update = function(datas, res, callback) {
-    Products_model.update(req.session.Auth._id, datas._id, req.body, function(e){
+exports.update = function(req, res, callback) {
+    Products_model.update(req.session.Auth._id, req.body._id, req.body, function(e){
         callback(e);
     });
 };
 // check user register then return user_infos
-exports.delete = function(datas, res, callback) {
-    Products_model.delete(req.session.Auth._id, datas._id, function(e){
+exports.delete = function(req, res, callback) {
+    Products_model.delete(req.session.Auth._id, req._id, function(e){
         callback(e);
     });
 };

@@ -31,13 +31,17 @@ const basketSchemas = new db.Schema(basket_datas),
 module.exports = {
     attributes: basket_datas
 };
-module.exports.get = function(datas, res, callback) {
+module.exports.get = function(datas, req, callback) {
     //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
     var query = {};
     if(datas.isAdmin && typeof datas.basket_id !== "undefined"){
         query = {_id : datas.basket_id};
-    }else if(typeof datas.options.user_id !== "undefined"){
-        query = {user_id : datas.options.user_id};
+    }else if(typeof datas.options !== "undefined"){
+        if(typeof datas.options.user_id !== "undefined"){
+          query = {user_id : datas.options.user_id};
+        }
+    }else if(typeof req.session.Auth !== "undefined"){
+        query = {user_id : req.session.Auth._id};
     }else{
         callback({status:401, message:"NOT_LOGGED_IN"});
         return false;
@@ -46,7 +50,17 @@ module.exports.get = function(datas, res, callback) {
         if(err){
             callback({status:401, datas:err});
         }else{
-            callback({status:200, datas:infos});
+            infos.forEach(function(basket){
+              basket.products.forEach(function(product){
+                products_controller.get({product_id : product.product_id}, req, function(e){
+                  product.infos = e.datas[0];
+                });
+              });
+            });
+            //_.findWhere(infos, {id: id});
+            setTimeout(function(){
+              callback({status:200, datas:infos});
+            }, 10);
         }
     });
 }

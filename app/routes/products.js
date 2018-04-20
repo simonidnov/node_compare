@@ -26,6 +26,9 @@ product.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+
+    res.setHeader('Content-Type', 'application/json');
+
     next();
 });
 /* GET home page. */
@@ -48,9 +51,11 @@ product
         });
     })
     .put('/', function(req, res, next){
+        console.log('req.body PUT :::: ', req.body);
+        console.log('req.query PUT :::: ', req.query);
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
-                Products_controller.update(req.body, res, function(e){
+                Products_controller.update(req, res, function(e){
                     res.status(e.status).send(e.datas);
                 });
             }else{
@@ -72,7 +77,6 @@ product
     .get('/medias/:filename', function(req, res, next){
       Auth_helper.has_media_right(req, function(e){
           if(e.status === 200){
-
             res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
                 if (err) {
                   //res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers", err:err});
@@ -109,7 +113,6 @@ product
         });
     })
     .delete('/medias', function(req, res, next){
-        console.log('put medias ', req.body);
         Auth_helper.validate_admin(req, function(e){
           if(e.status === 200){
             Products_controller.removeFile(req, res, function(e){

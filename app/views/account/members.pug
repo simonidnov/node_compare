@@ -1,0 +1,34 @@
+div.formular#add_kid
+    h2 Mes Enfants
+    if(typeof user.members !== "undefined")
+        if(user.members.length > 0)
+            ul.col_options_list
+                each member in user.members
+                    li(data-memberid=member._id)
+                        div.infos
+                            div.avatar
+                                img(src=member.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                            div.first_name= member.first_name 
+                            div.birth_date= member.birth_date
+                        ul.options
+                            li.primary(data-action="edit" data-edittemplate="member_edit_template" data-post="/me/members" data-value=member._id)
+                                div.icon.icon-pencil.idkids-icons
+                                div.label Éditer
+                            li.danger(data-action="delete" data-post="/me/members" data-type="member_id" data-value=member._id)
+                                div.icon.icon-trash.idkids-icons
+                                div.label Supprimer
+    form.form_content(method="POST" action='/me/members')
+        if(typeof user.members !== "undefined")
+            if(user.members.length == 0)
+                p Présentez-nous votre famille pour bénéficier de <a href="/family">conseils et offres personnalisés</a>.<br/><b> Obtenez 8€ de cadeau pour son anniversaire !</b>
+            else
+                h3 Ajouter un enfant
+        hr.separator
+        div#child
+            div.form-group.material_input.minlength
+                input#first_name.form-control(type='text', placeholder=lang[locale].keys.child_first_name_holder, name='first_name', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_name_error)
+                label(for='child_first_name') !{lang[locale].keys.child_first_name_holder}
+            div.form-group.material_input
+                input#birth_date.form-control(type='date', placeholder=lang[locale].keys.child_birth_date_holder, name='birth_date', required="required", value="", data-erromessage=lang[locale].keys.child_birth_date_error)
+                label(for='birth_date') !{lang[locale].keys.child_birth_date_holder}
+        div.btn.btn-success.btn-m.btn-disabled(data-action='submit')= lang[locale].keys.add_kid_cta

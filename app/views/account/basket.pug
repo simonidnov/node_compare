@@ -1,0 +1,10 @@
+div.col.col-md-7
+  div.formular
+    h1 Mon panier
+    if(typeof basket === "undefined" || basket.length === 0)
+      p Votre panier est vide
+    else
+      ul
+      each product in basket[0].products
+        li
+          div.label= JSON.stringify(product)

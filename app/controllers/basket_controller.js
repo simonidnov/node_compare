@@ -3,7 +3,7 @@ const Basket_model = require('../models/basket_model'),
 
 // check user login then return user_infos
 exports.get = function(req, res, callback) {
-    Basket_model.get(req.query, res, function(e){
+    Basket_model.get(req.query, req, function(e){
         callback(e);
     });
 };

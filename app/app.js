@@ -52,7 +52,6 @@ app.listen(9000);
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-
 //REST ANALYTICS MIDDLE WARE
 //app.use(analytics.middleware());
 
@@ -61,10 +60,20 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //app.use(ga(config.analytics.key, {
 //    safe: true
 //}));
-
 app.use(session({
     secret: "secret",
     resave: false,
+    saveUninitialized: true,
+    cookie: {
+	      secure: false,
+        httpOnly: false,
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
+/*
+app.use(session({
+    secret: "secret",
+    resave: true,
     saveUninitialized: false,
     cookie: {
         secure: false,
@@ -72,6 +81,7 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -87,10 +97,13 @@ app.use("/node_modules", express.static(path.join(__dirname, 'node_modules')));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//router.use(bodyParser.json({limit: '50mb'}));
+//router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 router.use('/admin', admin);
 router.use('/admin/:any', admin);
@@ -131,7 +144,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 //module.exports = app;

@@ -1,0 +1,13 @@
+div.formular#devices_list
+    h1= lang[locale].keys.authorized_devices_title
+    p= lang[locale].keys.authorized_devices_message
+    hr.separator
+    ul.option_list
+        //each device in user.devices
+            li
+                div.icon.idkids-icons.icon-desktop.icon-lg
+                div.option_infos
+                    if(typeof device.ua_parser !== "undefined")
+                        div.label= device.ua_parser.os.name+" "+device.ua_parser.browser.name+" "+device.ua_parser.browser.major
+                    div.arch= device.uid
+                    div#delete_device.delete_device.btn.btn-sm.btn-warning(data-device_uid=device.uid) supprimer

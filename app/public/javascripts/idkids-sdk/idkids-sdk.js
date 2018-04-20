@@ -53,7 +53,6 @@ var idkids_jssdk = function(options, callback){
                     dataType = 'json';
                     params = JSON.stringify(params);
                 }
-                console.log('----------- WITHOUT CREDENTIAL ------------');
                 jQuery.ajax(this.config.url+request, {
                     Accept: "text/plain; charset=utf-8",
                     xhrFields: {
