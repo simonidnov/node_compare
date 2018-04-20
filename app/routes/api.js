@@ -197,6 +197,14 @@ api
           }
           console.log(JSON.parse(body));
         });
-    });
+    })
+    .post('/testdatas', function(req, res, next){
+        console.log(req.body);
+        res.status(200).send({title:"testdatas POST", datas:req.body});
+    })
+    .put('/testdatas', function(req, res, next){
+        console.log(req.body);
+        res.status(200).send({title:"testdatas PUT", datas:req.body});
+    });;
 
 module.exports = api;
