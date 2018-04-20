@@ -14,6 +14,8 @@ div.formular#public_datas
       div.form-group.material_input
           input#birthDate.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birthDate' required="required", value=(new Date(user.birthDate).getFullYear()+"-"+((new Date(user.birthDate).getMonth() < 10) ? "0"+(new Date(user.birthDate).getMonth()+1) : (new Date(user.birthDate).getMonth()+1))+"-"+new Date(user.birthDate).getDate()), data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01' data-minage="16")
           label(for='birthDate') !{lang[locale].keys.birth_date_holder}
+          
+      p= (new Date(user.birthDate).getFullYear()+"-"+((new Date(user.birthDate).getMonth() < 10) ? "0"+(new Date(user.birthDate).getMonth()+1) : (new Date(user.birthDate).getMonth()+1))+"-"+new Date(user.birthDate).getDate())
       hr
       p !{lang[locale].keys.public_checks}
       div.form-group.inline
