@@ -60,6 +60,7 @@ var account = {
                                         if(typeof $('#member_edit_form #child_avatar').attr('data-path') !== "undefined"){
                                             data_form.avatar = $('#member_edit_form #child_avatar').attr('data-path');
                                         }
+                                        console.log('PUT "/me/members"');
                                         index.sdk.api.put("/me/members", data_form, function(e){
                                             if(e.status === 200){
                                               target.removeClass('editable');
@@ -113,6 +114,7 @@ var account = {
         this.public_form = new formular("#public_datas", function(e){
           if(e.status==="hitted" && e.action==="submit"){
               var public_datas = account.public_form.get_datas();
+              console.log("public_datas ", public_datas);
               index.sdk.api.put("/account/profile/", public_datas, function(e){
                 console.log(e);
               });
@@ -125,6 +127,7 @@ var account = {
                 $.each($("#add_kid form").serializeArray(), function(index, serie){
                     form_datas[serie.name] = serie.value;
                 });
+                console.log("form_datas KIDS ", form_datas);
                 index.sdk.api.post('/me/members', form_datas, function(e){
                     window.location.reload();
                 });
@@ -132,6 +135,7 @@ var account = {
         }).init();
         this.security_form = new formular('#security_form', function(e){
             if(e.status === "hitted" && e.action === "submit"){
+                console.log("change_password ");
                 index.sdk.api.put("/api/change_password/", {
                     user_id:$('#security_form #user_id').val(),
                     password:$('#security_form #change_password_old').val(),
@@ -157,6 +161,7 @@ var account = {
         this.services_form = new formular('#services_form', function(e){
             if(e.status==="hitted" && e.action==="submit"){
                 var user_datas = account.services_form.get_datas();
+                console.log("services ", user_datas);
                 index.sdk.api.put("/account/profile/", user_datas, function(e){
                   console.log(e);
                 });
@@ -174,6 +179,7 @@ var account = {
                             $.each($("#member_datas form").serializeArray(), function(index, serie){
                                 form_datas[serie.name] = serie.value;
                             });
+                            console.log("members ", form_datas);
                             index.sdk.api.put("/me/members", form_datas, function(e){
                                 window.location.reload();
                             });
@@ -186,6 +192,7 @@ var account = {
         }
         $('.delete_device').off('click').on('click', function(){
             var self = $(this);
+            console.log("delete device ", $(this).attr('data-device_uid'));
             index.sdk.api.call(
                 "DELETE",
                 '/auth/device',

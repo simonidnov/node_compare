@@ -83,6 +83,7 @@ module.exports.get = function(user_id, query, callback){
 }
 module.exports.create = function(user_id, datas, callback){
     var _self = this;
+    console.log('create app datas ', datas);
     datas.secret = jwt.sign({secret:user_id}, config.secrets.global.secret);
     datas.token = jwt.sign({secret:user_id+Date.now()}, config.secrets.global.secret);
     new_apps = new Apps(datas);

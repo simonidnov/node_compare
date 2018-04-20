@@ -25,7 +25,7 @@ var express = require('express'),
           //TODO GET APP FROM REFERER + SECRET THEN SET REDIRECT URL TO REFERER
           auth_helper.validate_origin({options:{secret:req.query.secret}}, req.get('origin'), function(e){
             if(!e){
-              res.status(401).send({ message: "UNAUTHORISED SERVER", secret:dataCheck.options.secret, host:req.get('origin'), is_ok:""});
+              res.status(401).send({ message: "UNAUTHORISED SERVER", host:req.get('origin'), is_ok:""});
             }else{
               current_app = e;
               current_app.referer = referer;

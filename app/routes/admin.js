@@ -19,11 +19,8 @@ admin.use(function(req, res, next){
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     Auth_helper.validate_session(req, function(e){
-        console.log ('has session ??????? ', e);
         if(e.status === 200){
-            console.log('admin check id admin');
             Auth_helper.validate_admin(req, function(e){
-                console.log ('has session ??????? ', e);
                 if(e.status === 200){
                     next();
                 }else{

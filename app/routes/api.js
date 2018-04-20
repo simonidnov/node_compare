@@ -15,12 +15,13 @@ api.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
-    //res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json');
 
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
+    console.log("dataCheck :::: ", dataCheck);
     next();
 });
 /* GET home page. */
@@ -87,6 +88,7 @@ api
         }
     })
     .post('/apps', function(req, res, next) {
+        console.log("POST APPS ::::: ", req.body);
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(e);
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
@@ -197,6 +199,14 @@ api
           }
           console.log(JSON.parse(body));
         });
+    })
+    .post('/testdatas', function(req, res, next){
+        console.log(req.body);
+        res.status(200).send({title:"testdatas POST", datas:req.body});
+    })
+    .put('/testdatas', function(req, res, next){
+        console.log(req.body);
+        res.status(200).send({title:"testdatas PUT", datas:req.body});
     });
 
 module.exports = api;

@@ -18,7 +18,7 @@ function formular(target, callback){
                 $(this).parent().remove();
             });
         });
-        
+
         $(target).find('[data-file]').off('change').on('change', function(e){
             var input = this,
                 input_id = $(this).attr("id");
@@ -38,7 +38,7 @@ function formular(target, callback){
                 }
             });
         });
-        
+
         $(target).find(".image_cropper").change(function() {
             var $image = document.getElementById($(this).attr('id')+'_preview'),
                 oFReader = new FileReader(),
@@ -55,14 +55,14 @@ function formular(target, callback){
                     _target.parent().find('.valid_crop').remove();
                     $image.src = cropper.getCroppedCanvas().toDataURL();
                     cropper.destroy();
-                    
-                    var url = "url/action";                
+
+                    var url = "url/action";
                     var image = $('#image-id').attr('src');
                     var base64ImageContent = $image.src.replace(/^data:image\/(png|jpg);base64,/, "");
                     var blob = base64ToBlob(base64ImageContent, 'image/png');
                     var formData = new FormData();
                     formData.append('base64', blob);
-                    
+
                     $.ajax({
                         url: '/media/base64',  //Server script to process data
                         type: 'POST',
@@ -89,7 +89,7 @@ function formular(target, callback){
                     // PERHAPS WE CAN POST DATA HERE
                     // ACTUALLY WE NEED TO USE CALLBACK LIGHTER FORM CLASS
                     //if(typeof $(target).find('form').attr('action') !== "undefined" && typeof $(target).find('form').attr('method') !== "undefined"){
-                    //    
+                    //
                     //}
                     break;
                 default:
@@ -120,14 +120,14 @@ function formular(target, callback){
                 });
             }
         });
-        
-        
+
+
         //, .maxlength, .minmaxlength
         self.check_min_max();
         $(target).find('.material_input input, .material_input textarea').off('keypress').on('keypress', function(){
             self.check_min_max();
         });
-        
+
         $(target).find('.material_input input').off('blur').on('blur', function(){
             self.check_min_max();
             self.inputCheck($(this), true);
@@ -171,7 +171,7 @@ function formular(target, callback){
             }else{
                 return false;
             }
-            
+
             if($(this).find('.number').length === 0){
                 $(this).append('<span class="number"></span>');
             }
@@ -278,19 +278,19 @@ function formular(target, callback){
                     }else{
                         $('[data-checkinput="'+target.attr('id')+'"] .check_hash').removeClass('checked');
                     }
-                    
+
                     if($('[data-checkinput="'+target.attr('id')+'"] .check_arobase').length > 0 && target.val().indexOf('@') !== -1){
                         $('[data-checkinput="'+target.attr('id')+'"] .check_arobase').addClass('checked');
                     }else{
                         $('[data-checkinput="'+target.attr('id')+'"] .check_arobase').removeClass('checked');
                     }
-                    
+
                     if($('[data-checkinput="'+target.attr('id')+'"] .check_dot').length > 0 && target.val().indexOf('.') !== -1){
                         $('[data-checkinput="'+target.attr('id')+'"] .check_dot').addClass('checked');
                     }else{
                         $('[data-checkinput="'+target.attr('id')+'"] .check_dot').removeClass('checked');
                     }
-                    
+
                     if($('[data-checkinput="'+target.attr('id')+'"] .check_length').length > 0 && target.val().length >= target.attr('minlength')){
                         $('[data-checkinput="'+target.attr('id')+'"] .check_length').addClass('checked');
                     }else{
@@ -372,13 +372,13 @@ function formular(target, callback){
         $.each($(target).find("form").serializeArray(), function(index, serie){
             form_datas[serie.name] = serie.value;
         });
-        
+
         $(target).find('input:checkbox, input:radio').map(function() {
             console.log(this);
             form_datas[$(this).attr('name')] = $(this).is(':checked');
             //return { name: this.name, value: this.checked ? this.value : "false" };
         });
-        
+
         $.each($(target).find('.array_list_inputs'), function(index, array_list){
             var array_list = {};
             //var data = {};
@@ -521,7 +521,7 @@ function datepicker(target, callback){
 
 
 
-function base64ToBlob(base64, mime) 
+function base64ToBlob(base64, mime)
 {
     mime = mime || '';
     var sliceSize = 1024;

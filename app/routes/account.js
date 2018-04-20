@@ -12,17 +12,17 @@ var express = require('express'),
 
 account.use(function(req, res, next){
     //ACCEPT CORS
-    res.setHeader('Access-Control-Allow-Credentials', false);
-    //console.log('------------------ req.get(origin) ::::::::: ', req.get('origin'));
     res.setHeader("Access-Control-Allow-Origin", "*");
-    //res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    //res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
 
+    var dataCheck = req.query;
+    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+        dataCheck = req.body;
+    }
+    console.log("dataCheck :::: ", dataCheck);
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     // TODO : VALIDATE SESSION USER
@@ -36,12 +36,15 @@ account.use(function(req, res, next){
         }
     });
 });
-/* GET home page. */
 account
     .get('/', function(req, res, next) {
+        console.log('req.query ::: ', req.query);
+        console.log('req.body ::: ', req.body);
         res.redirect(307, '/account/profile'+req.url.replace('/',''));
     })
     .get('/:page', function(req, res, next) {
+        console.log('req.query ::: ', req.query);
+        console.log('req.body ::: ', req.body);
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -67,6 +70,8 @@ account
         });
     })
     .get('/member/:member_id', function(req, res, next){
+        console.log('req.query ::: ', req.query);
+        console.log('req.body ::: ', req.body);
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -93,6 +98,8 @@ account
         });
     })
     .get('/addresses/:address_id', function(req, res, next){
+        console.log('req.query ::: ', req.query);
+        console.log('req.body ::: ', req.body);
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -119,6 +126,8 @@ account
         });
     })
     .post('/profile', function(req, res, next) {
+        console.log('req.query ::: ', req.query);
+        console.log('req.body ::: ', req.body);
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
                 res.redirect(200, e.datas);
@@ -128,6 +137,8 @@ account
         });
     })
     .put('/profile', function(req, res, next) {
+        console.log('req.query ::: ', req.query);
+        console.log('req.body ::: ', req.body);
         console.log("req.body  :::: ", req.body);
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
