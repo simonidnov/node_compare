@@ -9,7 +9,7 @@ module.exports = {
         'user':'idkids-app-28273',
         'password':'gLEv44TTJrw4z5q4',
         'name':'mongodb://localhost/idkids-app-com',
-        'users':"mongodb://idkids-app-28273:gLEv44TTJrw4z5q4@localhost:27017/idkids-app-com"
+        'users':"mongodb://localhost:27017/idkids-app-com"
     },
     'emailing': {
         'from': 'idnovant.it@gmail.com',

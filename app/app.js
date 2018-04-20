@@ -32,6 +32,7 @@ app = module.exports = express();
 
 /* DEFINE STATIC GLOBAL APP SPEC HERE ACCESS IN ALL CONTROLLER INSIDE app.locals NEED TO REBOOT SERVER TO REFRESH */
 Apps_controller.get(null, {}, function(e){
+  console.log('GET APPLICATIONS ', e);
     app.locals.applications = e.datas;
 });
 Settings_model.get(null, {}, function(e){

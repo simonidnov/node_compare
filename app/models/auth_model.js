@@ -355,7 +355,7 @@ module.exports.register = function(datas, callback) {
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
         new_user_datas.newsletter_services = {};
-        console.log("app.locals.applications ::: ", app.locals.applications);
+        //console.log("app.locals.applications ::: ", app.locals.applications);
         for(var i=0; i<app.locals.applications.length; i++){
           console.log(datas.body['newsletter_'+app.locals.applications[i].short_name]);
           if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
