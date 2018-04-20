@@ -291,7 +291,11 @@ module.exports.login = function(req, datas, callback) {
                               $set:{
                                   token : new_token,
                                   updated : Date.now(),
-                                  avatar : avatar
+                                  avatar : avatar,
+                                  rights  : {
+                                      "type":'RWO',
+                                      "authorizations":['me']
+                                  }
                               }
                           },
                           function(err, user){
