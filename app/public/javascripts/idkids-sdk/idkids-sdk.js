@@ -50,14 +50,14 @@ var idkids_jssdk = function(options, callback){
             this.add_params(params, $.proxy(function(new_params){
                 params = new_params;
                 dataType = 'json';
+                
                 if(method === "POST" || method === "PUT" || method === "DELETE"){
                     dataType = 'json';
                     params = JSON.stringify(params);
                 }
-                console.log(" ------------------ :::: ", params);
                 jQuery.ajax(this.config.url+request, {
                     method: method,
-                    contentType: 'application/jsonp; charset=utf-8',
+                    contentType: 'application/json',
                     dataType: dataType,
                     data: params
                 })
