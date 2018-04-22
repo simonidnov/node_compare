@@ -52,6 +52,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
         //res.redirect(307, '/admin/dashboard');
     })
     .get('/dashboard', function(req, res, next) {
@@ -71,6 +72,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
     })
     .get('/apps', function(req, res, next) {
         var applications = [];
@@ -97,6 +99,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
         });
     })
     .get('/apps/:page', function(req, res, next) {
@@ -123,7 +126,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
-
+            res.end();
         });
     })
     .get('/apps/:page/:_id', function(req, res, next) {
@@ -156,6 +159,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
         });
     })
     .get('/users', function(req, res, next) {
@@ -180,6 +184,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
          });
 
     })
@@ -200,6 +205,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
     })
     .get('/settings', function(req, res, next) {
          res.render('admin/settings', {
@@ -220,6 +226,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
     })
     .get('/translations', function(req, res, next) {
          res.render('admin/translations', {
@@ -238,6 +245,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
     })
     .get('/pages', function(req, res, next) {
       Pages_controller.get(req, res, function(e){
@@ -258,6 +266,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
       });
     })
     .get('/pages/:page', function(req, res, next) {
@@ -281,6 +290,7 @@ admin
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
         });
     })
     .get('/pages/:page/:_id', function(req, res, next) {
@@ -315,6 +325,7 @@ admin
                   '/public/stylesheets/components/pager/pager.css'
               ]
           });
+          res.end();
       });
     })
     .get('/products', function(req, res, next) {
@@ -336,6 +347,7 @@ admin
                   '/public/stylesheets/components/formular.css'
               ]
           });
+          res.end();
       });
     })
     .get('/products/:page', function(req, res, next) {
@@ -357,6 +369,7 @@ admin
                 '/public/stylesheets/components/formular.css'
             ]
         });
+        res.end();
       });
     })
     .get('/products/:page/:_id', function(req, res, next) {
@@ -386,6 +399,7 @@ admin
                   '/node_modules/dropzone/dist/dropzone.css'
               ]
           });
+          res.end();
         });
       });
     })
@@ -409,6 +423,7 @@ admin
                   '/public/stylesheets/components/formular.css'
               ]
           });
+          res.end();
       });
     })
     .get('/baskets', function(req, res, next) {
@@ -431,6 +446,7 @@ admin
                   '/public/stylesheets/components/formular.css'
               ]
           });
+          res.end();
       });
     });
 

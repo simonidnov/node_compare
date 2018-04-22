@@ -71,18 +71,22 @@ me.get('/', function(req, res, next) {
     })
     .post('/', function(req, res, next) {
         res.send({ message: "me post is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .put('/', function(req, res, next) {
         res.send({ message: "me put is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .delete('/', function(req, res, next) {
         res.send({ message: "me delete is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     /* ------------ MEMBERS MANAGMENT ------------ */
     .get('/members', function(req, res, next) {
         Members_model.get(req.query.options.user_id, null, function(e){
             e.updated_token = req.query.updated_token;
             res.status(e.status).send(e);
+            res.end();
         });
     })
     .post('/members', function(req, res, next) {
@@ -91,6 +95,7 @@ me.get('/', function(req, res, next) {
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
                 res.status(e.status).send(e);
+                res.end();
             });
         });
     })
@@ -100,6 +105,7 @@ me.get('/', function(req, res, next) {
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
                 res.status(e.status).send(e);
+                res.end();
             });
         });
     })
@@ -109,27 +115,33 @@ me.get('/', function(req, res, next) {
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
                 res.status(e.status).send(e);
+                res.end();
             });
         });
     })
     /* ------------ ORDERS MANAGMENT ----------- */
     .get('/friends', function(req, res, next) {
         res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .post('/friends', function(req, res, next) {
         res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .put('/friends', function(req, res, next) {
         res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .delete('/friends', function(req, res, next) {
         res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     /* ------------ ADRESS MANAGMENT ------------- */
     .get('/address', function(req, res, next) {
         Address_model.get(req.query.options.user_id, null, function(e){
             e.updated_token = req.query.updated_token;
             res.status(e.status).send(e);
+            res.end();
         });
     })
     .post('/address', function(req, res, next) {
@@ -138,6 +150,7 @@ me.get('/', function(req, res, next) {
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
                 res.status(e.status).send(e);
+                res.end();
             });
         });
     })
@@ -147,6 +160,7 @@ me.get('/', function(req, res, next) {
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
                 res.status(e.status).send(e);
+                res.end();
             });
         });
     })
@@ -156,6 +170,7 @@ me.get('/', function(req, res, next) {
             auth_helper.check_session(req, req.body.options.user_id, function(){
                 e.updated_token = req.query.updated_token;
                 res.status(e.status).send(e);
+                res.end();
             });
         });
     })
@@ -164,55 +179,71 @@ me.get('/', function(req, res, next) {
         Auth_model.getServices(req.query.options.user_id, function(e){
             e.updated_token = req.query.updated_token;
             res.status(e.status).send(e);
+            res.end();
         });
     })
     .post('/services', function(req, res, next) {
         res.send({ message: "services post is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .put('/services', function(req, res, next) {
         res.send({ message: "services put is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .delete('/services', function(req, res, next) {
         res.send({ message: "services delete is under development redirect to /account/profile", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     /* ------------ BASKET MANAGMENT ----------- */
     .get('/basket', function(req, res, next) {
         res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .post('/basket', function(req, res, next) {
         res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .put('/basket', function(req, res, next) {
         res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .delete('/basket', function(req, res, next) {
         res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     /* ------------ ORDERS MANAGMENT ----------- */
     .get('/orders', function(req, res, next) {
         res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .post('/orders', function(req, res, next) {
         res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .put('/orders', function(req, res, next) {
         res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .delete('/orders', function(req, res, next) {
         res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     /* ------------ notifications MANAGMENT ----------- */
     .get('/notifications', function(req, res, next) {
         res.send({ message: "notifications get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .post('/notifications', function(req, res, next) {
         res.send({ message: "notifications post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .put('/notifications', function(req, res, next) {
         res.send({ message: "notifications put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     .delete('/notifications', function(req, res, next) {
         res.send({ message: "notifications delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.end();
     })
     /* ------------ FROM VALIDATION ----------- */
     .get('/from', function(req, res, next) {
@@ -220,5 +251,6 @@ me.get('/', function(req, res, next) {
         //    res.status(e.status).send(e);
         //});
         res.status(200).send({status:"me from callback", origin:req.get('origin'), options:req.query.options.secret});
+        res.end();
     });
 module.exports = me;

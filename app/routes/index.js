@@ -10,6 +10,7 @@ const express = require('express'),
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('offline', { title: 'IDKIDS.community WELCOME' });
+    res.end();
 });
 router.get('/:page_url', function(req, res, next) {
     Page_controller.get(req.params, res, function(e) {
@@ -28,6 +29,7 @@ router.get('/:page_url', function(req, res, next) {
 
             ]
         });
+        res.end();
       }else{
         res.render('404', {
             title: '404',
@@ -39,6 +41,7 @@ router.get('/:page_url', function(req, res, next) {
             js:[],
             css:[]
         });
+        res.end();
       }
     });
 });

@@ -42,6 +42,8 @@ module.exports.get = function(datas, req, callback) {
         }
     }else if(typeof req.session.Auth !== "undefined"){
         query = {user_id : req.session.Auth._id};
+    }else if(typeof datas.user_id !== "undefined"){
+        query = {user_id : datas.user_id};
     }else{
         callback({status:401, message:"NOT_LOGGED_IN"});
         return false;

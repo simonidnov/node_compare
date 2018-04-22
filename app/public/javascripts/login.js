@@ -5,6 +5,7 @@ $(function(){
 var login = {
     form : null,
     init:function(){
+        this.add_account();
         if(typeof current_app !== "undefined" && current_app !== null){
             console.log("current app is set " + current_app.name);
         }
@@ -17,7 +18,6 @@ var login = {
             $('#email').parent().addClass('valid');
             $('#password').parent().addClass('invalid');
         }
-        this.add_account();
         this.form = new formular('#auth_form', function(e){
             $('.formular.auth').css({
                 height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"

@@ -16,9 +16,10 @@ validation.get('/', function(req, res, next) {
         res.render('validation', {
             title: 'Validation',
             infos : {},
-            js:[], 
+            js:[],
             css:[]
         });
+        res.end();
     })
     .get('/account/:email/:validation_code', function (req, res, next) {
         Auth_model.validAccount(req.params, function(e){
@@ -30,8 +31,9 @@ validation.get('/', function(req, res, next) {
                 ], css:[
                 ]
             });
+            res.end();
         });
         //res.status(200).send({status:200, message:"file upload success", path:req.file.path, file:req.file});
     });
-    
+
 module.exports = validation;

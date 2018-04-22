@@ -63,6 +63,7 @@ account
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
         });
     })
     .get('/member/:member_id', function(req, res, next){
@@ -90,6 +91,7 @@ account
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
         });
     })
     .get('/addresses/:address_id', function(req, res, next){
@@ -117,23 +119,28 @@ account
                     '/public/stylesheets/components/formular.css'
                 ]
             });
+            res.end();
         });
     })
     .post('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
                 res.redirect(200, e.datas);
+                res.end();
             }else{
                 res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
+                res.end();
             }
         });
     })
     .put('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
-                res.send(e.status, e.datas);
+                res.status(e.status).send(e.datas);
+                res.end();
             }else{
-                res.send(e.status, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
+                res.status(e.status).send('/account/'+req.url.replace('/','')+"?error_message="+e.message);
+                res.end();
             }
         });
     });

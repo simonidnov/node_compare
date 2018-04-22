@@ -5,6 +5,7 @@ const express = require('express'),
       templating = express.Router(),
       Auth_controller = require('../controllers/auth_controller'),
       Basket_controller = require('../controllers/basket_controller'),
+      Basket_model = require('../models/basket_model'),
       language_helper = require('../helpers/languages_helper'),
       uri_helper = require('../helpers/uri_helper'),
       lang = require('../public/languages/auth_lang'),
@@ -37,7 +38,9 @@ templating.get('/:template', function(req, res, next) {
     switch(req.params.template){
       case 'notif_button':
         if(typeof req.query.user !== "undefined"){
-          Basket_controller.get(req, res, function(e){
+          console.log('HAS USER ? ', req.query.user);
+          Basket_model.get({user_id:req.query.user._id}, req, function(e){
+            console.log('GET BASKET USER FROM TEMPLATING ', e);
             req.datas_set.basket = e.datas;
             next();
           });
@@ -58,6 +61,7 @@ templating.get('/:template', function(req, res, next) {
     //res.render('templates/'+req.params.template, req.query);
 }, function(req, res, next){
     res.render('templates/'+req.params.template, req.datas_set);
+    res.end();
 });
 
 module.exports = templating;

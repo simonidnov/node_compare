@@ -97,9 +97,10 @@ auth.get('/', function(req, res, next) {
 
                 if(typeof e.user !== "undefined"){
                     res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
-
+                    res.end();
                 }else{
                   res.render('auth/login', datas);
+                  res.end();
                 }
                 delete current_app;
                 current_app = null;
@@ -131,8 +132,10 @@ auth.get('/', function(req, res, next) {
             datas.user_session = req.session.Auth;
             if(typeof e.user !== "undefined"){
                 res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                res.end();
             }else{
                 res.render('auth/login', datas);
+                res.end();
             }
         });
     })
@@ -162,8 +165,10 @@ auth.get('/', function(req, res, next) {
                 datas.user_session = req.session.Auth;
                 if(typeof e.user !== "undefined"){
                     res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
+                    res.end();
                 }else{
                     res.render('auth/login', datas);
+                    res.end();
                 }
             });
         });
@@ -200,6 +205,7 @@ auth.get('/', function(req, res, next) {
                     ]
                 };
                 res.render('auth/login', datas);
+                res.end();
             }
             delete current_app;
             current_app = null;
@@ -208,11 +214,13 @@ auth.get('/', function(req, res, next) {
     .put('/login', function(req, res, next) {
         Auth_controller.update(req, res, function(){
             res.send('login put params');
+            res.end();
         });
     })
     .delete('/login', function(req, res, next) {
         Auth_controller.unregister(req, res, function(){
             res.send('login delete params');
+            res.end();
         });
     })
     .get('/:form_name/*', function(req, res, next) {
@@ -237,8 +245,10 @@ auth.get('/', function(req, res, next) {
             };
             if(typeof e.idkids_user !== "undefined"){
                 res.redirect(307, referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
+                res.end();
             }
             res.render('auth/login', datas);
+            res.end();
             delete current_app;
             current_app = null;
         });
@@ -246,6 +256,7 @@ auth.get('/', function(req, res, next) {
     .delete('/device', function(req, res, next){
         Auth_controller.delete_device(req, res, function(e){
             res.send(e);
+            res.end();
         });
     })
     .get('/logout', function(req, res, next) {
@@ -259,6 +270,7 @@ auth.get('/', function(req, res, next) {
                 param = "&";
               }
               res.redirect(307, req.headers.referer+param+"idkids-sdk-action=logout");
+              res.end();
             }
             //res.render('logout', { "title": "déconnexion", "referer":req.headers.referer });
             //res.render(req.headers.referer, { "title": "déconnexion", "referer":req.headers.referer, "idkids_sdk":"logout" });
@@ -266,6 +278,7 @@ auth.get('/', function(req, res, next) {
     })
     .get('/account', function(req, res, next) {
       res.render('account', { title: 'account auth page' });
+      res.end();
     });
 
 module.exports = auth;
