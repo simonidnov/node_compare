@@ -15,7 +15,7 @@ var idkids_jssdk = function(options, callback){
         },
         post : function(request, params, callback) {
             //this.call('POST', request, params, callback);
-            /*this.add_params(params, $.proxy(function(params){
+            this.add_params(params, $.proxy(function(params){
               $.post(this.config.url+request, {
                   Accept: "text/plain; charset=utf-8",
                   method: "POST",
@@ -36,7 +36,7 @@ var idkids_jssdk = function(options, callback){
                   this.hide_loader();
                   this.check_response(e);
               },this));
-            }, this));*/
+            }, this));
             this.call('POST', request, params, callback);
         },
         put : function(request, params, callback) {
@@ -50,7 +50,7 @@ var idkids_jssdk = function(options, callback){
             this.add_params(params, $.proxy(function(new_params){
                 params = new_params;
                 dataType = 'json';
-                
+
                 if(method === "POST" || method === "PUT" || method === "DELETE"){
                     dataType = 'json';
                     params = JSON.stringify(params);

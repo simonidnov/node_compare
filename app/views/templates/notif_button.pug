@@ -1,6 +1,6 @@
 li#notifications
     a(href="#")
-        div.indice 0
+        div.indice= basket.length
         div.icon-notifications.idkids-icons.lg
     div.subnav
         ul
@@ -8,7 +8,7 @@ li#notifications
                 a(href=app.locals.settings.host+"/account/basket" target="_blank")
                   div.idkids-icons.icon-basket
                   span Mon panier
-                  span(id="total_basket") (0)  
+                  span(id="total_basket")= basket.length  
             li
                 a(href=app.locals.settings.host+"/account/orders" target="_blank")
                   div.idkids-icons.icon-delivery

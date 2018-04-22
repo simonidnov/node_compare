@@ -46,7 +46,8 @@ const appsSchemas = new db.Schema(apps_datas),
       Apps = db.model('Apps', appsSchemas);
 
 module.exports = {
-    attributes: apps_datas
+    attributes: apps_datas,
+    Apps: Apps
 };
 module.exports.validate = function(secret, host, callback){
   /*
@@ -83,7 +84,6 @@ module.exports.get = function(user_id, query, callback){
 }
 module.exports.create = function(user_id, datas, callback){
     var _self = this;
-    console.log('create app datas ', datas);
     datas.secret = jwt.sign({secret:user_id}, config.secrets.global.secret);
     datas.token = jwt.sign({secret:user_id+Date.now()}, config.secrets.global.secret);
     new_apps = new Apps(datas);
@@ -106,7 +106,7 @@ module.exports.update = function(user_id, apps_id, datas, callback){
     datas.updated = Date.now();
     Apps.updateOne(
         {
-            _id     : apps_id
+            _id  : apps_id
         },
         {
             $set : datas

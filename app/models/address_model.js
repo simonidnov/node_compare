@@ -6,9 +6,9 @@ const db = require('mongoose'),
           label           : {type:"string"},
           first_name      : {type:"string"},
           last_name       : {type:"string"},
-          AddressLine1   : {type:'string'},
-          AddressLine2   : {type:'string'},
-          AddressLine3   : {type:'string'},
+          AddressLine1    : {type:'string'},
+          AddressLine2    : {type:'string'},
+          AddressLine3    : {type:'string'},
           city            : {type:'string'},
           country         : {type:'string'},
           country_code    : {type:'string'},
@@ -45,7 +45,7 @@ const db = require('mongoose'),
       },
       geocoder = NodeGeocoder(options);
 
-if(db.connection.readyState === 0){ 
+if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
 const addressSchemas = new db.Schema(address_datas),
@@ -58,7 +58,7 @@ module.exports = {
 // check user login then return user_infos
 
 module.exports.get = function(user_id, address_id, callback){
-    var query = {};  
+    var query = {};
     if(user_id !== null){
         query['user_id'] = user_id;
     }
@@ -72,20 +72,18 @@ module.exports.get = function(user_id, address_id, callback){
 }
 module.exports.create = function(user_id, datas, callback){
     datas.user_id = user_id;
-    //console.log(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country);
     geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
             datas.geocoder = res[0];
             new_address = new Address(datas);
-            new_address.save(function(err, infos){  
+            new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
             });
         })
         .catch(function(err) {
-            console.log('google map error ', err);
             new_address = new Address(datas);
-            new_address.save(function(err, infos){  
+            new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
             });

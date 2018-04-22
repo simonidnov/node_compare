@@ -44,7 +44,6 @@ address
         });
     })
     .delete('/', function(req, res, next) {
-        console.log("DELETE ADDRESS");
         Address_controller.delete(req, function(e){
             res.status(e.status).send(e);
             //res.redirect(301, '/account/addresses'+req.url.replace('/',''));

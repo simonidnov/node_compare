@@ -4,6 +4,7 @@ const express = require('express'),
       _und = require("underscore"),
       templating = express.Router(),
       Auth_controller = require('../controllers/auth_controller'),
+      Basket_controller = require('../controllers/basket_controller'),
       language_helper = require('../helpers/languages_helper'),
       uri_helper = require('../helpers/uri_helper'),
       lang = require('../public/languages/auth_lang'),
@@ -27,20 +28,36 @@ templating.use(function(req, res, next){
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 templating.get('/:template', function(req, res, next) {
-    var datas= {
+    req.datas_set= {
         locale:language_helper.getlocale(req),
         lang:lang,
         query:req.query,
         _:_und
     };
-    if(typeof req.session.Auth !== "undefined"){
-      datas.user = req.session.Auth;
-      if(typeof req.query.member_id !== "undefined"){
-        datas.member = _und.where(datas.user.members, {_id:req.query.member_id})[0];
-      }
+    switch(req.params.template){
+      case 'notif_button':
+        if(typeof req.query.user !== "undefined"){
+          Basket_controller.get(req, res, function(e){
+            req.datas_set.basket = e.datas;
+            next();
+          });
+        }else{
+          next();
+        }
+        break;
+      default:
+        if(typeof req.session.Auth !== "undefined"){
+          req.datas_set.user = req.session.Auth;
+          if(typeof req.query.member_id !== "undefined"){
+            req.datas_set.member = _und.where(req.datas_set.user.members, {_id:req.query.member_id})[0];
+          }
+        }
+        next();
+        break;
     }
-    res.render('templates/'+req.params.template, datas);
     //res.render('templates/'+req.params.template, req.query);
+}, function(req, res, next){
+    res.render('templates/'+req.params.template, req.datas_set);
 });
 
 module.exports = templating;

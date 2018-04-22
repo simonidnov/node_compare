@@ -21,7 +21,6 @@ api.use(function(req, res, next){
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
-    console.log("dataCheck :::: ", dataCheck);
     next();
 });
 /* GET home page. */
@@ -74,7 +73,6 @@ api
         });
     })
     .get('/apps/:action', function(req, res, next) {
-        console.log("req.body :::::: ", req);
         switch(action){
           case 'valid_sdk':
             Apps_controller.validate(req, res, function(e){
@@ -88,7 +86,6 @@ api
         }
     })
     .post('/apps', function(req, res, next) {
-        console.log("POST APPS ::::: ", req.body);
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(e);
             //res.redirect(301, '/account/informations'+req.url.replace('/',''));
@@ -194,18 +191,14 @@ api
           },
         }, function(err, httpResponse, body) {
           if (err) {
-            console.error('Error:', err);
             return;
           }
-          console.log(JSON.parse(body));
         });
     })
     .post('/testdatas', function(req, res, next){
-        console.log(req.body);
         res.status(200).send({title:"testdatas POST", datas:req.body});
     })
     .put('/testdatas', function(req, res, next){
-        console.log(req.body);
         res.status(200).send({title:"testdatas PUT", datas:req.body});
     });
 

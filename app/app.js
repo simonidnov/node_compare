@@ -43,6 +43,8 @@ Settings_model.get(null, {}, function(e){
 app.locals.auth_lang = require('./public/languages/auth_lang');
 app.locals.api_lang = require('./public/languages/api_lang');
 app.locals.admin_lang = require('./public/languages/admin_lang');
+app.locals._ = require("underscore");
+
 /* END DEFINED GLOBAL STATIC APP VARS */
 
 
@@ -62,14 +64,17 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //}));
 app.use(session({
     secret: "secret",
-    resave: false,
-    saveUninitialized: true,
     cookie: {
 	      secure: false,
         httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24
-    }
+    },
+    name: "Auth",
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
 }));
+//TODO CHECH IT store: sessionStore, // connect-mongo session store
 /*
 app.use(session({
     secret: "secret",

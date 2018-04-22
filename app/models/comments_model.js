@@ -32,7 +32,6 @@ module.exports.get = function(user_id, page_url, callback){
     });
 };
 module.exports.create = function(user_id, datas, callback){
-    console.log(datas);
     //datas.user = user._id;
     new_product = new Products(datas);
     new_product.save(function(err, infos){

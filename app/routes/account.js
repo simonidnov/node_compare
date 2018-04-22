@@ -22,7 +22,6 @@ account.use(function(req, res, next){
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
-    console.log("dataCheck :::: ", dataCheck);
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     // TODO : VALIDATE SESSION USER
@@ -38,13 +37,9 @@ account.use(function(req, res, next){
 });
 account
     .get('/', function(req, res, next) {
-        console.log('req.query ::: ', req.query);
-        console.log('req.body ::: ', req.body);
         res.redirect(307, '/account/profile'+req.url.replace('/',''));
     })
     .get('/:page', function(req, res, next) {
-        console.log('req.query ::: ', req.query);
-        console.log('req.body ::: ', req.body);
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -54,6 +49,7 @@ account
                 lang  : lang,
                 page  : req.params.page,
                 basket : baskets,
+                _:_,
                 js:[
                     '/public/javascripts/account.js',
                     '/node_modules/cropperjs/dist/cropper.min.js',
@@ -70,8 +66,6 @@ account
         });
     })
     .get('/member/:member_id', function(req, res, next){
-        console.log('req.query ::: ', req.query);
-        console.log('req.body ::: ', req.body);
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -82,6 +76,7 @@ account
                 page:"member",
                 basket : baskets,
                 member_infos:_.where(req.session.Auth.members, {_id:req.params.member_id})[0],
+                _:_,
                 js:[
                     '/public/javascripts/account.js',
                     '/node_modules/cropperjs/dist/cropper.min.js',
@@ -98,8 +93,6 @@ account
         });
     })
     .get('/addresses/:address_id', function(req, res, next){
-        console.log('req.query ::: ', req.query);
-        console.log('req.body ::: ', req.body);
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -110,6 +103,7 @@ account
                 page:"addresses",
                 basket : baskets,
                 address_infos:_.where(req.session.Auth.address, {_id:req.params.address_id})[0],
+                _:_,
                 js:[
                     '/public/javascripts/account.js',
                     '/node_modules/cropperjs/dist/cropper.min.js',
@@ -126,8 +120,6 @@ account
         });
     })
     .post('/profile', function(req, res, next) {
-        console.log('req.query ::: ', req.query);
-        console.log('req.body ::: ', req.body);
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
                 res.redirect(200, e.datas);
@@ -137,9 +129,6 @@ account
         });
     })
     .put('/profile', function(req, res, next) {
-        console.log('req.query ::: ', req.query);
-        console.log('req.body ::: ', req.body);
-        console.log("req.body  :::: ", req.body);
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
                 res.send(e.status, e.datas);

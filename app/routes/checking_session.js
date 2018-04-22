@@ -18,13 +18,17 @@ var express = require('express'),
     });
 checking_session.get('/', function(req, res, next) {
     if(typeof req.query._id !== "undefined" && typeof req.query.secret !== "undefined" && typeof req.query.token !== "undefined"){
-      Auth_model.checking_session(req, req.query._id, function(e){
-        if(typeof e.datas.password !== "undefined"){
-            res.redirect(307, "/account"+'?idkids-token='+e.datas.token+'&idkids-id='+e.datas._id+'&idkids-device='+e.datas.current_device);
-        }else{
-            res.render('auth/login', {});
-        }
-      });
+      if(req.query._id === "undefined"){
+        res.redirect(307, '/auth');
+      }else{
+        Auth_model.checking_session(req, req.query._id, function(e){
+          if(typeof e.datas.password !== "undefined"){
+              res.redirect(307, "/account"+'?idkids-token='+e.datas.token+'&idkids-id='+e.datas._id+'&idkids-device='+e.datas.current_device);
+          }else{
+              res.redirect(307, '/auth');
+          }
+        });
+      }
     }else{
       res.render('auth/checking_session', {});
     }

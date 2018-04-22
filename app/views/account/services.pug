@@ -4,7 +4,7 @@ div.formular#services_form
         div.form-group
             input.invisible(type='text' name="user_id" value=user._id)
         div.form-group
-            input#newsletter.form-control(type='checkbox', name='newsletter' checked=user.newsletter)
+            input#newsletter.form-control(type='checkbox', name='newsletter', checked=user.newsletter)
             label(for="newsletter") !{lang[locale].keys.accept_newsletter}
         div.form-group.checkbox_relative_container(data-checkboxrelative="newsletter" style= user.newsletter === true ? "display:block" : "display:none")
             div.checkbox_relative.array_list_inputs(data-name="newsletter_services")
@@ -13,7 +13,7 @@ div.formular#services_form
                   each apps in app.locals.applications
                     if(apps.has_newsletter)
                       div.line
-                        input.form-control(id="newsletter_"+apps.short_name type='checkbox', name='newsletter_'+apps.short_name, checked=((user.newsletter_services && user.newsletter_services['newsletter_'+apps.short_name] === true)? true : false))
+                        input.form-control(id="newsletter_"+apps.short_name, type='checkbox', name='newsletter_'+apps.short_name, checked=((user.newsletter_services && user.newsletter_services['newsletter_'+apps.short_name] === true)? true : false))
                         label(for="newsletter_"+apps.short_name) 
                           b= apps.name
                           span= " "+apps.short_desc
@@ -22,9 +22,9 @@ div.formular#services_form
                     label(for="newsletter_others") !{lang[locale].keys.accept_newsletter_others}
                 p !{lang[locale].keys.accept_notifications_more_informations}
         div.form-group
-            input#sms.form-control(type='checkbox', name='sms' checked=user.sms)
+            input#sms.form-control(type='checkbox', name='sms', checked=user.sms)
             label(for="sms") !{lang[locale].keys.accept_sms}
-        div.form-group.checkbox_relative_container(data-checkboxrelative="sms" style= user.sms === true ? "display:block" : "display:none")
+        div.form-group.checkbox_relative_container(data-checkboxrelative="sms", style= user.sms === true ? "display:block" : "display:none")
             div.checkbox_relative.array_list_inputs(data-name="sms_services")
                 p !{lang[locale].keys.accept_sms_partners}
                 if(typeof app.locals.applications !== "undefined")

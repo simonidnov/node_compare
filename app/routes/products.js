@@ -54,8 +54,6 @@ product
         });
     })
     .put('/', function(req, res, next){
-        console.log('req.body PUT :::: ', req.body);
-        console.log('req.query PUT :::: ', req.query);
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
                 Products_controller.update(req, res, function(e){

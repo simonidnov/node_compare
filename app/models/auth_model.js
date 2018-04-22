@@ -84,11 +84,8 @@ const userSchemas = new db.Schema(user_datas),
 //db.close();
 
 db.connection.on('open', function (ref) {
-  console.log('Connected to mongo server.');
 });
 db.connection.on('error', function (err) {
-  console.log('Could not connect to mongo server!');
-  console.log(err);
 });
 
 module.exports = {
@@ -132,7 +129,6 @@ module.exports.deleteDevice = function(req, datas, callback){
 module.exports.login = function(req, datas, callback) {
     var new_device = null;
     if(typeof req.query.remember_me === "undefined"){
-        console.log('DO NOT REMEMBER req.query.remember_me ::: ', req.query.remember_me);
     }else{
         if(typeof req.query.device_infos !== "undefined"){
             device_uid = req.query.device_infos.device_uid;
@@ -302,7 +298,6 @@ module.exports.login = function(req, datas, callback) {
                               if (err){
                                   callback({"status":"error", "code":err.code, "error":err, "message":err.message});
                               }else{
-                                  console.log('RESET SESSION #1');
                                   self.reset_session(req, users[0]._id, function(infos){
                                       infos.avatar = infos.avatar;
                                       callback({status:200, "message":"User updated", "idkids_user":infos});
@@ -356,13 +351,10 @@ module.exports.register = function(datas, callback) {
     }];
     //network : os.networkInterfaces(),
     /* TODO CHECK ARRAY SEND FORM DATA */
-    console.log("datas.body.subscribe_newsletter ", datas.body.subscribe_newsletter);
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
         new_user_datas.newsletter_services = {};
-        console.log("app.locals.applications ::: ", app.locals.applications);
         for(var i=0; i<app.locals.applications.length; i++){
-          console.log(datas.body['newsletter_'+app.locals.applications[i].short_name]);
           if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
               new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
           }
@@ -376,7 +368,6 @@ module.exports.register = function(datas, callback) {
     new_user.save(function(err, usr){
         if(err) callback({"status":"error", "message":err});
         else{
-          console.log('RESET SESSION #2');
           self.reset_session(datas, usr._id, function(infos){
               callback({"status":"success", "user":usr});
           });
@@ -417,7 +408,6 @@ module.exports.update = function(req, user_id, datas, callback) {
                 callback({status:401, "message":"Impossible de mettre à jour le token WHY ?", "datas":err});
             } else {
                 /* TODO RESET SESSION USER FUNCTION */
-                console.log('RESET SESSION #3');
                 self.reset_session(req, user_id, function(){
                     callback({status:200, "message":"User updated", "datas":infos});
                 });
@@ -499,7 +489,6 @@ module.exports.checking_session = function(req, user_id, callback){
     );
 }
 module.exports.reset_session = function(req, user_id, callback){
-    console.log('------------------------ RESET SESSION -----------------------------');
     User.findOne(
         {
             _id: user_id
@@ -570,7 +559,7 @@ module.exports.getFullUser = function(_id, callback){
                         callback({status:200, "message":"success me", "datas":user});
                     });
                 }else{
-                    callback({status:304, "message":"USER NOT FOUND", "datas":user});
+                    callback({status:404, "message":"USER NOT FOUND", "datas":user});
                 }
             }
         }
@@ -674,7 +663,6 @@ module.exports.deleteDevice = function(req, callback){
             if(err || users.length === 0){
                 callback({status:304, message:"appareil inexistant", datas:err});
             }else{
-                console.log('RESET SESSION #4');
                 self.reset_session(req, req.session.Auth._id, function(infos){
                     infos.avatar = infos.avatar;
                     callback({status:200, message:"device supprimé", "idkids_user":infos});

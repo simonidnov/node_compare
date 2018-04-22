@@ -71,16 +71,15 @@ block content
                         input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_product.keywords required)
                         label(for="keywords") keywords (75 max char)
                     div.form-group.material_input
-                        p= "edit_product.category ::::"+JSON.stringify(edit_product)+"---"
-                        select#category(name="category", value=edit_product.category)
-                          option(value="divertissement" selected=((edit_product.extra_category === "divertissement")? true : false)) divertissement
-                          option(value="service" selected=((edit_product.extra_category === "service")? true : false)) service
+                        select#category(name="category")
+                          option(value="divertissement" selected=((edit_product.category === "divertissement")? true : false)) divertissement
+                          option(value="service" selected=((edit_product.category === "service")? true : false)) service
                     div.form-group.material_input
-                        select#sub_category(name="sub_category", value=edit_product.sub_category)
-                          option(value="music" selected=((edit_product.extra_category === "music")? true : false)) Audio
-                          option(value="video_game" selected=((edit_product.extra_category === "video_game")? true : false)) Jeu vidéo
+                        select#sub_category(name="sub_category")
+                          option(value="music" selected=((edit_product.sub_category === "music")? true : false)) Audio
+                          option(value="video_game" selected=((edit_product.sub_category === "video_game")? true : false)) Jeu vidéo
                     div.form-group.material_input
-                        select#extra_category(name="extra_category", value=edit_product.extra_category)
+                        select#extra_category(name="extra_category")
                           option(value="musique" selected=((edit_product.extra_category === "musique")? true : false)) Musique MP3
                           option(value="compte" selected=((edit_product.extra_category === "compte")? true : false)) Compte
                           option(value="contine" selected=((edit_product.extra_category === "contine")? true : false)) contine

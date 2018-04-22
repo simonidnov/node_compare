@@ -17,7 +17,6 @@ var device_uid = null;
 me.use(function(req, res, next) {
     //ACCEPT CORS
     res.setHeader('Access-Control-Allow-Credentials', false);
-    //console.log('------------------ req.get(origin) ::::::::: ', req.get('origin'));
     res.setHeader("Access-Control-Allow-Origin", "*");
     //res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "OPTIONS,GET,PUT,POST,DELETE");

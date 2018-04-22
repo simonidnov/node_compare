@@ -50,17 +50,23 @@ module.exports.get = function(datas, req, callback) {
         if(err){
             callback({status:401, datas:err});
         }else{
+            if(infos.length === 0){
+              callback({status:200, datas:infos});
+            }
             infos.forEach(function(basket){
+              basket.total_amount = 0;
+              var index = 0.00;
               basket.products.forEach(function(product){
                 products_controller.get({product_id : product.product_id}, req, function(e){
                   product.infos = e.datas[0];
+                  basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
+                  index++;
+                  if(index >= basket.products.length){
+                    callback({status:200, datas:infos});
+                  }
                 });
               });
             });
-            //_.findWhere(infos, {id: id});
-            setTimeout(function(){
-              callback({status:200, datas:infos});
-            }, 10);
         }
     });
 }
@@ -123,12 +129,13 @@ module.exports.create = function(datas, res, callback) {
             );
           }
         }else {
-          var data_set = {
+          var quantity = 1,
+              data_set = {
               user_id        : datas.options.user_id,
               products       : [
                   {
                     product_id : datas.product_id,
-                    quantity   : datas.quantity,
+                    quantity   : quantity,
                     datas      : datas.datas, // push all products datas prperties
                     price      : product_infos.price,
                     total      : (parseFloat(product_infos.price)*parseFloat(datas.quantity)).toFixed(2),

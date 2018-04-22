@@ -9,11 +9,15 @@ var express = require('express'),
 basket.use(function(req, res, next){
     //ACCEPT CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
-    //res.setHeader("Content-Type: application/json", true);
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
 
-    res.setHeader('Content-Type', 'application/json');
+    //res.setHeader("Access-Control-Allow-Origin", "*");
+    //res.setHeader("Content-Type: application/json", true);
+    //res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+
+    //res.setHeader('Content-Type', 'application/json');
 
     Auth_helper.validate_admin(req, function(e){
       if(e.status === 200){
@@ -41,13 +45,11 @@ basket.use(function(req, res, next){
 basket
     .get('/', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
-            console.log(e);
             res.status(e.status).send(e.datas);
         });
     })
     .post('/', function(req, res, next) {
         Basket_controller.create(req.body.data, res, function(e){
-            console.log("Basket_controller.create POST ::::: ", e);
             res.status(e.status).send({status:e.status, response_display:{title:"Ajouté", message:"Votre produit a bien été ajouté dans votre panier."}});
         });
     })

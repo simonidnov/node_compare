@@ -9,19 +9,19 @@ exports.get = function(req, res, callback) {
 };
 // check user login then return user_infos
 exports.create = function(req, res, callback) {
-    Products_model.create(req.session.Auth._id, req, function(e){
+    Products_model.create(null, req, function(e){
         callback(e);
     });
 };
 // check user logout then return user_infos
 exports.update = function(req, res, callback) {
-    Products_model.update(req.session.Auth._id, req.body._id, req.body, function(e){
+    Products_model.update(null, req.body._id, req.body, function(e){
         callback(e);
     });
 };
 // check user register then return user_infos
 exports.delete = function(req, res, callback) {
-    Products_model.delete(req.session.Auth._id, req._id, function(e){
+    Products_model.delete(null, req._id, function(e){
         callback(e);
     });
 };

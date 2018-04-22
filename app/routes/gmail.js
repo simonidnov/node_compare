@@ -31,7 +31,7 @@ gmail.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     res.setHeader('Content-Type', 'application/json');
-    
+
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
@@ -45,12 +45,10 @@ gmail.get('/', function(req, res, next) {
         // Load client secrets from a local file.
         fs.readFile('client_secret.json', function processClientSecrets(err, content) {
           if (err) {
-              res.status(200).send({status:"error", err:err}).end();
-            console.log('Error loading client secret file: ' + err);
+            res.status(200).send({status:"error", err:err}).end();
             return;
           }else{
-              
-              res.status(200).send({status:"hello", content:content}).end();
+            res.status(200).send({status:"hello", content:content}).end();
           }
           // Authorize a client with the loaded credentials, then call the
           // Gmail API.
@@ -83,7 +81,6 @@ function getNewToken(oauth2Client, callback) {
     access_type: 'offline',
     scope: SCOPES
   });
-  console.log('Authorize this app by visiting this url: ', authUrl);
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -92,7 +89,6 @@ function getNewToken(oauth2Client, callback) {
     rl.close();
     oauth2Client.getToken(code, function(err, token) {
       if (err) {
-        console.log('Error while trying to retrieve access token', err);
         return;
       }
       oauth2Client.credentials = token;
@@ -111,7 +107,6 @@ function storeToken(token) {
     }
   }
   fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-  console.log('Token stored to ' + TOKEN_PATH);
 }
 
 function listLabels(auth) {
@@ -121,17 +116,13 @@ function listLabels(auth) {
     userId: 'me',
   }, function(err, response) {
     if (err) {
-      console.log('The API returned an error: ' + err);
       return;
     }
     var labels = response.labels;
     if (labels.length == 0) {
-      console.log('No labels found.');
     } else {
-      console.log('Labels:');
       for (var i = 0; i < labels.length; i++) {
         var label = labels[i];
-        console.log('- %s', label.name);
       }
     }
   });

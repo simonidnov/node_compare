@@ -23,7 +23,6 @@ module.exports.update = function(user_id, datas, callback){
     if (err){
         callback({status:403, error:err});
     } else {
-        console.log(data);
         app.locals.settings = datas;
         callback({status:200, datas:data});
     }

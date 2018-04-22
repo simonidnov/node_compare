@@ -40,7 +40,6 @@ module.exports.get = function(params, pages_id, callback){
     });
 };
 module.exports.create = function(user_id, datas, callback){
-    console.log(datas);
     //datas.user = user._id;
     new_page = new Pages(datas);
     new_page.save(function(err, infos){

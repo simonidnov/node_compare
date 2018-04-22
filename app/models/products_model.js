@@ -1,5 +1,6 @@
 // GOOGLE API KEY : AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs
 const db = require('mongoose'),
+      Apps_model = require('../models/apps_model'),
       config = require('../config/config'),
       language_helper  = require('../helpers/languages_helper');
       products_datas = {
@@ -11,7 +12,9 @@ const db = require('mongoose'),
           extra_category    : {type:"string"},
           public_target     : {type:"string"},
           typology          : {type:"string"},
-          app_id            : {type:"string"},
+          app_id            : {type:"ObjectId"},
+          app_icon          : {type:"string"},
+          app_label         : {type:"string"},
           phonetik          : {type:[]},
           thumb             : {type:"string"},
           picture           : {type:"string"},
@@ -19,7 +22,7 @@ const db = require('mongoose'),
           price             : {type:"number"},
           devise            : {type:"string", "enum": ["€", "£", "$"]},
           type              : {type:"string", "enum": ["physical", "demateralized"]},
-          attributs         : {type:"Object"},
+          attributs         : {type:"Array"},
           medias            : {type:"Array"},
           created           : {type:"Date", "default": Date.now},
           updated           : {type:"Date", "default": Date.now}
@@ -27,8 +30,14 @@ const db = require('mongoose'),
       fs = require('fs');
 
 if(db.connection.readyState === 0){
-    db.connect(config.database.users, {useMongoClient: true});
+    db.connect(config.database.users, {useMongoClient: true}, function(err, client){
+      if(err){
+      }else{
+      }
+    });
 }
+
+
 const productsSchemas = new db.Schema(products_datas);
       productsSchemas.pre('find', function(next) {
         next();
@@ -37,7 +46,8 @@ const productsSchemas = new db.Schema(products_datas);
 const Products = db.model('Products', productsSchemas);
 
 module.exports = {
-    attributes: products_datas
+    attributes: products_datas,
+    Products : Products
 };
 module.exports.get = function(datas, res, callback){
     var query = {},
@@ -48,11 +58,69 @@ module.exports.get = function(datas, res, callback){
     if(typeof datas.phonetik !== "undefined"){
       query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
     }
-    Products.find(query, function(err, infos){
+    /*query.$lookup = {
+       from: "Apps_model.Apps",
+       localField: "app_id",
+       foreignField: "_id",
+       as: "app_infos"
+    }*/
+
+    /*Products.aggregate(
+        [
+          {
+            _id: "DFGHJKLM",
+            $group:{
+              totalAmount:{ $sum: { $multiply: [ "$price", "$quantity" ] } }
+            }
+          }
+        ], function(err, infos){
+        }
+    );
+    ,
+    {
+      $lookup: {
+        from: "apps",
+        localField: "Products.app_id",
+        foreignField: "_id",
+        as: "app_infos"
+      }
+    }
+    */
+
+    Products.find(query, function(err, products_datas){
         if(err){
             callback({status:304, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
         }else{
-            callback({status:200, datas:infos});
+            /*
+            infos.forEach(function(info, index){
+              Apps_model.get(null, {_id:info.app_id}, function(e){
+                if(e.datas.length > 0){
+                  info.app_label = e.datas[0].label;
+                  info.app_icon = e.datas[0].icon;
+                }
+              });
+            });
+            */
+            var index = 0;
+            if(products_datas.length === 0){
+              callback({status:200, datas:products_datas});
+            }
+            products_datas.forEach(function(prod){
+              Apps_model.get(null, {_id : prod.app_id}, function(e){
+                if(e.datas.length > 0){
+                  prod.app_icon = e.datas[0].icon;
+                  prod.app_label = e.datas[0].label;
+                  prod.app_infos = [];
+                  index++;
+                  if(index === products_datas.length){
+                    callback({status:200, datas:products_datas});
+                  }
+                }else{
+                  callback({status:200, datas:products_datas});
+                }
+              });
+            });
+            //callback({status:200, datas:infos});
         }
     });
 };
@@ -80,11 +148,6 @@ module.exports.update = function(user_id, products_id, datas, callback){
     delete datas.options;
     delete datas.device_infos;
     delete datas._id;
-    console.log(datas);
-    console.log(datas.category);
-    console.log(datas.sub_category);
-    console.log(datas.extra_category);
-    console.log(datas.app_id);
     datas.updated = Date.now();
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;

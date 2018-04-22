@@ -49,7 +49,6 @@ var express = require('express'),
 /* GET home page. */
 auth.get('/', function(req, res, next) {
         //req.query.device_uid = device_uid;
-        //console.log('TRY FA facebook INIT API app id 143900369638121 SECRET 393fec1031105f7144748d3d569b7896');
         /*
         Fb.getLoginUrl({
           client_id: '143900369638121',
@@ -66,18 +65,15 @@ auth.get('/', function(req, res, next) {
             code: 'code'
         }, function (res) {
             if(!res || res.error) {
-                console.log(!res ? 'error occurred' : res.error);
                 return;
             }
             var accessToken = res.access_token;
             var expires = res.expires ? res.expires : 0;
         });
         */
-        //console.log('req.query ::::::::::::::::::::::::::: ', req.query);
         //Auth_controller.get_user_from_device(req, res, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 //Auth_controller.get_user_from_device("fingerprint", function(users_device){
-                //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
                 //});
                 var datas = {
                     title: 'Mon compte',
@@ -115,7 +111,6 @@ auth.get('/', function(req, res, next) {
         //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
             //Auth_controller.get_user_from_device("fingerprint", function(users_device){
-            //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
             //});
             var datas = {
                 title: 'Mon compte',
@@ -147,7 +142,6 @@ auth.get('/', function(req, res, next) {
         Auth_controller.get_user_from_device(req.params.device_uid, function(users_device){
             Auth_controller.login(req, req.query, function(e){
                 //Auth_controller.get_user_from_device("fingerprint", function(users_device){
-                //    console.log("users_device >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ", users_device);
                 //});
                 var datas = {
                     title: 'Mon compte',
@@ -258,10 +252,14 @@ auth.get('/', function(req, res, next) {
         var user_id = req.session;
         Auth_controller.logout(req, res, function(err, data){
             var param = "?";
-            if(req.headers.referer.indexOf('?') !== -1){
-              param = "&";
+            if(typeof req.headers.referer === "undefined" || req.headers.referer.indexOf('/account') !== -1){
+              res.redirect(307, "/auth?idkids-sdk-action=logout");
+            }else{
+              if(req.headers.referer.indexOf('?') !== -1){
+                param = "&";
+              }
+              res.redirect(307, req.headers.referer+param+"idkids-sdk-action=logout");
             }
-            res.redirect(307, req.headers.referer+param+"idkids-sdk-action=logout");
             //res.render('logout', { "title": "déconnexion", "referer":req.headers.referer });
             //res.render(req.headers.referer, { "title": "déconnexion", "referer":req.headers.referer, "idkids_sdk":"logout" });
         });
@@ -275,7 +273,7 @@ module.exports = auth;
 function getReferer(req){
   var referer = req.headers.referer;
   if(typeof referer === "undefined" || referer.indexOf('/auth') !== -1){
-    referer = "/account/account";
+    referer = "/account";
   }
   return referer;
 }
