@@ -59,6 +59,7 @@ coupon_code.get('/download/:offer', function(req, res, next){
         res.status(200).send(err);
       }else{
         res.redirect(301, path.replace('./', '/'));
+        res.status(200).send({csv:csv, datas:e.datas});
         res.end();
       }
     });

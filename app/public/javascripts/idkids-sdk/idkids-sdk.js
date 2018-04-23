@@ -8,13 +8,16 @@ var idkids_jssdk = function(options, callback){
         user : null,
         options:null,
         config : {
-          url:"https://www.idkids-app.com"
+          url:"https://www.idkids-app.com",
+          debug_url:"https://127.0.0.1:3000"
         },
         get : function(request, params, callback) {
             this.call('GET', request, params, callback);
         },
         post : function(request, params, callback) {
-
+            if(this.options.is_debug){
+              this.config.url = this.config.debug_url;
+            }
             //this.call('POST', request, params, callback);
             this.add_params(params, $.proxy(function(params){
               $.post(this.config.url+request, {
@@ -47,6 +50,9 @@ var idkids_jssdk = function(options, callback){
             this.call('DELETE', request, params, callback);
         },
         call : function(method, request, params, callback){
+            if(this.options.is_debug){
+              this.config.url = this.config.debug_url;
+            }
             this.show_loader();
             this.add_params(params, $.proxy(function(new_params){
                 params = new_params;
