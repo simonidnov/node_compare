@@ -50,7 +50,7 @@ coupon_code.get('/download/:offer', function(req, res, next){
     var fields = ['code', 'offer', 'amount'];
     var json2csvParser = new Json2csvParser({fields:fields});
     var csv = json2csvParser.parse(e.datas);
-
+    console.log('CSV ::::::::::: ', csv);
     //var fields = ['code', 'offer', 'amount'];
     //var csv = Json2csv({ data: e.datas, fields: fields });
     var path='./uploads/file'+Date.now()+'.csv';
