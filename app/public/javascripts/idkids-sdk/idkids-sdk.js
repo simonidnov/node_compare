@@ -8,7 +8,7 @@ var idkids_jssdk = function(options, callback){
         user : null,
         options:null,
         config : {
-          url:"http://www.idkids-app.com"
+          url:"https://www.idkids-app.com"
         },
         get : function(request, params, callback) {
             this.call('GET', request, params, callback);
