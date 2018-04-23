@@ -33,7 +33,7 @@ coupon_code.get('/', function(req, res, next) {
 });
 coupon_code.get('/download/:offer', function(req, res, next){
   //res.status(200).send({offer:req.params});
-  
+
   Auth_helper.validate_admin(req, function(e){
     if(e.status === 200){
       next();
