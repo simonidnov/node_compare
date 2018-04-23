@@ -54,7 +54,7 @@ block content
               p= "Valeur de la réduction "+coupons[0].amount+"€"
               p= "Nombre de codes valides "+_.where(coupons, {is_valid:true}).length
               p= "Nombre de codes utilisés "+_.where(coupons, {already_used:true}).length
-              a.btn.btn-success.btn-sm(href="/coupon_code/download/testsimon" target="_blank") Télécharger le fichier
+              a.btn.btn-success.btn-sm(href="/coupon_code/download/"+coupons[0].offer target="_blank") Télécharger le fichier
               div.btn.btn-danger.btn-sm(data-action="delete_offer" data-offer=coupons[0].offer) Supprimer l'offre
           div.row
             div.col.col-md-8
