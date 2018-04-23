@@ -44,5 +44,33 @@ block content
                       div.form-group.material_input.minlength
                           textarea#description(type="text" minlength="50" maxlength="250" name="description" required)= app.locals.settings.description
                           label(for="description") description
+                      
+                      
+                      hr.separator
+                      
+                      h3 Stripe enrolement settings for the current app
+                      p Cocher la box ci-dessous pour proposer aux membres de recevoir des notifications de la part de l'application.
+                      
+                      hr.separator
+                      div.form-group.material_input
+                          input#StripekeyPublishableTest(type="text" value=app.locals.settings.StripekeyPublishableTest name="StripekeyPublishableTest")
+                          label(for="StripekeyPublishableTest") Stripe Publisher key test mode
+                      div.form-group.material_input
+                          input#StripekeySecretTest(type="text" value=app.locals.settings.StripekeySecretTest name="StripekeySecretTest")
+                          label(for="StripekeySecretTest") Stripe Secret key test mode
+                      hr.separator
+                      div.form-group
+                          input#StripeMode(type="checkbox" value=app.locals.settings.StripeMode name="StripeMode" checked=((app.locals.settings.StripeMode)? true : false))
+                          label(for="StripeMode") Passer stripe en production et desactiver le mode test sandbox
+                      hr.separator
+                      div.form-group.material_input
+                          input#StripekeyPublishable(type="text" value=app.locals.settings.StripekeyPublishable name="StripekeyPublishable")
+                          label(for="StripekeyPublishable") Stripe Publisher key live mode
+                      div.form-group.material_input
+                          input#StripekeySecret(type="text" value=app.locals.settings.StripekeySecret name="StripekeySecret")
+                          label(for="StripekeySecret") Stripe Secret key live mode
+                      hr.separator
+                    
+                    
                       div.form-group
                           div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']

@@ -14,6 +14,7 @@ var idkids_jssdk = function(options, callback){
             this.call('GET', request, params, callback);
         },
         post : function(request, params, callback) {
+
             //this.call('POST', request, params, callback);
             this.add_params(params, $.proxy(function(params){
               $.post(this.config.url+request, {

@@ -165,13 +165,39 @@ block content
                                                 input(type="text" minlength="5" name=alias value=edit_application.aliases[alias])
                                                 label Entrez l'url de l'alias
                                                 div.delete_input_array_button= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                          
+                            hr.separator
+                            h3 APP SDK config keys
+                            p les clés utiles pour créer une instance du SDK cross plateform pour les domaines et sous-domaines renseignés sur cette page
+                            div.form-group.material_input
+                                input#secret(type="text" value=edit_application.secret name="secret" disabled)
+                                label(for="secret") Application secret Key
+                            div.form-group.material_input
+                                input#token(type="text" value=edit_application.token name="token" disabled)
+                                label(for="token") Application publisher token
+                            
+                            hr.separator
+                            h3 Stripe enrolement settings for the current app
+                            p Cocher la box ci-dessous pour proposer aux membres de recevoir des notifications de la part de l'application.
                             hr.separator
                             div.form-group.material_input
-                                input#secret(type="text" value=edit_application.secret name="terms_url" disabled)
-                                label(for="secret") secret
+                                input#StripekeyPublishableTest(type="text" value=edit_application.StripekeyPublishableTest name="StripekeyPublishableTest")
+                                label(for="StripekeyPublishableTest") Stripe Publisher key test mode
                             div.form-group.material_input
-                                input#token(type="text" value=edit_application.token name="terms_url" disabled)
-                                label(for="token") token
+                                input#StripekeySecretTest(type="text" value=edit_application.StripekeySecretTest name="StripekeySecretTest")
+                                label(for="StripekeySecretTest") Stripe Secret key test mode
+                            hr.separator
+                            div.form-group
+                                input#StripeMode(type="checkbox" value=edit_application.StripeMode name="StripeMode" checked=((edit_application.StripeMode)? true : false))
+                                label(for="StripeMode") Passer stripe en production et desactiver le mode test sandbox
+                            hr.separator
+                            div.form-group.material_input
+                                input#StripekeyPublishable(type="text" value=edit_application.StripekeyPublishable name="StripekeyPublishable")
+                                label(for="StripekeyPublishable") Stripe Publisher key live mode
+                            div.form-group.material_input
+                                input#StripekeySecret(type="text" value=edit_application.StripekeySecret name="StripekeySecret")
+                                label(for="StripekeySecret") Stripe Secret key live mode
+                            hr.separator
                             div.form-group.buttons.inline
                                 div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
                                 div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']

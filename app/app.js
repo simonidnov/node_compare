@@ -10,6 +10,7 @@ const express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     index = require('./routes/index'),
+    stripe_test = require('./routes/stripe_test'),
     basket = require('./routes/basket'),
     users = require('./routes/users'),
     media = require('./routes/media'),
@@ -23,6 +24,7 @@ const express = require('express'),
     auth = require('./routes/auth'),
     checking_session = require('./routes/checking_session'),
     me = require('./routes/me'),
+    coupon_code = require('./routes/coupon_code'),
     address = require('./routes/address'),
     account = require('./routes/account'),
     settings = require("./routes/settings"),
@@ -128,6 +130,9 @@ router.use('/checking_session', checking_session);
 router.use('/products', products);
 router.use('/settings', settings);
 router.use('/basket', basket);
+router.use('/stripe_test', stripe_test);
+router.use('/coupon_code', coupon_code);
+router.use('/coupon_code/:any', coupon_code);
 router.use('/', index);
 
 app.use('/', router);

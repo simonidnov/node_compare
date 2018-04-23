@@ -24,7 +24,7 @@ validation.get('/', function(req, res, next) {
     .get('/account/:email/:validation_code', function (req, res, next) {
         Auth_model.validAccount(req.params, function(e){
             //res.status(200).send(e);
-            res.render('validation', {
+            res.status(200).render('validation', {
                 title: 'Validation',
                 infos : e,
                 js:[

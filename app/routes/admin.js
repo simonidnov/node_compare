@@ -4,6 +4,7 @@ var express = require('express'),
     Auth_model = require('../models/auth_model'),
     Auth_helper = require('../helpers/auth_helper'),
     Apps_controller = require('../controllers/apps_controller'),
+    Coupon_controller = require('../controllers/coupon_controller'),
     Basket_controller = require('../controllers/basket_controller'),
     Orders_controller = require('../controllers/orders_controller'),
     Pages_controller = require('../controllers/pages_controller'),
@@ -30,6 +31,7 @@ admin.use(function(req, res, next){
             });
         }else{
             res.redirect(301, '/auth?message=NO_SESSION_ADMIN');
+            //next();
         }
     });
 });
@@ -425,6 +427,78 @@ admin
           });
           res.end();
       });
+    })
+    .get('/coupons', function(req, res, next) {
+        Coupon_controller.getOffers(req, res, function(e){
+          res.render('admin/coupons', {
+              title: 'Admin Coupons',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'coupons',
+              offers:e.datas,
+              js:[
+                  '/public/javascripts/admin/baskets.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/baskets.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
+          res.end();
+        });
+    })
+    .get('/coupons/new_offer', function(req, res, next) {
+        Coupon_controller.getOffers(req, res, function(e){
+          res.render('admin/coupons', {
+              title: 'Admin Coupons',
+              user : req.session.Auth,
+              locale: language_helper.getlocale(req),
+              lang: lang,
+              page: 'new_offer',
+              offers:e.datas,
+              js:[
+                  '/public/javascripts/admin/coupons.js',
+                  '/public/javascripts/components/formular.js',
+                  '/node_modules/qrcode/build/qrcode.min.js'
+              ], css:[
+                  '/public/stylesheets/admin/admin.css',
+                  '/public/stylesheets/admin/coupons.css',
+                  '/public/stylesheets/components/formular.css'
+              ]
+          });
+          res.end();
+        });
+    })
+    .get('/coupons/show_offer/:offer', function(req, res, next) {
+        //req.params.offer
+        Coupon_controller.getOffers(req, res, function(e){
+          var offers = e.datas;
+          Coupon_controller.get(req, res, function(e){
+            console.log("coupons ", e);
+            res.render('admin/coupons', {
+                title: 'Admin Coupons',
+                user : req.session.Auth,
+                locale: language_helper.getlocale(req),
+                lang: lang,
+                coupons:e.datas,
+                page: 'show_offer',
+                offers:offers,
+                js:[
+                    '/public/javascripts/admin/coupons.js',
+                    '/public/javascripts/components/formular.js',
+                    '/node_modules/qrcode/build/qrcode.min.js'
+                ], css:[
+                    '/public/stylesheets/admin/admin.css',
+                    '/public/stylesheets/admin/coupons.css',
+                    '/public/stylesheets/components/formular.css'
+                ]
+            });
+            res.end();
+          });
+        });
     })
     .get('/baskets', function(req, res, next) {
       Basket_controller.get(req, res, function(e){

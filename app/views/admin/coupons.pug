@@ -1,0 +1,69 @@
+extends admin_header
+block content
+  div.admin
+      div.shutter
+          a.shutter_action(href="/admin/coupons/new_offer" title="ajouter une application")
+              span.icon.icon-more.idkids-icons
+              div.label Nouvelle Offre
+          h3= app.locals.admin_lang[locale].keys['COUPONS_LEFT_PANEL']
+          ul.app_list
+            each offer in offers
+              a(href="/admin/coupons/show_offer/"+offer._id title="éditer la page")
+                li
+                  div.label= offer._id
+      div#pages.container(style= page === "coupons" ? "display:block" : "display:none")
+          div.article
+              div.col.col-md-6
+                  h1= app.locals.admin_lang[locale].keys['COUPONS_TITLE']
+                  p= app.locals.admin_lang[locale].keys['COUPONS_MESSAGE']
+      div.container(style= page === "new_offer" ? "display:block" : "display:none")
+        div.col.col-md-6
+          div.formular.fullscreen#create_coupons
+              h2 Créer une offre promotionnelle
+              br
+              form.form_content(method="POST" action='/coupon_code/create_offer')
+                div.form-group.material_input.minlength
+                  input#offer(type="text" name="offer" minlength="4" required)
+                  label(for="offer") Nom de votre nouvele offre
+                div.form-group.material_input.minlength
+                  input#label(type="text" name="label" minlength="4" required)
+                  label(for="label") label des tickets
+                div.form-group.material_input.minlength
+                  input#description(type="text" name="description" minlength="4" required)
+                  label(for="description") description de l'offre
+                div.form-group.material_input
+                  input#parts(type="number" name="parts" min="1" max="5" value="1" required)
+                  label(for="parts") Nombre de parties du code entre 1 et 5 
+                div.form-group.material_input
+                  input#amount(type="number" name="amount" min="0" required)
+                  label(for="amount") Valeur de la réduction en Euros ex : 4.99
+                div.form-group.material_input
+                  input#partLen(type="number" name="partLen" min="3" max="5" value="4" required)
+                  label(for="partLen") Longueur de chaque parties du coupon de promotion
+                div.form-group.material_input
+                  input#quantity(type="quantity" name="quantity" min="1" value="1" required)
+                  label(for="quantity") Nombre total de coupons à générer
+                div.form-group
+                  div.btn.btn-success.btn-lg(data-action="submit") Générer les coupons
+      div.container(style= page === "show_offer" ? "display:block" : "display:none")
+        if(typeof coupons !== "undefined")
+          div.row
+            div.col.col-md-4
+              h3= coupons[0].offer
+              p= "Nombre total de coupons "+coupons.length
+              p= "Valeur de la réduction "+coupons[0].amount+"€"
+              p= "Nombre de codes valides "+_.where(coupons, {is_valid:true}).length
+              p= "Nombre de codes utilisés "+_.where(coupons, {already_used:true}).length
+              a.btn.btn-success.btn-sm(href="/coupon_code/download/testsimon" target="_blank") Télécharger le fichier
+              div.btn.btn-danger.btn-sm(data-action="delete_offer" data-offer=coupons[0].offer) Supprimer l'offre
+          div.row
+            div.col.col-md-8
+              h3 Show Offers
+              //-p= JSON.stringify(coupons)
+              
+              ul.coupons_list
+                each coupon in coupons
+                  li
+                    span.code= coupon.code
+                    span.valid= coupon.is_valid
+                    span.used= coupon.already_used

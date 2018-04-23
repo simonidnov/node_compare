@@ -1,0 +1,22 @@
+h1 STRIPE TEST PAGE
+
+form(action="/stripe_test/charge", method="post")
+  article
+    label Amount: $5.00
+  script(
+    src="//checkout.stripe.com/v2/checkout.js",
+    class="stripe-button",
+    data-key=keyPublishable,
+    data-source='tok_visa',
+    data-description="Sample Charge -- NEED ORDER ID",
+    data-name="JOYVOX"
+    data-image="/public/uploads/41f79cf7b32a5f468d1a5ef0e0d925f4",
+    data-amount="499",
+    data-locale="fr_FR",
+    data-email="sdelamarre@idnovant.fr",
+    data-firstname="Simon",
+    data-lastname="Delamarre",
+    data-metadata= "{'order_id': '6735'}",
+    data-currency="eur")
+    
+p= JSON.stringify(coupon)

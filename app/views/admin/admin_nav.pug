@@ -11,6 +11,8 @@ block navigation
                 li(class= page === "baskets" ? "selected" : "" data-for="baskets")= app.locals.admin_lang[locale].keys['BASKETS_NAV']
             a(href="/admin/orders/")
                 li(class= page === "orders" ? "selected" : "" data-for="orders")= app.locals.admin_lang[locale].keys['ORDERS_NAV']
+            a(href="/admin/coupons/")
+                li(class= page === "coupons" ? "selected" : "" data-for="coupons")= app.locals.admin_lang[locale].keys['COUPONS_NAV']
             a(href="/admin/pages/")
                 li(class= page === "pages" ? "selected" : "" data-for="pages")= app.locals.admin_lang[locale].keys['PAGES_NAV']
             a(href="/admin/users/")

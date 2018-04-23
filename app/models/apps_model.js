@@ -34,6 +34,11 @@ const db = require('mongoose'),
               osx:{type:"string"},
               windows:{type:"string"}
           },
+          StripeMode                : {type:"bool"},
+          StripekeyPublishableTest  : {type:"string"},
+          StripekeySecretTest       : {type:"string"},
+          StripekeyPublishable      : {type:"string"},
+          StripekeySecret           : {type:"string"},
           terms_url         : {type:"String"},
           created           : {type:'Date', default: Date.now},
           updated           : {type:'Date', default: Date.now}

@@ -31,6 +31,7 @@ settings
     })
     .put('/', function(req, res, next) {
         //res.status(200).send(req.body);
+        //TODO CHECK ID ADMIN MODE
         Settings_model.update(req, req.body, function(e){
             res.status(e.status).send(e);
             //res.redirect(301, '/account/addresses'+req.url.replace('/',''));
