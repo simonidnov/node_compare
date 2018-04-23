@@ -124,6 +124,35 @@ product
             res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers"});
           }
         });
+    })
+    .post('/importFromFiles', upload.single('file'), function(req, res, next){
+        //icon /public/uploads/379838de348418139f127570be26776a
+        //picture /public/uploads/c9c03bcd78c43bd9b6d9852b7c2f0dc3
+        //label = get file first_name
+        //description = chanson personnalisée pour {first_name}
+        //price = 499
+        //devise = €
+        //keyword = chansons-mp3-joyvox-oxybul-prenom-anniversaire-personnalisee // split('-')
+        //category = divertissement
+        //sub_catégegory = AUDIO
+        //extra_category = CHANSONPERSONNALISEE
+        //META = COMPTINE | FEERIQUE | POP enum choice
+        //APPID = 5ad9cfbb3bb3b98dc9b4e4d9 === JOYVOX LOCAL ||| 5a81ba8a3818c45d83cca840 === JOYVOX IDKID-SAPP
+        //filename === relative origin parsed
+
+        //379838de348418_139f127570be26776a_c9c03bcd78c43bd9b6d9852b7c2f0dc3_{first_name}_DESCRIPTION_499_€_chansons-mp3-joyvox-oxybul-prenom-anniversaire-personnalisee_divertissement_AUDIO_CHANSONPERSONNALISEE_CONTINE_5ad9cfbb3bb3b98dc9b4e4d9_{original_file_name}.mp3
+
+        Auth_helper.validate_admin(req, function(e){
+          if(e.status === 200){
+            Products_controller.createProductFromFileName(req, req.file, function(e){
+              console.log("importFromFiles ", e);
+              res.status(e.status).send(e.datas);
+            });
+            //res.status(200).send({"message":"En cours de developpement", "req":req.body, "files":req.file});
+          }else{
+            res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers"});
+          }
+        });
     });
 
 module.exports = product;

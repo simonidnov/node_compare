@@ -3,13 +3,13 @@ var idkids_jssdk = function(options, callback){
     this.options = options;
     this.callback = callback;
     this.inited = false;
-
+    (window.location.origin.indexOf('127.0.0.1') === -1)? options.is_debug = false : options.is_debug = true;
     this.api = {
         user : null,
         options:null,
         config : {
           url:"https://www.idkids-app.com",
-          debug_url:"https://127.0.0.1:3000"
+          debug_url:"http://127.0.0.1:3000"
         },
         get : function(request, params, callback) {
             this.call('GET', request, params, callback);

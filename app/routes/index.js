@@ -9,7 +9,7 @@ const express = require('express'),
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('offline', { title: 'IDKIDS.community WELCOME' });
+    res.render('offline', {title: 'IDKIDS.community WELCOME'});
     res.end();
 });
 router.get('/:page_url', function(req, res, next) {

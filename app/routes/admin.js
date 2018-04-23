@@ -364,11 +364,13 @@ admin
             products: products,
             js:[
                 '/public/javascripts/admin/products.js',
-                '/public/javascripts/components/formular.js'
+                '/public/javascripts/components/formular.js',
+                '/node_modules/dropzone/dist/dropzone.js'
             ], css:[
                 '/public/stylesheets/admin/admin.css',
                 '/public/stylesheets/admin/products.css',
-                '/public/stylesheets/components/formular.css'
+                '/public/stylesheets/components/formular.css',
+                '/node_modules/dropzone/dist/dropzone.css'
             ]
         });
         res.end();

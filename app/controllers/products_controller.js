@@ -31,6 +31,16 @@ exports.addFile = function(req, file, callback) {
         callback(e);
     });
 };
+exports.createProductFromFileName = function(req, file, callback){
+  //console.log(" :::::::::::::::::::::::::::::::: ");
+  //console.log("req.body ", req.body);
+  //console.log("req.body ", file);
+  //console.log(" :::::::::::::::::::::::::::::::: ");
+  //callback({status:200, body:req.body, file:file});
+  Products_model.createProductFromFile(req.body, file, function(e){
+      callback(e);
+  });
+}
 exports.getFile = function(req, res, callback) {
     Products_model.getFile(req, res, function(e){
         callback(e);

@@ -187,11 +187,14 @@ module.exports.getFile = function(req, res, callback){
             throw err;
         }
         content = data;
-
         // Invoke the next step here however you like
         callback({status:200, datas:content});   // Put all of the code here (not the best solution)
         //processFile();          // Or put the next step in a function and invoke it
     });
+}
+module.exports.createProductFromFile = function(datas, file_infos, callback){
+    console.log(datas, file_infos);
+    callback({status:200, body:datas, file:file_infos, message:"simon say hello"});
 }
 module.exports.addFile = function(product_id, file, callback){
     Products.updateOne(

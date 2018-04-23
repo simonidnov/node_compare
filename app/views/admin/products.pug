@@ -17,8 +17,8 @@ block content
                     h1= app.locals.admin_lang[locale].keys['PRODUCTS_TITLE']
                     p= app.locals.admin_lang[locale].keys['PRODUCTS_MESSAGE']    
         div.container(style= page === "new_product" ? "display:block" : "display:none")
-            div.col.col-md-6
-              div.formular.fullscreen#create_product
+            div.col.col-md-12
+              div.formular#create_product
                   h1= app.locals.admin_lang[locale].keys['PRODUCTS_CREATE_TITLE']
                   br
                   form.form_content(method="POST" action='/products')
@@ -36,6 +36,40 @@ block content
                         label(for="keywords") keywords (75 max char)
                     div.form-group
                         div.btn.btn-success.btn-lg(data-action="submit") Ajouter
+            //-div.container(style= page === "new_product" ? "display:block" : "display:none")     -//     
+            div.col.col-md-12
+              div.formular#importFromFiles
+                h2 Importer de nouveaux produits en masse
+                br
+                p(style="background:red; padding:40px; color:#FFF; margin-bottom:0;") <b>ATTENTION !</b><br>cette fonctionnalité est expérimentale pour le moment, si vous ne savez pas renomer coorectement vos fichiers ou si vous avez le moindre doute lors de son utilisation, veuillez ne pas remplir ce formulaire.<br><b>Pour toute questions, veuillez vous rapprocher de <a href="mailto:sdelamarre@idnovant.fr">Simon</a></b>.<br><br><b>Veillez lire attentivement les instruction et ne pas envoyer de fichiers si vous ne comprenez pas.</b>
+                form.dropzone.form_content(style="border:2px solid red" method="POST" action='/products/importFromFiles')
+                  div.form-group.material_input
+                    select#app_id(name="app_id", value)
+                      each apps in app.locals.applications
+                        option(value=apps._id)= apps.label
+                    label(for="app_id") Sélectionnez l'application propriétaire du produit
+                  hr
+                  p Indiquez ci-dessous la description générique des produits.<br>Vous pouvez utiliser des variables de template dans votre description générique par exemple {label} sera remplacé par le label du produit contenu dans le nom du fichier uploadé.
+                  div.form-group.material_input.minlength
+                    textarea#description(type="text" name="description" maxlength="255" required)
+                    label(for="description") description (255 max char)
+                  div.form-group.material_input.maxlength
+                    input#separator(type="text" name="separator" minlength="1" required)
+                    label(for="separator") indiquez le séparateur du nom du fichier par exemple "_"
+                  p Vous devez définir ci-dessous la façon dont le nom des fichiers uploadés sont parsés, il est impératif que les variables suivantes soient comprises dans le nom du fichier :<br>{label}{category}{sub_category}{extra_category}<br>ces variables seront parsées et séparées par le séparateur indiqué dans le champs supérieur.<br>Voici un exemple de chaine à entrer dans ce formulaire :<br><b>{label}{category}{sub_category}{extra_category}{app_id}</b><br/>lorsque le nom de vos fichiers comprennnent un app_id, l'application sélectionnée au préalable ne sera pas prise en compte et l'app id en question sera indiqué sur la fiche produit.
+                  div.form-group.material_input
+                    input#parse_string_file_name(type="text" name="parse_string_file_name" required)
+                    label(for="parse_string_file_name") indiquez les variables à parser pour chaque fichier uploadé.
+                  p <b>Glissez déposez vos ressources plus bas</b>, une fois importé et en cas de problème, vous devrez les nettoyer un par un à la main.<br/><br/><b>ATTENTION !</b><br>selon la quantité et le poids des fichiers envoyés, la durée de traitement peut être plus ou moins longue.<br><b>Merci de patienter jusqu'à ce que la plateforme vous envoie le message suivant "TOUT S'EST BIEN PASSÉ !"</b>
+                  div.form-group
+                    div#dZUpload
+                    div.dz-default.dz-message(style="background:#F0F0F0; padding:10px; border-radius:10px;")
+                      span Pour créer de nouveaux produits en masse<br>déposez vos fichiers ici !
+                  //-div.form-group
+                    div.btn.btn-success.btn-sm(data-action="submit") Envoyer les fichiers et créer les nouveaux produits
+                  //-div.dropzone
+                    div#dZUpload
+                    div.dz-default
         div.container(style= page === "edit_product" ? "display:block" : "display:none")
             div.col.col-md-6
               div.formular.fullscreen#edit_product
@@ -78,6 +112,9 @@ block content
                         select#sub_category(name="sub_category")
                           option(value="music" selected=((edit_product.sub_category === "music")? true : false)) Audio
                           option(value="video_game" selected=((edit_product.sub_category === "video_game")? true : false)) Jeu vidéo
+                          option(value="comptine" selected=((edit_product.sub_category === "comptine")? true : false)) Comptine
+                          option(value="feerique" selected=((edit_product.sub_category === "feerique")? true : false)) Féérique
+                          option(value="pop" selected=((edit_product.sub_category === "pop")? true : false)) Pop
                     div.form-group.material_input
                         select#extra_category(name="extra_category")
                           option(value="musique" selected=((edit_product.extra_category === "musique")? true : false)) Musique MP3
@@ -88,6 +125,7 @@ block content
                           option(value="application" selected=((edit_product.extra_category === "application")? true : false)) application
                           option(value="puzzle" selected=((edit_product.extra_category === "puzzle")? true : false)) puzzle
                           option(value="BD" selected=((edit_product.extra_category === "BD")? true : false)) BD (bande dessinée)
+                          option(value="chansonspersonnalisees" selected=((edit_product.extra_category === "chansonspersonnalisees")? true : false)) Chansons personnalisées
                     div.form-group.material_input
                         select#app_id(name="app_id", value=edit_product.app_id)
                           each apps in app.locals.applications
@@ -124,13 +162,12 @@ block content
                               div.form-group.buttons.inline
                                 div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
                             
-                            
                   hr.separator
                   h3 Media upload
                   div ajouter les médias à télécharger lors de l'achat du produit ci-dessous
                   br
                   form#media_upload.dropzone(method="POST" action="/products/medias" data-id=edit_product._id)
                     div.form-group
-                        input#product_id.invisible(type="text" name="product_id" value=edit_product._id)
-                        div#dZUpload
-                        div.dz-default
+                      input#product_id.invisible(type="text" name="product_id" value=edit_product._id)
+                      div#dZUpload
+                      div.dz-default
