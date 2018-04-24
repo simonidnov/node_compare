@@ -24,11 +24,7 @@ stripe_test.use(function(req, res, next){
 
     next();
 });
-//stripe test secret key : sk_test_GTIdxcnyVDrnuJLN3ZfYBnKf
-//stripe test publishable key : pk_test_TOES8lsubOvARxEieu1c1kAO
 
-//stripe secret key : sk_live_v9RIngFtIPcIzRRwRpIvQ5Wf
-//stripe publishable key : pk_live_zkBcPD9ZS5tUVYtKfvtCEPhT
 
 /* GET users listing. */
 stripe_test

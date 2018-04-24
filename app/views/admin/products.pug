@@ -54,11 +54,11 @@ block content
                     textarea#description(type="text" name="description" maxlength="255" required)
                     label(for="description") description (255 max char)
                   div.form-group.material_input.maxlength
-                    input#separator(type="text" name="separator" minlength="1" required)
+                    input#separator(type="text" name="separator" minlength="1" value="_" required)
                     label(for="separator") indiquez le séparateur du nom du fichier par exemple "_"
                   p Vous devez définir ci-dessous la façon dont le nom des fichiers uploadés sont parsés, il est impératif que les variables suivantes soient comprises dans le nom du fichier :<br>{label}{category}{sub_category}{extra_category}<br>ces variables seront parsées et séparées par le séparateur indiqué dans le champs supérieur.<br>Voici un exemple de chaine à entrer dans ce formulaire :<br><b>{label}{category}{sub_category}{extra_category}{app_id}</b><br/>lorsque le nom de vos fichiers comprennnent un app_id, l'application sélectionnée au préalable ne sera pas prise en compte et l'app id en question sera indiqué sur la fiche produit.
                   div.form-group.material_input
-                    input#parse_string_file_name(type="text" name="parse_string_file_name" required)
+                    input#parse_string_file_name(type="text" name="parse_string_file_name" value="{label}{category}{sub_category}{extra_category}" required)
                     label(for="parse_string_file_name") indiquez les variables à parser pour chaque fichier uploadé.
                   p <b>Glissez déposez vos ressources plus bas</b>, une fois importé et en cas de problème, vous devrez les nettoyer un par un à la main.<br/><br/><b>ATTENTION !</b><br>selon la quantité et le poids des fichiers envoyés, la durée de traitement peut être plus ou moins longue.<br><b>Merci de patienter jusqu'à ce que la plateforme vous envoie le message suivant "TOUT S'EST BIEN PASSÉ !"</b>
                   div.form-group
