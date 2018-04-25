@@ -97,10 +97,11 @@ product
             return;
           }
         });
-        var fs = require('fs');
-        if (fs.existsSync("./uploads/"+req.params.filename.replace('.mp3', "_shortcut.mp3"))) {
+        var fs = require('fs'),
+            shortcut = 15;
+        if (fs.existsSync("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"))) {
             // Do something
-            req.params.filename = req.params.filename.replace('.mp3', "_shortcut.mp3");
+            req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
             next();
         }else{
 
@@ -108,7 +109,7 @@ product
             var track = "./uploads/"+req.params.filename;//your path to source file
 
             ffmpeg(track)
-            .duration(15)
+            .duration(shortcut)
             .toFormat('mp3')
             .on('error', function (err) {
               console.log('An error occurred: ' + err.message);
@@ -120,12 +121,13 @@ product
             })
             .on('end', function () {
               console.log('Processing finished !');
-              req.params.filename = req.params.filename.replace('.mp3', "_shortcut.mp3");
+              req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
+              /* TODO CREATE CHECKING EVENT FS EXIST ? */
               setTimeout(function(){
                 next();
               }, 500);
             })
-            .save("./uploads/"+req.params.filename.replace('.mp3', "_shortcut.mp3"));
+            .save("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"));
         }
     }, function(req, res, next){
         //Auth_helper.has_media_right(req, function(e){
