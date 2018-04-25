@@ -106,6 +106,9 @@ var idkids_jssdk = function(options, callback){
             if(this.user === null){
                 return {"status":"not_connected", "infos":"call api.get('me')"};
             }else{
+                if(typeof this.user._id === "undefined"){
+                  return {"status":"not_connected", "infos":"call api.get('me')"};
+                }
                 if(typeof Unity !== "undefined"){
                     Unity.call('{"status":"logged", "user":"'+JSON.stringify(this.user)+'", "token":"'+this.user.token+'", "id":"'+this.user.id+'", "device":"'+this.user.device+'"}');
                 }

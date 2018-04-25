@@ -1,10 +1,11 @@
 // GOOGLE API KEY : AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs
 const db = require('mongoose'),
+      _ = require('underscore'),
       Apps_model = require('../models/apps_model'),
       config = require('../config/config'),
       language_helper  = require('../helpers/languages_helper');
       products_datas = {
-          label             : {type:"string", unique: true},
+          label             : {type:"string", unique:false},
           description       : {type:"string"},
           keywords          : {type:"string"},
           category          : {type:"string"},
@@ -39,11 +40,16 @@ if(db.connection.readyState === 0){
 
 
 const productsSchemas = new db.Schema(products_datas);
+
       productsSchemas.pre('find', function(next) {
         next();
       });
 
 const Products = db.model('Products', productsSchemas);
+//Products.collection.dropIndexes();
+
+//Products.dropIndex( { "label" : -1 } );
+
 
 module.exports = {
     attributes: products_datas,
@@ -55,9 +61,22 @@ module.exports.get = function(datas, res, callback){
     if(typeof datas.product_id !== "undefined"){
       query._id = datas.product_id;
     }
+    if(typeof datas.label !== "undefined"){
+      //query.label = {$in:[datas.label]};
+      query.label = datas.label;
+      //{ $regex: new RegExp("^" + datas.label.toLowerCase(), "i") }
+    }
     if(typeof datas.phonetik !== "undefined"){
+      //console.log("WORDLAB :::: ", language_helper.wordlab(datas.phonetik).split('-'));
       query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
     }
+    let skip = 0,
+        limit = 50;
+    if(typeof datas.skip !== "undefined"){
+      skip = parseInt(datas.skip);
+    }
+    //query.limit = Number(5);
+    console.log("GET PRODUCT :::: ", query);
     /*query.$lookup = {
        from: "Apps_model.Apps",
        localField: "app_id",
@@ -86,8 +105,7 @@ module.exports.get = function(datas, res, callback){
       }
     }
     */
-
-    Products.find(query, function(err, products_datas){
+    let productQuery = Products.find(query).limit(limit).skip(skip).sort({'label': 1}).exec(function(err, products_datas){
         if(err){
             callback({status:304, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
         }else{
@@ -129,6 +147,7 @@ module.exports.create = function(user_id, datas, callback){
     delete datas.options;
     delete datas.device_infos;
 
+    datas.label = datas.label.toUpperCase();
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
@@ -148,6 +167,9 @@ module.exports.update = function(user_id, products_id, datas, callback){
     delete datas.options;
     delete datas.device_infos;
     delete datas._id;
+    if(typeof datas.label !== "undefined"){
+      datas.label = datas.label.toUpperCase();
+    }
     datas.updated = Date.now();
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -192,10 +214,94 @@ module.exports.getFile = function(req, res, callback){
         //processFile();          // Or put the next step in a function and invoke it
     });
 }
-module.exports.createProductFromFile = function(datas, file_infos, callback){
-    console.log(datas, file_infos);
-    callback({status:200, body:datas, file:file_infos, message:"simon say hello"});
+module.exports.updatePhonetik = function(req, res, callback){
+    Products.find({}, function(err, products_datas){
+        if(err){
+            callback({status:304, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+        }else{
+            var index = 0;
+            if(products_datas.length === 0){
+              callback({status:200, datas:products_datas});
+            }
+            products_datas.forEach(function(prod){
+                //if(typeof prod.phonetik === "undefined" || prod.phonetik === "" || prod.phonetik.length === 0){
+                  prod.label = prod.label.toUpperCase();
+                  function onlyUnique(value, index, self) {
+                      return self.indexOf(value) === index;
+                  }
+                  var a = language_helper.wordlab(prod.label+" "+prod.description).split('-');
+                  prod.phonetik = a.filter( onlyUnique );
+                  console.log(a);
+                  console.log(prod.phonetik);
+
+                  Products.updateOne(
+                      {
+                          _id: prod._id
+                      },
+                      {
+                          $set: prod
+                      },
+                      function(err, infos){
+                          if(err) console.log("----------------- ERROR PHONETIK -----------------", err);
+                          else console.log('updated ', infos);
+                      }
+                  );
+                //}
+                //callback({"status":200, "datas":{infos:infos, title:"PRODUCT_UPDATED", "message":"PRODUCT_UPDATED_MESSAGE", "media":"PRODUCT_UPDATED_MEDIA"}});
+                index++;
+                if(index === products_datas.length){
+                  callback({status:200, datas:products_datas});
+                }
+            });
+        }
+    });
 }
+module.exports.createProductFromFile = function(datas, file_infos, callback){
+    //console.log("datas product received :::: ", datas);
+    //console.log("file created received ::::: ", file_infos);
+
+    var products_datas = {},
+        parse_string_file_name = datas.parse_string_file_name.split(';'),
+        parse_file_name = file_infos.originalname.split('.')[0].split(datas.separator);
+    for(var i=0; i<parse_string_file_name.length; i++){
+        products_datas[parse_string_file_name[i]] = parse_file_name[i];
+    }
+
+    _.templateSettings = {interpolate: /\{\{(.+?)\}\}/g};
+    var description_template = _.template(datas.description);
+    products_datas.description = description_template(products_datas);
+    products_datas.app_id = datas.app_id;
+
+    //products_datas.medias = file_infos;
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    var a = language_helper.wordlab(datas.label+" "+datas.description).split('-');
+    products_datas.phonetik = a.filter( onlyUnique );
+
+    products_datas.label = products_datas.label.toUpperCase();
+
+    var self = this;
+    new_product = new Products(products_datas);
+    new_product.save(function(err, infos){
+        if(err){
+          callback({"status":304, "datas":{title:"PRODUCT_CREATED_ERROR", "message":"PRODUCT_CREATED_ERROR_MESSAGE", "media":"PRODUCT_CREATED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+        }else{
+          console.log(infos);
+          self.addFile(infos._id, file_infos, function(){
+            callback({"status":200, "datas":{infos:infos, title:"PRODUCT_CREATED", "message":"PRODUCT_CREATED_MESSAGE", "media":"PRODUCT_CREATED_MEDIA"}});
+          });
+        }
+    });
+
+    //callback({status:200, body:datas, file:file_infos, message:"simon say hello"});
+}
+module.exports.deleteAllProducts = function(req, res, callback){
+  Products.remove({}, function(err, infos){
+    callback({status:200, error:err, datas:infos});
+  })
+};
 module.exports.addFile = function(product_id, file, callback){
     Products.updateOne(
         {

@@ -25,6 +25,11 @@ exports.delete = function(req, res, callback) {
         callback(e);
     });
 };
+exports.deleteAllProducts = function(req, res, callback){
+  Products_model.deleteAllProducts(null, req._id, function(e){
+      callback(e);
+  });
+};
 // check user logout then return user_infos
 exports.addFile = function(req, file, callback) {
     Products_model.addFile(req.body.product_id, file, function(e){
@@ -32,15 +37,15 @@ exports.addFile = function(req, file, callback) {
     });
 };
 exports.createProductFromFileName = function(req, file, callback){
-  //console.log(" :::::::::::::::::::::::::::::::: ");
-  //console.log("req.body ", req.body);
-  //console.log("req.body ", file);
-  //console.log(" :::::::::::::::::::::::::::::::: ");
-  //callback({status:200, body:req.body, file:file});
   Products_model.createProductFromFile(req.body, file, function(e){
       callback(e);
   });
-}
+};
+exports.updatePhonetik = function(req, res, callback){
+  Products_model.updatePhonetik(req, res, function(e){
+      callback(e);
+  });
+};
 exports.getFile = function(req, res, callback) {
     Products_model.getFile(req, res, function(e){
         callback(e);

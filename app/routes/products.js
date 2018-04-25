@@ -42,6 +42,21 @@ product
             res.status(e.status).send(e.datas);
         });
     })
+
+    .get('/updatephonetik', function(req, res, next) {
+        //res.status(200).send({title:"API"});
+        Products_controller.updatePhonetik(req, res, function(e){
+            res.status(e.status).send(e.datas);
+        });
+    })
+
+    .get('/deleteallproducts', function(req, res, next) {
+        //res.status(200).send({title:"API"});
+        Products_controller.deleteAllProducts(req, res, function(e){
+            res.status(e.status).send(e.datas);
+        });
+    })
+
     .post('/', function(req, res, next) {
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
@@ -76,13 +91,54 @@ product
         });
     })
     .get('/medias/:filename', function(req, res, next){
-      Auth_helper.has_media_right(req, function(e){
+        Auth_helper.has_media_right(req, function(e){
           if(e.status === 200){
+            next();
+            return;
+          }
+        });
+        var fs = require('fs');
+        if (fs.existsSync("./uploads/"+req.params.filename.replace('.mp3', "_shortcut.mp3"))) {
+            // Do something
+            req.params.filename = req.params.filename.replace('.mp3', "_shortcut.mp3");
+            next();
+        }else{
+
+            var ffmpeg = require('fluent-ffmpeg');
+            var track = "./uploads/"+req.params.filename;//your path to source file
+
+            ffmpeg(track)
+            .duration(15)
+            .toFormat('mp3')
+            .on('error', function (err) {
+              console.log('An error occurred: ' + err.message);
+              res.status("400").send(err);
+            })
+            .on('progress', function (progress) {
+              // console.log(JSON.stringify(progress));
+              console.log('Processing: ' + progress.targetSize + ' KB converted');
+            })
+            .on('end', function () {
+              console.log('Processing finished !');
+              req.params.filename = req.params.filename.replace('.mp3', "_shortcut.mp3");
+              setTimeout(function(){
+                next();
+              }, 500);
+            })
+            .save("./uploads/"+req.params.filename.replace('.mp3', "_shortcut.mp3"));
+        }
+    }, function(req, res, next){
+        //Auth_helper.has_media_right(req, function(e){
+          //if(e.status === 200){
+
+
             res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
                 if (err) {
+                  console.log('errror ', err);
                   //res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers", err:err});
                   //next(err);
                 } else {
+                  console.log('success ');
                   //res.status(200).send({"message":"le fichier est autorisé à la lecture", filename:req.params.filename});
                 }
             });
@@ -96,10 +152,13 @@ product
               }
             });
             */
-          }else{
-            res.status(e.status).send(e);
-          }
-        });
+
+
+
+          //}else{
+          //  res.status(e.status).send(e);
+          //}
+        //});
     })
     .post('/medias', upload.single('file'), function(req, res, next){
         Auth_helper.validate_admin(req, function(e){
@@ -145,7 +204,6 @@ product
         Auth_helper.validate_admin(req, function(e){
           if(e.status === 200){
             Products_controller.createProductFromFileName(req, req.file, function(e){
-              console.log("importFromFiles ", e);
               res.status(e.status).send(e.datas);
             });
             //res.status(200).send({"message":"En cours de developpement", "req":req.body, "files":req.file});

@@ -60,8 +60,12 @@ module.exports.get = function(datas, req, callback) {
               var index = 0.00;
               basket.products.forEach(function(product){
                 products_controller.get({product_id : product.product_id}, req, function(e){
-                  product.infos = e.datas[0];
-                  basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
+                  if(e.datas.length === 0){
+                    product.infos = {label:"DOSNT_EXIST", message:"PRODUIT_INTROUVABLE_OU_SUPPRIME"}
+                  }else{
+                    product.infos = e.datas[0];
+                    basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
+                  }
                   index++;
                   if(index >= basket.products.length){
                     callback({status:200, datas:infos});

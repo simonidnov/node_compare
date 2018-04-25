@@ -12,6 +12,7 @@ const express = require('express'),
     index = require('./routes/index'),
     stripe_test = require('./routes/stripe_test'),
     basket = require('./routes/basket'),
+    comments = require('./routes/comments'),
     users = require('./routes/users'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
@@ -130,6 +131,7 @@ router.use('/checking_session', checking_session);
 router.use('/products', products);
 router.use('/settings', settings);
 router.use('/basket', basket);
+router.use('/comments', comments);
 router.use('/stripe_test', stripe_test);
 router.use('/coupon_code', coupon_code);
 router.use('/coupon_code/:any', coupon_code);

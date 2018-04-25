@@ -51,14 +51,14 @@ block content
                   hr
                   p Indiquez ci-dessous la description générique des produits.<br>Vous pouvez utiliser des variables de template dans votre description générique par exemple {label} sera remplacé par le label du produit contenu dans le nom du fichier uploadé.
                   div.form-group.material_input.minlength
-                    textarea#description(type="text" name="description" maxlength="255" required)
+                    textarea#description(type="text" name="description" maxlength="255" required) {{extra_category}} personnalisée pour {{label}}
                     label(for="description") description (255 max char)
                   div.form-group.material_input.maxlength
                     input#separator(type="text" name="separator" minlength="1" value="_" required)
                     label(for="separator") indiquez le séparateur du nom du fichier par exemple "_"
-                  p Vous devez définir ci-dessous la façon dont le nom des fichiers uploadés sont parsés, il est impératif que les variables suivantes soient comprises dans le nom du fichier :<br>{label}{category}{sub_category}{extra_category}<br>ces variables seront parsées et séparées par le séparateur indiqué dans le champs supérieur.<br>Voici un exemple de chaine à entrer dans ce formulaire :<br><b>{label}{category}{sub_category}{extra_category}{app_id}</b><br/>lorsque le nom de vos fichiers comprennnent un app_id, l'application sélectionnée au préalable ne sera pas prise en compte et l'app id en question sera indiqué sur la fiche produit.
+                  p Vous devez définir ci-dessous la façon dont le nom des fichiers uploadés sont parsés, il est impératif que les variables suivantes soient comprises dans le nom du fichier :<br> label;category;sub_category;extra_category <br>ces variables seront parsées et séparées par le séparateur indiqué dans le champs supérieur.<br>Voici un exemple de chaine à entrer dans ce formulaire :<br><b>label;category;sub_category;extra_category;app_id</b><br/>lorsque le nom de vos fichiers comprennnent un app_id, l'application sélectionnée au préalable ne sera pas prise en compte et l'app id en question sera indiqué sur la fiche produit.
                   div.form-group.material_input
-                    input#parse_string_file_name(type="text" name="parse_string_file_name" value="{label}{category}{sub_category}{extra_category}" required)
+                    input#parse_string_file_name(type="text" name="parse_string_file_name" value="label;category;sub_category;extra_category;price" required)
                     label(for="parse_string_file_name") indiquez les variables à parser pour chaque fichier uploadé.
                   p <b>Glissez déposez vos ressources plus bas</b>, une fois importé et en cas de problème, vous devrez les nettoyer un par un à la main.<br/><br/><b>ATTENTION !</b><br>selon la quantité et le poids des fichiers envoyés, la durée de traitement peut être plus ou moins longue.<br><b>Merci de patienter jusqu'à ce que la plateforme vous envoie le message suivant "TOUT S'EST BIEN PASSÉ !"</b>
                   div.form-group
@@ -106,32 +106,26 @@ block content
                         label(for="keywords") keywords (75 max char)
                     div.form-group.material_input
                         select#category(name="category")
-                          option(value="divertissement" selected=((edit_product.category === "divertissement")? true : false)) divertissement
-                          option(value="service" selected=((edit_product.category === "service")? true : false)) service
+                          option(value="DIVERTISSEMENT" selected=((edit_product.category === "DIVERTISSEMENT")? true : false)) divertissement
+                          option(value="SERVICE" selected=((edit_product.category === "SERVICE")? true : false)) service
                     div.form-group.material_input
                         select#sub_category(name="sub_category")
-                          option(value="music" selected=((edit_product.sub_category === "music")? true : false)) Audio
-                          option(value="video_game" selected=((edit_product.sub_category === "video_game")? true : false)) Jeu vidéo
-                          option(value="comptine" selected=((edit_product.sub_category === "comptine")? true : false)) Comptine
-                          option(value="feerique" selected=((edit_product.sub_category === "feerique")? true : false)) Féérique
-                          option(value="pop" selected=((edit_product.sub_category === "pop")? true : false)) Pop
+                          option(value="MUSIC" selected=((edit_product.sub_category === "MUSIC")? true : false)) Audio
+                          option(value="VIDEOGAME" selected=((edit_product.sub_category === "VIDEOGAME")? true : false)) Jeu vidéo
+                          option(value="CHANSONPERSONNALISEE" selected=((edit_product.sub_category === "CHANSONPERSONNALISEE")? true : false)) Chanson personnalisée
                     div.form-group.material_input
                         select#extra_category(name="extra_category")
-                          option(value="musique" selected=((edit_product.extra_category === "musique")? true : false)) Musique MP3
-                          option(value="compte" selected=((edit_product.extra_category === "compte")? true : false)) Compte
-                          option(value="contine" selected=((edit_product.extra_category === "contine")? true : false)) contine
-                          option(value="album" selected=((edit_product.extra_category === "album")? true : false)) album
-                          option(value="livre" selected=((edit_product.extra_category === "livre")? true : false)) livre
-                          option(value="application" selected=((edit_product.extra_category === "application")? true : false)) application
-                          option(value="puzzle" selected=((edit_product.extra_category === "puzzle")? true : false)) puzzle
-                          option(value="BD" selected=((edit_product.extra_category === "BD")? true : false)) BD (bande dessinée)
-                          option(value="chansonspersonnalisees" selected=((edit_product.extra_category === "chansonspersonnalisees")? true : false)) Chansons personnalisées
+                          option(value="MUSIC" selected=((edit_product.extra_category === "MUSIC")? true : false)) Musique MP3
+                          option(value="APPLICATION" selected=((edit_product.extra_category === "APPLICATION")? true : false)) application
+                          option(value="POP" selected=((edit_product.extra_category === "POP")? true : false)) Chansons POP
+                          option(value="COMPTINE" selected=((edit_product.extra_category === "COMPTINE")? true : false)) Chansons COMPTINE
+                          option(value="FEERIQUE" selected=((edit_product.extra_category === "FEERIQUE")? true : false)) Chansons FEERIQUE
                     div.form-group.material_input
                         select#app_id(name="app_id", value=edit_product.app_id)
                           each apps in app.locals.applications
                             option(value=apps._id)= apps.label
                     hr.separator
-                      
+                    p= JSON.stringify(edit_product.phonetik)
                     div.form-group.buttons.inline
                         div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
                         div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']
