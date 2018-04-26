@@ -59,10 +59,30 @@
     -o-transition: all .2s ease-in;
     transition: all .2s ease-in;
 }
-.idkids_jssdk .short_cuts ul li .icon{
+.idkids_jssdk .short_cuts ul li .icon,
+.idkids_jssdk .short_cuts ul li .idkids-icons{
     font-size: 40px;
     text-align: center;
     width:100%;
+}
+.idkids_jssdk .short_cuts ul li .idkids-icons img{
+  opacity: .5;
+  width: 50px;
+  padding-top:5px;
+}
+.idkids_jssdk .short_cuts ul a .indice{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #FFF;
+  background-color: #d51419;
+  border-radius: 40px;
+  z-index: 9;
 }
 .idkids_jssdk .short_cuts ul li:hover,
 .idkids_jssdk .short_cuts ul li:active,

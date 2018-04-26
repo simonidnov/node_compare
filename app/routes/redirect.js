@@ -20,84 +20,84 @@ redirect
     .get('/', function(req, res, next) {
         /*Address_controller.get(req, res, function(e){
             //res.status(e.status).send(e);
-            res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });*/
         switch(redirect_lang){
           case 'fr':
-            res.redirect(301, 'http://www.okaidi.fr/disneynature/');
+            res.redirect(307, 'http://www.okaidi.fr/disneynature/');
             break;
           case 'nl':
-            res.redirect(301, 'https://nl.okaidi.be/dinseynature/');
+            res.redirect(307, 'https://nl.okaidi.be/dinseynature/');
             break;
           case 'it':
-            res.redirect(301, 'https://www.okaidi.it/disneynature/');
+            res.redirect(307, 'https://www.okaidi.it/disneynature/');
             break;
           case 'es':
-            res.redirect(301, 'https://www.okaidi.es/disneynature');
+            res.redirect(307, 'https://www.okaidi.es/disneynature');
             break;
           case 'de':
-            res.redirect(301, 'https://www.okaidi.de/disneynature/');
+            res.redirect(307, 'https://www.okaidi.de/disneynature/');
             break;
           case 'pl':
-            res.redirect(301, 'https://www.okaidi.pl/disneynature/');
+            res.redirect(307, 'https://www.okaidi.pl/disneynature/');
             break;
           case 'ca':
-            res.redirect(301, 'https://ca.okaidi.es/disneynature');
+            res.redirect(307, 'https://ca.okaidi.es/disneynature');
             break;
           case 'ch':
-            res.redirect(301, 'https://fr.okaidi.ch/disneynature/');
+            res.redirect(307, 'https://fr.okaidi.ch/disneynature/');
             break;
           default:
-            res.redirect(301, 'http://www.okaidi.fr/disneynature/');
+            res.redirect(307, 'http://www.okaidi.fr/disneynature/');
             break;
         }
-        //res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
+        //res.redirect(307, 'https://www.okaidi.fr/jeu-planet-challenge/');
     })
     .get('/:url', function(req, res, next) {
         var redirect_lang = req.headers["accept-language"].split('-')[0];
         switch(redirect_lang){
           case 'fr':
-            res.redirect(301, 'http://www.okaidi.fr/disneynature/');
+            res.redirect(307, 'http://www.okaidi.fr/disneynature/');
             break;
           case 'nl':
-            res.redirect(301, 'https://nl.okaidi.be/dinseynature/');
+            res.redirect(307, 'https://nl.okaidi.be/dinseynature/');
             break;
           case 'it':
-            res.redirect(301, 'https://www.okaidi.it/disneynature/');
+            res.redirect(307, 'https://www.okaidi.it/disneynature/');
             break;
           case 'es':
-            res.redirect(301, 'https://www.okaidi.es/disneynature');
+            res.redirect(307, 'https://www.okaidi.es/disneynature');
             break;
           case 'de':
-            res.redirect(301, 'https://www.okaidi.de/disneynature/');
+            res.redirect(307, 'https://www.okaidi.de/disneynature/');
             break;
           case 'pl':
-            res.redirect(301, 'https://www.okaidi.pl/disneynature/');
+            res.redirect(307, 'https://www.okaidi.pl/disneynature/');
             break;
           case 'ca':
-            res.redirect(301, 'https://ca.okaidi.es/disneynature');
+            res.redirect(307, 'https://ca.okaidi.es/disneynature');
             break;
           case 'ch':
-            res.redirect(301, 'https://fr.okaidi.ch/disneynature/');
+            res.redirect(307, 'https://fr.okaidi.ch/disneynature/');
             break;
           default:
-            res.redirect(301, 'http://www.okaidi.fr/disneynature/');
+            res.redirect(307, 'http://www.okaidi.fr/disneynature/');
             break;
         }
         /*switch(req.params.adress){
           case "planet_chellenge_surfrider":
-            res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
+            res.redirect(307, 'https://www.okaidi.fr/jeu-planet-challenge/');
             break;
           case "planet_chellenge":
-            res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
+            res.redirect(307, 'https://www.okaidi.fr/jeu-planet-challenge/');
             break;
           default:
-            res.redirect(301, 'https://www.okaidi.fr/jeu-planet-challenge/');
+            res.redirect(307, 'https://www.okaidi.fr/jeu-planet-challenge/');
             break;
         }*/
         /*Address_controller.get(req, res, function(e){
             //res.status(e.status).send(e);
-            res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });*/
     });
 

@@ -32,6 +32,11 @@ module.exports.get = function(req, res, callback){
     if(typeof req.params.offer !== "undefined"){
       query.offer = req.params.offer;
     }
+    if(typeof req.query.code !== "undefined"){
+      query.code = req.query.code;
+      query.is_valid = 1;
+      query.already_used = 0;
+    }
     Coupon.find(query, function(err, infos) {
         if(err){
             callback({status:405, datas:err});
@@ -172,10 +177,24 @@ module.exports.update = function(req, res, callback){
         },
         function(err, infos){
             if(err) callback({"status":304, "message":err});
-            else callback({"status":200, "pages":infos});
+            else callback({"status":200, "datas":infos});
         }
     )
 };
+module.exports.updateAmount = function(req, res, callback){
+    Coupon.updateMany(
+       {
+          offer: "chansonspersonnalisees"
+       },
+       {
+          $set :{
+            amount: 499
+          }
+       }
+    ).exec(function(err, infos){
+        callback({"status":200, "datas":infos});
+    });
+}
 module.exports.delete = function(req, res, callback){
     var query = {};
     if(typeof req.body.offer !== "undefined"){

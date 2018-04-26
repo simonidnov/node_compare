@@ -33,7 +33,7 @@ api
             if(e.status === 200){
                 res.status(200).send({title:"POST API"});
             }else{
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
     })
@@ -43,12 +43,12 @@ api
                 res.status(200).send({title:"PUT API"});
             }else{
                 //next();
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
         //Apps_controller.update(req, res, function(e){
         //    res.status(e.status).send(e);
-        //    res.redirect(301, '/account/informations'+req.url.replace('/',''));
+        //    res.redirect(307, '/account/informations'+req.url.replace('/',''));
         //});
     })
     .delete('/', function(req, res, next) {
@@ -57,19 +57,19 @@ api
                 next();
             }else{
                 //next();
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
         res.status(200).send({title:"DELETE API"});
         //Apps_controller.delete(req, function(e){
         //    res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         //});
     })
     .get('/apps', function(req, res, next) {
         Apps_controller.get(req, {}, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .get('/apps/:action', function(req, res, next) {
@@ -77,7 +77,7 @@ api
           case 'valid_sdk':
             Apps_controller.validate(req, res, function(e){
                 res.status(e.status).send(e);
-                //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+                //res.redirect(307, '/account/informations'+req.url.replace('/',''));
             });
             break;
           default:
@@ -88,43 +88,43 @@ api
     .post('/apps', function(req, res, next) {
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .put('/apps', function(req, res, next) {
         Apps_controller.update(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .delete('/apps', function(req, res, next) {
         Apps_controller.delete(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .get('/pages', function(req, res, next) {
         Pages_controller.get(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .post('/pages', function(req, res, next) {
         Pages_controller.create(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .put('/pages', function(req, res, next) {
         Pages_controller.update(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .delete('/pages', function(req, res, next) {
         Pages_controller.delete(req, res, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/informations'+req.url.replace('/',''));
+            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .post('/request_validation_code', function(req, res, next){
@@ -145,7 +145,7 @@ api
                 next();
             }else{
                 //next();
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_API');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
         */

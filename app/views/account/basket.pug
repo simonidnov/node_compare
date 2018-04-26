@@ -2,43 +2,61 @@ div.col.col-md-7
   div.formular.basket
     h2 Mon panier
     hr
-    if(typeof basket === "undefined" || basket.length === 0)
+    if (typeof basket === "undefined" || basket.length === 0)
       p Votre panier est vide
     else
-      ul.products_list
-        each product in basket[0].products
-          li
-            div.col
-              if(product.infos.thumb !== "" && typeof product.infos.thumb !== "undefined")
-                div.preview(style="background-image:url("+product.infos.thumb+")")
-              else
-                div.preview
-            div.infos
-              div.label= product.infos.label
-              div.label= _.where(app.locals.applications, {_id:"5ad9cfbb3bb3b98dc9b4e4d9"})
-              div.label= "Ajouté le : "+product.infos.created
-              div.brand
-                img(src=product.infos.app_icon, width="24", height="24")
-                div= product.infos.app_label
-              a.hyperlink(href="" target="_blank") Voir le produit
-            div.details
-              div.price= product.price
-              input.quantity#quantity(name="quantity" type="number" value=product.quantity)
-            div.options
-              div.btn.btn-danger.btn-xs(data-basketid=basket[0]._id, data-productid=product.infos._id, data-action="delete_basket_product")
-                div.icon.idkids-icons.icon-trash
-            div.cat= product.infos.category+" | "+product.infos.sub_category+" | "+product.infos.extra_category
+      if (typeof basket[0].products === "undefined" || basket[0].products.length === 0)
+        p Votre panier est vide
+      else
+        ul.products_list
+          each product in basket[0].products
+            li
+              div.col
+                if(product.infos.thumb !== "" && typeof product.infos.thumb !== "undefined")
+                  div.preview(style="background-image:url("+product.infos.thumb+")")
+                else
+                  div.preview
+              div.infos
+                div.label= product.infos.label
+                //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
+                //-div.label= "Ajouté le : "+product.infos.created
+                div.brand
+                  img(src=product.infos.app_icon, width="24", height="24")
+                  div.label= product.infos.app_label
+                //$a.hyperlink(href="" target="_blank") Voir le produit
+                div.cat= product.infos.category+" | "+product.infos.sub_category+" | "+product.infos.extra_category
+              div.details
+                div.price= (product.price/100)+"€"
+                //-input.quantity#quantity(name="quantity" type="number" value=product.quantity)
+                div.options
+                  div.btn.btn-warning.btn-sm(data-basketid=basket[0]._id, data-productid=product.product_id, data-idkidssdk="delete_basket_product")
+                    span.icon.idkids-icons.icon-trash
+                    span.label Supprimer
+              
 div.col.col-md-5
-  div.formular
+  div.basket.formular
     h2 Résumé du panier
     hr
     if(typeof basket === "undefined" || basket.length === 0)
       p Votre panier est vide
     else
-      form.form_content(method="POST" action="/order")#checkout_form
-        div.total= "Total "+basket[0].total_amount+"€"
-        div.material_input.form-group.minlength
-          input.form-control.minlength#coupon_code(type="text" name="coupon_code")
-          label(for="coupon_code") Code de réduction
-        div.btn.btn-success.btn-m(data-action="submit") Valider mon panier
+      div.formular.fullscreen#checkout_form
+        form.form_content(method="POST" action="/orders/transaction")
+          div.total_products= "Votre panier contient "+basket[0].products.length+" produit"+ ((basket[0].products.length > 1)? "s" : "")
+          div.total= "Total "+(basket[0].total_amount/100)+"€"
+          hr
+          ul.coupons_list#coupons_list
+          div.material_input.form-group
+            input.form-control.minlength#coupon_code(type="text" name="coupon_code" data-errormessage="Ce code est invalide.")
+            label(for="coupon_code") Code de réduction
+          hr
+          div.coupons_infos
+            div.message
+            div.amount
+          div.btn.btn-success.btn-lg.centered(data-action="submit") Valider mon panier
+          div.wallet_infos
+            div.message
+            div.amount
+            
+          
       

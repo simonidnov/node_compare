@@ -5,6 +5,7 @@ $(function(){
 var account = {
     user : null,
     sdk  : null,
+    coupons : [],
     init : function(){
         this.create_forms();
         this.set_listeners();
@@ -110,7 +111,52 @@ var account = {
             });
         });
     },
+    check_amount : function(){
+      index.sdk.api.get('/basket/amount', {
+        coupon_code:account.coupons
+      }, function(e){
+        $('.coupons_infos .message').html('Nouveau montant à régler :');
+        $('.coupons_infos .amount').html((e.new_amount.toFixed(2))+' €');
+        $('.coupons_infos').addClass('showed');
+        var codes = "";
+        for(var i=0; i<account.coupons.length; i++){
+          codes += account.coupons[i].code+" ";
+        }
+        if(typeof e.wallet_infos !== "undefined"){
+          $('.wallet_infos .message').html('En validant votre panier avec vos '+account.coupons.length+' coupons de réduction, un coupon de réduction '+e.wallet_infos.label+' sera crédité sur votre porte monnaie d\'une valeur de '+(e.dif_amount/100)+"€, vous pourrez l'utiliser plus tard avec votre compte client.<br><br>");
+        }
+        $('.wallet_infos .message').append('En validant, vous utiliserez les coupons suivants :<br><b>'+codes+"</b>");
+        $('.wallet_infos').addClass('showed');
+      });
+    },
     create_forms : function(){
+        this.checkout_form = new formular('#checkout_form', function(e){
+          if(e.status === "blur"){
+            if($('#coupon_code').val().length >=3 ){
+              index.sdk.api.get('/coupon_code/valid', {code:$('#coupon_code').val()}, function(e){
+                if(e.datas.length >= 1){
+                  if($('[data-code="'+e.datas[0].code+'"]').length === 0){
+                    $('#coupons_list').append('<li data-code="'+e.datas[0].code+'" data-amount="'+e.datas[0].amount+'"><div class="code">coupon code : '+e.datas[0].code+'</div><div class="amount">'+e.datas[0].label+" : "+(e.datas[0].amount/100)+' €</div></li>');
+                  }
+                  $('#coupon_code').val('').parent().removeClass('notempty').removeClass('valid');
+                  account.coupons.push(e.datas[0]);
+                  account.check_amount();
+                  $('#coupon_code').parent().find('.input_error').remove();
+                }else{
+                  $('#coupon_code').parent()
+                    .removeClass('valid')
+                    .addClass('invalid')
+                    .append('<div class="input_error">'+$('#coupon_code').attr('data-errormessage')+'</div>');
+                }
+              });
+            }
+          }
+          if(e.status==="hitted" && e.action==="submit"){
+            alert('submit');
+          }
+        });
+        this.checkout_form.init();
+
         this.public_form = new formular("#public_datas", function(e){
           if(e.status==="hitted" && e.action==="submit"){
               var public_datas = account.public_form.get_datas();

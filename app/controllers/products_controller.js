@@ -19,6 +19,11 @@ exports.update = function(req, res, callback) {
         callback(e);
     });
 };
+exports.updateAmount = function(req, res, callback) {
+    Products_model.updateAmount(req, res, function(e){
+        callback(e);
+    });
+};
 // check user register then return user_infos
 exports.delete = function(req, res, callback) {
     Products_model.delete(null, req._id, function(e){

@@ -26,11 +26,11 @@ admin.use(function(req, res, next){
                     next();
                 }else{
                     //next();
-                    res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_ADMIN');
+                    res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_ADMIN');
                 }
             });
         }else{
-            res.redirect(301, '/auth?message=NO_SESSION_ADMIN');
+            res.redirect(307, '/auth?message=NO_SESSION_ADMIN');
             //next();
         }
     });

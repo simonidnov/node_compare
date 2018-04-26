@@ -42,7 +42,11 @@ product
             res.status(e.status).send(e.datas);
         });
     })
-
+    .get('/update_amount', function(req, res, next){
+        Products_controller.updateAmount(req, res, function(e){
+            res.status(e.status).send(e.datas);
+        });
+    })
     .get('/updatephonetik', function(req, res, next) {
         //res.status(200).send({title:"API"});
         Products_controller.updatePhonetik(req, res, function(e){
@@ -64,7 +68,7 @@ product
                     res.status(e.status).send(e.datas);
                 });
             }else{
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS');
             }
         });
     })
@@ -75,7 +79,7 @@ product
                     res.status(e.status).send(e.datas);
                 });
             }else{
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS');
             }
         });
     })
@@ -86,19 +90,23 @@ product
                     res.status(e.status).send(e.datas);
                 });
             }else{
-                res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS');
+                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS');
             }
         });
     })
     .get('/medias/:filename', function(req, res, next){
+        /*
         Auth_helper.has_media_right(req, function(e){
           if(e.status === 200){
             next();
             return;
           }
         });
+        */
         var fs = require('fs'),
             shortcut = 15;
+
+        //console.log('FILE EXIST ::: ', req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"));
         if (fs.existsSync("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"))) {
             // Do something
             req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
@@ -130,20 +138,16 @@ product
             .save("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"));
         }
     }, function(req, res, next){
-        //Auth_helper.has_media_right(req, function(e){
-          //if(e.status === 200){
-
-
-            res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
-                if (err) {
-                  console.log('errror ', err);
+        res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
+            if (err) {
+              console.log('errror ', err);
                   //res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers", err:err});
                   //next(err);
-                } else {
-                  console.log('success ');
+            } else {
+              console.log('success ');
                   //res.status(200).send({"message":"le fichier est autorisé à la lecture", filename:req.params.filename});
-                }
-            });
+            }
+        });
 
             /* TODO CHECK ORDERS USER KEY THEN AUTHORIZE OR NOT DIRECTLY ON HAS MEDIA RIGHT ?
             Products_controller.getFile(req, res, function(e){

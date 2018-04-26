@@ -65,5 +65,6 @@ block content
                 each coupon in coupons
                   li
                     span.code= coupon.code
-                    span.valid= coupon.is_valid
-                    span.used= coupon.already_used
+                    span.valid= " - "+coupon.is_valid
+                    span.used= " - "+coupon.already_used
+                    span.used= " - "+coupon.amount

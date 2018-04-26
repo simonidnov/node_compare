@@ -521,6 +521,13 @@ p{
     -o-transition: all .2s ease-in;
     transition: all .2s ease-in;
 }
+.btn .icon{
+  float: left;
+}
+.btn .label{
+  float: left;
+  line-height: 33px;
+}
 .btn:hover{
     transform: scale(1.02);
     -moz-box-shadow: 2px 2px 20px -5px rgba(0,0,0,.3);

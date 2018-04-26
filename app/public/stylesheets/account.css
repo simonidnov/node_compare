@@ -85,4 +85,74 @@
   margin:5px;
   background-color:#F0F0F0;
   background-image:url(/public/images/assets/picture.svg);
+  float:left;
+}
+.basket .products_list li .infos{
+  float:left;
+}
+.basket .products_list li .infos .label{
+  font-size: 17px;
+  padding:10px;
+  padding-bottom:0;
+}
+.basket .products_list li .infos .brand{
+  display: inline-flex;
+}
+.basket .products_list li .infos .brand img{
+  margin: 10px;
+}
+.basket .products_list li .infos .brand .label{
+  padding-left:0px;
+  font-size: 17px;
+}
+.basket .products_list li .infos .cat{
+  font-size: 10px;
+  padding-left:10px;
+}
+.basket .products_list li .details{
+  float: right;
+}
+.basket .products_list li .details .price{
+  font-size: 24px;
+  padding-top: 10px;
+}
+.basket .total_products{
+  line-height: 20px;
+  padding-bottom: 10px;
+}
+.basket .total{
+  font-size: 23px;
+}
+
+.coupons_list{
+  margin:0;
+  padding:0;
+}
+.coupons_list li{
+  margin:0;
+  padding:0;
+  padding:10px;
+  list-style: none;
+  margin-bottom:5px;
+  background:#F0F0F0;
+  border-radius: 5px;
+}
+.coupons_infos, .wallet_infos{
+  padding:10px;
+  background:orange;
+  color:#FFF;
+  border-radius: 5px;
+  margin-bottom:10px;
+  display:none;
+}
+.wallet_infos{
+  margin-top:10px;
+  margin-bottom:0px;
+}
+.coupons_infos .amount, .wallet_infos .amount{
+  font-size: 24px;
+  line-height: 35px;
+}
+.coupons_infos.showed, .wallet_infos.showed{
+  display:block;
 }

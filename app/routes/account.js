@@ -31,7 +31,7 @@ account.use(function(req, res, next){
         if(e.status === 200){
             next();
         }else{
-            res.redirect(301, '/checking_session');
+            res.redirect(307, '/checking_session');
         }
     });
 });

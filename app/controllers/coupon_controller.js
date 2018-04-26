@@ -7,6 +7,11 @@ exports.get = function(req, res, callback) {
         callback(e);
     });
 };
+exports.updateAmount = function(req, res, callback){
+  Coupon_model.updateAmount(req, res, function(e){
+      callback(e);
+  });
+};
 exports.getOffersCSV = function(req, res, callback){
     Coupon_model.getOffersCSV(req, res, function(e){
         callback(e);

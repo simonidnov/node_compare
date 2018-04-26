@@ -44,11 +44,12 @@ module.exports = {
     validate_user : function(req, host, callback) {
       //var datas = req.query;
       /* check user id */
-        if(typeof req.options.user_id === "undefined"){
-            callback({status:401, "message":"UNAUTHARISED need valid user ID"});
+        if(typeof req.options === "undefined"){
+            callback({status:401, "message":"UNAUTHARISED need OPTIONS"});
         }else{
-          /* check user device */
-          if(typeof req.options.user_secret === "undefined"){
+          if(typeof req.options.user_id === "undefined"){
+              callback({status:401, "message":"UNAUTHARISED need valid user ID"});
+          }else if(typeof req.options.user_secret === "undefined"){
               callback({status:401, "message":"UNAUTHARISED need valid user secret"});
           }else{
             /* check user token */

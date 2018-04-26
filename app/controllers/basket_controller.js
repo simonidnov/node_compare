@@ -7,6 +7,11 @@ exports.get = function(req, res, callback) {
         callback(e);
     });
 };
+exports.getAmount = function(req, res, callback) {
+    Basket_model.getAmount(req.query, req, function(e){
+        callback(e);
+    });
+};
 // check user login then return user_infos
 exports.create = function(datas, res, callback) {
     Basket_model.create(datas, res, function(e){
@@ -20,8 +25,8 @@ exports.update = function(req, res, callback) {
     });
 };
 // check user register then return user_infos
-exports.deleting = function(req, res, callback) {
-    Basket_model.deleting(req, res, function(e){
+exports.delete = function(req, res, callback) {
+    Basket_model.delete(req, res, function(e){
         callback(e);
     });
 };

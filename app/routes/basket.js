@@ -30,7 +30,11 @@ basket.use(function(req, res, next){
     });
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+      if(typeof req.body.data !== "undefined"){
         dataCheck = req.body.data;
+      }else{
+        dataCheck = req.body;
+      }
     }
     //dataCheck.options = dataCheck;
     Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
@@ -48,6 +52,11 @@ basket
             res.status(e.status).send(e.datas);
         });
     })
+    .get('/amount', function(req, res, next) {
+        Basket_controller.getAmount(req, res, function(e){
+            res.status(e.status).send(e.datas);
+        });
+    })
     .post('/', function(req, res, next) {
         Basket_controller.create(req.body.data, res, function(e){
             res.status(e.status).send({status:e.status, response_display:{title:"Ajouté", message:"Votre produit a bien été ajouté dans votre panier."}});
@@ -55,12 +64,12 @@ basket
     })
     .put('/', function(req, res, next) {
         Basket_controller.update(req.body.data, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send({status:e.status, infos:e.datas});
         });
     })
     .delete('/', function(req, res, next) {
-        Basket_controller.deleting(req.body.data, res, function(e){
-            res.status(e.status).send(e.datas);
+        Basket_controller.delete(req, res, function(e){
+            res.status(e.status).send({status:e.status, infos:e.datas});
         });
     });
 

@@ -22,10 +22,35 @@ coupon_code.get('/', function(req, res, next) {
       if(e.status === 200){
         next();
       }else{
-        res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
+        res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
       }
     });
 }, function(req, res, next){
+    Coupon_controller.get(req, res, function(e){
+      res.status(e.status).send(e);
+      res.end();
+    });
+});
+coupon_code.get('/update_amount', function(req, res, next) {
+    Auth_helper.validate_admin(req, function(e){
+      if(e.status === 200){
+        next();
+      }else{
+        res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
+      }
+    });
+}, function(req, res, next){
+    Coupon_controller.updateAmount(req, res, function(e){
+      res.status(e.status).send(e);
+      res.end();
+    });
+});
+coupon_code.get('/valid', function(req, res, next) {
+    next();
+}, function(req, res, next){
+    if(typeof req.query.code === "undefined"){
+      res.status(400).send({status:400, message:"NEED_CODE"});
+    }
     Coupon_controller.get(req, res, function(e){
       res.status(e.status).send(e);
       res.end();
@@ -57,7 +82,7 @@ coupon_code.get('/download/:offer', function(req, res, next){
       if (err) {
         res.status(200).send(err);
       }else{
-        res.redirect(301, path.replace('./', '/'));
+        res.redirect(307, path.replace('./', '/'));
         res.status(200).send({csv:csv, datas:e.datas});
         res.end();
       }
@@ -72,7 +97,7 @@ coupon_code.get('/offers', function(req, res, next) {
       if(e.status === 200){
         next();
       }else{
-        res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
+        res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
       }
     });
 }, function(req, res, next){
@@ -91,7 +116,7 @@ coupon_code.post('/create_offer', function(req, res, next) {
       if(e.status === 200){
         next();
       }else{
-        res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
+        res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
       }
     });
 }, function(req, res, next){
@@ -111,7 +136,7 @@ coupon_code.delete('/', function(req, res, next) {
       if(e.status === 200){
         next();
       }else{
-        res.redirect(301, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
+        res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_COUPONS');
       }
     });
 }, function(req, res, next){

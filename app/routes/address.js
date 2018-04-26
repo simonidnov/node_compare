@@ -19,7 +19,7 @@ address.use(function(req, res, next){
         if(e.status === 200){
             next();
         }else{
-            res.redirect(301, '/auth');
+            res.redirect(307, '/auth');
         }
     });
 });
@@ -28,25 +28,25 @@ address
     .get('/', function(req, res, next) {
         Address_controller.get(req, res, function(e){
             //res.status(e.status).send(e);
-            res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .post('/', function(req, res, next) {
         Address_controller.create(req, res, function(e){
             //res.status(e.status).send(e);
-            res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .put('/', function(req, res, next){
         Address_controller.update(req, res, function(e){
             //res.status(e.status).send(e);
-            res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .delete('/', function(req, res, next) {
         Address_controller.delete(req, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     });
 

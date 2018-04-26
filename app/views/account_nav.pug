@@ -6,7 +6,7 @@ block navigation
             a(href="/account/account" data-navigate="page_reload")
                 li(class= page === "account" ? "selected" : "" data-for="account")= lang[locale].keys.account_nav_account
             a(href="/account/basket" data-navigate="page_reload")
-                li(class= page === "basket" ? "selected" : "" data-for="basket")= lang[locale].keys.account_nav_basket
+                li(class= page === "basket" ? "selected" : "" data-for="basket")= lang[locale].keys.account_nav_basket+ " ("+baskets[0].products.length+")"
             a(href="/account/orders" data-navigate="page_reload")
                 li(class= page === "orders" ? "selected" : "" data-for="orders")= lang[locale].keys.account_nav_orders
             a(href="/account/services" data-navigate="page_reload")

@@ -301,19 +301,34 @@ var idkids_jssdk = function(options, callback){
       var self = this;
       $('[data-idkidssdk]').off('click').on('click', function(e){
         switch($(this).attr('data-idkidssdk')){
-          case 'add_basket':
+          case 'add_basket' :
             // TODO call api add_basket
             self.api.post('/basket',
               {
                 product_id : $(this).attr('data-productid'),
                 quantity : $(this).attr('data-quantity')
               },
-              function(e){
+              function(e) {
                 console.log('AJOUT AU PANIER AVEC SUCCES ? ', e);
               }
             );
             break;
-          default:
+          case "delete_basket_product" :
+            console.log('delete basket '+$(this).attr('data-basketid')+" "+$(this).attr('data-productid'));
+            self.api.deleting('/basket',
+              {
+                basket_id : $(this).attr('data-basketid'),
+                product_id : $(this).attr('data-productid')
+              },
+              function(e){
+                console.log('supprime de PANIER AVEC SUCCES ? ', e);
+                if(e.status === 200){
+                  window.location.reload();
+                }
+              }
+            );
+            break;
+          default :
             console.log('action not reconized by idkids sdk, please upgrade your sdk version');
             break;
         }

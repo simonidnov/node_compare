@@ -76,7 +76,6 @@ module.exports.get = function(datas, res, callback){
       skip = parseInt(datas.skip);
     }
     //query.limit = Number(5);
-    console.log("GET PRODUCT :::: ", query);
     /*query.$lookup = {
        from: "Apps_model.Apps",
        localField: "app_id",
@@ -191,6 +190,18 @@ module.exports.update = function(user_id, products_id, datas, callback){
         }
     )
 };
+module.exports.updateAmount = function(req, res, callback){
+  Products.updateMany({
+
+  },
+  {
+    $set:{}
+  },
+  function(err, infos){
+    callback({status:200, err:err, datas:infos});
+  });
+  //price:499
+};
 module.exports.delete = function(user_id, products_id, callback){
     Products.deleteOne(
         {
@@ -231,8 +242,6 @@ module.exports.updatePhonetik = function(req, res, callback){
                   }
                   var a = language_helper.wordlab(prod.label+" "+prod.description).split('-');
                   prod.phonetik = a.filter( onlyUnique );
-                  console.log(a);
-                  console.log(prod.phonetik);
 
                   Products.updateOne(
                       {

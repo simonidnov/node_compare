@@ -18,7 +18,7 @@ settings.use(function(req, res, next){
         if(e.status === 200){
             next();
         }else{
-            res.redirect(301, '/auth');
+            res.redirect(307, '/auth');
         }
     });
 });
@@ -34,7 +34,7 @@ settings
         //TODO CHECK ID ADMIN MODE
         Settings_model.update(req, req.body, function(e){
             res.status(e.status).send(e);
-            //res.redirect(301, '/account/addresses'+req.url.replace('/',''));
+            //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     });
 

@@ -507,10 +507,12 @@ input:-webkit-autofill {
     color:lightseagreen;
 }
 
+/*
+.formular .material_input input:valid + label,
+*/
 .formular .material_input input[disabled] + label,
 .formular .material_input input[type="date"] + label,
 .formular .material_input input:focus + label,
-.formular .material_input input:valid + label,
 .formular .material_input textarea[disabled] + label,
 .formular .material_input textarea:focus + label,
 .formular .material_input textarea:valid + label,

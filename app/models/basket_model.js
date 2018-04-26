@@ -58,21 +58,99 @@ module.exports.get = function(datas, req, callback) {
             infos.forEach(function(basket){
               basket.total_amount = 0;
               var index = 0.00;
-              basket.products.forEach(function(product){
-                products_controller.get({product_id : product.product_id}, req, function(e){
-                  if(e.datas.length === 0){
-                    product.infos = {label:"DOSNT_EXIST", message:"PRODUIT_INTROUVABLE_OU_SUPPRIME"}
-                  }else{
-                    product.infos = e.datas[0];
-                    basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
-                  }
-                  index++;
-                  if(index >= basket.products.length){
-                    callback({status:200, datas:infos});
-                  }
+              console.log(" -------- basket.products -------- ", basket.products);
+              if(basket.products.length > 0){
+                basket.products.forEach(function(product){
+                  products_controller.get({product_id : product.product_id}, req, function(e){
+                    if(e.datas.length === 0){
+                      product.infos = {label:"DOSNT_EXIST", message:"PRODUIT_INTROUVABLE_OU_SUPPRIME"}
+                    }else{
+                      product.infos = e.datas[0];
+                      basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
+                    }
+                    index++;
+                    if(index >= basket.products.length){
+                      callback({status:200, datas:infos});
+                    }
+                  });
                 });
-              });
+              }else{
+                callback({status:200, datas:infos});
+              }
             });
+
+        }
+    });
+}
+module.exports.getAmount = function(datas, req, callback) {
+    //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
+    var query = {};
+    if(datas.isAdmin && typeof datas.basket_id !== "undefined"){
+        query = {_id : datas.basket_id};
+    }else if(typeof datas.options !== "undefined"){
+      if(typeof datas.options.user_id !== "undefined"){
+            query = {user_id : datas.options.user_id};
+      }
+    }else if(typeof req.session.Auth !== "undefined"){
+        query = {user_id : req.session.Auth._id};
+    }else if(typeof datas.user_id !== "undefined"){
+        query = {user_id : datas.user_id};
+    }else{
+        callback({status:401, message:"NOT_LOGGED_IN"});
+        return false;
+    }
+    Baskets.find(query, function(err, infos){
+        if(err){
+            callback({status:401, datas:err});
+        }else{
+            if(infos.length === 0){
+              callback({status:200, datas:infos});
+            }
+            infos.forEach(function(basket){
+              basket.total_amount = 0;
+              var index = 0.00;
+              if(basket.products.length > 0){
+                basket.products.forEach(function(product){
+                  products_controller.get({product_id : product.product_id}, req, function(e){
+                    if(e.datas.length === 0){
+                      product.infos = {label:"DOSNT_EXIST", message:"PRODUIT_INTROUVABLE_OU_SUPPRIME"}
+                    }else{
+                      product.infos = e.datas[0];
+                      basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
+                    }
+                    index++;
+
+                    var data_send = {
+                      amount:basket.total_amount,
+                      new_amount:basket.total_amount,
+                      reduction:0,
+                      reduced_amount:0,
+                      dif_amount:0
+                    }
+
+                    /* TODO CHECK COUPONS VALIDITY */
+                    for(var i=0; i<datas.coupon_code.length; i++){
+                      data_send.reduction = parseInt(data_send.reduction) + parseInt(datas.coupon_code[i].amount);
+                    }
+                    data_send.reduced_amount = (basket.total_amount - data_send.reduction);
+                    data_send.new_amount = data_send.reduced_amount;
+
+                    if(data_send.reduced_amount < 0){
+                      data_send.new_amount = 000;
+                      data_send.dif_amount = Math.abs(data_send.reduction-basket.total_amount);
+                      data_send.wallet_infos = datas.coupon_code[0];
+                      data_send.wallet_infos.amount = data_send.dif_amount;
+                    }
+                    if(index >= basket.products.length){
+                      callback({status:200, datas:data_send});
+                    }
+                  });
+                });
+              }else{
+                callback({status:200, datas:infos});
+              }
+            });
+
         }
     });
 }
@@ -98,7 +176,9 @@ module.exports.create = function(datas, res, callback) {
             if(already_exist.length > 0) {
               already_exist = already_exist[0];
               /* LE PRODUIT EST DEJA DANS LE PANIER on incrémente la quantité ?*/
-              already_exist.quantity++;
+              /* TODO CREATE QUANTITY MODE FOR DIFFERENT META PRODUCT ? */
+              /* NOT UTIL FOR DEMATERIALIZED PRODUCTS I THINK */
+              already_exist.quantity = 1;
               // on met à jour les totaux...
               already_exist.total = parseFloat(already_exist.price) * parseInt(already_exist.quantity);
               // on met à jour la date de checking du produit...
@@ -157,7 +237,7 @@ module.exports.create = function(datas, res, callback) {
           new_basket = new Baskets(data_set);
           new_basket.save(function(err, infos) {
               if(err) {
-                callback({"status":405, "message":err});
+                callback({"status":405, "datas":{message:"ERROR", infos:err}});
               }else {
                 callback({"status":200, "datas":infos});
               }
@@ -183,15 +263,39 @@ module.exports.update = function(req, res, callback){
         },
         function(err, infos){
             if(err){
-              callback({"status":405, "message":err});
+              callback({"status":405, "datas":err});
             }
             else{
-              callback({"status":200, "apps":infos});
+              callback({"status":200, "datas":infos});
             }
         }
     )
 }
 module.exports.delete = function(req, res, callback){
+    if(typeof req.body.product_id !== "undefined"){
+      console.log('req.body.product_id ', req.body.product_id);
+    }
+    if(typeof req.body.basket_id !== "undefined"){
+      console.log('req.body.basket_id ', req.body.basket_id);
+    }
+    Baskets.update(
+        {
+          _id:req.body.basket_id
+        },
+        {
+          $pull: {
+            "products": {
+              product_id:req.body.product_id
+            }
+          }
+        },
+        function(err, infos){
+          console.log("-------- DELETE BASKET ----------- ", err);
+          if(err) callback({"status":400, datas:{"message":err}});
+          else callback({"status":200, "datas":infos});
+        }
+    )
+    /*
     Baskets.deleteOne(
         {
             _id     : req.body._id
@@ -201,4 +305,5 @@ module.exports.delete = function(req, res, callback){
             else callback({"status":200, "apps":infos});
         }
     )
+    */
 }

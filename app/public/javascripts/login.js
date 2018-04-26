@@ -73,15 +73,6 @@ var login = {
           return_scopes: true
       });
     },
-    parse_url : function(url){
-        var uri_params = [],
-            uri_array  = url.split('/');
-        for(var i=1; i<uri_array.length; i+=2){
-            uri_params.push({});
-            uri_params[uri_array[i]] = uri_array[i+1];
-        }
-        return uri_params;
-    },
     set_listeners : function(){
         $('[data-action]').off('click').on('click', function(e){
             e.preventDefault();

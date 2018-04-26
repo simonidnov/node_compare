@@ -175,7 +175,7 @@ function formular(target, callback){
             if($(this).find('.number').length === 0){
                 $(this).append('<span class="number"></span>');
             }
-            if(val.length >= parseInt(input.attr('minlength'))){
+            if(val.length+1 >= parseInt(input.attr('minlength'))){
                 $(this).find('.number').html('<span class="icon idkids-icon icon-check"></span>');
             }else{
                 $(this).find('.number').html(val.length+'/'+input.attr('minlength'));
