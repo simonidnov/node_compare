@@ -41,19 +41,19 @@ div.col.col-md-5
       p Votre panier est vide
     else
       div.formular.fullscreen#checkout_form
-        form.form_content(method="POST" action="/orders/transaction")
+        form.form_content(method="POST", action="/orders/transaction")
           div.total_products= "Votre panier contient "+basket[0].products.length+" produit"+ ((basket[0].products.length > 1)? "s" : "")
           div.total= "Total "+(basket[0].total_amount/100)+"€"
           hr
           ul.coupons_list#coupons_list
           div.material_input.form-group
-            input.form-control.minlength#coupon_code(type="text" name="coupon_code" data-errormessage="Ce code est invalide.")
+            input.form-control.minlength#coupon_code(type="text", name="coupon_code", data-errormessage="Ce code est invalide.")
             label(for="coupon_code") Code de réduction
           hr
           div.coupons_infos
             div.message
             div.amount
-          div.btn.btn-success.btn-lg.centered(data-action="submit") Valider mon panier
+          div.btn.btn-success.btn-lg.centered#order_transaction(data-action="submit", data-basketid=basket[0]._id) Valider mon panier
           div.wallet_infos
             div.message
             div.amount

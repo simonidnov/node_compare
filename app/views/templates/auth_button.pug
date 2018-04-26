@@ -1,6 +1,7 @@
 if(typeof query.user === "undefined" || query.user === null || query.user === "")
   div#account_infos
     div.icon.icon-account_1.idkids-icons.lg
+      img(src=app.locals.settings.host+"/public/images/assets/account.svg")
   div.subnav.account
       div.account_infos
           div.avatar
@@ -16,6 +17,7 @@ if(typeof query.user === "undefined" || query.user === null || query.user === ""
 else
   div#account_infos
       div.icon.icon-account_1.idkids-icons.lg
+        img(src=app.locals.settings.host+"/public/images/assets/account.svg")
   div.subnav.account
       div.account_infos
           div.avatar
