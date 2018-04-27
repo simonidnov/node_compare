@@ -86,7 +86,7 @@ api
         }
     })
     .post('/apps', function(req, res, next) {
-        console.log("POST APP :::::: ", req);
+        console.log("POST APP :::::: ", req.session.Auth);
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(e);
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
