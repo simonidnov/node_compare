@@ -25,11 +25,11 @@ var express = require('express'),
           //TODO GET APP FROM REFERER + SECRET THEN SET REDIRECT URL TO REFERER
           auth_helper.validate_origin({options:{secret:req.query.secret}}, req.get('origin'), function(e){
             if(!e){
-              res.redirect(301, req.get('origin')+"?message=UNAUTHORISED_SERVER");
+              res.redirect(307, req.get('origin')+"?message=UNAUTHORISED_SERVER");
             }else{
-              console.log('CURRENT APP IS SET ', e);
+
               current_app = e;
-              //referer = current_app.redirect_url;
+              referer = current_app.redirect_url;
               //current_app.referer = referer;
               next();
             }
@@ -38,14 +38,13 @@ var express = require('express'),
           Apps_controller.get(req, {_id:req.query.app_id}, function(e){
             if(e.status === 200){
               current_app = e.datas[0];
-              //referer = current_app.redirect_url;
+              referer = current_app.redirect_url;
               next();
             }else{
-              res.redirect(301, req.get('origin')+"?message=UNAUTHORISED_SERVER");
+              res.redirect(307, req.get('origin')+"?message=UNAUTHORISED_SERVER");
             }
           });
         }else if(typeof req.body.app_id !== "undefined"){
-          console.log('req.body.app_id :::::::::::: ', req.body.app_id);
           Apps_controller.get(req, {_id:req.body.app_id}, function(e){
             if(e.status === 200){
               if(e.datas.length > 0){
@@ -54,7 +53,7 @@ var express = require('express'),
               }
               next();
             }else{
-              res.redirect(301, req.get('origin')+"?message=UNAUTHORISED_SERVER");
+              res.redirect(307, req.get('origin')+"?message=UNAUTHORISED_SERVER");
             }
           });
         }else{
@@ -113,8 +112,8 @@ auth.get('/', function(req, res, next) {
                 };
                 datas.user_session = req.session.Auth;
 
-                // console.log('current_app  ::::::::::: ', current_app);
-                // console.log('referer  ::::::::::: ', referer);
+                console.log('current_app  ::::::::::: ', current_app);
+                console.log('referer  ::::::::::: ', referer);
 
                 if(typeof e.user !== "undefined"){
                     res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
@@ -129,23 +128,12 @@ auth.get('/', function(req, res, next) {
         //});
     })
     .post('/login', function(req, res, next) {
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('POST REQ. BODY HAS SECRET ? ', req.body);
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
-        console.log('--------------------------------------');
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
-                console.log('current_app  ::::::::::: ', current_app);
-                console.log('referer  ::::::::::: ', referer);
+                console.log('LOGIN current_app  ::::::::::: ', current_app);
+                console.log('LOGIN referer  ::::::::::: ', referer);
 
-                res.redirect(301, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id);
+                res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id);
                 //res.redirect(307, '/account/?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device);
             }else{
                 var user_device = [];
@@ -171,6 +159,52 @@ auth.get('/', function(req, res, next) {
             current_app = null;
         });
     })
+    .get(['/update_password', '/update_password/:email/:validation_code'], function(req, res, next){
+        res.render('auth/update_password',
+          {
+            email:req.params.email,
+            validation_code:req.params.validation_code,
+            locale:language_helper.getlocale(req),
+            lang:lang,
+            uri_params : uri_helper.get_params(req),
+            js:[
+                '/public/javascripts/lost_password.js',
+                '/public/javascripts/components/formular.js'
+            ], css:[
+                '/public/stylesheets/components/formular.css',
+                '/public/stylesheets/auth.css',
+            ]
+          }
+        );
+        res.end();
+    })
+    .post('/update_password', function(req, res, next){
+        Auth_controller.validCode(req.body, function(e){
+          if(e.status === 200){
+            next();
+          }else{
+            res.status(e.status).send(e);
+            res.end();
+          }
+        });
+    }, function(req, res, next){
+        if(typeof req.body.password === "undefined" || typeof req.body.retype_password === "undefined"){
+            res.status(304).send({message:"NEED_PASSWORD"});
+            res.end();
+        }
+        if(req.body.password !== req.body.retype_password){
+            res.status(304).send({message:"NEED_SAME_PASSWORD"});
+            res.end();
+        }
+        Auth_controller.update_password({email:req.body.email, password:req.body.password}, res, function(e){
+            res.redirect(307, "/auth?message="+e.message);
+        });
+    })
+    .post('/lost_password', function(req, res, next){
+        Auth_controller.lost_password(req, res, function(e){
+          res.status(e.status).send(e);
+        });
+    })
     .put('/login', function(req, res, next) {
         Auth_controller.update(req, res, function(){
             res.send('login put params');
@@ -183,7 +217,29 @@ auth.get('/', function(req, res, next) {
             res.end();
         });
     })
-    .get('/:form_name/*', function(req, res, next) {
+    .get('/logout', function(req, res, next) {
+        var user_id = req.session;
+        Auth_controller.logout(req, res, function(e){
+
+            var param = "?";
+            if(typeof req.headers.referer === "undefined" || req.headers.referer.indexOf('/account') !== -1){
+              res.redirect(307, "/auth?idkids-sdk-action=logout");
+              //res.end();
+            }else{
+              if(req.headers.referer.indexOf('?') !== -1){
+                param = "&";
+              }
+
+              res.redirect(307, req.headers.referer+param+"idkids-sdk-action=logout");
+              //res.end();
+            }
+            res.end();
+            //res.send(e);
+            //res.render('logout', { "title": "déconnexion", "referer":req.headers.referer });
+            //res.render(req.headers.referer, { "title": "déconnexion", "referer":req.headers.referer, "idkids_sdk":"logout" });
+        });
+    })
+    .get(['/:form_name', '/:form_name/*'], function(req, res, next) {
         //req.query.device_uid = device_uid;
         //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
@@ -195,7 +251,8 @@ auth.get('/', function(req, res, next) {
                 locale:language_helper.getlocale(req),
                 lang:lang,
                 uri_params:uri_helper.get_params(req),
-                form:req.params.form_name,
+                form:req.params.form_name.replace('_form', ''),
+                form_name:req.params.form_name,
                 js:[
                     '/public/javascripts/login.js',
                     '/public/javascripts/components/formular.js'
@@ -205,10 +262,7 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                console.log('current_app  ::::::::::: ', current_app);
-                console.log('referer  ::::::::::: ', referer);
-
-                res.redirect(301, referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
+                res.redirect(307, referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
                 res.end();
             }else{
               res.render('auth/login', datas);
@@ -222,26 +276,6 @@ auth.get('/', function(req, res, next) {
         Auth_controller.delete_device(req, res, function(e){
             res.send(e);
             res.end();
-        });
-    })
-    .get('/logout', function(req, res, next) {
-        var user_id = req.session;
-        Auth_controller.logout(req, res, function(err, data){
-            var param = "?";
-            if(typeof req.headers.referer === "undefined" || req.headers.referer.indexOf('/account') !== -1){
-              res.redirect(301, "/auth?idkids-sdk-action=logout");
-            }else{
-              if(req.headers.referer.indexOf('?') !== -1){
-                param = "&";
-              }
-              console.log('current_app  ::::::::::: ', current_app);
-              console.log('referer  ::::::::::: ', referer);
-
-              res.redirect(301, req.headers.referer+param+"idkids-sdk-action=logout");
-              res.end();
-            }
-            //res.render('logout', { "title": "déconnexion", "referer":req.headers.referer });
-            //res.render(req.headers.referer, { "title": "déconnexion", "referer":req.headers.referer, "idkids_sdk":"logout" });
         });
     })
     .get('/facebook', function(req, res, next){
@@ -327,6 +361,5 @@ function getReferer(req){
   if(typeof referer === "undefined" || referer.indexOf('/auth') !== -1){
     referer = "/account";
   }
-  console.log(' ---------------------------------- '+referer);
   return referer;
 }

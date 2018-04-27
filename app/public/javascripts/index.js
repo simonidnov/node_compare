@@ -35,7 +35,7 @@ var index = {
             console.log('inited ', status);
             this.sdk.isLogged($.proxy(function(e){
                 this.sdk.api.get('/me', {}, function(e){
-                  $('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
+                  //$('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
                   $('.account_infos .avatar img').attr('src', e.datas.avatar);
                   $('.account_infos .infos .label').html(e.datas.pseudo);
                   $('.account_infos .infos .email').html(e.datas.email);

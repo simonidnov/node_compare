@@ -8,7 +8,8 @@ block content
           var current_app  = (!{JSON.stringify(current_app)});
         }
         var referer  = "#{referer}";
-    script.
+    //-TODO FACEBOOK INTEGRATION
+    //-script.
         window.fbAsyncInit = function() {
           FB.init({
             appId      : '143900369638121',
@@ -40,7 +41,7 @@ block content
         .row
             div#auth_form.formular.mini.auth
                 header
-                    div.logo.idkids
+                    div.logo.idkids(href="/auth" data-action="page_reload") 
                     ul.brands
                       if(typeof app.locals.applications !== "undefined")
                         each apps in app.locals.applications
@@ -50,14 +51,14 @@ block content
                     if current_app !== null && typeof current_app !== "undefined"
                       div.row
                         img(src=current_app.icon, height="50")
-                        img(src=current_app.logo, height="50")
+                        //-img(src=current_app.logo, height="50")
                         div= "Me connecter sur "+current_app.name
                 div#account_selection(class=typeof form === "undefined" ? "displayblock" : "displaynone")
                     h1 !{lang[locale].keys.account_picker_title}
                     ul.account_list.option_list
                         if(typeof user_session !== "undefined")
                             if current_app !== null && typeof current_app !== "undefined"
-                              a(href=current_app.redirect_url title="Accéder à l'application")
+                              a(href=current_app.redirect_url+"?idkids-token="+user_session.token+"&idkids-id="+user_session._id+"&idkids-device=&idkids-secret="+user_session.secret, title="Accéder à l'application")
                                 li(data-userid=user_session._id)
                                     img.avatar(src=user_session.avatar)
                                     div.option_infos
@@ -99,7 +100,7 @@ block content
                                                 div.label= users.pseudo
                                                 div.email= users.email
                                                 div.status= lang[locale].keys.not_connected_status
-                        a(href="/auth/subscribe/" title="Me connecter" data-action="page_reload")
+                        a(href="/auth/login/" title="Me connecter" data-action="page_reload")
                             li.other
                                 img.avatar(src="/public/images/assets/account.svg")
                                 div.option_infos
@@ -109,8 +110,8 @@ block content
                     if(datas.message)
                         div.message= datas.message
                     ul.switch_tab
-                        li.tab.selected(data-tab="login_form") !{lang[locale].keys.login_tab_1}
-                        li.tab(data-tab="subscribe_form") !{lang[locale].keys.login_tab_2}
+                        li.tab(data-tab="login_form" class=(form === "login")? "selected" : "") !{lang[locale].keys.login_tab_1}
+                        li.tab(data-tab="subscribe_form" class=(form === "subscribe")? "selected" : "") !{lang[locale].keys.login_tab_2}
                     //-hr
                     //-h3 Connectez-vous avec <b>Facebook</b> :
                     //-ul.social_login.social_buttons
@@ -120,7 +121,7 @@ block content
                     //-h3 Utilisez votre <b>email</b> :
                     hr
                     div.tab_group
-                        form#login_form(method="get" action='/auth/login/')
+                        form#login_form(method="get" action='/auth/login/' style='display:"'+((form === "login")? "block" : "none")+'"')
                             div.form-group.material_input
                                 input#email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)
                                 label(for='email') !{lang[locale].keys.email_holder}
@@ -153,7 +154,8 @@ block content
                                   input.phantom_input.form-control(name="referer" value=referer)
                                     
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.login_cta
-                        form#subscribe_form(method="post" action='/auth/login/')
+                            a.hyperlink(href="/auth/lost" data-action="page_reload") Mot de passe perdu ?
+                        form#subscribe_form(method="post" action='/auth/login/' style='display:"'+((form === "subscribe")? "block" : "none")+'"')
                             div.form-group.material_input
                                 input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=datas.pseudo, minlength="4")
                                 label(for='pseudo') !{lang[locale].keys.pseudo_holder}
@@ -161,18 +163,18 @@ block content
                                 input#subscribe_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='subscribe_email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-erromessage=lang[locale].keys.email_error)
                                 label(for='subscribe_email') !{lang[locale].keys.email_holder}
                             div.form-group.material_input
-                                input#subscribe_password.form-control(type='password', name='subscribe_password', required="required", value=datas.password, minlength="8" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" data-errormessage=lang[locale].keys.password_error)
+                                input#subscribe_password.form-control(type='password', name='subscribe_password', required="required", value=datas.password, minlength="8", data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$", data-errormessage=lang[locale].keys.password_error)
                                 label(for='subscribe_password')= lang[locale].keys.password_holder
                             div.input_check(data-checkinput="subscribe_password")
                                 div.check.check_length= lang[locale].keys.input_check_length
                                 div.check.check_capital= lang[locale].keys.input_check_capital
                                 div.check.check_number= lang[locale].keys.input_check_number
                             div.form-group.material_input
-                                input#retype_password.form-control(type='password', name='retype_password', required="required", value=datas.password, minlength="8" data-regex="same" data-target="subscribe_password" data-errormessage=lang[locale].keys.retype_password_error)
+                                input#retype_password.form-control(type='password', name='retype_password', required="required", minlength="8", data-regex="same", data-target="subscribe_password", data-errormessage=lang[locale].keys.retype_password_error)
                                 label(for='retype_password') !{lang[locale].keys.retype_password_holder}
                             hr
                             div.form-group
-                                input#subscribe_term_accept.form-control(type='checkbox', name='subscribe_term_accept', checked='true', required="required")
+                                input#subscribe_term_accept.form-control(type='checkbox', name='subscribe_term_accept', required="required")
                                 label(for="subscribe_term_accept") !{lang[locale].keys.accept_terms}
                             div.form-group
                                 input#subscribe_newsletter.form-control(type='checkbox', name='subscribe_newsletter')
@@ -207,7 +209,7 @@ block content
                                   input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.subscribe_cta
-                        form#lost_form(method="post" action='/auth/lost_password/')
+                        form#lost_form(method="post" action='/auth/lost_password/' style='display:"'+((form === "lost")? "block" : "none")+'"')
                             div.form-group.material_input
                                 input#lost_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)
                                 label(for='lost_email') !{lang[locale].keys.email_holder}
@@ -225,7 +227,7 @@ block content
                                 if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
                                   input.phantom_input.form-control(name="referer" value=referer)
                                 
-                            button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.lost_password_cta
+                            button.btn.btn-success.btn-m.btn-disabled(type="submit", data-action='receive_password')= lang[locale].keys.lost_password_cta
                     if(response.status === "error" && typeof response.message !== "undefined")
                         div.error= lang[locale].keys[response.message]
             include footer.pug

@@ -18,6 +18,9 @@ exports.register = function(req, callback) {
 exports.unregister = function(req, res, callback) {
     Auth_model.unregister(req, res, callback);
 };
+exports.lost_password = function(req, res, callback) {
+    Auth_model.lost_password(req, res, callback);
+};
 // check user login then return user_infos
 exports.update = function(req, res) {
     Auth_model.update(req);
@@ -25,6 +28,9 @@ exports.update = function(req, res) {
 exports.request_validation_code = function(req, datas, callback){
     Auth_model.getValidationCode(req.body.user_id, callback);
 };
+exports.validCode = function(datas, callback){
+    Auth_model.validCode(datas, callback);
+}
 exports.get_user_from_device = function(device_uid, callback){
     Auth_model.getUsersDevice(device_uid, callback);
 };
@@ -32,5 +38,8 @@ exports.delete_device = function(req, res, callback){
     Auth_model.deleteDevice(req, callback);
 }
 exports.update_password = function(req, res, callback){
-    Auth_model.updatePassword(req, callback);
+    Auth_model.updatePassword(req, res, callback);
+}
+exports.getUserInfos = function(req, res, callback){
+  Auth_model.getUserInfos(req, res, callback);
 }

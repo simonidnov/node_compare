@@ -6,6 +6,7 @@ const db = require('mongoose'),
       validator = require("email-validator"),
       Members_model = require('../models/members_model'),
       Address_model = require('../models/address_model'),
+      Email_controller = require('../controllers/email_controller'),
       config = require('../config/config'),
       gravatar = require('gravatar'),
       urlExists = require('url-exists'),
@@ -114,6 +115,18 @@ module.exports.get = function(req, datas, callback) {
         }
     }).skip (parseInt(datas.page)*50).limit (50);
 };
+module.exports.getUserInfos = function(req, res, callback){
+    if(typeof req.query.user === "undefined" || req.query.user === ""){
+      callback({"status":304, "datas":{message:"NEED USER"}});
+    }
+    User.find({_id:req.query.user._id}, function(err, users){
+        if (err){
+            callback({"status":304, "code":err.code, "error":err, "message":err.message});
+        }else{
+            callback({"status":200, "user":users});
+        }
+    });
+}
 /* EXPERIMENTAL MONGO REQUEST DELETE FROM {OBJECT} SCHEMAS */
 module.exports.deleteDevice = function(req, datas, callback){
     User.update(
@@ -320,8 +333,14 @@ module.exports.login = function(req, datas, callback) {
 };
 // check user logout then return user_infos
 module.exports.logout = function(req, datas, callback) {
-    req.session.destroy();
-    callback();
+    //console.log("AUTH MODEL LOGOUT <<<<<< ", req.session);
+    if(typeof req.session.Auth !== "undefined"){
+      //req.session.Auth.destroy();
+      req.session.destroy();
+    }
+    //console.log("AUTH MODEL LOGOUT AFTER >>>>> ", req.session);
+    //req.session.destroy();
+    callback({status:200, datas:{message:"SESSION_DELETED"}});
 };
 // check user register then return user_infos
 module.exports.register = function(datas, callback) {
@@ -376,6 +395,35 @@ module.exports.register = function(datas, callback) {
     //callback(new_user);
     return datas.body;
 };
+module.exports.lost_password = function(req, res, callback){
+    if(typeof req.body.email === "unefined"){
+      callback({status:403, datas:{message:"UNKNOW_USER"}});
+    }
+    var self = this;
+    User.findOne({
+      email:req.body.email
+    }, function(err, user){
+        if(err) callback({"status":403, datas:{"message":err}});
+        else{
+          if(user === null){
+            callback({"status":403, datas:{"message":"UNKNOW_USER"}});
+          }else{
+            self.getValidationCode(user._id, function(e){
+              if(e.status === 200){
+                Email_controller.lost_password(req, e, function(email){
+                    console.log(email);
+                    callback({"status":email.status, datas:email});
+                });
+              }else{
+                callback({"status":e.status, datas:e});
+              }
+            });
+
+          }
+          console.log("user :::::::::::::: ",user);
+        }
+    });
+}
 // check user unregister then return user_infos
 module.exports.unregister = function(req, res, callback) {
     //device_uid = req.body.device_uid;
@@ -416,8 +464,18 @@ module.exports.update = function(req, user_id, datas, callback) {
         true //SAIS PAS POURQUOI
     );
 };
-module.exports.updatePassword = function(res, callback){
-    callback({status:200, message:"password update progress"});
+module.exports.updatePassword = function(req, res, callback){
+    User.update({
+      email: req.email
+    },{
+      $set:{password:req.password}
+    }, function(err, user){
+      if(err){
+        callback({status:401, "message":"IMPOSSIBLE DE METTRE A JOUR VOTRE MOT DE PASSE", "error":err});
+      }else{
+        callback({status:200, "message":"Votre mot de passe a bien été mis à jour", "infos":user});
+      }
+    })
 }
 module.exports.check_user = function(req, callback){
     device_uid = req.device_uid;
@@ -593,6 +651,21 @@ module.exports.getValidationCode = function(_id, callback){
         }
     );
 };
+module.exports.validCode = function(params, callback){
+  User.findOne(
+      {
+          email:params.email,
+          validation_code : params.validation_code
+      },
+      function(err, user){
+        if(err || user === null){
+            callback({status:304, message:"Le code de validation est invalide", datas:err});
+        }else{
+            callback({status:200, message:"Le code est valide", datas:user})
+        }
+      }
+    );
+};
 module.exports.validAccount = function(params, callback){
     User.findOne(
         {
@@ -612,7 +685,7 @@ module.exports.validAccount = function(params, callback){
                     },
                     function(err, validation){
                         if(err) callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});
-                        else callback({status:200, message:"Utilisateur certifié validé", datas:validation})
+                        else callback({status:200, message:"Utilisateur certifié validé", datas:validation});
                     }
                 );
             }
@@ -620,8 +693,6 @@ module.exports.validAccount = function(params, callback){
     );
 };
 module.exports.getUsersDevice = function(device_uid, callback){
-    //device_uid = req.query.device_uid;
-    //device_uid = machineId.machineIdSync({original: true});
     User.find(
         {
             devices:{

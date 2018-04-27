@@ -150,9 +150,11 @@ api
         });
         */
         //res.status(200).send({title:"POST UPDATE PASSWORD IS CURRENTLY ON TODO LIST"});
+        /*
         Auth_controller.update_password(req, res, function(e){
             res.status(e.status).send(e);
         });
+        */
     })
     .get('/users/:any', function(req, res, next){
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});

@@ -41,6 +41,7 @@ basket.use(function(req, res, next){
       if(e.status === 200) {
         next();
       }else {
+        console.log('USER NOT VALID');
         res.status(e.status).send(e.datas);
       }
     });

@@ -5,11 +5,11 @@ block content
                 option(value=l.locale) #{l.label}
         nav.footer_nav
             ul
-                a(href="/help")
+                //-a(href="/help" target="_blank")
                     li= "Aide"
-                a(href="/confidentialite")
+                a(href="/confidentialite" target="_blank")
                     li= "Confidentialité"
-                a(href="/cgu")
+                a(href="/cgu" target="_blank")
                     li= "Conditions d'utilisation"
         script(src="/public/javascripts/idkids-sdk/idkids-sdk.js")
         script(src="/node_modules/fingerprintjs2/dist/fingerprint2.min.js")

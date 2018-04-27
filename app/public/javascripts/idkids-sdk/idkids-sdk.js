@@ -227,7 +227,8 @@ var idkids_jssdk = function(options, callback){
     };
     this.logout = function(){
         this.api.store('idkids_local_user', '');
-        window.location.href = window.location.origin + window.location.pathname;
+        //window.location.href = window.location.origin + window.location.pathname;
+        window.history.pushState({"pageTitle":document.title}, document.title, window.location.origin + window.location.pathname);
     };
     this.api.options = options;
     this.init = function(callback){

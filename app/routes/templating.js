@@ -48,6 +48,18 @@ templating.get('/:template', function(req, res, next) {
           next();
         }
         break;
+      case 'auth_button':
+        if(typeof req.query.user !== "undefined"){
+          Auth_controller.getUserInfos(req, res, function(e){
+            if(typeof e.user !== "undefined"){
+              req.datas_set.user = e.user;
+            }
+            next();
+          });
+        }else{
+          next();
+        }
+        break;
       default:
         if(typeof req.session.Auth !== "undefined"){
           req.datas_set.user = req.session.Auth;
