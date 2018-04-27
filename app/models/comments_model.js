@@ -61,6 +61,9 @@ module.exports.getStats = function(req, res, callback){
         if(err){
             callback({status:405, datas:err});
         }else{
+            if(typeof infos.count === "undefined"){
+              infos = [{count:0, stars:0, _id:req.query.page_url}];
+            }
             callback({status:200, datas:infos});
         }
     });
