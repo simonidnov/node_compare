@@ -44,6 +44,11 @@ module.exports = {
     validate_user : function(req, host, callback) {
       //var datas = req.query;
       /* check user id */
+      req.options.device_uid = device_uid;
+      Auth_model.check_user(req, function(e){
+          callback(e);
+      });
+        /*
         if(typeof req.options === "undefined"){
             callback({status:304, "message":"UNAUTHARISED need OPTIONS"});
         }else{
@@ -52,13 +57,10 @@ module.exports = {
           }else if(typeof req.options.user_secret === "undefined"){
               callback({status:304, "message":"UNAUTHARISED need valid user secret"});
           }else{
-            /* check user token */
             if(typeof req.options.user_token === "undefined"){
                 callback({status:304, "message":"UNAUTHARISED need valid user token"});
             }else{
-              /* TODO VERIFY TOKEN FROM USER SECRET */
               //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
-              /* match user token + device */
 
               //db.connect(config.database.users, {useMongoClient: true});
               req.options.device_uid = device_uid;
@@ -68,6 +70,7 @@ module.exports = {
             }
           }
         }
+        */
     },
     validate_session : function(req, callback) {
         if(typeof req.session.Auth === "undefined"){
