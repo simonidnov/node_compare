@@ -93,7 +93,7 @@ api
         });
     })
     .put('/apps', function(req, res, next) {
-        console.log("PUT APP :::::: ", req);
+        console.log("PUT APP :::::: ", req.session.Auth);
         Apps_controller.update(req, res, function(e){
             res.status(e.status).send(e);
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
