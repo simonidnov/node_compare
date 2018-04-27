@@ -48,6 +48,7 @@ module.exports = {
         if(typeof req.options === "undefined"){
             callback({status:203, "message":"UNAUTHARISED need OPTIONS"});
         }else{
+          /*
           if(typeof req.options.user_id === "undefined"){
               callback({status:203, "message":"UNAUTHARISED need valid user ID"});
           }else if(typeof req.options.user_secret === "undefined"){
@@ -55,16 +56,15 @@ module.exports = {
           }else{
             if(typeof req.options.user_token === "undefined"){
                 callback({status:203, "message":"UNAUTHARISED need valid user token"});
-            }else{
+            }else{*/
               //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
 
               //db.connect(config.database.users, {useMongoClient: true});
-              req.options.device_uid = device_uid;
               Auth_model.check_user(req, function(e){
                   callback(e);
               });
-            }
-          }
+            /*}
+          }*/
         }
 
     },

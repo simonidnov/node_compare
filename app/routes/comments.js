@@ -31,18 +31,16 @@ comments.use(function(req, res, next){
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body.data;
+        Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
+          if(e.status === 200) {
+            next();
+          }else {
+            res.status(e.status).send(e.datas);
+          }
+        });
+    }else{
+      next();
     }
-    //dataCheck.options = dataCheck;
-    /*
-    Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
-      if(e.status === 200) {
-        next();
-      }else {
-        res.status(e.status).send(e.datas);
-      }
-    });
-    */
-    next();
 });
 /* GET home page. */
 comments

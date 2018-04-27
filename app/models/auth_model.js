@@ -477,6 +477,11 @@ module.exports.updatePassword = function(req, res, callback){
       }
     })
 }
+module.exports.check_user_session = function(req, callback){
+  User.find(
+      {
+        
+}
 module.exports.check_user = function(req, callback){
     device_uid = req.device_uid;
     //device_uid = machineId.machineIdSync({original: true});

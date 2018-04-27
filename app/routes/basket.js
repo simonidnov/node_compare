@@ -30,11 +30,7 @@ basket.use(function(req, res, next){
     });
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
-      if(typeof req.body.data !== "undefined"){
-        dataCheck = req.body.data;
-      }else{
-        dataCheck = req.body;
-      }
+      dataCheck = req.body;
     }
     //dataCheck.options = dataCheck;
     Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
