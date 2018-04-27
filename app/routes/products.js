@@ -59,7 +59,7 @@ product
         const fs = require('fs');
         const path = require('path');
 
-        const directory = '/uploads';
+        const directory = './uploads/';
 
         fs.readdir(directory, (err, files) => {
           if (err) throw err;
