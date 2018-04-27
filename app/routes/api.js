@@ -86,6 +86,7 @@ api
         }
     })
     .post('/apps', function(req, res, next) {
+        console.log("PUT APP :::::: ", req);
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(e);
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
@@ -139,6 +140,7 @@ api
         });
     })
     .put('/change_password', function(req, res, next){
+        res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
         /*
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
