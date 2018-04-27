@@ -56,6 +56,20 @@ product
 
     .get('/deleteallproducts', function(req, res, next) {
         //res.status(200).send({title:"API"});
+        const fs = require('fs');
+        const path = require('path');
+
+        const directory = '/uploads';
+
+        fs.readdir(directory, (err, files) => {
+          if (err) throw err;
+
+          for (const file of files) {
+            fs.unlink(path.join(directory, file), err => {
+              if (err) throw err;
+            });
+          }
+        });
         Products_controller.deleteAllProducts(req, res, function(e){
             res.status(e.status).send(e.datas);
         });
