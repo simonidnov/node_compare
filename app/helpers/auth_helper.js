@@ -46,15 +46,15 @@ module.exports = {
       /* check user id */
 
         if(typeof req.options === "undefined"){
-            callback({status:200, "message":"UNAUTHARISED need OPTIONS"});
+            callback({status:203, "message":"UNAUTHARISED need OPTIONS"});
         }else{
           if(typeof req.options.user_id === "undefined"){
-              callback({status:200, "message":"UNAUTHARISED need valid user ID"});
+              callback({status:203, "message":"UNAUTHARISED need valid user ID"});
           }else if(typeof req.options.user_secret === "undefined"){
-              callback({status:200, "message":"UNAUTHARISED need valid user secret"});
+              callback({status:203, "message":"UNAUTHARISED need valid user secret"});
           }else{
             if(typeof req.options.user_token === "undefined"){
-                callback({status:200, "message":"UNAUTHARISED need valid user token"});
+                callback({status:203, "message":"UNAUTHARISED need valid user token"});
             }else{
               //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
 
