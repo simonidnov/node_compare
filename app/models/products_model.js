@@ -46,7 +46,7 @@ const productsSchemas = new db.Schema(products_datas);
       });
 
 const Products = db.model('Products', productsSchemas);
-//Products.collection.dropIndexes();
+Products.collection.dropIndexes();
 
 //Products.dropIndex( { "label" : -1 } );
 
