@@ -147,9 +147,11 @@ block content
                                     input.phantom_input.form-control(name="appVersion")
                                     input.phantom_input.form-control(name="userAgent")
                                     input.phantom_input.form-control(name="vendor")
-                                    if current_app !== null && typeof current_app !== "undefined"
-                                      input.phantom_input.form-control(name="app_id" value=current_app._id)
-                                
+                                if current_app !== null && typeof current_app !== "undefined"
+                                  input.phantom_input.form-control(name="app_id" value=current_app._id)
+                                if referer !== null && typeof referer !== "undefined"
+                                  input.phantom_input.form-control(name="referer" value=referer)
+                                    
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.login_cta
                         form#subscribe_form(method="post" action='/auth/login/')
                             div.form-group.material_input
@@ -199,10 +201,10 @@ block content
                                     input.phantom_input.form-control(name="appVersion")
                                     input.phantom_input.form-control(name="userAgent")
                                     input.phantom_input.form-control(name="vendor")
-                                    if current_app !== null && typeof current_app !== "undefined"
-                                      input.phantom_input.form-control(name="app_id" value=current_app._id)
-                                    if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
-                                      input.phantom_input.form-control(name="referer" value=referer)
+                                if current_app !== null && typeof current_app !== "undefined"
+                                  input.phantom_input.form-control(name="app_id" value=current_app._id)
+                                if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
+                                  input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.subscribe_cta
                         form#lost_form(method="post" action='/auth/lost_password/')
@@ -218,10 +220,10 @@ block content
                                     input.phantom_input.form-control(name="appVersion")
                                     input.phantom_input.form-control(name="userAgent")
                                     input.phantom_input.form-control(name="vendor")
-                                    if current_app !== null && typeof current_app !== "undefined"
-                                      input.phantom_input.form-control(name="app_id" value=current_app._id)
-                                    if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
-                                      input.phantom_input.form-control(name="referer" value=referer)
+                                if current_app !== null && typeof current_app !== "undefined"
+                                  input.phantom_input.form-control(name="app_id" value=current_app._id)
+                                if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
+                                  input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.lost_password_cta
                     if(response.status === "error" && typeof response.message !== "undefined")

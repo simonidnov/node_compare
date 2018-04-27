@@ -2,8 +2,6 @@ var keyPublishable = "",
       keySecret = "",
       express = require('express'),
       stripe_test = express.Router();
-      stripe = require("stripe"),
-      Coupon_controller = require('../controllers/coupon_controller');
 
 stripe_test.use(function(req, res, next){
     //ACCEPT CORS
@@ -35,16 +33,13 @@ stripe_test
       source: 'tok_visa',
       receipt_email: 'sdelamarre@idnovant.fr',
     });*/
-    Coupon_controller.get(req, res, function(e){
       res.render('stripe_test', {
           title: 'Stripe',
           keyPublishable:keyPublishable,
-          coupon:e,
           js:[
           ], css:[
           ]
       }).end();
-    });
 
   })
   .get("/charge", function(req, res) {
@@ -52,13 +47,29 @@ stripe_test
   })
   .post("/charge", function(req, res) {
     console.log("req.body ::::: ", req.body);
-    console.log(JSON.stringify(req.body, null, 2));
+    //console.log(JSON.stringify(req.body, null, 2));
     var stripeToken = req.body.token;
+    const token = req.body.stripeToken; // Using Express
 
+    const charge = stripe.charges.create({
+      amount: 999,
+      currency: 'usd',
+      description: 'Example charge',
+      source: token,
+    }, function(err, charge){
+        if(err) console.log("ERROR ----- ", err);
+        if(charge) console.log("ERROR ----- ", charge);
+        res.send({"charge":charge}).end();
+    });
+
+
+
+
+    /*
     var charge = stripe.charges.create({
         amount: 0005, // amount in cents, again
         currency: "eur",
-        card: stripeToken,
+        card: req.body.stripeToken,
         description: req.body.stripeEmail
     }, function(err, charge) {
         console.log('ERROR ? ', err);
@@ -68,6 +79,8 @@ stripe_test
         console.log('charge :::: ', charge);
         res.send("completed payment!")
     });
+    */
+
     /*
     var amount = 500;
     console.log("STRIPE CHARGE REQ ::: ", req);

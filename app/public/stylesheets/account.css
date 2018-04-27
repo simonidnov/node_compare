@@ -134,13 +134,13 @@
   padding:10px;
   list-style: none;
   margin-bottom:5px;
-  background:#F0F0F0;
+  background:#e6ebf1;
   border-radius: 5px;
 }
 .coupons_infos, .wallet_infos{
   padding:10px;
-  background:orange;
-  color:#FFF;
+  background:#e6ebf1;
+  color:#333;
   border-radius: 5px;
   margin-bottom:10px;
   display:none;
@@ -148,6 +148,8 @@
 .wallet_infos{
   margin-top:10px;
   margin-bottom:0px;
+  background:#e6ebf1;
+  color:#333;
 }
 .coupons_infos .amount, .wallet_infos .amount{
   font-size: 24px;

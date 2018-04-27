@@ -508,7 +508,6 @@ input:-webkit-autofill {
 }
 
 /*
-.formular .material_input input:valid + label,
 */
 .formular .material_input input[disabled] + label,
 .formular .material_input input[type="date"] + label,
@@ -516,6 +515,9 @@ input:-webkit-autofill {
 .formular .material_input textarea[disabled] + label,
 .formular .material_input textarea:focus + label,
 .formular .material_input textarea:valid + label,
+.formular .material_input input[type="email"]:valid + label,
+.formular .material_input input[type="text"]:valid + label,
+.formular .material_input input[type="number"]:valid + label,
 .formular .material_input.notempty label,
 .formular .material_input.invalid label,
 .formular select + label{

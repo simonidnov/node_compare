@@ -12,8 +12,8 @@ if(typeof query.user === "undefined" || query.user === null || query.user === ""
               a(href=app.locals.settings.host+"/auth?secret="+query.options.secret id="idkids_sdk_login_button").btn.btn-success Me connecter
       div.other_accounts
       div.options
-          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth") Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth") Créer un compte
+          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Créer un compte
 else
   div#account_infos
       div.icon.icon-account_1.idkids-icons.lg

@@ -10,6 +10,9 @@ var express = require('express'),
     lang = require('../public/languages/auth_lang'),
     Fb = require('fb');
 
+    var keyPublishable = "",
+        keySecret = "";
+
 account.use(function(req, res, next){
     //ACCEPT CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,21 +25,36 @@ account.use(function(req, res, next){
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
     }
+
+    if(app.locals.settings.StripeMode){
+      keyPublishable = app.locals.settings.StripekeyPublishable;
+      keySecret = app.locals.settings.StripekeySecret;
+    }else{
+      keyPublishable = app.locals.settings.StripekeyPublishableTest;
+      keySecret = app.locals.settings.StripekeySecretTest;
+    }
+    stripe = require("stripe")(keySecret);
+
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
     // TODO : VALIDATE SESSION USER
     //res.setHeader('Content-Type', 'application/json');
     Auth_helper.validate_session(req, function(e){
         /* TODO SEND ORIGIN FOR RESIRECTION AFTER CHECKING */
-        if(e.status === 200){
+        if (e.status === 200) {
             next();
-        }else{
+        } else {
             res.redirect(307, '/checking_session');
         }
     });
 });
 account
     .get('/', function(req, res, next) {
+        console.log("req.url.replace('/','') ", req.url.replace('/',''));
+        res.redirect(307, '/account/profile'+req.url.replace('/',''));
+    })
+    .post('/', function(req, res, next) {
+        console.log("------------------ req.url.replace('/','') ---------------------- ", req.url.replace('/',''));
         res.redirect(307, '/account/profile'+req.url.replace('/',''));
     })
     .get('/:page', function(req, res, next) {
@@ -63,7 +81,7 @@ account
                     '/public/stylesheets/components/formular.css'
                 ]
             });
-            res.end();
+            //res.end();
         });
     })
     .get('/member/:member_id', function(req, res, next){
@@ -94,7 +112,7 @@ account
             res.end();
         });
     })
-    .get('/addresses/:address_id', function(req, res, next){
+    .get('/addresses/:address_id', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
             res.render('account', {
@@ -123,7 +141,7 @@ account
         });
     })
     .post('/profile', function(req, res, next) {
-        Auth_model.update(req, req.session.Auth._id, req.body, function(e){
+        Auth_model.update(req, req.session.Auth._id, req.body, function(e) {
             if(e.status === 200){
                 res.redirect(200, e.datas);
                 res.end();

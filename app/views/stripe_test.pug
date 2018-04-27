@@ -1,6 +1,6 @@
 h1 STRIPE TEST PAGE
 
-form(action="/stripe_test/charge", method="post")
+form(action="/stripe_test/charge/", method="post")
   article
     label Amount: $5.00
   script(
@@ -19,4 +19,3 @@ form(action="/stripe_test/charge", method="post")
     data-metadata= "{'order_id': '6735'}",
     data-currency="eur")
     
-p= JSON.stringify(coupon)
