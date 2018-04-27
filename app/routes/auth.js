@@ -23,7 +23,7 @@ var express = require('express'),
         //res.setHeader('Content-Type', 'application/json');
         if(typeof req.query.secret !== "undefined"){
           //TODO GET APP FROM REFERER + SECRET THEN SET REDIRECT URL TO REFERER
-          auth_helper.validate_origin({options:{secret:req.query.secret}}, req.get('origin'), function(e){
+          auth_helper.validate_origin({options:{secret:req.query.secret, host:referer}}, req.get('origin'), function(e){
             if(!e){
               res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
             }else{
