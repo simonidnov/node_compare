@@ -41,7 +41,7 @@ var express = require('express'),
               referer = current_app.redirect_url;
               next();
             }else{
-              res.redirect(307, req.get('origin')+"?message=UNAUTHORISED_SERVER");
+              res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
             }
           });
         }else if(typeof req.body.app_id !== "undefined"){
@@ -53,7 +53,7 @@ var express = require('express'),
               }
               next();
             }else{
-              res.redirect(307, req.get('origin')+"?message=UNAUTHORISED_SERVER");
+              res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
             }
           });
         }else{
