@@ -3,6 +3,7 @@
 //forever start "script": "index.js",
 const express = require('express'),
     path = require('path'),
+    compression = require('compression'),
     config = require('./config/config'),
     favicon = require('serve-favicon'),
     cp = require('childprocess').spawn,
@@ -56,6 +57,7 @@ app.listen(9000);
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(compression());
 
 //REST ANALYTICS MIDDLE WARE
 //app.use(analytics.middleware());
