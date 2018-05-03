@@ -137,7 +137,7 @@ router.use (function (req, res, next) {
 */
 //router.use(bodyParser.json({limit: '50mb'}));
 //router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-router.all('/secret', function (req, res, next) {
+router.all('*', function (req, res, next) {
   var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
   console.log('HAS HTTPS ', schema);
   console.log("req.get('host') ", req.get('host'));
