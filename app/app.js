@@ -138,12 +138,12 @@ router.use (function (req, res, next) {
 //router.use(bodyParser.json({limit: '50mb'}));
 //router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 router.all('*', function (req, res, next) {
-  var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-  console.log('HAS HTTPS ', schema);
+  //var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+  console.log('HAS HTTPS ', req.get('x-forwarded-proto'));
   console.log("req.get('host') ", req.get('host'));
   console.log("req.get('origin') ", req.get('origin'));
   console.log("req.get('X-Forwarded-Host') >>>>> ", req.get('X-Forwarded-Host'));
-  var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+  var schema = req.get('x-forwarded-proto').toLowerCase();
   if (schema === 'https') {
     console.log('HAS HTTPS ', schema);
     next();
