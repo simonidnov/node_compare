@@ -54,7 +54,7 @@ app.locals._ = require("underscore");
 
 
 //app.set('port', process.env.PORT || 8080);
-//app.listen(9000);
+app.listen(9000);
 
 app.use(session({
     secret: "secret",
