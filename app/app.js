@@ -56,18 +56,6 @@ app.locals._ = require("underscore");
 //app.set('port', process.env.PORT || 8080);
 app.listen(9000);
 
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(compression());
-
-//REST ANALYTICS MIDDLE WARE
-//app.use(analytics.middleware());
-
-// UNCOMMENT TO REST ANALYTICS WITH GOOGLE ANALYTICS
-//app.use(express.cookieParser());
-//app.use(ga(config.analytics.key, {
-//    safe: true
-//}));
 app.use(session({
     secret: "secret",
     cookie: {
@@ -80,6 +68,20 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(compression());
+
+//REST ANALYTICS MIDDLE WARE
+//app.use(analytics.middleware());
+
+// UNCOMMENT TO REST ANALYTICS WITH GOOGLE ANALYTICS
+//app.use(express.cookieParser());
+//app.use(ga(config.analytics.key, {
+//    safe: true
+//}));
+
 //TODO CHECH IT store: sessionStore, // connect-mongo session store
 /*
 app.use(session({
