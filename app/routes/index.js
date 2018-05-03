@@ -15,9 +15,10 @@ router.use(function(req, res, next) {
   //res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-  
+
   var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
   console.log('HAS HTTPS ', schema);
+  console.log('req ', req);
   console.log("req.get('host') ", req.get('host'));
   console.log("req.get('origin') ", req.get('origin'));
   next();
