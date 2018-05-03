@@ -54,9 +54,7 @@ app.locals._ = require("underscore");
 
 
 //app.set('port', process.env.PORT || 8080);
-app.listen(9000);
-
-
+//app.listen(9000);
 
 app.use(session({
     secret: "secret",
@@ -119,7 +117,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-/*router.use (function (req, res, next) {
+/*
+router.use (function (req, res, next) {
       var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
       if (schema === 'https') {
         console.log('HAS HTTPS ', schema);
@@ -134,7 +133,8 @@ app.use(express.static(path.join(__dirname, 'public')));
           next();
         }
       }
-    });*/
+    });
+*/
 //router.use(bodyParser.json({limit: '50mb'}));
 //router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
