@@ -31,37 +31,36 @@ account.use(function(req, res, next){
       keyPublishable = app.locals.settings.StripekeyPublishableTest;
       keySecret = app.locals.settings.StripekeySecretTest;
     }
+    if ('OPTIONS' === req.method) {
+      //respond with 200
+      res.send(200);
+    }else {
+      var dataCheck = req.query;
+      if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE" || req.method === "OPTIONS"){
+          dataCheck = req.body;
+      }
+      if(app.locals.settings.StripeMode){
+        keyPublishable = app.locals.settings.StripekeyPublishable;
+        keySecret = app.locals.settings.StripekeySecret;
+      }else{
+        keyPublishable = app.locals.settings.StripekeyPublishableTest;
+        keySecret = app.locals.settings.StripekeySecretTest;
+      }
+      stripe = require("stripe")(keySecret);
 
-    var dataCheck = req.query;
-    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE" || req.method === "OPTIONS"){
-        dataCheck = req.body;
+      //SET OUTPUT FORMAT
+      //res.setHeader('Content-Type', 'application/json');
+      // TODO : VALIDATE SESSION USER
+      //res.setHeader('Content-Type', 'application/json');
+      Auth_helper.validate_session(req, function(e){
+          /* TODO SEND ORIGIN FOR RESIRECTION AFTER CHECKING */
+          if (e.status === 200) {
+              next();
+          } else {
+              res.redirect(307, '/checking_session');
+          }
+      });
     }
-    if(req.method === "OPTIONS"){
-      console.log("OPTIONS ", req.body);
-      next();
-      return false;
-    }
-    if(app.locals.settings.StripeMode){
-      keyPublishable = app.locals.settings.StripekeyPublishable;
-      keySecret = app.locals.settings.StripekeySecret;
-    }else{
-      keyPublishable = app.locals.settings.StripekeyPublishableTest;
-      keySecret = app.locals.settings.StripekeySecretTest;
-    }
-    stripe = require("stripe")(keySecret);
-
-    //SET OUTPUT FORMAT
-    //res.setHeader('Content-Type', 'application/json');
-    // TODO : VALIDATE SESSION USER
-    //res.setHeader('Content-Type', 'application/json');
-    Auth_helper.validate_session(req, function(e){
-        /* TODO SEND ORIGIN FOR RESIRECTION AFTER CHECKING */
-        if (e.status === 200) {
-            next();
-        } else {
-            res.redirect(307, '/checking_session');
-        }
-    });
 });
 account
     .get('/', function(req, res, next) {
