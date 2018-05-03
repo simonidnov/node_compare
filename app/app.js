@@ -142,6 +142,18 @@ router.all('*', function (req, res, next) {
   console.log('HAS HTTPS ', schema);
   console.log("req.get('host') ", req.get('host'));
   console.log("req.get('origin') ", req.get('origin'));
+  console.log("req.get('X-Forwarded-Host') >>>>> ", req.get('X-Forwarded-Host'));
+  var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+  if (schema === 'https') {
+    console.log('HAS HTTPS ', schema);
+    next();
+  } else {
+    if(req.get('X-Forwarded-Host').indexOf('127.0.0.1') === -1){
+      res.redirect('https://' + req.get('X-Forwarded-Host') + req.url);
+    }else{
+      next();
+    }
+  }
   next(); // pass control to the next handler
 });
 router.use('/admin', admin);
