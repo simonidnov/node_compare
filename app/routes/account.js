@@ -33,10 +33,14 @@ account.use(function(req, res, next){
     }
 
     var dataCheck = req.query;
-    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE" || req.method === "OPTIONS"){
         dataCheck = req.body;
     }
-
+    if(req.method === "OPTIONS"){
+      console.log("OPTIONS ", req.body);
+      next();
+      return false;
+    }
     if(app.locals.settings.StripeMode){
       keyPublishable = app.locals.settings.StripekeyPublishable;
       keySecret = app.locals.settings.StripekeySecret;
