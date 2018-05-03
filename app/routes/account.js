@@ -31,10 +31,8 @@ account.use(function(req, res, next){
       keyPublishable = app.locals.settings.StripekeyPublishableTest;
       keySecret = app.locals.settings.StripekeySecretTest;
     }
-    if ('OPTIONS' === req.method) {
-      //respond with 200
-      res.send(200);
-    }else {
+
+
       var dataCheck = req.query;
       if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE" || req.method === "OPTIONS"){
           dataCheck = req.body;
@@ -60,7 +58,6 @@ account.use(function(req, res, next){
               res.redirect(307, '/checking_session');
           }
       });
-    }
 });
 account
     .get('/', function(req, res, next) {
