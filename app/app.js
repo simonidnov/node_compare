@@ -126,10 +126,10 @@ router.use (function (req, res, next) {
         next();
       } else {
         console.log('DOESNT HAVE HTTPS ', schema);
-        console.log("NEED HTTPS ", req.headers.host);
-        console.log('request.hostname >>>>>>> ', req.hostname);
+        console.log("req.get('host') ", req.get('host'));
+        console.log("req.get('origin') ", req.get('origin'));
         if(req.headers.host.indexOf('127.0.0.1:3000') === -1){
-          res.redirect('https://' + req.hostname + req.url);
+          res.redirect('https://' + req.headers.host + req.url);
         }else{
           next();
         }
