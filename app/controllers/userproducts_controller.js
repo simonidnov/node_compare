@@ -1,4 +1,4 @@
-const Userproducts_model = require('../models/Userproducts_model');
+const Userproducts_model = require('../models/userproducts_model');
 
 exports.get = function(req, res, callback) {
     Userproducts_model.get(req, res, callback);
