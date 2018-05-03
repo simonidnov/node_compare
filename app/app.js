@@ -139,7 +139,7 @@ router.use (function (req, res, next) {
 //router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 router.all('*', function (req, res, next) {
   //var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-  console.log("req.protocol ", req.protocol);
+  /*console.log("req.protocol ", req.protocol);
   console.log("req.get('X-Forwarded-Host') >>>>> ", req.get('X-Forwarded-Host'));
   var schema = req.protocol.toLowerCase();
   if (schema === 'https') {
@@ -155,8 +155,8 @@ router.all('*', function (req, res, next) {
     }else{
       next();
     }
-  }
-  //next(); // pass control to the next handler
+  }*/
+  next(); // pass control to the next handler
 });
 router.use('/admin', admin);
 router.use('/admin/:any', admin);
