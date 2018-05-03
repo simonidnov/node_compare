@@ -148,13 +148,17 @@ router.all('*', function (req, res, next) {
     console.log('HAS HTTPS ', schema);
     next();
   } else {
-    if(req.get('X-Forwarded-Host').indexOf('127.0.0.1') === -1){
-      res.redirect('https://' + req.get('X-Forwarded-Host') + req.url);
+    if(typeof req.get('X-Forwarded-Host') !== "undefined"){
+      if(req.get('X-Forwarded-Host').indexOf('127.0.0.1') === -1){
+        res.redirect('https://' + req.get('X-Forwarded-Host') + req.url);
+      }else{
+        next();
+      }
     }else{
       next();
     }
   }
-  next(); // pass control to the next handler
+  //next(); // pass control to the next handler
 });
 router.use('/admin', admin);
 router.use('/admin/:any', admin);
