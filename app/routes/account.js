@@ -53,7 +53,7 @@ account.use(function(req, res, next){
       // TODO : VALIDATE SESSION USER
       //res.setHeader('Content-Type', 'application/json');
       Auth_helper.validate_session(req, function(e){
-          /* TODO SEND ORIGIN FOR RESIRECTION AFTER CHECKING */
+          /* TODO SEND ORIGIN FOR REDIRECTION AFTER CHECKING */
           if (e.status === 200) {
               next();
           } else {

@@ -69,6 +69,8 @@ module.exports = {
 
     },
     validate_session : function(req, callback) {
+        console.log("req.session ::::::::::: ", req.session);
+        console.log("req.session.Auth ::::::::::: ", req.session.Auth);
         if(typeof req.session.Auth === "undefined"){
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
