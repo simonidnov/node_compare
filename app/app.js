@@ -119,6 +119,21 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+app.use (function (req, res, next) {
+      var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+      if (schema === 'https') {
+        console.log('HAS HTTPS ', schema);
+        next();
+      } else {
+        console.log('DOESNT HAVE HTTPS ', schema);
+        console.log("NEED HTTPS ", req.headers.host);
+        if(req.headers.host.indexOf('127.0.0.1') === -1){
+          res.redirect('https://' + req.headers.host + req.url);
+        }else{
+          next();
+        }
+      }
+    });
 //router.use(bodyParser.json({limit: '50mb'}));
 //router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
@@ -149,27 +164,8 @@ router.use('/', index);
 
 app.use('/', router);
 
-
-app.use (function (req, res, next) {
-      var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-      if (schema === 'https') {
-        console.log('HAS HTTPS ', schema);
-        next();
-      } else {
-        console.log('DOESNT HAVE HTTPS ', schema);
-        console.log("NEED HTTPS ", req.headers.host);
-        if(req.headers.host.indexOf('127.0.0.1') === -1){
-          res.redirect('https://' + req.headers.host + req.url);
-        }else{
-          next();
-        }
-      }
-    });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-  console.log('req.headers.host ', req.headers.host);
-  console.log('SCHEMA ', schema);
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -177,9 +173,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-  console.log('req.headers.host ', req.headers.host);
-  console.log('SCHEMA ', schema);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
