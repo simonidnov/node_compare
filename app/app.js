@@ -119,7 +119,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use (function (req, res, next) {
+router.use (function (req, res, next) {
       var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
       if (schema === 'https') {
         console.log('HAS HTTPS ', schema);
