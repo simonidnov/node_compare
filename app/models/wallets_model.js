@@ -2,7 +2,9 @@
 const db = require('mongoose'),
       config = require('../config/config'),
       wallet_datas = {
-          basket_id         : {type:"string"},
+          user_id           : {type:"string"},
+          description       : {type:"string"},
+          meta_datas        : {type:"Object"},
           amount            : {type:"Number"},
           created           : {type:'Date', default: Date.now},
           updated           : {type:'Date', default: Date.now}
@@ -29,7 +31,7 @@ module.exports.get = function(req, res, callback) {
 };
 module.exports.create = function(req, res, callback) {
     var datas = {};
-    new_wallet = new Orders(datas);
+    new_wallet = new Wallets(datas);
     new_wallet.save(function(err, infos){
         if(err){
           callback({"status":405, "message":err});

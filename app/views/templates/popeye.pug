@@ -1,4 +1,5 @@
 block popeye
+    link(rel='stylesheet', href=app.locals.settings.host+'/public/stylesheets/components/popeye.min.css')
     div#popeye.popeye(class=query.type)
         if(query.type === "modal")
             div.modal(class=typeof query.className !== "undefined" ? query.className : '')
@@ -8,7 +9,11 @@ block popeye
                           img(src="https://www.idkids-app.com/public/images/assets/cross.svg")
                     if(query.illus)
                         div.popeye_header
-                            div.illus(style="background-image:url("+query.illus+"); background-color:"+query.color+";")
+                            div.illus(style="background-image:url("+query.illus.src+"); background-color:"+query.illus.color+";")
+                    if(query.motion)
+                        div.popeye_header
+                            iframe.illus(src=query.motion.src, style="background-color:"+query.motion.color+";")
+                            //-div.illus(style="background-image:url("+query.illus+"); background-color:"+query.color+";")
                     if(query.message)
                         div.popeye_title= query.title
                     if(query.message)
@@ -16,7 +21,7 @@ block popeye
                     if(query.buttons)
                         div.popeye_buttons
                             each button in query.buttons
-                                div.cta.btn.btn-ld(class= " "+button.class, data-buttonid=button.value)= button.label
+                                a.cta.btn.btn-ld(class= " "+button.class, data-buttonid=button.value, href=button.href, target=button.target)= button.label
                     if(query.options)
                         ul.popeye_options
                             each option in query.options

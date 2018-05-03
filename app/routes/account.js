@@ -5,10 +5,14 @@ var express = require('express'),
     Auth_model = require('../models/auth_model'),
     Auth_helper = require('../helpers/auth_helper'),
     Basket_controller = require('../controllers/basket_controller'),
+    Userproducts_controller = require('../controllers/userproducts_controller'),
+    Order_controller = require('../controllers/orders_controller'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang'),
-    Fb = require('fb');
+    Fb = require('fb'),
+    keyPublishable ="",
+    keySecret="";
 
     var keyPublishable = "",
         keySecret = "";
@@ -20,6 +24,13 @@ account.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
+    if(app.locals.settings.StripeMode){
+      keyPublishable = app.locals.settings.StripekeyPublishable;
+      keySecret = app.locals.settings.StripekeySecret;
+    }else{
+      keyPublishable = app.locals.settings.StripekeyPublishableTest;
+      keySecret = app.locals.settings.StripekeySecretTest;
+    }
 
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
@@ -60,40 +71,68 @@ account
     .get('/:page', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
-            res.render('account', {
-                title : 'User Account',
-                user  : req.session.Auth,
-                locale: language_helper.getlocale(req),
-                lang  : lang,
-                page  : req.params.page,
-                basket : baskets,
-                _:_,
-                js:[
-                    '/public/javascripts/account.js',
-                    '/node_modules/cropperjs/dist/cropper.min.js',
-                    '/public/javascripts/components/formular.js',
-                    '/node_modules/qrcode/build/qrcode.min.js',
-                    'https://maps.googleapis.com/maps/api/js?key='+config.google.map
-                ], css:[
-                    '/public/stylesheets/account.css',
-                    '/public/stylesheets/ui.css',
-                    '/node_modules/cropperjs/dist/cropper.min.css',
-                    '/public/stylesheets/components/formular.css'
-                ]
-            });
-            //res.end();
+            next();
         });
+    }, function (req, res, next){
+        Order_controller.get(req, res, function(e){
+            if(e.status === 200){
+              orders = e.datas;
+              next();
+            }else{
+              next();
+            }
+        });
+    }, function(req, res, next){
+        Userproducts_controller.get(req, res, function(e){
+            userproducts = e.datas;
+            next();
+        });
+    }, function(req, res, next){
+        res.render('account', {
+            title : 'User Account',
+            user  : req.session.Auth,
+            locale: language_helper.getlocale(req),
+            lang  : lang,
+            page  : req.params.page,
+            basket : baskets,
+            orders : (typeof orders !== "undefined")? orders : "",
+            userproducts : (typeof userproducts !== "undefined")? userproducts: "",
+            keyPublishable:keyPublishable,
+            _:_,
+            js:[
+                '/public/javascripts/account.js',
+                '/node_modules/cropperjs/dist/cropper.min.js',
+                '/public/javascripts/components/formular.js',
+                '/node_modules/qrcode/build/qrcode.min.js',
+                'https://maps.googleapis.com/maps/api/js?key='+config.google.map
+            ], css:[
+                '/public/stylesheets/account.css',
+                '/public/stylesheets/ui.css',
+                '/node_modules/cropperjs/dist/cropper.min.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+        res.end();
     })
     .get('/member/:member_id', function(req, res, next){
         Basket_controller.get(req, res, function(e){
             baskets = e.datas;
-            res.render('account', {
+            next();
+        });
+    }, function (req, res, next){
+        Order_controller.get(req, res, function(e){
+            orders = e.datas;
+            next();
+        });
+    }, function(req, res, next){
+        res.render('account', {
                 title: 'User Account',
                 user : req.session.Auth,
                 locale:language_helper.getlocale(req),
                 lang:lang,
                 page:"member",
                 basket : baskets,
+                keyPublishable:keyPublishable,
                 member_infos:_.where(req.session.Auth.members, {_id:req.params.member_id})[0],
                 _:_,
                 js:[
@@ -110,10 +149,18 @@ account
                 ]
             });
             res.end();
-        });
     })
     .get('/addresses/:address_id', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
+            baskets = e.datas;
+            next();
+        });
+    }, function (req, res, next){
+        Order_controller.get(req, res, function(e){
+            orders = e.datas;
+            next();
+        });
+    }, function(req, res, next){
             baskets = e.datas;
             res.render('account', {
                 title: 'Edit address',
@@ -122,6 +169,7 @@ account
                 lang:lang,
                 page:"addresses",
                 basket : baskets,
+                keyPublishable:keyPublishable,
                 address_infos:_.where(req.session.Auth.address, {_id:req.params.address_id})[0],
                 _:_,
                 js:[
@@ -138,7 +186,6 @@ account
                 ]
             });
             res.end();
-        });
     })
     .post('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e) {

@@ -300,11 +300,7 @@ module.exports.login = function(req, datas, callback) {
                               $set:{
                                   token : new_token,
                                   updated : Date.now(),
-                                  avatar : avatar,
-                                  rights  : {
-                                      "type":'RWO',
-                                      "authorizations":['me']
-                                  }
+                                  avatar : avatar
                               }
                           },
                           function(err, user){
@@ -478,10 +474,10 @@ module.exports.updatePassword = function(req, res, callback){
     })
 }
 module.exports.check_user_session = function(req, callback){
-  
+
 }
 module.exports.check_user = function(req, callback){
-    device_uid = req.device_uid;
+    device_uid = req.device_infos.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     var new_device  = {
             uid     : device_uid
@@ -489,7 +485,6 @@ module.exports.check_user = function(req, callback){
         new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
 
     new_device.token = new_token;
-
     /* check if device exist */
     User.find(
         {
@@ -504,7 +499,7 @@ module.exports.check_user = function(req, callback){
         },
         function(err, user) {
             if(err){
-                callback({status:401, "message":"user token device doesn't match", "datas":err});
+                callback({status:401, "message":"UNAUTHORISED user token device doesn't match", "datas":err});
             }else{
                 /* ON MET A JOUR LE TOKEN */
                 User.update(

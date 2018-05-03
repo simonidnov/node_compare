@@ -1,1 +1,56 @@
-h1 Mes commandes
+div.col.col-md-7
+  div.formular.basket
+    h2= "Mes produits ("+((typeof userproducts !== "undefined")? userproducts.length : 0)+")"
+    hr
+    ul.products_list
+      each product in userproducts
+        li
+          div.col
+            if(product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined")
+              div.preview(style="background-image:url("+product.meta_datas.thumb+")")
+            else
+              div.preview
+          div.infos.col
+            div.label= product.meta_datas.label
+            //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
+            //-div.label= "Ajouté le : "+product.infos.created
+            div.brand
+              img(src=product.meta_datas.app_icon, width="24", height="24")
+              div.label= product.meta_datas.app_label
+            //$a.hyperlink(href="" target="_blank") Voir le produit
+            div.cat= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
+          
+          ul.medias_download.col
+            each media in product.meta_datas.medias
+              li
+                case media[0].mimetype
+                  when 'audio/mp3'
+                    audio(controls preload="none")
+                      source(src="/"+media[0].path type=media[0].mimetype)
+                  default
+                    p= media[0].originalname
+                    p= media[0].mimetype
+          
+    
+  div.formular.basket
+    h2 Mes achats
+    hr
+    if (typeof orders === "undefined" || orders.length === 0)
+      p Vous n'avez effectué aucun achat
+    else
+      ul.orders_list
+        each order in orders
+          li.order
+            p= order.amount
+            if(typeof order.coupons_code !== "undefined")
+              each coupon in order.coupons_code
+                p= coupon.code
+            if(typeof order.response !== "undefined")
+              p= (order.response.paid)? "payé" : "non payé"
+              p= (order.response.receipt_email)? "email envoyé" : "email non encoyé"
+              p= "credit card : "+order.response.source.brand+" "+order.response.source.last4
+              p= "name : "+order.response.source.name
+              p= order.response.status
+            if(typeof order.basketdatas !== "undefined")
+              p= "Nombre de produits "+order.basketdatas.products.length
+              p= "date "+order.created

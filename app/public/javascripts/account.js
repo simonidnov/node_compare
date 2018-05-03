@@ -117,9 +117,11 @@ var account = {
         for(var i=0; i<account.coupons.length; i++){
           codes += account.coupons[i].code+" ";
         }
+        $('#coupons_code').val(JSON.stringify(account.coupons));
         if(typeof e.wallet_infos !== "undefined"){
           $('.wallet_infos .message').html('En validant votre panier avec vos '+account.coupons.length+' coupons de réduction, un coupon de réduction '+e.wallet_infos.label+' sera crédité sur votre porte monnaie d\'une valeur de '+(e.dif_amount/100)+"€, vous pourrez l'utiliser plus tard avec votre compte client.<br><br>");
         }
+        $('#order_transaction').attr('data-amount', e.new_amount);
         $('.wallet_infos .message').append('En validant, vous utiliserez les coupons suivants :<br><b>'+codes+"</b>");
         $('.wallet_infos').addClass('showed');
       });
@@ -148,7 +150,16 @@ var account = {
             }
           }
           if(e.status==="hitted" && e.action==="submit"){
-            index.sdk.api.post('/orders/transaction', {basket_id:$('#order_transaction').attr('data-basketid'), coupons:account.coupons}, function(){});
+            var $button = $("#order_transaction"),
+                $form = $button.parents('form');
+            var opts = $.extend({}, $button.data(), {
+                token: function(result) {
+                    $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
+                }
+            });
+            StripeCheckout.open(opts);
+
+            //index.sdk.api.post('/orders/transaction', {basket_id:$('#order_transaction').attr('data-basketid'), coupons:account.coupons}, function(){});
           }
         });
         this.checkout_form.init();

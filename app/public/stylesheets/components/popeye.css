@@ -71,12 +71,19 @@
     100%  {top: 200%; transform: rotateY(-10deg) rotateX(-45deg) rotateZ(-45deg);}
 }
 
-.popeye .modal .popeye_content .illus{
+.popeye .modal .popeye_content .illus, .popeye .modal .popeye_content .motion{
     width:100%;
     height:200px;
     background-size: cover;
     background:#F0F0F0;
+    border:none;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
+.popeye .modal .popeye_content .illus iframe, .popeye .modal .popeye_content .motion iframe{
+  border:none;
+}
+
 .popeye .popeye_content .popeye_title{
     font-size: 20px;
     line-height: 30px;
@@ -139,12 +146,12 @@
     position: relative;
     background:rgba(0,0,0,.7);
     bottom: -200px;
-    
+
     -webkit-transition: all .3s ease-in;
     -moz-transition: all .3s ease-in;
     -o-transition: all .3s ease-in;
     transition: all .3s ease-in;
-    
+
     -webkit-animation: toast_opening .6s ease-out;
     animation: toast_opening .6s ease-out;
     -webkit-animation-fill-mode: forwards;
@@ -153,7 +160,7 @@
     animation-iteration-count: 1;
     -webkit-animation-delay: .1s;
     animation-delay: .1s;
-    
+
     -moz-box-shadow: 1px 3px 13px -5px #656565;
     -webkit-box-shadow: 1px 3px 13px -5px #656565;
     -o-box-shadow: 1px 3px 13px -5px #656565;
@@ -174,7 +181,7 @@
 .popeye .toast .popeye_content.success{
 }
 .popeye .toast .popeye_content.warning{
-    
+
 }
 .popeye .toast .popeye_content.danger{
 }

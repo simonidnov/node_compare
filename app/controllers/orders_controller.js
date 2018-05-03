@@ -5,6 +5,9 @@ exports.get = function(req, res, callback) {
         callback(e);
     });
 };
+exports.createCharge = function(req, res, callback){
+    Orders_model.createCharge(req.body, res, callback);
+}
 exports.create = function(req, res, callback) {
     Orders_model.create(req, res, function(e){
         callback(e);

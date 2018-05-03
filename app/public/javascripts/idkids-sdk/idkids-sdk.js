@@ -310,7 +310,8 @@ var idkids_jssdk = function(options, callback){
                 quantity : $(this).attr('data-quantity')
               },
               function(e) {
-                console.log('AJOUT AU PANIER AVEC SUCCES ? ', e);
+                self.callback({status:"ADD_BASKET"});
+                //console.log('AJOUT AU PANIER AVEC SUCCES ? ', e);
               }
             );
             break;

@@ -58,7 +58,6 @@ module.exports.get = function(datas, req, callback) {
             infos.forEach(function(basket){
               basket.total_amount = 0;
               var index = 0.00;
-              console.log(" -------- basket.products -------- ", basket.products);
               if(basket.products.length > 0){
                 basket.products.forEach(function(product){
                   products_controller.get({product_id : product.product_id}, req, function(e){
@@ -271,6 +270,11 @@ module.exports.update = function(req, res, callback){
         }
     )
 }
+module.exports.deleteUserBasket = function(user_id, callback){
+  Baskets.deleteOne({user_id:user_id}, function(e){
+    callback(e);
+  });
+}
 module.exports.delete = function(req, res, callback){
     if(typeof req.body.product_id !== "undefined"){
       console.log('req.body.product_id ', req.body.product_id);
@@ -290,7 +294,6 @@ module.exports.delete = function(req, res, callback){
           }
         },
         function(err, infos){
-          console.log("-------- DELETE BASKET ----------- ", err);
           if(err) callback({"status":400, datas:{"message":err}});
           else callback({"status":200, "datas":infos});
         }

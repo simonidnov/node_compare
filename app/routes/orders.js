@@ -26,7 +26,7 @@ orders.use(function(req, res, next){
       dataCheck = req.body;
     }
     //dataCheck.options = dataCheck;
-    Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
+    Auth_helper.validate_session(req, function(e){
       if(e.status === 200) {
         next();
       }else {
@@ -43,12 +43,23 @@ orders
     })
     .get('/amount', function(req, res, next) {
         Orders_controller.getAmount(req, res, function(e){
-            res.status(e.status).send(e.datas);
+          res.status(e.status).send(e.datas);
+        });
+    })
+    .post('/transaction', function(req, res, next){
+        //res.status(200).send({status:"POST", body:req.body});
+        Orders_controller.createCharge(req, res, function(e){
+            e.title = "Paiement";
+            res.status(e.status).render("order", e);
         });
     })
     .post('/', function(req, res, next) {
         Orders_controller.create(req.body.data, res, function(e){
-            res.status(e.status).send({status:e.status, response_display:{title:"Ajouté", message:"Votre commande est prête à être réglée.", buttons:["OK"]}});
+          if(e.status === 200){
+            res.status(e.status).send({status:e.status, response_display:{title:"Commande", message:"Votre commande est prête à être réglée.", buttons:["OK"]}});
+          }else{
+            res.status(e.status).send(e);
+          }
         });
     })
     .put('/', function(req, res, next) {

@@ -8,7 +8,7 @@ block navigation
             a(href="/account/basket" data-navigate="page_reload")
                 li(class= page === "basket" ? "selected" : "" data-for="basket")= lang[locale].keys.account_nav_basket+ " ("+((baskets.length > 0)? baskets[0].products.length : 0)+")"
             a(href="/account/orders" data-navigate="page_reload")
-                li(class= page === "orders" ? "selected" : "" data-for="orders")= lang[locale].keys.account_nav_orders
+                li(class= page === "orders" ? "selected" : "" data-for="orders")= lang[locale].keys.account_nav_orders+ " ("+((typeof userproducts !== "undefined")? userproducts.length : 0)+")"
             a(href="/account/services" data-navigate="page_reload")
                 li(class= page === "services" ? "selected" : "" data-for="services")= lang[locale].keys.account_nav_services
             a(href="/account/profile" data-navigate="page_reload")

@@ -166,6 +166,25 @@ module.exports.create = function(req, res, callback){
         else callback({"status":200, "datas":infos});
     });
 };
+module.exports.useOne = function(datas, callback){
+  //datas.updated = Date.now();
+  Coupon.updateOne(
+      {
+          _id  : datas._id
+      },
+      {
+          $set : {
+            is_valid : 0,
+            already_used : 1,
+            updated :Date.now()
+          }
+      },
+      function(err, infos){
+          if(err) callback({"status":304, "message":err});
+          else callback({"status":200, "datas":infos});
+      }
+  )
+}
 module.exports.update = function(req, res, callback){
     req.body.updated = Date.now();
     Coupon.updateOne(

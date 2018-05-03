@@ -33,7 +33,7 @@ div.col.col-md-7
                     span.icon.idkids-icons.icon-trash
                     span.label Supprimer
               
-div.col.col-md-5
+div.col.col-md-5.first_order
   div.basket.formular
     h2 Résumé du panier
     hr
@@ -45,8 +45,11 @@ div.col.col-md-5
           div.total_products= "Votre panier contient "+basket[0].products.length+" produit"+ ((basket[0].products.length > 1)? "s" : "")
           div.total= "Total "+(basket[0].total_amount/100)+"€"
           hr
-          div.material_input.form-group
-            input.form-control.minlength#coupon_code(type="text", name="coupon_code", data-errormessage="Ce code est invalide.")
+          input.phantom_input#user_id(type="text", name="user_id", value=user._id)
+          input.phantom_input#basket_id(type="text", name="basket_id", value=basket[0]._id)
+          input.phantom_input#coupons_code(type="text", name="coupons_code", value="")
+          div.material_input.form-group.minlength
+            input.form-control#coupon_code(type="text", minlength="3", name="coupon_code", data-errormessage="Ce code est invalide.")
             label(for="coupon_code") Code de réduction
           hr
           ul.coupons_list#coupons_list
@@ -54,7 +57,23 @@ div.col.col-md-5
           div.coupons_infos
             div.message
             div.amount
-          div.btn.btn-success.btn-lg.centered#order_transaction(data-action="submit", data-basketid=basket[0]._id) Valider mon panier
+          script(src="https://checkout.stripe.com/v2/checkout.js")
+          button.btn.btn-success.btn-lg.centered#order_transaction(
+            data-action="submit",
+            data-basketid=basket[0]._id, 
+            data-value="Valider mon panier", 
+            data-key=keyPublishable, 
+            data-amount=basket[0].total_amount, 
+            data-currency="eur", 
+            data-email=user.email, 
+            data-locale="fr-FR",
+            data-firstname=user.firstname,
+            data-lastname=user.lastname,
+            data-image="/public/uploads/41f79cf7b32a5f468d1a5ef0e0d925f4",
+            data-name="JOYVOX",
+            data-source='tok_visa',
+            data-description="Finaliser ma commande") Finaliser ma commande
+          
           div.wallet_infos
             div.message
             div.amount
