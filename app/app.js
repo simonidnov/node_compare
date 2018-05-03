@@ -127,8 +127,9 @@ app.use (function (req, res, next) {
       } else {
         console.log('DOESNT HAVE HTTPS ', schema);
         console.log("NEED HTTPS ", req.headers.host);
-        if(req.headers.host.indexOf('127.0.0.1') === -1){
-          res.redirect('https://' + req.headers.host + req.url);
+        console.log('request.hostname >>>>>>> ', req.hostname);
+        if(req.hostname.indexOf('127.0.0.1') === -1){
+          res.redirect('https://' + req.hostname + req.url);
         }else{
           next();
         }
