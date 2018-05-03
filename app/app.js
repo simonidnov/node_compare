@@ -141,7 +141,7 @@ router.all('*', function (req, res, next) {
   //var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
   console.log("req.protocol ", req.protocol);
   console.log("req.get('X-Forwarded-Host') >>>>> ", req.get('X-Forwarded-Host'));
-  var schema = req.get('X-Forwarded-Proto').toLowerCase();
+  var schema = req.protocol.toLowerCase();
   if (schema === 'https') {
     console.log('HAS HTTPS ', schema);
     next();
