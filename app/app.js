@@ -122,6 +122,8 @@ app.use (function (req, res, next) {
       } else {
         if(req.headers.host.indexOf('127.0.0.1') === -1){
           res.redirect('https://' + req.headers.host + req.url);
+        }else{
+          next();
         }
       }
     });
