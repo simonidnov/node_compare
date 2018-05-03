@@ -7,8 +7,16 @@ const express = require('express'),
     lang = require('../public/languages/auth_lang'),
     apps = Apps_controller.getApps();
 
+router.use(function(req, res, next) {
+  var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+  console.log('HAS HTTPS ', schema);
+  console.log("req.get('host') ", req.get('host'));
+  console.log("req.get('origin') ", req.get('origin'));
+  next();
+});
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
     res.render('offline', {title: 'IDKIDS.community WELCOME'});
     res.end();
 });
