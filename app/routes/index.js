@@ -19,6 +19,7 @@ router.use(function(req, res, next) {
   var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
   console.log('HAS HTTPS ', schema);
   console.log('req ', req);
+  console.log("req.get('X-Forwarded-Host') >>>>> ", req.get('X-Forwarded-Host'));
   console.log("req.get('host') ", req.get('host'));
   console.log("req.get('origin') ", req.get('origin'));
   next();
