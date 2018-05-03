@@ -119,7 +119,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-router.use (function (req, res, next) {
+/*router.use (function (req, res, next) {
       var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
       if (schema === 'https') {
         console.log('HAS HTTPS ', schema);
@@ -134,7 +134,7 @@ router.use (function (req, res, next) {
           next();
         }
       }
-    });
+    });*/
 //router.use(bodyParser.json({limit: '50mb'}));
 //router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
