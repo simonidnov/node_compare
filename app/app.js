@@ -120,7 +120,9 @@ app.use (function (req, res, next) {
       if (schema === 'https') {
         next();
       } else {
-        res.redirect('https://' + req.headers.host + req.url);
+        if(req.headers.host.indexOf('127.0.0.1') === -1){
+          res.redirect('https://' + req.headers.host + req.url);
+        }
       }
     });
 
