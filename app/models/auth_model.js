@@ -282,7 +282,7 @@ module.exports.login = function(req, datas, callback) {
 
                     urlExists(avatar, function(err, exists) {
                       if(!exists){
-                        avatar = "http://www.idkids-app.com/public/images/assets/account.svg";
+                        avatar = app.locals.settings.host+"/public/images/assets/account.svg";
                       }
                       /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
                       /*
@@ -752,7 +752,7 @@ function checkAvatarExist(avatar){
       if(http.status != 404){
         return avatar;
       }else{
-        return "http://www.idkids-app.com/public/images/assets/account.svg";
+        return app.locals.settings.host+"/public/images/assets/account.svg";
       }
     });
     req.end();

@@ -51,10 +51,10 @@ block content
                             label(for="short_name") Short Name (without spaces and special characters)
                         div.form-group.material_input.minlength
                             input#host(type="text" name="host" minlength="4" required)
-                            label(for="host") host ex : http://account.idkids-app.com
+                            label(for="host") host ex : http://account.mondomaine.com
                         div.form-group.material_input.minlength
                             input#redirect_url(type="text" name="redirect_url" minlength="4" required)
-                            label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
+                            label(for="redirect_url") host ex : http://account.mondomaine.com/redirect
                         div.form-group
                             a.hyperlink(href="#") En savoir plus sur l'url de redirection
                         div.form-group.material_input.minlength
@@ -65,7 +65,7 @@ block content
                             label(for="short_desc") short description
                         div.form-group.material_input.minlength
                             input#bundle(type="text" minlength="20" maxlength="50" name="bundle" required)
-                            label(for="bundle") bundle ex : account.idkids.fr
+                            label(for="bundle") bundle ex : account.mondomaine.fr
                         div.form-group.material_input.minlength
                             input#terms_url(type="text" minlength="20" maxlength="50" name="terms_url" required)
                             label(for="terms_url") special terms url with http://
@@ -105,10 +105,10 @@ block content
                                 label(for="short_name") Short Name (without spaces and special characters)
                             div.form-group.material_input.minlength
                                 input#host(type="text" name="host" minlength="4" value=edit_application.host required)
-                                label(for="host") host ex : http://account.idkids-app.com
+                                label(for="host") host ex : http://account.mondomaine.com
                             div.form-group.material_input.minlength
                                 input#redirect_url(type="text" name="redirect_url" minlength="4" value=edit_application.redirect_url required)
-                                label(for="redirect_url") host ex : http://account.idkids-app.com/redirect
+                                label(for="redirect_url") host ex : http://account.mondomaine.com/redirect
                             div.form-group
                                 a.hyperlink(href="#") En savoir plus sur l'url de redirection
                             div.form-group.material_input.minlength
@@ -126,7 +126,7 @@ block content
                             hr.separator
                               
                             h3 Créer un Widget pour cette application
-                            p les widgets apparaîssent dans le footer ainsi que dans le menu widget su SDK. Ne cocher que lorsque l'application doit être mise en avant par idkids-app, principalement dédié aux marques et services.
+                            p les widgets apparaîssent dans le footer ainsi que dans le menu widget su SDK. Ne cocher que lorsque l'application doit être mise en avant, principalement dédié aux marques et services.
                             div.form-group
                                 input#is_widget(type="checkbox" value=edit_application.is_widget name="is_widget" checked=((edit_application.is_widget)? true : false))
                                 label(for="is_widget") Afficher entant que Widget

@@ -27,13 +27,13 @@ router.get('/', function(req, res, next) {
 router.get('/:page_url', function(req, res, next) {
     Page_controller.get(req.params, res, function(e) {
       if(e.datas.length === 1){
-        res.render('index', {
+        res.render('page_templates/'+e.datas[0].template, {
             title: 'Welcome',
             user : req.session.Auth,
             locale:language_helper.getlocale(req),
             lang:lang,
             page:req.params.page_name,
-            page_datas:e.datas,
+            page_datas:e.datas[0],
             js:[
 
             ],

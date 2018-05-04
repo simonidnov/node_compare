@@ -70,7 +70,7 @@ auth.get('/', function(req, res, next) {
         Fb.getLoginUrl({
           client_id: '143900369638121',
           scope: 'email,user_likes',
-          redirect_uri: 'https://www.idkids-app.com/auth/facebook'
+          redirect_uri: app.locals.settings.host+'/auth/facebook'
         });
         */
         /*
@@ -78,7 +78,7 @@ auth.get('/', function(req, res, next) {
             client_id: '143900369638121',
             client_secret: '393fec1031105f7144748d3d569b7896',
             scope: 'email,user_likes',
-            redirect_uri: 'https://www.idkids-app.com/auth/facebook',
+            redirect_uri: app.locals.settings.host+'/auth/facebook',
             code: 'code'
         }, function (res) {
             if(!res || res.error) {

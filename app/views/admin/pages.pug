@@ -48,11 +48,22 @@ block content
                         input#label(type="text" name="label" minlength="4" value=edit_page.label required)
                         label(for="label") Label * uniq
                     div.form-group.material_input.minlength
+                        input#url(type="text" name="url" minlength="4" value=edit_page.url required)
+                        label(for="url") Url * uniq
+                    div.form-group.material_input.minlength
                         textarea#description(type="text" name="description" maxlength="255" minlength="75" value=edit_page.description required)= edit_page.description
                         label(for="description") description (255 max char)
                     div.form-group.material_input.minlength
                         input#keywords(type="text" name="keywords" maxlength="75" minlength="25" value=edit_page.keywords required)
                         label(for="keywords") keywords (75 max char)
+                    div.form-group.material_input
+                        select#template(name="template")
+                          option(value="personal_datas" selected=((edit_page.template === "personal_datas")? true : false)) données personnelles
+                          option(value="use_of_cookies" selected=((edit_page.template === "use_of_cookies")? true : false)) utilisation des cookies
+                          option(value="legal_notice" selected=((edit_page.template === "legal_notice")? true : false)) mentions legales
+                          option(value="payment_and_orders" selected=((edit_page.template === "payment_and_orders")? true : false)) paiements et conditions de remboursement
+                          
                     div.form-group.buttons.inline
                         div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
                         div.btn.btn-danger.btn-lg(data-action="delete")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                        

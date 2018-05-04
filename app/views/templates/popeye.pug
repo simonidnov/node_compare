@@ -6,7 +6,7 @@ block popeye
                 div.popeye_content
                     div.cross_button
                         div.icon.idkids-icons.icon-cross
-                          img(src="https://www.idkids-app.com/public/images/assets/cross.svg")
+                          img(src=app.locals.settings.host+"/public/images/assets/cross.svg")
                     if(query.illus)
                         div.popeye_header
                             div.illus(style="background-image:url("+query.illus.src+"); background-color:"+query.illus.color+";")
@@ -31,7 +31,7 @@ block popeye
                 div.popeye_content
                     div.cross_button
                         div.icon.idkids-icons.icon-cross
-                          img(src="https://www.idkids-app.com/public/images/assets/cross.svg")
+                          img(src=app.locals.settings.host+"/public/images/assets/cross.svg")
                     if(query.title)
                         div.popeye_title= query.title
                     else
