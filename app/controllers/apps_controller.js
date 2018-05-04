@@ -26,6 +26,7 @@ exports.create = function(req, datas, callback) {
 // check user logout then return user_infos
 exports.update = function(req, datas, callback) {
     console.log('UPDATE APP ', req.body);
+    console.log('req.session ', req.session);
     Apps_model.update(req.session.Auth._id, req.body._id, req.body, function(e){
         callback(e);
     });

@@ -8,7 +8,7 @@ var idkids_jssdk = function(options, callback){
         user : null,
         options:null,
         config : {
-          url:"https://www.idkids-app.com",
+          url:"https://auth.joyvox.fr",
           debug_url:"http://127.0.0.1:3000"
         },
         get : function(request, params, callback) {
