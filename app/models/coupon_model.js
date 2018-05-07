@@ -176,6 +176,7 @@ module.exports.useOne = function(datas, callback){
           $set : {
             is_valid : 0,
             already_used : 1,
+            user_id : datas.user_id,
             updated :Date.now()
           }
       },

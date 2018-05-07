@@ -2,27 +2,27 @@ block footer
     footer.container
         div.row
             div.col.col-md-3
-                h3 À propos de IDKIDS
+                h3= "À propos de "+app.locals.settings.label
                 ul
                     li 
-                        a(href="http://corporate.idkidscommunity.com/groupe/qui-sommes-nous/" target="_blank") Histoire
+                        a(href="https://www.joyvox.fr/" target="_blank") Site internet
                     li 
-                        a(href="http://corporate.idkidscommunity.com/act-for-kids/une-demarche-globale-rse/" target="blank") Politique RSE
+                        a(href="http://www.joyvox.fr/fr/contacts" target="blank") Contact
                     li 
-                        a(href="http://corporate.idkidscommunity.com/nous-rejoindre/nos-offres/" target="blank") Nous rejoindre - Recrutement
+                        a(href="http://www.joyvox.fr/fr/quisommesnous" target="blank") Qui sommes nous
                     li 
-                        a(href="https://www.idkids.fr/utils/programme-fidelite" target="blank") Membres IDKIDS.community
+                        a(href="http://www.joyvox.fr/fr/blog" target="blank") Blog
             div.col.col-md-4
                 h3 Aide et confidentialité
                 ul
                     li 
                         a(href="/payments-orders") Paiements et gestion de mes commandes
                     li 
-                        a(href="/cgu") Mentions légales
+                        a(href="/legal-notice") Mentions légales
                     li 
-                        a(href="/terms_of_use") Confitions d'utilisation
+                        a(href="/terms-of-use") Confitions d'utilisation
                     li 
-                        a(href="/cookies") Utilisation des Cookies
+                        a(href="/uses-of-cookies") Utilisation des Cookies
                     li 
                         a(href="/private_datas") Vie privée, sécurité et contrôle de vos données
                 
@@ -38,17 +38,17 @@ block footer
                 h3 Mon compte
                 ul
                     li 
-                        a(href="/account/account") Informations
+                        a(href="/account/account") Mon compte
                     li 
-                        a(href="/account/basket") Panier
+                        a(href="/account/basket") Mon panier
                     li 
-                        a(href="/account/orders") Commandes
+                        a(href="/account/orders") Mes commandes
                     li
-                        a(href='/account/story') Historique
-                    li 
-                        a(href="/account/addresses") Adresses de livraison
+                        a(href='/account/profile') Mes informations
+                    //-li 
+                        a(href="/account/addresses") Mes adresses
                     li
-                        a(href='/account/profile') Informations et vie privée
+                        a(href='/account/security') Sécurité et connexion
         hr
         div.row
             if(typeof app.locals.applications !== "undefined")
@@ -61,7 +61,7 @@ block footer
         script(src="/node_modules/underscore/underscore-min.js")
         script(src="/public/javascripts/components/popeye.js")
         link(rel='stylesheet', href='/public/stylesheets/components/popeye.min.css')
-        script(src="/public/javascripts/index.min.js")
+        script(src="/public/javascripts/index.js")
         script(src="/public/javascripts/idkids-sdk/idkids-sdk.js")
         if(js)
             each val in js

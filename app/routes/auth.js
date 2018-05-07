@@ -59,39 +59,12 @@ var express = require('express'),
         }else{
           next();
         }
-        console.log("req.body ");
         //next();
     });
 /* DEVICE UID IS UNIQ BY DEVICE, NOT BROWSER PERHAPS WE NEED TO IDENTIFY BROWSER UNIQ ID NOT SURE... */
 /* GET home page. */
 auth.get('/', function(req, res, next) {
-        //req.query.device_uid = device_uid;
-        /*
-        Fb.getLoginUrl({
-          client_id: '143900369638121',
-          scope: 'email,user_likes',
-          redirect_uri: app.locals.settings.host+'/auth/facebook'
-        });
-        */
-        /*
-        Fb.api('oauth/access_token', {
-            client_id: '143900369638121',
-            client_secret: '393fec1031105f7144748d3d569b7896',
-            scope: 'email,user_likes',
-            redirect_uri: app.locals.settings.host+'/auth/facebook',
-            code: 'code'
-        }, function (res) {
-            if(!res || res.error) {
-                return;
-            }
-            var accessToken = res.access_token;
-            var expires = res.expires ? res.expires : 0;
-        });
-        */
-        //Auth_controller.get_user_from_device(req, res, function(users_device){
-            Auth_controller.login(req, req.query, function(e){
-                //Auth_controller.get_user_from_device("fingerprint", function(users_device){
-                //});
+        Auth_controller.login(req, req.query, function(e){
                 var datas = {
                     title: 'Mon compte',
                     datas: req.query,
@@ -103,17 +76,16 @@ auth.get('/', function(req, res, next) {
                     current_app:current_app,
                     js:[
                         '/public/javascripts/login.js',
+                        '/public/javascripts/components/popeye.js',
                         '/public/javascripts/components/formular.js'
                     ],
                     css:[
                         '/public/stylesheets/components/formular.css',
+                        '/public/stylesheets/components/popeye.css',
                         '/public/stylesheets/auth.css',
                     ]
                 };
                 datas.user_session = req.session.Auth;
-
-                console.log('current_app  ::::::::::: ', current_app);
-                console.log('referer  ::::::::::: ', referer);
 
                 if(typeof e.user !== "undefined"){
                     res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id+'&idkids-device='+e.user.current_device);
@@ -125,34 +97,22 @@ auth.get('/', function(req, res, next) {
                 delete current_app;
                 current_app = null;
             });
-        //});
     })
     .post('/login', function(req, res, next) {
+        req.query = req.body.data;
+        Auth_controller.login(req, req.body.data, function(e){
+            res.status(e.status).send(e);
+            res.end();
+        });
+    })
+    .post('/subscribe', function(req, res, next) {
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
-                console.log('LOGIN current_app  ::::::::::: ', current_app);
-                console.log('LOGIN referer  ::::::::::: ', referer);
-
-                res.redirect(307, referer+'?idkids-token='+e.user.token+'&idkids-id='+e.user._id);
-                //res.redirect(307, '/account/?idkids-token='+e.idkids_user.token+'&idkids-id='+e.idkids_user._id+'&idkids-device='+e.idkids_user.current_device);
+                e.idkids_user = {datas:e.user};
+                res.status(e.status).send(e);
+                res.end();
             }else{
-                var user_device = [];
-                var datas = {
-                    title: 'Mon compte',
-                    datas: req.query,
-                    locale:language_helper.getlocale(req),
-                    lang:lang,
-                    uri_params : uri_helper.get_params(req),
-                    response:e,
-                    js:[
-                        '/public/javascripts/login.js',
-                        '/public/javascripts/components/formular.js'
-                    ], css:[
-                        '/public/stylesheets/components/formular.css',
-                        '/public/stylesheets/auth.css',
-                    ]
-                };
-                res.render('auth/login', datas);
+                res.status(e.status).send(e);
                 res.end();
             }
             delete current_app;
@@ -169,9 +129,11 @@ auth.get('/', function(req, res, next) {
             uri_params : uri_helper.get_params(req),
             js:[
                 '/public/javascripts/lost_password.js',
-                '/public/javascripts/components/formular.js'
+                '/public/javascripts/components/formular.js',
+                '/public/javascripts/components/popeye.js'
             ], css:[
                 '/public/stylesheets/components/formular.css',
+                '/public/stylesheets/components/popeye.css',
                 '/public/stylesheets/auth.css',
             ]
           }
@@ -179,29 +141,38 @@ auth.get('/', function(req, res, next) {
         res.end();
     })
     .post('/update_password', function(req, res, next){
-        Auth_controller.validCode(req.body, function(e){
+        Auth_controller.validCode(req.body.data, function(e){
           if(e.status === 200){
             next();
           }else{
-            res.status(e.status).send(e);
+            console.log('Auth_controller.validCode ', e);
+            res.status(203).send(e);
             res.end();
           }
         });
     }, function(req, res, next){
-        if(typeof req.body.password === "undefined" || typeof req.body.retype_password === "undefined"){
-            res.status(304).send({message:"NEED_PASSWORD"});
+        if(typeof req.body.data.password === "undefined" || typeof req.body.data.retype_password === "undefined"){
+            res.status(203).send({message:"NEED_PASSWORD"});
             res.end();
         }
-        if(req.body.password !== req.body.retype_password){
-            res.status(304).send({message:"NEED_SAME_PASSWORD"});
+        if(req.body.data.password !== req.body.data.retype_password){
+            res.status(203).send({message:"NEED_SAME_PASSWORD"});
             res.end();
+        }else{
+          Auth_controller.update_password({email:req.body.data.email, password:req.body.data.password}, res, function(e){
+              console.log("update_password ::::: ", e);
+              res.status(e.status).send(e);
+              res.end();
+              //res.redirect(307, "/auth?message="+e.message);
+          });
         }
-        Auth_controller.update_password({email:req.body.email, password:req.body.password}, res, function(e){
-            res.redirect(307, "/auth?message="+e.message);
-        });
     })
     .post('/lost_password', function(req, res, next){
         Auth_controller.lost_password(req, res, function(e){
+          if(typeof e.response_display !== "undefined"){
+            e.response_display.title = lang[language_helper.getlocale(req)].keys[e.response_display.title];
+            e.response_display.message = lang[language_helper.getlocale(req)].keys[e.response_display.message];
+          }
           res.status(e.status).send(e);
         });
     })
@@ -231,19 +202,12 @@ auth.get('/', function(req, res, next) {
               }
 
               res.redirect(307, req.headers.referer+param+"idkids-sdk-action=logout");
-              //res.end();
             }
             res.end();
-            //res.send(e);
-            //res.render('logout', { "title": "déconnexion", "referer":req.headers.referer });
-            //res.render(req.headers.referer, { "title": "déconnexion", "referer":req.headers.referer, "idkids_sdk":"logout" });
         });
     })
     .get(['/:form_name', '/:form_name/*'], function(req, res, next) {
-        //req.query.device_uid = device_uid;
-        //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
-
             var datas = {
                 title: 'Mon compte',
                 datas: req.query,
@@ -255,14 +219,16 @@ auth.get('/', function(req, res, next) {
                 form_name:req.params.form_name,
                 js:[
                     '/public/javascripts/login.js',
-                    '/public/javascripts/components/formular.js'
+                    '/public/javascripts/components/formular.js',
+                    '/public/javascripts/components/popeye.js'
                 ], css:[
                     '/public/stylesheets/components/formular.css',
+                    '/public/stylesheets/components/popeye.css',
                     '/public/stylesheets/auth.css',
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                res.redirect(307, referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret);
+                res.status(e.status).send(e);
                 res.end();
             }else{
               res.render('auth/login', datas);
@@ -280,10 +246,7 @@ auth.get('/', function(req, res, next) {
     })
     .get('/facebook', function(req, res, next){
         var facebook_call = req;
-        //req.get('origin');
         Auth_controller.login(req, req.query, function(e){
-            //Auth_controller.get_user_from_device("fingerprint", function(users_device){
-            //});
             var datas = {
                 title: 'Mon compte',
                 datas: req.query,
@@ -311,12 +274,8 @@ auth.get('/', function(req, res, next) {
         });
     })
     .get('/fingerprint/:device_uid', function(req, res, next) {
-        //req.query.device_uid = device_uid;
-        //req.get('origin');
         Auth_controller.get_user_from_device(req.params.device_uid, function(users_device){
             Auth_controller.login(req, req.query, function(e){
-                //Auth_controller.get_user_from_device("fingerprint", function(users_device){
-                //});
                 var datas = {
                     title: 'Mon compte',
                     datas: req.query,

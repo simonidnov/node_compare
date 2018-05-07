@@ -34,6 +34,7 @@ address
     .post('/', function(req, res, next) {
         Address_controller.create(req, res, function(e){
             //res.status(e.status).send(e);
+            console.log('Address_controller.create ', e);
             res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })

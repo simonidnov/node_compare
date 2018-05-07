@@ -12,6 +12,7 @@ const db = require('mongoose'),
           amount            : {type:"Number"},
           reduced_amount    : {type:"Number"},
           coupons_code      : {type:"Object"},
+          bill_number       : {type:"string"},
           metadata          : {type:"Object"},
           response          : {type:"Object"},
           basketdatas       : {type:"Object"},
@@ -39,6 +40,9 @@ module.exports.get = function(req, res, callback){
     }else if(typeof req.query.user_id !== "undefined"){
         query = {user_id : datas.user_id};
     }
+    if(typeof req.query._id !== "undefined"){
+      query._id = req.query._id;
+    }
     if(typeof query.user_id === "undefined"){
       callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
     }
@@ -49,6 +53,25 @@ module.exports.get = function(req, res, callback){
             callback({status:200, datas:infos});
         }
     }).sort({'created':-1});
+}
+module.exports.getBill = function(user_id, datas, callback){
+  var query = {};
+  if(!datas.is_admin){
+    query.user_id = user_id;
+  }
+  if(typeof datas.bill_number !== "undefined"){
+    query.bill_number = datas.bill_number;
+  }
+  if(typeof datas._id !== "undefined"){
+    query._id = datas._id;
+  }
+  Orders.findOne(query, function(err, infos){
+      if(err){
+          callback({status:405, datas:err});
+      }else{
+          callback({status:200, datas:infos});
+      }
+  })
 }
 module.exports.createCharge = function(datas, res, callback){
   if(app.locals.settings.StripeMode){
@@ -103,41 +126,47 @@ module.exports.createCharge = function(datas, res, callback){
           callback({status:401, message:"BASKET_DOESNT_MATCH"});
           //callback({status:401, message:"STIPE_ERROR_CHARGES", err:err});
         }else {
-          console.log('STRIPE CHARGES SUCCESS ', charge);
-          var new_order_datas = {
-              basket_id         : datas.basket_id,
-              user_id           : datas.user_id,
-              stripeToken       : token,
-              devise            : "eur",
-              amount            : amount,
-              reduced_amount    : reduced_amount,
-              coupons_code      : coupons_code,
-              metadata          : basket,
-              response          : charge,
-              basketdatas       : e.datas[0],
-              status            : 1
-          }
-          /* TODO ON UTILISE LES COUPONS S'IL Y EN A */
-          //already_used      : {type:"bool", default:false},
-          //is_valid
-          if(typeof coupons_code !== "undefined"){
-            for(var c=0; c<coupons_code.length; c++){
-              coupon_model.useOne(coupons_code[c], function(e){
-                console.log('coupon used : ', e);
-              });
+          Orders.find().count().exec(function(err, infos){
+            var count = infos;
+            var bill_number = "FA";
+                bill_number+= new Date(Date.now()).getFullYear().toString().substring(1,4);
+                bill_number+= (count/1000000).toString().replace('0.', '');
+            var new_order_datas = {
+                basket_id         : datas.basket_id,
+                user_id           : datas.user_id,
+                stripeToken       : token,
+                devise            : "eur",
+                amount            : amount,
+                reduced_amount    : reduced_amount,
+                coupons_code      : coupons_code,
+                bill_number       : bill_number,
+                metadata          : basket,
+                response          : charge,
+                basketdatas       : e.datas[0],
+                status            : 1
             }
-          }
-          /* TODO ON VIDE LE PANIER DE l'UTILISATEUR */
-          basket_model.deleteUserBasket(datas.user_id, function(e){
-            console.log('BASKET DELETED ', e);
-          });
-          self.create(new_order_datas, res, function(e){
-            if(e.status === 200){
-              callback({status:200, datas:new_order_datas});
-            }else{
-              e.datas = new_order_datas;
-              callback(e)
+            /* TODO ON UTILISE LES COUPONS S'IL Y EN A */
+            //already_used      : {type:"bool", default:false},
+            //is_valid
+            if(typeof coupons_code !== "undefined"){
+              for(var c=0; c<coupons_code.length; c++){
+                coupon_model.useOne({id:coupons_code[c].id, user_id:datas.user_id}, function(e){
+                  console.log('coupon used : ', e);
+                });
+              }
             }
+            /* TODO ON VIDE LE PANIER DE l'UTILISATEUR */
+            basket_model.deleteUserBasket(datas.user_id, function(e){
+              console.log('BASKET DELETED ', e);
+            });
+            self.create(new_order_datas, res, function(e){
+              if(e.status === 200){
+                callback({status:200, datas:new_order_datas});
+              }else{
+                e.datas = new_order_datas;
+                callback(e)
+              }
+            });
           });
         }
       });

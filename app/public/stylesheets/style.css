@@ -369,6 +369,7 @@ footer hr{
     border-bottom: 1px solid #E2E2E2;
 }
 footer h3{
+    font-size: 17px;
     margin:0;
     padding-left:5px;
     line-height: 30px;
@@ -443,6 +444,26 @@ footer ul li a:hover:after{
     text-align: center;
 }
 
+.head_title{
+  padding:40px;
+  position: relative;
+  margin-bottom:40px;
+}
+.head_title::after{
+  content: '';
+  position: absolute;
+  overflow: hidden;
+  top:90%;
+  left:-10%;
+  width:120%;
+  height:40px;
+  transform: rotate(-.7deg);
+  background-color:#f5655f;
+}
+.head_title.red{
+  background-color:#f5655f;
+  color:#FFF;
+}
 .container .row{
     max-width: 980px;
     text-align: left;
@@ -451,10 +472,41 @@ footer ul li a:hover:after{
     position: relative;
     overflow: hidden;
 }
-p{
-    max-width: 100%;
+h3{
+  font-size: 25px;
+  line-height: 35px;
+  color:#333;
+  font-weight: 200;
 }
-
+p{
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 28px;
+  color: #797373;
+  max-width: 100%;
+  font-family: sans-serif;
+}
+.red p{
+  color: #FFFFFF;
+}
+.page ul{
+  margin:0;
+}
+.page ul li{
+  padding-bottom:20px;
+  margin-bottom:20px;
+  border-bottom: 1px solid #E3E3E3;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 28px;
+  color: #797373;
+  max-width: 100%;
+  font-family: sans-serif;
+  word-break: break-all;
+}
+.page ul li:last-child{
+  border:none;
+}
 /* ------------- GRID COLUMNS PROCESS -------------- */
 .col{
     display: table;

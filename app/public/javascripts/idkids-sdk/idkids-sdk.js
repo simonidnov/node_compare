@@ -11,10 +11,10 @@ var idkids_jssdk = function(options, callback){
           url:"https://auth.joyvox.fr",
           debug_url:"http://127.0.0.1:3000"
         },
-        get : function(request, params, callback) {
-            this.call('GET', request, params, callback);
+        get : function(request, params, callback, error_callback) {
+            this.call('GET', request, params, callback, error_callback);
         },
-        post : function(request, params, callback) {
+        post : function(request, params, callback, error_callback) {
             if(this.options.is_debug){
               this.config.url = this.config.debug_url;
             }
@@ -35,6 +35,9 @@ var idkids_jssdk = function(options, callback){
               }, this))
               .fail(function(e) {
                   console.log('fail ', e);
+                  if(typeof error_callback !== "undefined"){
+                    error_callback(e);
+                  }
               })
               .always($.proxy(function(e) {
                   this.hide_loader();
@@ -43,13 +46,13 @@ var idkids_jssdk = function(options, callback){
             }, this));
             this.call('POST', request, params, callback);
         },
-        put : function(request, params, callback) {
-            this.call('PUT', request, params, callback);
+        put : function(request, params, callback, error_callback) {
+            this.call('PUT', request, params, callback, error_callback);
         },
-        deleting : function(request, params, callback) {
-            this.call('DELETE', request, params, callback);
+        deleting : function(request, params, callback, error_callback) {
+            this.call('DELETE', request, params, callback, error_callback);
         },
-        call : function(method, request, params, callback){
+        call : function(method, request, params, callback, error_callback){
             if(this.options.is_debug){
               this.config.url = this.config.debug_url;
             }
@@ -77,6 +80,9 @@ var idkids_jssdk = function(options, callback){
                 }, this))
                 .fail(function(e) {
                     console.log('fail ', e);
+                    if(typeof error_callback !== "undefined"){
+                      error_callback(e);
+                    }
                 })
                 .always($.proxy(function(e) {
                     this.hide_loader();
@@ -91,6 +97,7 @@ var idkids_jssdk = function(options, callback){
             }, this));
         },
         check_response : function(e){
+          console.log('CHECK RESPONSE === ', e);
           if(typeof e.response_display !== "undefined"){
               e.response_display.type ="modal";
               var pop = new popeye(

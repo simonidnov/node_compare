@@ -1,6 +1,10 @@
 li#notifications
     a(href="#")
-        div.indice= basket[0].products.length
+        if typeof basket[0] !== "undefined"
+          div.indice= basket[0].products.length
+        else
+          div.indice 0
+        
         div.icon-notifications.idkids-icons.lg
           img(src=app.locals.settings.host+"/public/images/assets/notifications.svg")
     div.subnav
@@ -9,7 +13,10 @@ li#notifications
                 a(href=app.locals.settings.host+"/account/basket" target="_blank")
                   //-div.idkids-icons.icon-basket
                   span Mon panier
-                  span(id="total_basket")= basket[0].products.length  
+                  if typeof basket[0] !== "undefined"
+                    span(id="total_basket")= basket[0].products.length  
+                  else 
+                    span(id="total_basket") 0
             li
                 a(href=app.locals.settings.host+"/account/orders" target="_blank")
                   //-div.idkids-icons.icon-delivery

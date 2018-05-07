@@ -2,12 +2,17 @@ extends ../layout
 block content
     script.
         var uri_params   = (!{JSON.stringify(uri_params)});
+    script.
         var response     = (!{JSON.stringify(response)});
-        var translation  = (!{JSON.stringify(lang[locale])});
+    script.
+        var translation  = (!{JSON.stringify(lang[locale].keys)});
+    script.
         if(typeof current_app !== "undefined"){
           var current_app  = (!{JSON.stringify(current_app)});
         }
+    script.
         var referer  = "#{referer}";
+        
     //-TODO FACEBOOK INTEGRATION
     //-script.
         window.fbAsyncInit = function() {
@@ -121,12 +126,12 @@ block content
                     //-h3 Utilisez votre <b>email</b> :
                     hr
                     div.tab_group
-                        form#login_form(method="get" action='/auth/login/' style='display:"'+((form === "login")? "block" : "none")+'"')
+                        form#login_form(method="post" action='/auth/login/' style='display:"'+((form === "login")? "block" : "none")+'"')
                             div.form-group.material_input
                                 input#email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)
                                 label(for='email') !{lang[locale].keys.email_holder}
                             div.form-group.material_input
-                                input#password.form-control(type='password', name='password', required="required", value=datas.password, minlength="8" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" data-errormessage=lang[locale].keys.password_error)
+                                input#password.form-control(type='password', name='password', required="required", value=datas.password, minlength="6" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$" data-errormessage=lang[locale].keys.password_error)
                                 label(for='password')= lang[locale].keys.password_holder
                             div.input_check(data-checkinput="password")
                                 div.check.check_length= lang[locale].keys.input_check_length
@@ -153,9 +158,9 @@ block content
                                 if referer !== null && typeof referer !== "undefined"
                                   input.phantom_input.form-control(name="referer" value=referer)
                                     
-                            button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.login_cta
+                            button.btn.btn-success.btn-m.btn-disabled(type='submit', data-formaction='submit', data-formid="login_form")= lang[locale].keys.login_cta
                             a.hyperlink(href="/auth/lost" data-action="page_reload") Mot de passe perdu ?
-                        form#subscribe_form(method="post" action='/auth/login/' style='display:"'+((form === "subscribe")? "block" : "none")+'"')
+                        form#subscribe_form(method="post" action='/auth/subscribe/' style='display:"'+((form === "subscribe")? "block" : "none")+'"')
                             div.form-group.material_input
                                 input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=datas.pseudo, minlength="4")
                                 label(for='pseudo') !{lang[locale].keys.pseudo_holder}
@@ -163,14 +168,14 @@ block content
                                 input#subscribe_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='subscribe_email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-erromessage=lang[locale].keys.email_error)
                                 label(for='subscribe_email') !{lang[locale].keys.email_holder}
                             div.form-group.material_input
-                                input#subscribe_password.form-control(type='password', name='subscribe_password', required="required", value=datas.password, minlength="8", data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$", data-errormessage=lang[locale].keys.password_error)
+                                input#subscribe_password.form-control(type='password', name='subscribe_password', required="required", value=datas.password, minlength="6", data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$", data-errormessage=lang[locale].keys.password_error)
                                 label(for='subscribe_password')= lang[locale].keys.password_holder
                             div.input_check(data-checkinput="subscribe_password")
                                 div.check.check_length= lang[locale].keys.input_check_length
                                 div.check.check_capital= lang[locale].keys.input_check_capital
                                 div.check.check_number= lang[locale].keys.input_check_number
                             div.form-group.material_input
-                                input#retype_password.form-control(type='password', name='retype_password', required="required", minlength="8", data-regex="same", data-target="subscribe_password", data-errormessage=lang[locale].keys.retype_password_error)
+                                input#retype_password.form-control(type='password', name='retype_password', required="required", minlength="6", data-regex="same", data-target="subscribe_password", data-errormessage=lang[locale].keys.retype_password_error)
                                 label(for='retype_password') !{lang[locale].keys.retype_password_holder}
                             hr
                             div.form-group
@@ -208,7 +213,7 @@ block content
                                 if referer !== null && typeof referer !== "undefined" && referer !=="undefined"
                                   input.phantom_input.form-control(name="referer" value=referer)
                                 
-                            button.btn.btn-success.btn-m.btn-disabled(type='submit')= lang[locale].keys.subscribe_cta
+                            button.btn.btn-success.btn-m.btn-disabled(type='submit', data-formaction='submit', data-formid="subscribe_form")= lang[locale].keys.subscribe_cta
                         form#lost_form(method="post" action='/auth/lost_password/' style='display:"'+((form === "lost")? "block" : "none")+'"')
                             div.form-group.material_input
                                 input#lost_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)

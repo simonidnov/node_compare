@@ -72,20 +72,25 @@ module.exports.get = function(user_id, address_id, callback){
 }
 module.exports.create = function(user_id, datas, callback){
     datas.user_id = user_id;
+    console.log('module.exports.create');
     geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
+            console.log('geocode success ', res);
             datas.geocoder = res[0];
             new_address = new Address(datas);
             new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
+                console.log("res :::: ", res, "    infos ::::: ", infos);
             });
         })
         .catch(function(err) {
+            console.log('geocode catch err ', err);
             new_address = new Address(datas);
             new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
+                console.log("err ::::: ", err , " infos ::::: ", infos);
             });
         });
 }

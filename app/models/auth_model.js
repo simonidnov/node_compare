@@ -13,7 +13,7 @@ const db = require('mongoose'),
       user_datas = {
           email       : {type:'string', unique: true},
           password    : {type:'string'},
-          pseudo      : {type:'string', unique: true},
+          pseudo      : {type:'string'},
           firstName   : {type:'string'},
           avatar      : {type:'string'},
           lastName    : {type:'string'},
@@ -83,11 +83,12 @@ if(db.connection.readyState === 0){
 const userSchemas = new db.Schema(user_datas),
       User = db.model('User', userSchemas);
 //db.close();
-
 db.connection.on('open', function (ref) {
 });
 db.connection.on('error', function (err) {
 });
+
+User.collection.dropIndexes();
 
 module.exports = {
     attributes: user_datas
@@ -117,11 +118,11 @@ module.exports.get = function(req, datas, callback) {
 };
 module.exports.getUserInfos = function(req, res, callback){
     if(typeof req.query.user === "undefined" || req.query.user === ""){
-      callback({"status":304, "datas":{message:"NEED USER"}});
+      callback({"status":304, "datas":{message:"NEED_USER"}});
     }
     User.find({_id:req.query.user._id}, function(err, users){
         if (err){
-            callback({"status":304, "code":err.code, "error":err, "message":err.message});
+            callback({"status":304, "code":err.code, "error":err, "message":"NEED_USER"});
         }else{
             callback({"status":200, "user":users});
         }
@@ -133,8 +134,8 @@ module.exports.deleteDevice = function(req, datas, callback){
         { _id : datas.user_id },
         { $pull: { devices: { uid: req.query.device_uid } }},
         function(err, deleted){
-            if(errr) callback({status:403, message:"impossible de supprimer le device"})
-            else callback({status:200, message:"Device deleted"})
+            if(errr) callback({status:403, message:"DEVICE_DELETE_ERROR"})
+            else callback({status:200, message:"DEVICE_DELETE_SUCCESS"})
         }
     );
 }
@@ -193,12 +194,12 @@ module.exports.login = function(req, datas, callback) {
                     if(users.length === 0){
                         User.find({email: datas.email}, function (err, users) {
                             if(err){
-                                callback({"status":"error", "code":11, "error":err, "message":"user_not_found"});
+                                callback({"status":400, "code":11, "error":err, "message":"USER_WRONG_EMAIL"});
                             }else{
                                 if(users.length === 0){
-                                    callback({"status":"error", "code":11, "error":err, "message":"user_not_found", email_valid:users.length});
+                                    callback({"status":400, "code":11, "error":err, "message":"USER_WRONG_EMAIL", email_valid:users.length});
                                 }else{
-                                    callback({"status":"error", "code":13, "error":err, "message":"wrong_pawword", email_valid:users.length});
+                                    callback({"status":400, "code":13, "error":err, "message":"USER_WRONG_PASSWORD", email_valid:users.length});
                                 }
                             }
                         });
@@ -305,11 +306,11 @@ module.exports.login = function(req, datas, callback) {
                           },
                           function(err, user){
                               if (err){
-                                  callback({"status":"error", "code":err.code, "error":err, "message":err.message});
+                                  callback({"status":400, "code":err.code, "error":err, "message":"USER_LOGIN_ERROR"});
                               }else{
                                   self.reset_session(req, users[0]._id, function(infos){
                                       infos.avatar = infos.avatar;
-                                      callback({status:200, "message":"User updated", "idkids_user":infos});
+                                      callback({status:200, "message":"USER_LOGIN_SUCCESS", "idkids_user":infos});
                                   });
                               }
                           }
@@ -320,10 +321,10 @@ module.exports.login = function(req, datas, callback) {
             //
             //User.find({email: datas.email, password: sha1(datas.password), termAccept:1}, callback);
         }else{
-            callback({"message":"email invalide"}, null);
+            callback({status:400, "message":"USER_WRONG_EMAIL"});
         }
     }else{
-        callback([]);
+        callback({status:400, "message":"USER_LOGIN_ERROR"});
     }
     return datas;
 };
@@ -345,11 +346,21 @@ module.exports.register = function(datas, callback) {
     /* UPDATE ALL datas set check email is uniq and valid then send confirmation email */
     /* ----- CHECK EMAIL UNIQ ----- */
     /* ----- GENERATE TOKEN FIRST expire in 24 H ----- */
+    if(typeof datas.body === "undefined"){
+      //callback({"status":"error", "message":"NO_BODY"});
+      return false;
+    }
+    if(typeof datas.body.subscribe_password === "undefined"){
+      //callback({"status":"error", "message":"NO_BODY"});
+      return false;
+    }
+    //sha1 = require('sha1');
+    var pass = sha1(datas.body.subscribe_password);
     db.connect(config.database.users, {useMongoClient: true});
     var self = this;
     var new_user_datas = {
             email   : datas.body.subscribe_email,
-            password: sha1(datas.body.subscribe_password),
+            password: pass,
             pseudo  : datas.body.pseudo,
             secret  : jwt.sign({}, config.secrets.global.secret, {}, { expiresIn: '2 days' }),
             termAccept : true,
@@ -369,9 +380,11 @@ module.exports.register = function(datas, callback) {
     if(datas.body.subscribe_newsletter){
         new_user_datas.newsletter = true;
         new_user_datas.newsletter_services = {};
-        for(var i=0; i<app.locals.applications.length; i++){
-          if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
-              new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
+        if(typeof app.locals !== "undefined" && typeof app.locals.applications !== "undefined"){
+          for(var i=0; i<app.locals.applications.length; i++){
+            if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
+                new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
+            }
           }
         }
     }else{
@@ -381,19 +394,21 @@ module.exports.register = function(datas, callback) {
 
     new_user = new User(new_user_datas);
     new_user.save(function(err, usr){
-        if(err) callback({"status":"error", "message":err});
+        if(err){
+          callback({"status":400, "message":"SUBSCRIBE_EMAIL_EXIST", err:err});
+        }
         else{
           self.reset_session(datas, usr._id, function(infos){
-              callback({"status":"success", "user":usr});
+              callback({"status":200, "user":usr});
           });
         }
     });
     //callback(new_user);
-    return datas.body;
+    //return datas.body;
 };
 module.exports.lost_password = function(req, res, callback){
     if(typeof req.body.email === "unefined"){
-      callback({status:403, datas:{message:"UNKNOW_USER"}});
+      callback({status:403, message:"UNKNOW_USER_EMAIL"});
     }
     var self = this;
     User.findOne({
@@ -402,21 +417,21 @@ module.exports.lost_password = function(req, res, callback){
         if(err) callback({"status":403, datas:{"message":err}});
         else{
           if(user === null){
-            callback({"status":403, datas:{"message":"UNKNOW_USER"}});
+            callback({"status":403, "message":"UNKNOW_USER_EMAIL"});
           }else{
             self.getValidationCode(user._id, function(e){
               if(e.status === 200){
                 Email_controller.lost_password(req, e, function(email){
+                    console.log('----------------------- ');
                     console.log(email);
-                    callback({"status":email.status, datas:email});
+                    console.log('----------------------- ');
+                    callback({"status":email.status, response_display:{message:"REQUEST_PASSWORD_MESSAGE", title:"REQUEST_PASSWORD_TITLE"}, "message":"PASSWORD_SENDED"});
                 });
               }else{
                 callback({"status":e.status, datas:e});
               }
             });
-
           }
-          console.log("user :::::::::::::: ",user);
         }
     });
 }
@@ -425,12 +440,15 @@ module.exports.unregister = function(req, res, callback) {
     //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* DELETE where email, passe, secret and token */
-    User.remove( {"_id": req.body.id}, function(){callback(req.body);} );
+    User.remove( {"_id": req.body.id}, function(){
+      callback({status:200, message:"USER_DELETED", infos:req.body});
+    });
 
     return req.body;
 };
 // check user login then return user_infos
 module.exports.update = function(req, user_id, datas, callback) {
+  console.log('////////////////// update');
     device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     var self = this;
@@ -449,11 +467,11 @@ module.exports.update = function(req, user_id, datas, callback) {
         }, // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
         function(err, infos){
             if(err){
-                callback({status:401, "message":"Impossible de mettre à jour le token WHY ?", "datas":err});
+                callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
             } else {
                 /* TODO RESET SESSION USER FUNCTION */
                 self.reset_session(req, user_id, function(){
-                    callback({status:200, "message":"User updated", "datas":infos});
+                    callback({status:200, "message":"TOKEN_UPDATED", "datas":infos, response_display:{title:"Mis à jour", message:"Votre profil vien d'être mis à jour."}});
                 });
             }
         } , // CALLBACK
@@ -464,12 +482,12 @@ module.exports.updatePassword = function(req, res, callback){
     User.update({
       email: req.email
     },{
-      $set:{password:req.password}
+      $set:{password:sha1(req.password)}
     }, function(err, user){
       if(err){
-        callback({status:401, "message":"IMPOSSIBLE DE METTRE A JOUR VOTRE MOT DE PASSE", "error":err});
+        callback({status:401, "message":"CANT_UPDATE_PASSWORD", "error":err});
       }else{
-        callback({status:200, "message":"Votre mot de passe a bien été mis à jour", "infos":user});
+        callback({status:200, "message":"PASSWORD_UPDATED", "infos":user});
       }
     })
 }
@@ -484,45 +502,47 @@ module.exports.check_user = function(req, callback){
         },
         new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
 
-    new_device.token = new_token;
+    jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
+      if (err) console.log({ auth: false, message: 'Failed to authenticate token.' });
+      console.log("decoded :::::::: ", decoded);
+      //callback({status:200, "message":"TOKEN_VALIDATED"});
+      //res.status(200).send(decoded);
+    });
     /* check if device exist */
     User.find(
         {
-            _id:req.options.user_id,
-            secret : req.options.user_secret,
-            devices:{
-                $elemMatch : {
-                    uid:device_uid,
-                    token:req.options.user_token
-                }
-            }
+            _id : req.options.user_id,
+            token : req.options.user_token
         },
         function(err, user) {
             if(err){
-                callback({status:401, "message":"UNAUTHORISED user token device doesn't match", "datas":err});
+                callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err});
             }else{
-                /* ON MET A JOUR LE TOKEN */
-                User.update(
-                    {
-                        id:req.options.user_id,
-                        devices: {
-                            $elemMatch: {
-                                uid:device_uid
-                            }
-                        }
-                    }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
-                    {
-                        $set : {
-                            token : new_token,
-                            updated : Date.now()
-                        }
-                    } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
-                    function(err, infos){
-                        if(err) callback({status:401, "message":"Impossible de mettre à jour le token WHY ?", "datas":err});
-                        else callback({status:200, "message":"User auth success", "datas":user, "updated_token":new_token});
-                    } , // CALLBACK
-                    true //SAIS PAS POURQUOI
-                );
+                if(user.length === 0){
+                  callback({status:203, "message":"UNAUTHORISED"});
+                }else{
+                  callback({status:200, "message":"TOKEN_UPDATED", "datas":user});
+                  /* ON MET A JOUR LE TOKEN */
+                  /*
+                  TODO CHECK AND UPDATE TOKENT
+                  User.update(
+                      {
+                          id:req.options.user_id
+                      }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+                      {
+                          $set : {
+                              token : new_token,
+                              updated : Date.now()
+                          }
+                      } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
+                      function(err, infos){
+                          if(err) callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
+                          else callback({status:200, "message":"TOKEN_UPDATED", "datas":user, "updated_token":new_token});
+                      } , // CALLBACK
+                      true //SAIS PAS POURQUOI
+                  );
+                  */
+                }
             }
         }
     );
@@ -563,7 +583,7 @@ module.exports.reset_session = function(req, user_id, callback){
                         //if(req.get('origin').replace('http://', '').replace('https://', '') === app.locals.settings.host.replace('http://', '').replace('https://', '')){
                           req.session.Auth = user_infos;
                         //}
-                        callback({status:200, "message":"Session Updated", "datas":user_infos});
+                        callback({status:200, "message":"SESSION_UPDATED", "datas":user_infos});
                     });
                 });
             }
@@ -607,7 +627,7 @@ module.exports.getFullUser = function(_id, callback){
         },
         function(err, user) {
             if(err){
-                callback({status:401, "message":"This is no way to peace -> peace is the way. UNAUTHORIZED", "datas":err});
+                callback({status:401, "message":"UNAUTHORISED_TOKEN", "datas":err});
             }else{
                 if(user !== null){
                     Members_model.get(_id, null, function(e){
@@ -615,7 +635,7 @@ module.exports.getFullUser = function(_id, callback){
                         callback({status:200, "message":"success me", "datas":user});
                     });
                 }else{
-                    callback({status:404, "message":"USER NOT FOUND", "datas":user});
+                    callback({status:404, "message":"USER_NOT_FOUND", "datas":user});
                 }
             }
         }
@@ -628,7 +648,7 @@ module.exports.getValidationCode = function(_id, callback){
         },
         function(err, user) {
             if(err){
-                callback({status:401, "message":"This is no way to peace -> peace is the way. UNAUTHORIZED", "datas":err});
+                callback({status:401, "message":"UNAUTHORISED_TOKEN", "datas":err});
             }else{
                 if(user !== null){
                     var validation_code = jwt.sign({secret:user.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
@@ -643,7 +663,7 @@ module.exports.getValidationCode = function(_id, callback){
                         }
                     );
                 }else{
-                    callback({status:304, "message":"USER NOT FOUND", "datas":user});
+                    callback({status:304, "message":"USER_NOT_FOUND", "datas":user});
                 }
             }
         }
@@ -657,9 +677,9 @@ module.exports.validCode = function(params, callback){
       },
       function(err, user){
         if(err || user === null){
-            callback({status:304, message:"Le code de validation est invalide", datas:err});
+            callback({status:304, message:"INVALID_CODE", datas:err});
         }else{
-            callback({status:200, message:"Le code est valide", datas:user})
+            callback({status:200, message:"CODE_VALID", datas:user})
         }
       }
     );
@@ -672,7 +692,7 @@ module.exports.validAccount = function(params, callback){
         },
         function(err, user){
             if(err || user === null){
-                callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});
+                callback({status:304, message:"UNAUTHORISED_TOKEN", datas:err});
             }else{
                 User.update(
                     {
@@ -682,8 +702,8 @@ module.exports.validAccount = function(params, callback){
                         $set: { validated: true, certified: true }
                     },
                     function(err, validation){
-                        if(err) callback({status:304, message:"Impossible de certifier l'utilisateur", datas:err});
-                        else callback({status:200, message:"Utilisateur certifié validé", datas:validation});
+                        if(err) callback({status:304, message:"UNAUTHORISED_TOKEN", datas:err});
+                        else callback({status:200, message:"USER_VALIDATED", datas:validation});
                     }
                 );
             }
@@ -706,7 +726,7 @@ module.exports.getUsersDevice = function(device_uid, callback){
         },
         function(err, users){
             if(err || users.length === 0){
-                callback({status:304, message:"Nouvel appareil", datas:err});
+                callback({status:304, message:"NEW_DEVICE", datas:err});
             }else{
                 callback({status:200, message:"liste des utilisateurs ayant utilisé ce device", users_device:users})
             }
@@ -730,11 +750,11 @@ module.exports.deleteDevice = function(req, callback){
         },
         function(err, users){
             if(err || users.length === 0){
-                callback({status:304, message:"appareil inexistant", datas:err});
+                callback({status:304, message:"DEVICE_DELETE_ERROR", datas:err});
             }else{
                 self.reset_session(req, req.session.Auth._id, function(infos){
                     infos.avatar = infos.avatar;
-                    callback({status:200, message:"device supprimé", "idkids_user":infos});
+                    callback({status:200, message:"DEVICE_DELETE_SUCCESS", "idkids_user":infos});
                 });
             }
         }

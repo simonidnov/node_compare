@@ -34,6 +34,7 @@ basket.use(function(req, res, next){
     }
     //dataCheck.options = dataCheck;
     Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
+      console.log('Auth_helper.validate_user ', e);
       if(e.status === 200) {
         next();
       } else {

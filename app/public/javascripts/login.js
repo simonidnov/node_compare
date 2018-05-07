@@ -2,6 +2,7 @@
 $(function(){
     login.init();
 });
+var index = {};
 var login = {
     form : null,
     init:function(){
@@ -18,9 +19,40 @@ var login = {
         }
         this.form = new formular('#auth_form', function(e){
             if(e.status === "tab_change"){
+              $('#error_display').remove();
               window.history.pushState({"pageTitle":e.value}, document.title, window.location.origin + '/auth/' + e.value.replace('_form', ''));
               login.navigate();
               $('#lost_form').css('display', "none");
+            }
+            if(e.action === "submit_form"){
+              var form_datas = {};
+              $.each(e.form.serializeArray(), function(index, serie){
+                  form_datas[serie.name] = serie.value;
+              });
+
+              //console.log(form_datas);
+              login.sdk.api[e.form.attr('method')](e.form.attr('action'), form_datas, function(e){
+                if(typeof e.idkids_user !== "undefined"){
+                  if(typeof referer !== "undefined"){
+                    window.location.href = referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret;
+                  }else{
+                    window.location.href = '/account/account/?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret;
+                  }
+                }
+              }, function(e){
+                if(typeof e.responseJSON !== "undefined"){
+                  if(typeof e.responseJSON.message !== "undefined"){
+                    if($('#error_display').length === 0){
+                      $("#account_forms").append('<br/><div class="error" id="error_display"></div>');
+                    }
+                    $('#error_display').html(translation[e.responseJSON.message]);
+                    $('.formular.auth').css({
+                        height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"
+                    });
+                  }
+                }
+              });
+
             }
             $('.formular.auth').css({
                 height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"
@@ -56,9 +88,9 @@ var login = {
        this.sdk = new idkids_jssdk(
             {
                 "secret":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiI1YTMwZGViZmYzNjViMzBhZmQ3ODY4OWMiLCJpYXQiOjE1MTMxNTgxODV9.8e9JhLtcpzf8hO2CguRuUINBpLWOOClx_-3GfFoVqcM",
-                "callback_url":window.location.origin+"/redirect/",
-                "authorisation":{
-                    "email"         : true
+                "callback_url" : window.location.origin+"/redirect/",
+                "authorisation" : {
+                    "email" : true
                 }
             },
             function(response, params){
@@ -79,6 +111,8 @@ var login = {
                 login.form.checkInputs();
             }, this));
         }, this));
+
+        index.sdk = login.sdk;
     },
     navigate : function(){
         var params = login.parse_url(window.location.pathname);

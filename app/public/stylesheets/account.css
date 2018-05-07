@@ -186,6 +186,40 @@
 }
 
 
+.orders_list{
+  margin:0;
+  padding:0;
+  width:100%;
+  display: block;
+  box-sizing: border-box;
+}
+.orders_list li{
+  margin:10px;
+  padding:10px;
+  list-style: none;
+  display: table;
+  width:94%;
+  -moz-box-shadow: 0 2px 25px -10px #656565;
+  -webkit-box-shadow: 0 2px 25px -10px #656565;
+  -o-box-shadow: 0 2px 25px -10px #656565;
+  box-shadow: 0 2px 25px -10px #656565;
+  filter: progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
+}
+.orders_list li .options{
+  display: none;
+}
+.orders_list .bill_number, .orders_list .amount{
+  padding:5px;
+  font-size: 14px;
+}
+.orders_list .amount{
+  font-size: 20px;
+}
+.orders_list .date{
+  font-size: 12px;
+  float: right;
+  padding:5px;
+}
 @media screen and (max-width: 420px) {
   .basket .products_list li{
     padding-bottom:0;

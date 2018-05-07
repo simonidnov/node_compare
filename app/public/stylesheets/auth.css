@@ -161,7 +161,7 @@ header .logo{
     -webkit-animation-delay: 1.7s;
     animation-delay: 1.7s;
 }
-.icon{
+header .brands li.icon{
     opacity: 0;
     -webkit-animation: brands 2s;
     animation: brands 2s;

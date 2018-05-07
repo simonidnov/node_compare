@@ -5,6 +5,11 @@ exports.get = function(req, res, callback) {
         callback(e);
     });
 };
+exports.getBill = function(user_id, datas, callback){
+    Orders_model.getBill(user_id, datas, function(e){
+        callback(e);
+    });
+}
 exports.createCharge = function(req, res, callback){
     Orders_model.createCharge(req.body, res, callback);
 }

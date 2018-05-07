@@ -78,26 +78,49 @@ function formular(target, callback){
                 });
             };
         });
-        $(target).find('[data-action]').off("click").on("click", function(e){
+        $(target).find('[data-action], [data-formaction]').off("click").on("click", function(e){
             e.preventDefault();
             var action = $(this).attr('data-action');
             switch(action){
                 case 'switch_tab':
+                    self.callback({"status":"hitted", "action":action});
                     break;
                 case 'submit':
-                    //callback({status:"hitted", "action":"submit"});
                     // PERHAPS WE CAN POST DATA HERE
                     // ACTUALLY WE NEED TO USE CALLBACK LIGHTER FORM CLASS
-                    //if(typeof $(target).find('form').attr('action') !== "undefined" && typeof $(target).find('form').attr('method') !== "undefined"){
-                    //
-                    //}
+                    if(typeof $(target).find('form').attr('action') !== "undefined" && typeof $(target).find('form').attr('method') !== "undefined"){
+                        callback({status:"hitted", "action":"submit_form", form:$(target).find('form')});
+                        callback({status:"hitted", "action":"submit", form:$(target).find('form')});
+                    }else{
+                        callback({status:"hitted", "action":"submit"});
+                    }
                     break;
                 default:
+                    self.callback({"status":"hitted", "action":action});
                     break;
             }
-            self.callback({"status":"hitted", "action":action});
+
             return false;
         });
+
+        $(target).find('[data-formaction]').off("click").on("click", function(e){
+            e.preventDefault();
+            var action = $(this).attr('data-formaction');
+            switch(action){
+                case 'switch_tab':
+                    self.callback({"status":"hitted", "action":action});
+                    break;
+                case 'submit':
+                    callback({status:"hitted", "action":"submit_form", form:$("#"+$(this).attr("data-formid"))});
+                    break;
+                default:
+                    self.callback({"status":"hitted", "action":action});
+                    break;
+            }
+
+            return false;
+        });
+
         $(target).find('.material_input input').off('focus').on('focus', function(){
             $(this).parent().addClass('focused');
             self.callback({"status":"focus", value:$(this)});
@@ -116,7 +139,6 @@ function formular(target, callback){
                     return false;
                 }
                 var cal = new datepicker($(this), function(e){
-                    console.log(e);
                 });
             }
         });
@@ -348,7 +370,6 @@ function formular(target, callback){
 
                     }else{
                         if(!$(this).parent().hasClass('valid') && $(this).attr('required')){
-                            //console.log('ca bloque ici ', $(this), " ---- ", $(this).attr('required'));
                             valid = false;
                         }
                     }
@@ -374,7 +395,6 @@ function formular(target, callback){
         });
 
         $(target).find('input:checkbox, input:radio').map(function() {
-            console.log(this);
             form_datas[$(this).attr('name')] = $(this).is(':checked');
             //return { name: this.name, value: this.checked ? this.value : "false" };
         });
@@ -383,7 +403,6 @@ function formular(target, callback){
             var array_list = {};
             //var data = {};
             $.each($(this).find('input'), function(index, input_list){
-                console.log();
                 var name = $(this).attr('name'),
                     value = $(this).val();
                 if($(this).attr('type') === "checkbox" || $(this).attr('type') === "radio"){
@@ -504,7 +523,6 @@ function datepicker(target, callback){
         var day = $('.calendar .wrapper.days .selected').attr('data-value'),
             month = $('.calendar .wrapper.months .selected').attr('data-value'),
             year = $('.calendar .wrapper.years .selected').attr('data-value');
-        console.log(self.days[parseInt(month)-1]);
         if(self.days[parseInt(month)-1] === 30){
             $('.calendar .wrapper.days li').eq(30).addClass('disabled');
             $('.calendar .wrapper.days li').eq(29).removeClass('disabled');

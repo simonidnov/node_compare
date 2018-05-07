@@ -31,26 +31,29 @@ div.col.col-md-7
                     p= media[0].originalname
                     p= media[0].mimetype
           
-    
+div.col.col-md-5
   div.formular.basket
-    h2 Mes achats
-    hr
-    if (typeof orders === "undefined" || orders.length === 0)
-      p Vous n'avez effectué aucun achat
-    else
-      ul.orders_list
-        each order in orders
-          li.order
-            p= order.amount
-            if(typeof order.coupons_code !== "undefined")
-              each coupon in order.coupons_code
-                p= coupon.code
-            if(typeof order.response !== "undefined")
-              p= (order.response.paid)? "payé" : "non payé"
-              p= (order.response.receipt_email)? "email envoyé" : "email non encoyé"
-              p= "credit card : "+order.response.source.brand+" "+order.response.source.last4
-              p= "name : "+order.response.source.name
-              p= order.response.status
-            if(typeof order.basketdatas !== "undefined")
-              p= "Nombre de produits "+order.basketdatas.products.length
-              p= "date "+order.created
+      h2 Mes achats
+      hr
+      if (typeof orders === "undefined" || orders.length === 0)
+        p Vous n'avez effectué aucun achat
+      else
+        ul.orders_list
+          each order in orders
+            li.order
+              div.bill_number= "Facture n° "+order.bill_number
+              div.amount= (order.amount/100)+"€"
+              div.date= "le "+order.created.toLocaleDateString('fr-FR', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })
+              a.hyperlink(href=app.locals.settings.host+"/billing/"+order._id, target="_blank") Télécharger ma facture
+              div.options
+                if(typeof order.coupons_code !== "undefined")
+                  each coupon in order.coupons_code
+                    p= coupon.code
+                if(typeof order.response !== "undefined")
+                  p= (order.response.paid)? "payé" : "non payé"
+                  p= (order.response.receipt_email)? "email envoyé" : "email non encoyé"
+                  p= "credit card : "+order.response.source.brand+" "+order.response.source.last4
+                  p= "name : "+order.response.source.name
+                  p= order.response.status
+                if(typeof order.basketdatas !== "undefined")
+                  p= "Nombre de produits "+order.basketdatas.products.length

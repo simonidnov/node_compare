@@ -61,11 +61,9 @@ account.use(function(req, res, next){
 });
 account
     .get('/', function(req, res, next) {
-        console.log("req.url.replace('/','') ", req.url.replace('/',''));
         res.redirect(307, '/account/profile'+req.url.replace('/',''));
     })
     .post('/', function(req, res, next) {
-        console.log("------------------ req.url.replace('/','') ---------------------- ", req.url.replace('/',''));
         res.redirect(307, '/account/profile'+req.url.replace('/',''));
     })
     .get('/:page', function(req, res, next) {
@@ -103,13 +101,15 @@ account
                 '/public/javascripts/account.js',
                 '/node_modules/cropperjs/dist/cropper.min.js',
                 '/public/javascripts/components/formular.js',
+                '/public/javascripts/components/popeye.js',
                 '/node_modules/qrcode/build/qrcode.min.js',
                 'https://maps.googleapis.com/maps/api/js?key='+config.google.map
             ], css:[
                 '/public/stylesheets/account.css',
                 '/public/stylesheets/ui.css',
                 '/node_modules/cropperjs/dist/cropper.min.css',
-                '/public/stylesheets/components/formular.css'
+                '/public/stylesheets/components/formular.css',
+                '/public/stylesheets/components/popeye.css'
             ]
         });
         res.end();
@@ -161,7 +161,7 @@ account
             next();
         });
     }, function(req, res, next){
-            baskets = e.datas;
+            //baskets = e.datas;
             res.render('account', {
                 title: 'Edit address',
                 user : req.session.Auth,
@@ -190,7 +190,7 @@ account
     .post('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e) {
             if(e.status === 200){
-                res.redirect(200, e.datas);
+                res.redirect(200, e);
                 res.end();
             }else{
                 res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
@@ -201,7 +201,7 @@ account
     .put('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
-                res.status(e.status).send(e.datas);
+                res.status(e.status).send(e);
                 res.end();
             }else{
                 res.status(e.status).send('/account/'+req.url.replace('/','')+"?error_message="+e.message);

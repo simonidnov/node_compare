@@ -13,6 +13,7 @@ const express = require('express'),
     index = require('./routes/index'),
     stripe_test = require('./routes/stripe_test'),
     basket = require('./routes/basket'),
+    billing = require('./routes/billing'),
     orders = require('./routes/orders'),
     comments = require('./routes/comments'),
     users = require('./routes/users'),
@@ -176,6 +177,7 @@ router.use('/checking_session', checking_session);
 router.use('/products', products);
 router.use('/settings', settings);
 router.use('/basket', basket);
+router.use('/billing', billing);
 router.use('/orders', orders);
 router.use('/comments', comments);
 router.use('/stripe_test', stripe_test);
