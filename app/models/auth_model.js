@@ -448,7 +448,6 @@ module.exports.unregister = function(req, res, callback) {
 };
 // check user login then return user_infos
 module.exports.update = function(req, user_id, datas, callback) {
-  console.log('////////////////// update');
     device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     var self = this;
@@ -471,7 +470,7 @@ module.exports.update = function(req, user_id, datas, callback) {
             } else {
                 /* TODO RESET SESSION USER FUNCTION */
                 self.reset_session(req, user_id, function(){
-                    callback({status:200, "message":"TOKEN_UPDATED", "datas":infos, response_display:{title:"Mis à jour", message:"Votre profil vien d'être mis à jour."}});
+                    callback({status:200, "message":"TOKEN_UPDATED", "datas":infos, response_display:{title:"Mis à jour", message:"Votre profil vient d'être mis à jour."}});
                 });
             }
         } , // CALLBACK
