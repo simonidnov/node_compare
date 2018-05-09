@@ -49,6 +49,7 @@ module.exports = {
           if(typeof req.data !== "undefined"){
             if(typeof req.data.options !== "undefined"){
               req.options = req.data.options;
+
             }
           }
         }
@@ -63,7 +64,7 @@ module.exports = {
         if(typeof req.options === "undefined"){
             callback({status:401, "message":"UNAUTHARISED_NEED_LOGIN", response_display:{"title":"Connexion", "message":"Vous devez être connecté pour effectuer cette action."}});
         }else{
-
+          //req.body = req.options;
           /*
           if(typeof req.options.user_id === "undefined"){
               callback({status:203, "message":"UNAUTHARISED need valid user ID"});

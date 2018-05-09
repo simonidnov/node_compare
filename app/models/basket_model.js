@@ -166,6 +166,7 @@ module.exports.create = function(datas, res, callback) {
       }
       /* TODO CHECK IF USER ALREADY HAS A BASKET NOT VALIDATED */
       _self.get(datas, res, function(e){
+        console.log('SELF GET ', e);
         if(e.status === 200 && e.datas.length > 0){
           var basket = e.datas[0];
           // l'utilisateur à déjà un panier en cours

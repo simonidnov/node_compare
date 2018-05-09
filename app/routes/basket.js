@@ -54,9 +54,13 @@ basket
         });
     })
     .post('/', function(req, res, next) {
+        console.log("BEFORE Userproducts_controller.allreadyBuy ", req.body);
+        if(typeof req.body.data !== "undefined"){
+          req.body = req.body.data;
+        }
         /* ON CHECK SI L'UTILISATEUR N'AURAIT PAS DEJA ACHETE LE PRODUIT ES FOIS PAR HASARD */
         Userproducts_controller.allreadyBuy(req.body.options.user_id, req.body.product_id, function(e){
-            console.log("Userproducts_controller.allreadyBuy ::::: ", e);
+            console.log("Userproducts_controller.allreadyBuy ::::::::::: ", e, req.body.product_id);
             if(e.status === 200){
               res.status(e.status).send(
                 {
