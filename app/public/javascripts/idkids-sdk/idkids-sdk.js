@@ -342,4 +342,7 @@ var idkids_jssdk = function(options, callback){
         }
       });
     }
+    this.connect = function(){
+      window.location.href = this.api.config.url+"/auth?secret="+this.options.secret;
+    }
 }

@@ -57,7 +57,7 @@ comments
     })
     .post('/', function(req, res, next) {
         Comment_controller.create(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(200).send({status:200, response_display:{title:"COMMENTAIRE", message:"Votre commentaire a bien été pris en compte et sera publié prochainement !<br>Merci !"}});
         });
     })
     .put('/', function(req, res, next) {
@@ -67,7 +67,8 @@ comments
     })
     .delete('/', function(req, res, next) {
         Comment_controller.delete(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            e.response_display = {title:"COMMENTAIRE", message:"Votre commentaire a bien été supprimé !<br>Merci !"};
+            res.status(e.status).send(e);
         });
     });
 

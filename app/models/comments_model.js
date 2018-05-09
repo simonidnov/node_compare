@@ -1,6 +1,7 @@
 // GOOGLE API KEY : AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs
 const db = require('mongoose'),
       config = require('../config/config'),
+      _ = require('underscore'),
       Users_model = require('../models/auth_model'),
       await = require('await'),
       comments_datas = {
@@ -32,7 +33,7 @@ module.exports.get = function(req, res, callback){
       callback({status:405, messsage:"need page url"});
     }
     var query = {"page_url":req.query.page_url};
-    Comments.find(query).limit(50).exec(function(err, comments){
+    Comments.find(query).sort({updated: -1}).limit(50).exec(function(err, comments){
         if(err) {
           callback({status:405, datas:err});
         }else {
@@ -40,8 +41,8 @@ module.exports.get = function(req, res, callback){
           comments.forEach(function (comment) {
               Users_model.getPublicProfile(comment.user_id, function(user_info){
                 datas.push({
-                  _id:comment._id,
-                  label:comment.label,
+                  _id : comment._id,
+                  label : comment.label,
                   page_url : comment.page_url,
                   content : comment.content,
                   stars : comment.stars,
@@ -52,9 +53,11 @@ module.exports.get = function(req, res, callback){
                 });
               });
           });
-
           setTimeout(function(){
-            callback({status:200, datas:datas});
+            var sorted = _.sortBy(datas,function(node){
+              return - (new Date(node.created).getTime());
+            });
+            callback({status:200, datas:sorted});
           }, 500);
         }
     });
