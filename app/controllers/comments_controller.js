@@ -21,8 +21,8 @@ exports.update = function(req, res, callback) {
         callback(e);
     });
 };
-exports.deleting = function(req, res, callback) {
-    Comments_model.deleting(req, res, function(e){
+exports.delete = function(req, res, callback) {
+    Comments_model.delete(req, res, function(e){
         callback(e);
     });
 };

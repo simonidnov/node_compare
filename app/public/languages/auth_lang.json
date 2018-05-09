@@ -61,7 +61,7 @@
             "input_check_length":"Longueur",
             "input_check_capital":"Majuscule",
             "input_check_number":"Chiffre",
-            "accept_terms":"Accepter les <a href=\"/terms-of-use\" title=\"conditions d'utilisation\">conditions générales d'utilisation</a>",
+            "accept_terms":"Accepter les <a href=\"/terms-of-use\" title=\"conditions d'utilisation\" target=\"_blank\">conditions générales d'utilisation</a>",
             "accept_newsletter":"Je souhaites recevoir la newsletter",
             "accept_newsletter_partners":"Sélectionnez ci-dessous les services, marques et partenaires dont vous souhaitez recevoir des nouvelles par newsletter :",
             "accept_newsletter_okaidi":"<b>Okaïdi</b> vêtements 6-12 ans",

@@ -7,6 +7,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "await": "^0.2.6",
     "body-parser": "~1.18.2",
     "childprocess": "^2.0.2",
     "compression": "^1.7.2",

@@ -30,7 +30,8 @@ comments.use(function(req, res, next){
     });
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
-        dataCheck = req.body.data;
+      console.log("req.body ::::::::: ", req.body);
+        dataCheck = req.body;
         Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
           if(e.status === 200) {
             next();
@@ -65,7 +66,7 @@ comments
         });
     })
     .delete('/', function(req, res, next) {
-        Comment_controller.deleting(req, res, function(e){
+        Comment_controller.delete(req, res, function(e){
             res.status(e.status).send(e.datas);
         });
     });

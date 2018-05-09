@@ -115,10 +115,15 @@ product
 
             var ffmpeg = require('fluent-ffmpeg');
             var track = "./uploads/"+req.params.filename;//your path to source file
-
             ffmpeg(track)
             .duration(shortcut)
             .toFormat('mp3')
+            .audioFilters([
+              {
+                filter: 'afade',
+                options: 't=out:st='+(shortcut-2)+':d=2'
+              }
+            ])
             .on('error', function (err) {
               console.log('An error occurred: ' + err.message);
               res.status("400").send(err);

@@ -97,7 +97,6 @@ var idkids_jssdk = function(options, callback){
             }, this));
         },
         check_response : function(e){
-          console.log('CHECK RESPONSE === ', e);
           if(typeof e.response_display !== "undefined"){
               e.response_display.type ="modal";
               var pop = new popeye(

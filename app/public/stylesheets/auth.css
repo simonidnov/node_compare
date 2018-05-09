@@ -52,11 +52,14 @@ h1{
 }
 /* ------------- FOOTER --------------- */
 .auth_footer{
-    max-width: 450px;
+    max-width: 430px;
     left:0;
     right:0;
     margin: auto;
     padding:10px;
+    display: table;
+    width:100%;
+    border-radius: 4px;
 }
 .footer_nav{
     float: right;

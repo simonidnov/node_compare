@@ -2,6 +2,7 @@
 const db = require('mongoose'),
       config = require('../config/config'),
       Users_model = require('../models/auth_model'),
+      await = require('await'),
       comments_datas = {
           label             : {type:"string"},
           description       : {type:"string"},
@@ -31,22 +32,45 @@ module.exports.get = function(req, res, callback){
       callback({status:405, messsage:"need page url"});
     }
     var query = {"page_url":req.query.page_url};
-    Comments.find(query).limit(50).exec(function(err, infos){
+    Comments.find(query).limit(50).exec(function(err, comments){
         if(err) {
           callback({status:405, datas:err});
         }else {
-          console.log(' COMMENT GET ------------- ', infos);
-          callback({status:200, datas:infos});
+          var datas = [];
+          comments.forEach(function (comment) {
+              Users_model.getPublicProfile(comment.user_id, function(user_info){
+                datas.push({
+                  _id:comment._id,
+                  label:comment.label,
+                  page_url : comment.page_url,
+                  content : comment.content,
+                  stars : comment.stars,
+                  user_id : comment.user_id,
+                  created : comment.created,
+                  updated : comment.updated,
+                  user_infos : user_info.datas
+                });
+              });
+          });
+
+          setTimeout(function(){
+            callback({status:200, datas:datas});
+          }, 500);
         }
     });
 };
+
 module.exports.getStats = function(req, res, callback){
     if(typeof req.query.page_url === "undefined"){
       callback({status:405, messsage:"need page url"});
     }
-
     Comments.aggregate([
     		{
+          "$match": {
+            page_url: req.query.page_url
+          }
+        },
+        {
           "$group" : {
             _id:"$page_url",
             count: {
@@ -58,10 +82,14 @@ module.exports.getStats = function(req, res, callback){
           }
         }
       ], function(err, infos){
+        console.log("err :::: ", err);
+        console.log('infos ::::: ', infos);
         if(err){
             callback({status:405, datas:err});
         }else{
-            if(typeof infos.count === "undefined"){
+            if(infos.length === 0){
+              infos = [{count:0, stars:0, _id:req.query.page_url}];
+            }else if(typeof infos[0].count === "undefined"){
               infos = [{count:0, stars:0, _id:req.query.page_url}];
             }
             callback({status:200, datas:infos});
@@ -82,31 +110,31 @@ module.exports.getStats = function(req, res, callback){
 module.exports.create = function(req, res, callback){
     //datas.user = user._id;
     console.log("req.body ===== ", req.body);
-    if(typeof req.body.data === "undefined"){
+    if(typeof req.body === "undefined"){
       callback({status:400, datas:{message:"METHOD NOT ALLOWED"}});
     }
-    if(typeof req.body.data.label === "undefined"){
+    if(typeof req.body.label === "undefined"){
       callback({status:400, datas:{message:"NEED_LABEL"}});
     }
-    if(typeof req.body.data.page_url === "undefined"){
+    if(typeof req.body.page_url === "undefined"){
       callback({status:400, datas:{message:"NEED_PAGE_URL"}});
     }
-    if(typeof req.body.data.content === "undefined"){
+    if(typeof req.body.content === "undefined"){
       callback({status:400, datas:{message:"NEED_CONTENT"}});
     }
-    if(typeof req.body.data.stars === "undefined"){
+    if(typeof req.body.stars === "undefined"){
       callback({status:400, datas:{message:"NEED_STARS"}});
     }
-    if(typeof req.body.data.options.user_id === "undefined"){
+    if(typeof req.body.options.user_id === "undefined"){
       callback({status:400, datas:{message:"NEED_USER_ID"}});
     }
     //callback({status:200, body:req.body});
     var comment_datas = {
-      label: req.body.data.label,
-      page_url : req.body.data.page_url,
-      content : req.body.data.content,
-      stars : req.body.data.stars,
-      user_id: req.body.data.options.user_id
+      label: req.body.label,
+      page_url : req.body.page_url,
+      content : req.body.content,
+      stars : req.body.stars,
+      user_id: req.body.options.user_id
     }
 
     new_comment = new Comments(comment_datas);
@@ -134,15 +162,15 @@ module.exports.update = function(req, res, callback){
         }
     )
 };
-module.exports.deleting = function(req, res, callback){
+module.exports.delete = function(req, res, callback){
     Comments.deleteOne(
         {
-            _id     : comment_id,
-            user_id : user_id
+            _id     : req.body.comment_id,
+            user_id : req.body.options.user_id
         },
         function(err, infos){
             if(err) callback({"status":405, "message":err});
-            else callback({"status":200, "pages":infos});
+            else callback({"status":200, "datas":infos});
         }
     )
 };

@@ -1,15 +1,15 @@
 block content
     footer.auth_footer
-        select.select_lang
+        //-select.select_lang
             each l in lang
                 option(value=l.locale) #{l.label}
         nav.footer_nav
             ul
                 //-a(href="/help" target="_blank")
                     li= "Aide"
-                a(href="/confidentialite" target="_blank")
+                a(href="/private_datas" target="_blank")
                     li= "Confidentialité"
-                a(href="/cgu" target="_blank")
+                a(href="/terms-of-use" target="_blank")
                     li= "Conditions d'utilisation"
         script(src="/public/javascripts/idkids-sdk/idkids-sdk.js")
         script(src="/node_modules/fingerprintjs2/dist/fingerprint2.min.js")
