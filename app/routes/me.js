@@ -54,7 +54,7 @@ me.use(function(req, res, next) {
                         }
                         next();
                     }else{
-                        res.status(response.status).send({ message: "the user token was not up to date", request:dataCheck, host:req.get('host')});
+                        res.status(response.status).send(response);
                         return false;
                     }
                 });

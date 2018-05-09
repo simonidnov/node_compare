@@ -34,7 +34,7 @@ var idkids_jssdk = function(options, callback){
                   callback(e);
               }, this))
               .fail(function(e) {
-                  console.log('fail ', e);
+                console.log('FAIL :::: ', e);
                   if(typeof error_callback !== "undefined"){
                     error_callback(e);
                   }
@@ -79,7 +79,6 @@ var idkids_jssdk = function(options, callback){
                     callback(e);
                 }, this))
                 .fail(function(e) {
-                    console.log('fail ', e);
                     if(typeof error_callback !== "undefined"){
                       error_callback(e);
                     }
@@ -178,18 +177,15 @@ var idkids_jssdk = function(options, callback){
             try {
                 window.localStorage.setItem(key, JSON.stringify(datas));
             } catch(e) {
-                console.log("error ::: ", e); // error in the above string (in this case, yes)!
             }
         },
         getStore:function(key){
             try {
                 this.user = JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
-                console.log("error ::: ", e); // error in the above string (in this case, yes)!
             }
         },
         get_device_uid : function(callback){
-            //console.log("get_device_uid");
             $('[name="appCodeName"]').val(navigator.appCodeName);
             $('[name="appName"]').val(navigator.appName);
             $('[name="appVersion"]').val(navigator.appVersion);
@@ -214,7 +210,6 @@ var idkids_jssdk = function(options, callback){
                     vendor : navigator.vendor
                     */
                     //a hash, representing your device fingerprint
-                    //console.log(result, components); // an array of FP components
                 });
             }else{
                 callback(
@@ -248,7 +243,8 @@ var idkids_jssdk = function(options, callback){
                 },
             };
         }
-        this.api.get_device_uid(function(e){console.log('device uid ', e);});
+        this.api.get_device_uid(function(e){
+        });
         this.api.reset_user(function(datas){
         });
         this.api.get('/me/from', {secret:{}}, function(e){
@@ -317,19 +313,16 @@ var idkids_jssdk = function(options, callback){
               },
               function(e) {
                 self.callback({status:"ADD_BASKET"});
-                //console.log('AJOUT AU PANIER AVEC SUCCES ? ', e);
               }
             );
             break;
           case "delete_basket_product" :
-            console.log('delete basket '+$(this).attr('data-basketid')+" "+$(this).attr('data-productid'));
             self.api.deleting('/basket',
               {
                 basket_id : $(this).attr('data-basketid'),
                 product_id : $(this).attr('data-productid')
               },
               function(e){
-                console.log('supprime de PANIER AVEC SUCCES ? ', e);
                 if(e.status === 200){
                   window.location.reload();
                 }

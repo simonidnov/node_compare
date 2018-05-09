@@ -30,13 +30,12 @@ comments.use(function(req, res, next){
     });
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
-      console.log("req.body ::::::::: ", req.body);
         dataCheck = req.body;
         Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
           if(e.status === 200) {
             next();
           }else {
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send(e);
           }
         });
     }else{

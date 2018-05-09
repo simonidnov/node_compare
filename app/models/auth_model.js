@@ -502,49 +502,58 @@ module.exports.check_user = function(req, callback){
         new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
 
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
-      if (err) console.log({ auth: false, message: 'Failed to authenticate token.' });
-      console.log("decoded :::::::: ", decoded);
+      if (err){
+        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
+      }else{
+        User.find(
+            {
+                _id : req.options.user_id,
+                token : req.options.user_token
+            },
+            function(err, user) {
+                if(err){
+                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
+                }else{
+                    if(user.length === 0){
+                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
+                    }else{
+
+                      /* ON MET A JOUR LE TOKEN */
+                      jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
+                        if (err){
+                          User.update(
+                              {
+                                  id:req.options.user_id
+                              }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+                              {
+                                  $set : {
+                                      token : new_token,
+                                      updated : Date.now()
+                                  }
+                              } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
+                              function(err, infos){
+                                  if(err) callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
+                                  else callback({status:200, "message":"TOKEN_UPDATED", "datas":user, "updated_token":new_token});
+                              } , // CALLBACK
+                              true //SAIS PAS POURQUOI
+                          );
+                          //callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
+                        }else{
+                          callback({status:200, "message":"TOKEN_UPDATED", "datas":user});
+                        }
+                      });
+                    }
+                }
+            }
+        );
+      }
+      //console.log({ auth: false, message: 'Failed to authenticate token.' });
+      //console.log("decoded :::::::: ", decoded);
       //callback({status:200, "message":"TOKEN_VALIDATED"});
       //res.status(200).send(decoded);
     });
     /* check if device exist */
-    User.find(
-        {
-            _id : req.options.user_id,
-            token : req.options.user_token
-        },
-        function(err, user) {
-            if(err){
-                callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err});
-            }else{
-                if(user.length === 0){
-                  callback({status:203, "message":"UNAUTHORISED"});
-                }else{
-                  callback({status:200, "message":"TOKEN_UPDATED", "datas":user});
-                  /* ON MET A JOUR LE TOKEN */
-                  /*
-                  TODO CHECK AND UPDATE TOKENT
-                  User.update(
-                      {
-                          id:req.options.user_id
-                      }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
-                      {
-                          $set : {
-                              token : new_token,
-                              updated : Date.now()
-                          }
-                      } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
-                      function(err, infos){
-                          if(err) callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
-                          else callback({status:200, "message":"TOKEN_UPDATED", "datas":user, "updated_token":new_token});
-                      } , // CALLBACK
-                      true //SAIS PAS POURQUOI
-                  );
-                  */
-                }
-            }
-        }
-    );
+
 }
 module.exports.checking_session = function(req, user_id, callback){
   var self = this;

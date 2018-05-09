@@ -30,7 +30,7 @@ wallets.use(function(req, res, next){
       if(e.status === 200) {
         next();
       }else {
-        res.status(e.status).send(e.datas);
+        res.status(e.status).send(e);
       }
     });
 });
