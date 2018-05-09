@@ -4,8 +4,14 @@ var idkids_jssdk = function(options, callback){
     this.callback = callback;
     this.inited = false;
     (window.location.origin.indexOf('127.0.0.1') === -1)? options.is_debug = false : options.is_debug = true;
+    this.logout = function(){
+        this.api.store('idkids_local_user', '');
+        //window.location.href = window.location.origin + window.location.pathname;
+        window.history.pushState({"pageTitle":document.title}, document.title, window.location.origin + window.location.pathname);
+    };
     this.api = {
         user : null,
+        parent : null,
         options:null,
         config : {
           url:"https://auth.joyvox.fr",
@@ -19,6 +25,8 @@ var idkids_jssdk = function(options, callback){
               this.config.url = this.config.debug_url;
             }
             //this.call('POST', request, params, callback);
+
+
             this.add_params(params, $.proxy(function(params){
               $.post(this.config.url+request, {
                   Accept: "text/plain; charset=utf-8",
@@ -34,17 +42,19 @@ var idkids_jssdk = function(options, callback){
                   callback(e);
               }, this))
               .fail(function(e) {
-                console.log('FAIL :::: ', e);
+                  console.log("FAIL STATUS ? ", e);
                   if(typeof error_callback !== "undefined"){
                     error_callback(e);
                   }
               })
               .always($.proxy(function(e) {
+                  console.log("STATUS ? ", e);
                   this.hide_loader();
                   this.check_response(e);
               },this));
             }, this));
-            this.call('POST', request, params, callback);
+
+            //this.call('POST', request, params, callback);
         },
         put : function(request, params, callback, error_callback) {
             this.call('PUT', request, params, callback, error_callback);
@@ -96,14 +106,53 @@ var idkids_jssdk = function(options, callback){
             }, this));
         },
         check_response : function(e){
+          console.log('check_response ', e);
+          if(typeof e.responseJSON !== "undefined"){
+            e = e.responseJSON;
+          }
           if(typeof e.response_display !== "undefined"){
+              if(e.status === 203){
+                callback("logout");
+                this.store('idkids_local_user', "");
+                e.response_display.buttons = [
+                  {
+                    "class":"btn-success",
+                    "label":"Me reconnecter",
+                    "value":0,
+                    "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth?secret="+this.options.secret
+                  },
+                  {
+                    "class":"btn-danger",
+                    "label":"Continuer sans connexion",
+                    "value":1,
+                    "href":"#logout"
+                  }
+                ];
+              }else if(e.status === 401){
+                e.response_display.buttons = [
+                  {
+                    "class":"btn-success",
+                    "label":"Me connecter",
+                    "value":0,
+                    "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth?secret="+this.options.secret
+                  },
+                  {
+                    "class":"btn-warning",
+                    "label":"Créer un compte",
+                    "value":1,
+                    "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth/subscribe?secret="+this.options.secret
+                  }
+                ];
+              }
               e.response_display.type ="modal";
               var pop = new popeye(
                   $('body'),
                   e.response_display,
                   function(e){
+                    console.log("POPEYE ::::: ", e);
                   }
-              ).init();
+              );
+              pop.init();
           }
         },
         get_user_status : function(){
@@ -226,11 +275,8 @@ var idkids_jssdk = function(options, callback){
             }
         }
     };
-    this.logout = function(){
-        this.api.store('idkids_local_user', '');
-        //window.location.href = window.location.origin + window.location.pathname;
-        window.history.pushState({"pageTitle":document.title}, document.title, window.location.origin + window.location.pathname);
-    };
+
+    this.api.parent = this;
     this.api.options = options;
     this.init = function(callback){
         if (typeof(Unity) === 'undefined') {
@@ -244,6 +290,7 @@ var idkids_jssdk = function(options, callback){
             };
         }
         this.api.get_device_uid(function(e){
+          console.log('device uid ', e);
         });
         this.api.reset_user(function(datas){
         });

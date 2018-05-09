@@ -494,12 +494,12 @@ module.exports.check_user_session = function(req, callback){
 
 }
 module.exports.check_user = function(req, callback){
-    device_uid = req.device_infos.device_uid;
+    //device_uid = req.device_infos.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
-    var new_device  = {
-            uid     : device_uid
-        },
-        new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
+    //var new_device  = {
+    //        uid     : device_uid
+    //    },
+    var new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
 
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){

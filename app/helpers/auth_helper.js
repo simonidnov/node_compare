@@ -46,8 +46,24 @@ module.exports = {
       /* check user id */
 
         if(typeof req.options === "undefined"){
-            callback({status:203, "message":"UNAUTHARISED need OPTIONS"});
+          if(typeof req.data !== "undefined"){
+            if(typeof req.data.options !== "undefined"){
+              req.options = req.data.options;
+            }
+          }
+        }
+        /*
+        if(typeof req.body !== "undefined"){
+          if(typeof req.body.data !== "undefined"){
+            req.body = req.body.data;
+          }
+        }
+        */
+
+        if(typeof req.options === "undefined"){
+            callback({status:401, "message":"UNAUTHARISED_NEED_LOGIN", response_display:{"title":"Connexion", "message":"Vous devez être connecté pour effectuer cette action."}});
         }else{
+
           /*
           if(typeof req.options.user_id === "undefined"){
               callback({status:203, "message":"UNAUTHARISED need valid user ID"});
@@ -58,9 +74,9 @@ module.exports = {
                 callback({status:203, "message":"UNAUTHARISED need valid user token"});
             }else{*/
               //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
-              console.log("validate_user :::: ", req);
               //db.connect(config.database.users, {useMongoClient: true});
               Auth_model.check_user(req, function(e){
+                  console.log('CHECK USER ', e);
                   callback(e);
               });
             /*}
@@ -69,8 +85,6 @@ module.exports = {
 
     },
     validate_session : function(req, callback) {
-        console.log("req.session ::::::::::: ", req.session);
-        console.log("req.session.Auth ::::::::::: ", req.session.Auth);
         if(typeof req.session.Auth === "undefined"){
             callback({status:401, "message":"UNAUTHAURIZED"});
         }else{
