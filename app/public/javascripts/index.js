@@ -30,9 +30,7 @@ var index = {
             }
         );
         var self = this;
-        console.log("init sdk");
         this.sdk.init($.proxy(function(status){
-            console.log('inited ', status);
             this.sdk.isLogged($.proxy(function(e){
                 this.sdk.api.get('/me', {}, function(e){
                   //$('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
@@ -95,6 +93,17 @@ var index = {
         }
         window.addEventListener('popstate', this.navigate);
         window.addEventListener("scroll", function(){index.replace_scroll();});
+
+
+        var a=document.getElementsByTagName("a");
+        for(var i=0;i<a.length;i++)
+        {
+            a[i].onclick=function()
+            {
+                window.location=this.getAttribute("href");
+                return false
+            }
+        }
     },
     navigate : function(){
         var params = this.parse_url(window.location.pathname),

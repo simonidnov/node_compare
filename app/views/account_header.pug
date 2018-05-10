@@ -8,7 +8,31 @@ html
     link(rel='stylesheet', href='/stylesheets/style.min.css')
     link(rel='stylesheet', href='/public/fonts/dist/idkids-icons.min.css')
     link(rel='stylesheet', href='/public/stylesheets/idkids-sdk/idkids-sdk.min.css')
+    
     link(rel="manifest", href="/public/manifest.json")
+    //- Add to home screen for Safari on iOS
+    meta(name="apple-mobile-web-app-capable" content="yes")
+    meta(name="apple-mobile-web-app-status-bar-style" content="white")
+    meta(name="apple-mobile-web-app-title" content="JOYVOX - connect")
+      
+    //-- place this in a head section
+    link(rel="apple-touch-icon" href="/public/images/icons/icon-152x152.png")
+    link(rel="apple-touch-icon" href="/public/images/icons/touch-icon-iphone.png")
+    link(rel="apple-touch-icon" sizes="152x152" href="/public/images/icons/touch-icon-ipad.png")
+    link(rel="apple-touch-icon" sizes="180x180" href="/public/images/icons/touch-icon-iphone-retina.png")
+    link(rel="apple-touch-icon" sizes="167x167" href="/public/images/icons/touch-icon-ipad-retina.png")
+      
+    meta(name="msapplication-TileImage" content="/public/images/icons/icon-144x144.png")
+    meta(name="msapplication-TileColor" content="#f5645f")
+    
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)")
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-750x1294.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)")
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-1242x2148.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)")
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)")
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-1536x2048.png" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)")
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-1668x2224.png" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)")
+    link(rel="apple-touch-startup-image" href="/public/images/splash/launch-2048x2732.png" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)")
+        
     script(src="/public/javascripts/function_helper.min.js")
     if(css)
         each val in css
