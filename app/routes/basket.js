@@ -54,7 +54,6 @@ basket
         });
     })
     .post('/', function(req, res, next) {
-        console.log("BEFORE Userproducts_controller.allreadyBuy ", req.body);
         if(typeof req.body.data !== "undefined"){
           req.body = req.body.data;
         }
@@ -91,7 +90,7 @@ basket
         });
     }, function(req, res, next){
         console.log('ADD BASKET ', req.body);
-        Basket_controller.create(req.body.data, res, function(e){
+        Basket_controller.create(req.body, res, function(e){
             console.log('BASKET CREATE ', e);
             res.status(e.status).send(
               {

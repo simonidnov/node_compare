@@ -14,6 +14,7 @@ exports.getAmount = function(req, res, callback) {
 };
 // check user login then return user_infos
 exports.create = function(datas, res, callback) {
+  console.log('basket controller create ', datas);
     Basket_model.create(datas, res, function(e){
         callback(e);
     });

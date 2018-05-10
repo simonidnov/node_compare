@@ -157,6 +157,8 @@ module.exports.create = function(datas, res, callback) {
   //TODO on check si le produit existe....
   var _self = this,
       product_infos = null;
+
+  console.log('datas basket model create ', datas);
   products_controller.get(datas, res, function(e){
     if(e.status === 200){
       product_infos = e.datas[0];

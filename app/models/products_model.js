@@ -58,6 +58,7 @@ module.exports = {
 module.exports.get = function(datas, res, callback){
     var query = {},
         self = this;
+    console.log("products GET :::::: ", datas);
     if(typeof datas.product_id !== "undefined"){
       query._id = datas.product_id;
     }
