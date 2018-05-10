@@ -95,6 +95,7 @@ var index = {
         window.addEventListener("scroll", function(){index.replace_scroll();});
 
 
+        /*
         var a=document.getElementsByTagName("a");
         for(var i=0;i<a.length;i++)
         {
@@ -104,6 +105,7 @@ var index = {
                 return false
             }
         }
+        */
     },
     navigate : function(){
         var params = this.parse_url(window.location.pathname),

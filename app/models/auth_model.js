@@ -249,10 +249,10 @@ module.exports.login = function(req, datas, callback) {
                                         );
                                     }else{
                                         /* Update Object in Array Collection */
+                                        //$set : {token : new_token},
                                         User.update(
                                             {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
                                             {
-                                                $set : {token : new_token},
                                                 device : {
                                                     $set : new_device
                                                 }
@@ -293,13 +293,13 @@ module.exports.login = function(req, datas, callback) {
                                       "authorizations":['me']
                                   }
                       */
+                      //token : new_token,
                       User.update(
                           {
                               _id: users[0]._id
                           },
                           {
                               $set:{
-                                  token : new_token,
                                   updated : Date.now(),
                                   avatar : avatar
                               }
@@ -517,7 +517,7 @@ module.exports.check_user = function(req, callback){
                     if(user.length === 0){
                       callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
                     }else{
-
+                      //token : new_token,
                       /* ON MET A JOUR LE TOKEN */
                       jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
                         if (err){
@@ -527,14 +527,13 @@ module.exports.check_user = function(req, callback){
                               }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
                               {
                                   $set : {
-                                      token : new_token,
-                                      updated : Date.now()
+                                    updated : Date.now()
                                   }
                               } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
                               function(err, infos){
                                   if(err) callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
-                                  else callback({status:200, "message":"TOKEN_UPDATED", "datas":user, "updated_token":new_token});
-                              } , // CALLBACK
+                                  else callback({status:200, "message":"TOKEN_UPDATED", "datas":user});
+                              } , // CALLBACK , "updated_token":new_token
                               true //SAIS PAS POURQUOI
                           );
                           //callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
