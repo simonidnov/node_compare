@@ -9,6 +9,7 @@ var account = {
     init : function(){
         this.create_forms();
         this.set_listeners();
+        //this.init_apple_pay();
     },
     set_listeners : function(){
         $('#request_validation_code').off('click').on('click', function(){
@@ -240,5 +241,28 @@ var account = {
                 }
             );
         });
+    },
+    init_apple_pay : function(){
+      document.getElementById('apple-pay-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        var paymentRequest = {
+          requiredBillingContactFields: ['postalAddress'],
+          requiredShippingContactFields: ['phone'],
+          countryCode: 'FR',
+          currencyCode: 'EUR',
+          total: {
+            label: 'joyvox.fr',
+            amount: '4.99'
+          }
+        };
+        var session = Stripe.applePay.buildSession(paymentRequest,
+          function(result, completion) {
+          console.log(result.token.card.address_line1); // 12 Main St
+          console.log(result.shippingContact.phoneNumber); // 8885551212
+          completion(true);
+        });
+        session.begin();
+        return false;
+      });
     }
 }

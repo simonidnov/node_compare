@@ -50,6 +50,7 @@ orders
         //res.status(200).send({status:"POST", body:req.body});
         Orders_controller.createCharge(req, res, function(e){
             e.title = "Paiement";
+            console.log(e);
             res.status(e.status).render("order", e);
         });
     })
