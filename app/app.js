@@ -35,7 +35,8 @@ const express = require('express'),
     session = require("express-session"),
     Apps_controller = require('./controllers/apps_controller');
     Settings_model = require('./models/settings_model'),
-    router = express.Router();
+    router = express.Router(),
+    serveIndex = require('serve-index');
 
 app = module.exports = express();
 
@@ -105,6 +106,8 @@ app.set('view engine', 'pug');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(__dirname + '/public')
 app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
+
+app.use('/.well-known', express.static('.well-known'), serveIndex('.well-known'));
 
 app.use("/public", express.static(path.join(__dirname, 'public')));
 app.use("/node_modules", express.static(path.join(__dirname, 'node_modules')));

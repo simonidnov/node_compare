@@ -51,6 +51,7 @@
     "pug": "2.0.0-beta11",
     "qrcode": "^1.0.0",
     "serve-favicon": "~2.4.5",
+    "serve-index": "^1.9.1",
     "sha1": "^1.1.1",
     "sortablejs": "^1.7.0",
     "stripe": "^5.8.0",
