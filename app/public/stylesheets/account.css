@@ -220,6 +220,79 @@
   float: right;
   padding:5px;
 }
+
+.dashboard{
+  background-color:#e6ebf1;
+}
+
+.dashboard .col{
+  padding: 10px;
+}
+.dashboard a{
+  text-decoration: none;
+}
+.dashboard .block{
+  font-family: 'Roboto';
+  width:100%;
+  padding:20px;
+  background-color:#FFF;
+  border-radius: 4px;
+  box-sizing: border-box;
+  -moz-box-shadow: 1px 3px 13px -5px #656565;
+  -webkit-box-shadow: 1px 3px 13px -5px #656565;
+  -o-box-shadow: 1px 3px 13px -5px #656565;
+  box-shadow: 1px 3px 13px -5px #656565;
+  position: relative;
+  filter: progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=134, Strength=8);
+  -webkit-transition: height .6s ease-in-out;
+  -moz-transition: height .6s ease-in-out;
+  -o-transition: height .6s ease-in-out;
+}
+.dashboard .block h2{
+  position: relative;
+  margin:0;
+  font-size: 24px;
+  font-weight: 200;
+  text-decoration: none;
+  color:#333;
+}
+.dashboard .block p{
+  padding:0px;
+  margin:0;
+}
+.dashboard .block.basket{
+  background-color:coral;
+}
+.dashboard .block .amount{
+  font-size: 45px;
+  color:#333;
+  text-align: center;
+}
+.dashboard .block.basket .amount, .dashboard .block.orders .amount{
+  color:#FFF;
+}
+.dashboard .block.basket h2, .dashboard .block.orders h2{
+  color:#FFF;
+}
+.dashboard .block.basket p, .dashboard .block.orders p{
+  color:#FFF;
+}
+
+.dashboard .block.orders{
+  background-color:lightseagreen;
+}
+.dashboard .prod_list{
+  width: 100%;
+}
+.dashboard .prod_list td,
+.dashboard .prod_list th{
+  padding:5px;
+  max-width: 25%;
+  overflow: hidden;
+}
+.dashboard .prod_list tr:nth-child(2n+1){
+  background-color:#F0F0F0;
+}
 @media screen and (max-width: 420px) {
   .basket .products_list li{
     padding-bottom:0;

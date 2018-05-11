@@ -17,7 +17,7 @@ div.col.col-md-7
             div.brand
               img(src=product.meta_datas.app_icon, width="24", height="24")
               div.label= product.meta_datas.app_label
-            //$a.hyperlink(href="" target="_blank") Voir le produit
+              a.hyperlink(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Écouter
             div.cat= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
           
           ul.medias_download.col

@@ -61,10 +61,10 @@ account.use(function(req, res, next){
 });
 account
     .get('/', function(req, res, next) {
-        res.redirect(307, '/account/profile'+req.url.replace('/',''));
+        res.redirect(307, '/account/account'+req.url.replace('/',''));
     })
     .post('/', function(req, res, next) {
-        res.redirect(307, '/account/profile'+req.url.replace('/',''));
+        res.redirect(307, '/account/account'+req.url.replace('/',''));
     })
     .get('/:page', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
@@ -88,6 +88,8 @@ account
     }, function(req, res, next){
         res.render('account', {
             title : 'User Account',
+            profile_percent : getPercent(req.session.Auth),
+            profile_needs : getNeeds(req.session.Auth),
             user  : req.session.Auth,
             locale: language_helper.getlocale(req),
             lang  : lang,
@@ -127,6 +129,8 @@ account
     }, function(req, res, next){
         res.render('account', {
                 title: 'User Account',
+                profile_percent : getPercent(req.session.Auth),
+                profile_needs : getNeeds(req.session.Auth),
                 user : req.session.Auth,
                 locale:language_helper.getlocale(req),
                 lang:lang,
@@ -164,6 +168,8 @@ account
             //baskets = e.datas;
             res.render('account', {
                 title: 'Edit address',
+                profile_percent : getPercent(req.session.Auth),
+                profile_needs : getNeeds(req.session.Auth),
                 user : req.session.Auth,
                 locale:language_helper.getlocale(req),
                 lang:lang,
@@ -210,4 +216,35 @@ account
         });
     });
 
+var getPercent = function(user){
+  var percent = 20;
+  if(user.address.length > 0){
+    percent+=10;
+  }
+  if(user.members.length > 0){
+    percent+=10;
+  }
+  if(user.termAccept){
+    percent+=10;
+  }
+  if(user.validated){
+    percent+=10;
+  }
+  if(typeof user.gender !== "undefined"){
+    percent+=10;
+  }
+  if(typeof user.firstName !== "undefined"){
+    percent+=10;
+  }
+  if(typeof user.lastName !== "undefined"){
+    percent+=10;
+  }
+  if(typeof user.birthDate !== "undefined"){
+    percent+=10;
+  }
+  return percent;
+}
+var getNeeds = function(user){
+  return [{title:"Validation", message:"Valider votre email"}];
+}
 module.exports = account;

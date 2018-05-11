@@ -2,6 +2,61 @@ extends account_header
 
 block content
     div.container.with_head
+        div.dashboard#account(style= (page === "" || page === "account") ? "display:block" : "display:none")
+          div.row.centered
+            div.col.col-md-4
+              div.block.apps
+                h2 Profil
+                if (profile_percent < 100)
+                  p Votre profil est incomplet
+                else
+                  p Votre profil est complet
+                div.amount #{profile_percent}%
+                a.btn.centered(href="/account/profile", target="_self", data-action="page_reload") Mettre à jour
+            div.col.col-md-4
+                div.block.basket
+                  h2 Panier
+                  if (typeof basket === "undefined" || basket.length === 0)
+                    p Votre panier est vide
+                    div.amount 0.00€
+                  else
+                    if (typeof basket[0].products === "undefined" || basket[0].products.length === 0)
+                      p Votre panier est vide
+                      div.amount 0.00€
+                    else
+                      p= "Votre panier contient "+basket[0].products.length+" produit"+ ((basket[0].products.length > 1)? "s" : "")
+                      div.amount= (basket[0].total_amount/100)+"€"
+                  
+                  a.btn.btn-warning.centered(href="/account/basket", target="_self", data-action="page_reload") Voir mon panier
+            div.col.col-md-4
+                div.block.orders
+                  h2 Achats
+                  p Total des commandes
+                  if typeof orders === "undefined"
+                    div.amount 0
+                  else
+                    div.amount #{orders.length}
+                  
+                  a.btn.btn-success.centered(href="/account/basket", target="_self", data-action="page_reload") Voir mes commandes
+            div.col.col-md-12
+                div.block.products
+                  h2 Achats
+                  if userproducts.length === 0
+                    p Vous n'avez effetué aucun achat
+                  else
+                    p Liste de vos achats
+                    table.prod_list
+                      tr
+                        th Nom
+                        th Style
+                        th Prix
+                      each product in userproducts
+                        tr
+                          td 
+                            a(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id) #{product.meta_datas.label}
+                          td #{product.meta_datas.extra_category}
+                          td #{product.meta_datas.price/100}€
+              
         div.row#profile(style= page === "profile" ? "display:block" : "display:none")
             div.col.col-md-7
                 include account/profile.pug
