@@ -28,16 +28,19 @@ module.exports.get = function(req, res, callback){
             query = {user_id : req.session.Auth._id};
         }else if(typeof req.query.user_id !== "undefined"){
             query = {user_id : datas.user_id};
+        }else if(typeof req.query.options !== "undefined"){
+          query = {user_id:req.query.options.user_id}
         }
         if(typeof query.user_id === "undefined"){
           callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
+          return false;
         }
-
     req.user_id = query.user_id;
     self.checkOrders(req, res, function(e){
       Userproducts.find(query, function(err, userproducts){
         if(err){
             callback({status:405, datas:err});
+            return false;
         }else{
           /*
           for(var num=0; num<userproducts.length; num++){
@@ -52,6 +55,7 @@ module.exports.get = function(req, res, callback){
           }
           */
           callback({status:200, datas:userproducts});
+          return false;
         }
       }).sort({'created':-1});
     });
@@ -85,15 +89,16 @@ module.exports.checkOrders = function(req, res, callback){
             user_id : req.user_id,
             product_id :e.datas[i].basketdatas.products[p].product_id
           }, res, function(e){
-            console.log(e);
+            console.log("checkOrders ::: ", e);
           });
         }
       }
-      callback(e);
+      //callback(e);
     }else{
-      callback(e);
+
     }
   });
+  callback({status:200, message:"CHECKING"});
 }
 module.exports.create = function(datas, res, callback){
     Userproducts.find(
@@ -104,7 +109,6 @@ module.exports.create = function(datas, res, callback){
       function(err, infos){
         if(err || infos.length === 0){
           Products_model.get({product_id:datas.product_id}, res, function(e){
-            console.log("Products_model.get ::::::: ", e.datas);
             //infos[d].details = e.datas;
             new_userproduct = new Userproducts({
               user_id:datas.user_id,

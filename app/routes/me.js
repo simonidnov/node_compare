@@ -9,7 +9,8 @@ var express = require('express'),
     machineId       = require('node-machine-id'),
     Auth_model      = require('../models/auth_model'),
     Members_model   = require('../models/members_model'),
-    Address_model   = require('../models/address_model');
+    Address_model   = require('../models/address_model'),
+    Userproducts_controller = require('../controllers/userproducts_controller');
 
 var device_uid = null;
 
@@ -249,6 +250,13 @@ me.get('/', function(req, res, next) {
     .delete('/notifications', function(req, res, next) {
         res.send({ message: "notifications delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
         res.end();
+    })
+    /* ------------ USER PRODUCTS ------------- */
+    .get('/products', function(req, res, next){
+        Userproducts_controller.get(req, res, function(e){
+            res.status(200).send(e);
+            res.end();
+        });
     })
     /* ------------ FROM VALIDATION ----------- */
     .get('/from', function(req, res, next) {
