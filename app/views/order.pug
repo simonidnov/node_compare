@@ -8,12 +8,11 @@ block content
           div.col.col-md-7.centered
             div.formular
               h1 Paiement effectué
-              p Nous avons bien reçu votre paiement, d'un montant de <b>#{(order_datas.amount/100)} €</b><br/>Rendez-vous sur <a href="/account/orders", target="_self">votre compte</a>. pour télécharger vos achats
+              p Nous avons bien reçu votre paiement, d'un montant de <b>#{(order_datas.reduced_amount/100)} €</b><br/>Rendez-vous sur <a href="/account/orders", target="_self">votre compte</a>. pour télécharger vos achats
               p Methode de paiement : #{order_datas.response.source.brand} ....#{order_datas.response.source.last4} exprire le : #{order_datas.response.source.exp_month} #{order_datas.response.source.exp_year}
               div.form-control
                 a.btn.btn-success.centered(href="/account/orders") Voir mes achats
               p Téléchargez votre facture en cliquant <a href="/account/orders"+order_datas._id, target="_self">ici</a>
-      p= JSON.stringify(order_datas)
     else
       div.main.container.with_head
         div.row
