@@ -7,12 +7,12 @@ block content
     script.
         var translation  = (!{JSON.stringify(lang[locale].keys)});
     script.
-        if(typeof current_app !== "undefined"){
+        if(typeof current_app !== "undefined" && current_app !== "undefined" && current_app !== null){
           var current_app  = (!{JSON.stringify(current_app)});
         }
     script.
         var referer  = "#{referer}";
-        
+    
     //-TODO FACEBOOK INTEGRATION
     //-script.
         window.fbAsyncInit = function() {

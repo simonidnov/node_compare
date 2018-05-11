@@ -1,6 +1,6 @@
 if(typeof query.user === "undefined" || query.user === null || query.user === "")
   div#account_infos
-    div.icon.icon-account_1.idkids-icons.lg
+    div.avatar.sm
       img(src=app.locals.settings.host+"/public/images/assets/account.svg")
   div.subnav.account
       div.account_infos
@@ -9,11 +9,11 @@ if(typeof query.user === "undefined" || query.user === null || query.user === ""
           div.infos
               div.label= "Mon Compte"
               //-div.email= "Mon Compte"
-              a(href=app.locals.settings.host+"/auth?secret="+query.options.secret id="idkids_sdk_login_button").btn.btn-success Me connecter
+              a(href=app.locals.settings.host+"/auth"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "") id="idkids_sdk_login_button").btn.btn-success Me connecter
       div.other_accounts
       div.options
-          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Créer un compte
+          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")) Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")) Créer un compte
 else
   div#account_infos
       div.avatar.sm
@@ -28,7 +28,7 @@ else
               a(href=app.locals.settings.host+"/account/account" target="_blank").btn.btn-success Mon compte
       div.other_accounts
       div.options
-          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?secret="+query.options.secret) Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-danger(href=app.locals.settings.host+"/auth/logout?secret="+query.options.secret) Déconnexion
+          a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")) Ajouter un compte
+          a.btn.btn-default.btn-sm.btn-danger(href=app.locals.settings.host+"/auth/logout"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")) Déconnexion
   
       

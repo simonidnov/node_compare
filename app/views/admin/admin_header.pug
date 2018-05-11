@@ -21,7 +21,8 @@ html
         nav.short_cuts
             ul
                 include ../widgets.pug
-                include ../notifs.pug
+                //-include ../notifs.pug
+                li#notifs_taskbar
                 li#account_taskbar
                     div#account_infos
                         if(user.avatar)

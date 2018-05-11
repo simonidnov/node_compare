@@ -9,7 +9,7 @@ var index = {
         this.set_hornav();
         this.sdk = new idkids_jssdk(
             {
-                "secret":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiI1YTMwZGViZmYzNjViMzBhZmQ3ODY4OWMiLCJpYXQiOjE1MTMxNTgxODV9.8e9JhLtcpzf8hO2CguRuUINBpLWOOClx_-3GfFoVqcM",
+                "secret":"",
                 "callback_url":window.location.origin+"/redirect/",
                 "authorisation":{
                     "email"         : true,
@@ -31,38 +31,42 @@ var index = {
         );
         var self = this;
         this.sdk.init($.proxy(function(status){
-            this.sdk.isLogged($.proxy(function(e){
-                this.sdk.api.get('/me', {}, function(e){
-                  //$('.icon-account_1').replaceWith('<div class="avatar sm"><img src="'+e.datas.avatar+'" alt="avatar"/></div>');
-                  $('.account_infos .avatar img').attr('src', e.datas.avatar);
-                  $('.account_infos .infos .label').html(e.datas.pseudo);
-                  $('.account_infos .infos .email').html(e.datas.email);
-                });
-                /*
-                this.sdk.api.get('/me/members', {}, function(e){
-                    console.log('/me/members :::: ', e);
-                });
-                this.sdk.api.get('/me/address', {}, function(e){
-                    console.log('/me/address :::: ', e);
-                });
-                this.sdk.api.get('/me/services', {}, function(e){
-                    console.log('/me/services :::: ', e);
-                });
-                this.sdk.api.get('/me/basket', {}, function(e){
-                    console.log('/me/basket :::: ', e);
-                });
-                this.sdk.api.get('/me/orders', {}, function(e){
-                    console.log('/me/orders :::: ', e);
-                });
-                this.sdk.api.get('/me/notifications', {}, function(e){
-                    console.log('/me/notifications :::: ', e);
-                });
-                */
-            }, this));
+          this.sdk.isLogged($.proxy(function(e){
+              if(e.status === "logged"){
+                //$('.short_cuts ul').prepend('<li id="notifs_taskbar"></li>');
+                this.sdk.createNotificationButton('notifs_taskbar', $.proxy(function(e){
+                  $('#notifs_taskbar').css('display', 'block');
+                },this));
+                this.sdk.createAuthbutton('account_taskbar', $.proxy(function(e){
+                  this.sdk.api.get('/me', {}, function(e){});
+                },this));
+              }else{
+                this.sdk.createAuthbutton('account_taskbar', $.proxy(function(e){},this));
+              }
+
+              /*
+              this.sdk.api.get('/me/members', {}, function(e){
+                  console.log('/me/members :::: ', e);
+              });
+              this.sdk.api.get('/me/address', {}, function(e){
+                  console.log('/me/address :::: ', e);
+              });
+              this.sdk.api.get('/me/services', {}, function(e){
+                  console.log('/me/services :::: ', e);
+              });
+              this.sdk.api.get('/me/basket', {}, function(e){
+                  console.log('/me/basket :::: ', e);
+              });
+              this.sdk.api.get('/me/orders', {}, function(e){
+                  console.log('/me/orders :::: ', e);
+              });
+              this.sdk.api.get('/me/notifications', {}, function(e){
+                  console.log('/me/notifications :::: ', e);
+              });
+              */
+              //this.set_listeners();
+          }, this));
         }, this));
-        /*$('.short_cuts li').off('touchstart').on('touchstart', function(){
-            $(this).focus();
-        });*/
         $('[data-navigate]').off('click').on('click', function(e){
             e.preventDefault();
             var action = $(this).attr('data-navigate');
