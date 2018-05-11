@@ -14,9 +14,9 @@ li#notifications
                   div.icon.idkids-icons.icon-basket
                   span Mon panier
                   if typeof basket[0] !== "undefined"
-                    span(id="total_basket")= basket[0].products.length  
+                    span(id="total_basket") (#{basket[0].products.length})
                   else 
-                    span(id="total_basket") 0
+                    span(id="total_basket") (0)
             li
                 a(href=app.locals.settings.host+"/account/orders" target="_blank")
                   div.icon.idkids-icons.icon-delivery
