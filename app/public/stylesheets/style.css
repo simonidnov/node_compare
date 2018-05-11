@@ -312,6 +312,12 @@ p{
 .page ul li:last-child{
   border:none;
 }
+
+
+.header.sticky .short_cuts{
+    height:100%;
+    overflow: hidden;
+}
 /* ------------- GRID COLUMNS PROCESS -------------- */
 .col{
     display: table;
