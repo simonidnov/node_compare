@@ -41,6 +41,26 @@ orders
             res.status(e.status).send(e.datas);
         });
     })
+    .get('/transaction', function(req, res, next){
+      res.render('order', {
+          title : 'User Account',
+          user  : req.session.Auth,
+          locale: language_helper.getlocale(req),
+          lang  : lang,
+          page  : "transaction",
+          js:[
+              '/public/javascripts/order.js',
+              '/public/javascripts/components/formular.js',
+              '/public/javascripts/components/popeye.js',
+          ], css:[
+              '/public/stylesheets/order.css',
+              '/public/stylesheets/ui.css',
+              '/public/stylesheets/components/formular.css',
+              '/public/stylesheets/components/popeye.css'
+          ]
+      });
+      res.end();
+    })
     .get('/amount', function(req, res, next) {
         Orders_controller.getAmount(req, res, function(e){
           res.status(e.status).send(e.datas);
@@ -49,9 +69,25 @@ orders
     .post('/transaction', function(req, res, next){
         //res.status(200).send({status:"POST", body:req.body});
         Orders_controller.createCharge(req, res, function(e){
-            e.title = "Paiement";
-            console.log(e);
-            res.status(e.status).render("order", e);
+            res.render('order', {
+                title : 'User Account',
+                user  : req.session.Auth,
+                locale: language_helper.getlocale(req),
+                lang  : lang,
+                page  : "transaction",
+                order_datas : e.datas,
+                js:[
+                    '/public/javascripts/order.js',
+                    '/public/javascripts/components/formular.js',
+                    '/public/javascripts/components/popeye.js',
+                ], css:[
+                    '/public/stylesheets/order.css',
+                    '/public/stylesheets/ui.css',
+                    '/public/stylesheets/components/formular.css',
+                    '/public/stylesheets/components/popeye.css'
+                ]
+            });
+            res.end();
         });
     })
     .post('/', function(req, res, next) {

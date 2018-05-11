@@ -594,27 +594,35 @@ p{
 }
 .btn.btn-primary{
     background-color:darkblue;
+    color:#FFF;
 }
 .btn.btn-primary:hover{
     background-color:#2c2caf;
+    color:#FFF;
 }
 .btn.btn-warning{
     background-color:coral;
+    color:#FFF;
 }
 .btn.btn-warning:hover{
     background-color:#ff9f7b;
+    color:#FFF;
 }
 .btn.btn-success{
     background-color:lightseagreen;
+    color:#FFF;
 }
 .btn.btn-success:hover{
     background-color:#5acac3;
+    color:#FFF;
 }
 .btn.btn-danger{
     background-color:red;
+    color:#FFF;
 }
 .btn.btn-danger:hover{
     background-color:#ff6a6a;
+    color:#FFF;
 }
 .btn.btn-disabled{
     background-color:#E3E3E3;
@@ -622,6 +630,7 @@ p{
 }
 .btn.btn-danger.inactive{
     background-color: darkgrey;
+    color:#FFF;
 }
 
 .btn-xs{
@@ -824,6 +833,10 @@ p{
 }`
 
 
+@media all and (display-mode: standalone) {
+  body {
+  }
+}
 
 xmp {
     font-family: Cambria, Georgia;

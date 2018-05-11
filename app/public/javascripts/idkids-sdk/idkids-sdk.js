@@ -279,6 +279,9 @@ var idkids_jssdk = function(options, callback){
     this.api.parent = this;
     this.api.options = options;
     this.init = function(callback){
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+          console.log("Thank you for installing our app!");
+        }
         if (typeof(Unity) === 'undefined') {
            Unity = {
             call: function(msg) {
