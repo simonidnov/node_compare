@@ -101,7 +101,7 @@ auth.get('/', function(req, res, next) {
     .post('/login', function(req, res, next) {
         req.query = req.body.data;
         Auth_controller.login(req, req.body.data, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             res.end();
         });
     })
@@ -109,10 +109,10 @@ auth.get('/', function(req, res, next) {
         Auth_controller.register(req, function(e){
             if(typeof e.user !== "undefined"){
                 e.idkids_user = {datas:e.user};
-                res.status(e.status).send(e);
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 res.end();
             }else{
-                res.status(e.status).send(e);
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 res.end();
             }
             delete current_app;
@@ -146,22 +146,22 @@ auth.get('/', function(req, res, next) {
             next();
           }else{
             console.log('Auth_controller.validCode ', e);
-            res.status(203).send(e);
+            res.status(203).send(Auth_helper.addParams(e, req));
             res.end();
           }
         });
     }, function(req, res, next){
         if(typeof req.body.data.password === "undefined" || typeof req.body.data.retype_password === "undefined"){
-            res.status(203).send({message:"NEED_PASSWORD"});
+            res.status(203).send(Auth_helper.addParams({message:"NEED_PASSWORD"}, req));
             res.end();
         }
         if(req.body.data.password !== req.body.data.retype_password){
-            res.status(203).send({message:"NEED_SAME_PASSWORD"});
+            res.status(203).send(Auth_helper.addParams({message:"NEED_SAME_PASSWORD"}, req));
             res.end();
         }else{
           Auth_controller.update_password({email:req.body.data.email, password:req.body.data.password}, res, function(e){
               console.log("update_password ::::: ", e);
-              res.status(e.status).send(e);
+              res.status(e.status).send(Auth_helper.addParams(e, req));
               res.end();
               //res.redirect(307, "/auth?message="+e.message);
           });
@@ -173,7 +173,7 @@ auth.get('/', function(req, res, next) {
             e.response_display.title = lang[language_helper.getlocale(req)].keys[e.response_display.title];
             e.response_display.message = lang[language_helper.getlocale(req)].keys[e.response_display.message];
           }
-          res.status(e.status).send(e);
+          res.status(e.status).send(Auth_helper.addParams(e));
         });
     })
     .put('/login', function(req, res, next) {
@@ -228,7 +228,7 @@ auth.get('/', function(req, res, next) {
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
-                res.status(e.status).send(e);
+                res.status(e.status).send(Auth_helper.addParams(e));
                 res.end();
             }else{
               res.render('auth/login', datas);
@@ -240,7 +240,7 @@ auth.get('/', function(req, res, next) {
     })
     .delete('/device', function(req, res, next){
         Auth_controller.delete_device(req, res, function(e){
-            res.send(e);
+            res.send(Auth_helper.addParams(e));
             res.end();
         });
     })

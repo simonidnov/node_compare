@@ -13,12 +13,10 @@ var express = require('express'),
     Fb = require('fb'),
     keyPublishable ="",
     keySecret="";
-
     var keyPublishable = "",
         keySecret = "";
 
 account.use(function(req, res, next){
-    //ACCEPT CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
@@ -196,7 +194,7 @@ account
     .post('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e) {
             if(e.status === 200){
-                res.redirect(200, e);
+                res.status(200).send(Auth_helper.addParams(e, req));
                 res.end();
             }else{
                 res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
@@ -207,10 +205,10 @@ account
     .put('/profile', function(req, res, next) {
         Auth_model.update(req, req.session.Auth._id, req.body, function(e){
             if(e.status === 200){
-                res.status(e.status).send(e);
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 res.end();
             }else{
-                res.status(e.status).send('/account/'+req.url.replace('/','')+"?error_message="+e.message);
+                res.redirect(307, '/account/'+req.url.replace('/','')+"?error_message="+e.message);
                 res.end();
             }
         });

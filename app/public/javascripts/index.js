@@ -123,8 +123,18 @@ var index = {
         $.each($('[data-for]'), function(index, page){
             $('#'+$(this).attr('data-for')).css('display', 'none');
         });
-        $('#'+data_for).css('display', 'block');
-        $('html, body').animate({scrollTop:0}, 500, 'swing', function() {});
+        if($('#'+data_for).length === 1){
+          $('#'+data_for).css('display', 'block');
+          $('html, body').animate({scrollTop:0}, 500, 'swing', function() {});
+        }else{
+          index.sdk.getPage(window.location.pathname, {}, function(e){
+            var tempDom = $('<output>').append($.parseHTML(e.responseText));
+            var appContainer = $('#page_content', tempDom);
+            console.log('appContainer ', appContainer.html());
+            $('#page_content').html(appContainer.html());
+          });
+        }
+
         this.set_hornav();
     },
     set_hornav : function(){

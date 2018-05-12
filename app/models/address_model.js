@@ -65,32 +65,28 @@ module.exports.get = function(user_id, address_id, callback){
     if(address_id !== null){
         query['address_id'] = address_id;
     }
+    console.log('ADRESS MDEL GET ', query)
     Address.find(query, function(err, addresses){
         if(err) callback({status:405, datas:err});
         else callback({status:200, datas:addresses});
     });
 }
-module.exports.create = function(user_id, datas, callback){
+module.exports.create = function(user_id, datas, callback) {
     datas.user_id = user_id;
-    console.log('module.exports.create');
     geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
-            console.log('geocode success ', res);
             datas.geocoder = res[0];
             new_address = new Address(datas);
             new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
-                console.log("res :::: ", res, "    infos ::::: ", infos);
             });
         })
         .catch(function(err) {
-            console.log('geocode catch err ', err);
             new_address = new Address(datas);
             new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
-                console.log("err ::::: ", err , " infos ::::: ", infos);
             });
         });
 }
@@ -105,11 +101,13 @@ module.exports.update = function(user_id, address_id, datas, callback){
         },
         function(err, infos){
             if(err) callback({"status":405, "message":err});
-            else callback({"status":200, "user":infos});
+            else callback({"status":200, "address":infos});
         }
     )
 }
 module.exports.delete = function(user_id, address_id, callback){
+    console.log('user id', user_id);
+    console.log('address_id id', address_id);
     Address.deleteOne(
         {
             user_id : user_id,
@@ -117,7 +115,7 @@ module.exports.delete = function(user_id, address_id, callback){
         },
         function(err, infos){
             if(err) callback({"status":405, "message":err});
-            else callback({"status":200, "user":infos});
+            else callback({"status":200, "address":infos});
         }
     )
 }

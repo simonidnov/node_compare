@@ -89,7 +89,6 @@ module.exports.checkOrders = function(req, res, callback){
             user_id : req.user_id,
             product_id :e.datas[i].basketdatas.products[p].product_id
           }, res, function(e){
-            console.log("checkOrders ::: ", e);
           });
         }
       }

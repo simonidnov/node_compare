@@ -12,7 +12,7 @@ var account = {
         //this.init_apple_pay();
     },
     set_listeners : function(){
-        $('#request_validation_code').off('click').on('click', function(){
+        $('#request_validation_code').off('click').on('click', function() {
             index.sdk.api.post('/api/request_validation_code', {
                 user_id:$(this).attr('data-userid'),
                 user_email:$(this).attr('data-useremail')
@@ -22,7 +22,7 @@ var account = {
         $('.account_validation .cross_button').off('click').on('click', function(){
             $('#account_validation').remove();
         });
-        $('[data-action]').on('click', function(){
+        $('[data-action]').on('click', function() {
             switch($(this).attr('data-action')){
                 case "delete" :
                     var send_datas = {};
@@ -32,7 +32,8 @@ var account = {
                         $(this).attr('data-post'),
                         send_datas,
                         function(e){
-                            window.location.reload();
+                          console.log(e);
+                            //window.location.reload();
                         }
                     );
                     break;

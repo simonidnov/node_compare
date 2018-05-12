@@ -207,7 +207,7 @@ module.exports.login = function(req, datas, callback) {
                     }
                     /* CHECK DEVICE */
 
-                    var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresInMinutes: 1440, maxAge : '2 days'});
+                    var new_token = jwt.sign({secret:users[0].secret, email:users[0].email, password:datas.password}, config.secrets.global.secret, { expiresIn: '2 days'});
 
                     /*if(typeof req.query.remember_me !== "undefined"){
                         new_device.token = new_token;
@@ -375,18 +375,18 @@ module.exports.register = function(datas, callback) {
             email   : datas.body.subscribe_email,
             password: pass,
             pseudo  : datas.body.pseudo,
-            secret  : jwt.sign({}, config.secrets.global.secret, { expiresIn: '2 days' }),
+            avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}, true).replace('//', 'http://'),
+            secret  : jwt.sign({pseudo:(datas.body.pseudo+"_"+datas.body.subscribe_email)}, config.secrets.global.secret, { expiresIn: '2 days' }),
             termAccept : true,
             rights  : {
                 "type":'R',
                 "authorizations":['me']
             }
         }
-    new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresInMinutes: 1440, maxAge : '2 days'});
+    new_user_datas.token = jwt.sign({secret:new_user_datas.secret, email:datas.body.subscribe_email, pazssword:datas.body.subscribe_password}, config.secrets.global.secret, { expiresIn: '2 days'});
     new_user_datas.device = [{
         uid     : device_uid,
-        token   : new_user_datas.token,
-        avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}, true).replace('//', 'http://')
+        token   : new_user_datas.token
     }];
     //network : os.networkInterfaces(),
     /* TODO CHECK ARRAY SEND FORM DATA */
@@ -435,9 +435,6 @@ module.exports.lost_password = function(req, res, callback){
             self.getValidationCode(user._id, function(e){
               if(e.status === 200){
                 Email_controller.lost_password(req, e, function(email){
-                    console.log('----------------------- ');
-                    console.log(email);
-                    console.log('----------------------- ');
                     callback({"status":email.status, response_display:{message:"REQUEST_PASSWORD_MESSAGE", title:"REQUEST_PASSWORD_TITLE"}, "message":"PASSWORD_SENDED"});
                 });
               }else{
@@ -453,10 +450,10 @@ module.exports.unregister = function(req, res, callback) {
     //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* DELETE where email, passe, secret and token */
+    // TODO DELETE ALL USER INFOS IN DB COMMENTS ETC...
     User.remove( {"_id": req.body.id}, function(){
       callback({status:200, message:"USER_DELETED", infos:req.body});
     });
-
     return req.body;
 };
 // check user login then return user_infos
@@ -491,15 +488,20 @@ module.exports.update = function(req, user_id, datas, callback) {
     );
 };
 module.exports.updatePassword = function(req, res, callback){
+    var new_token = jwt.sign({secret:req.decoded.secret,email:req.decoded.email,password:req.password}, config.secrets.global.secret, {expiresIn: '2 days'});
     User.update({
       email: req.email
     },{
-      $set:{password:sha1(req.password)}
+      $set:{
+        password:sha1(req.password),
+        token:new_token,
+        updated : Date.now()
+      }
     }, function(err, user){
       if(err){
-        callback({status:401, "message":"CANT_UPDATE_PASSWORD", "error":err});
+        callback({status:401, "message":"CANT_UPDATE_PASSWORD", "error":err, "updated_token":new_token});
       }else{
-        callback({status:200, "message":"PASSWORD_UPDATED", "infos":user});
+        callback({status:200, "message":"PASSWORD_UPDATED", "infos":user, "updated_token":new_token});
       }
     })
 }
@@ -512,16 +514,20 @@ module.exports.check_user = function(req, callback){
     //var new_device  = {
     //        uid     : device_uid
     //    },
-    var new_token = jwt.sign({secret:req.options.user_secret}, config.secrets.global.secret, { expiresIn: '2 days' });
 
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){
         callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
       }else{
+        req.decoded = decoded;
+        if(typeof decoded.password === "undefined" || typeof decoded.email === "undefined"){
+          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
+          return false;
+        }
         User.find(
             {
-                _id : req.options.user_id,
-                token : req.options.user_token
+                email : decoded.email,
+                password : sha1(decoded.password)
             },
             function(err, user) {
                 if(err){
@@ -530,42 +536,36 @@ module.exports.check_user = function(req, callback){
                     if(user.length === 0){
                       callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
                     }else{
+                      var new_token = jwt.sign({secret:user[0].user_secret, email:user[0].email, password:decoded.password}, config.secrets.global.secret, { expiresIn: '2 days' });
+
                       //token : new_token,
                       /* ON MET A JOUR LE TOKEN */
-                      jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
-                        if (err){
-                          User.update(
-                              {
-                                  id:req.options.user_id
-                              }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
-                              {
-                                  $set : {
-                                    updated : Date.now()
-                                  }
-                              } , // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
-                              function(err, infos){
-                                  if(err) callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
-                                  else callback({status:200, "message":"TOKEN_UPDATED", "datas":user});
-                              } , // CALLBACK , "updated_token":new_token
-                              true //SAIS PAS POURQUOI
-                          );
-                          //callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
-                        }else{
-                          callback({status:200, "message":"TOKEN_UPDATED", "datas":user});
-                        }
-                      });
+                      User.update(
+                          {
+                              _id:user[0]._id
+                          }, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
+                          {
+                              $set : {
+                                updated : Date.now(),
+                                token : new_token
+                              }
+                          }, // ON SET LES VARIABLES A METTRE A JOUR ICI LE TOKEN JETON UTILISATEUR
+                          function(err, infos){
+                              if(err) {
+                                callback({status:401, "message":"CANT_UPDATE_TOKEN", "datas":err});
+                              } else {
+                                req.updated_token = new_token;
+                                callback({status:200, "message":"TOKEN_UPDATED", "datas":user, "updated_token":new_token});
+                              }
+                          } , // CALLBACK , "updated_token":new_token
+                          true //SAIS PAS POURQUOI
+                      );
                     }
                 }
             }
         );
       }
-      //console.log({ auth: false, message: 'Failed to authenticate token.' });
-      //console.log("decoded :::::::: ", decoded);
-      //callback({status:200, "message":"TOKEN_VALIDATED"});
-      //res.status(200).send(decoded);
     });
-    /* check if device exist */
-
 }
 module.exports.checking_session = function(req, user_id, callback){
   var self = this;
@@ -797,58 +797,3 @@ function checkAvatarExist(avatar){
     });
     req.end();
 }
-
-// Load mongoose package
-//var mongoose = require('mongoose');
-// Connect to MongoDB and create/use database called todoAppTest
-//mongoose.connect('mongodb://localhost/todoAppTest');
-// Create a schema
-/*var TodoSchema = new mongoose.Schema({
-  name: String,
-  completed: Boolean,
-  note: String,
-  updated_at: { type: Date, default: Date.now },
-});*/
-// Create a model based on the schema
-//var Todo = mongoose.model('Todo', TodoSchema);
-
-
-// Create a todo in memory
-//var todo = new Todo({name: 'Simon NodeJS', completed: true, note: 'Getting there...'});
-// Save it to database
-/*todo.save(function(err){
-  if(err) console.log("SAVE ERROR :::: ", err);
-  else console.log("SUCCESS TODO :::: ", todo);
-});*/
-
-// Find all data in the Todo collection
-/*
-Todo.find(function (err, todos) {
-  if (err) return console.error("error ::: ", err);
-  console.log("TODOS ::: ", todos)
-});
-*/
-
-// callback function to avoid duplicating it all over
-//var callback = function (err, data) {
-//  if (err) { return console.error("callback error ::: ", err); }
-//  else { console.log("callback success ::: ", data); }
-//}
-// Get ONLY completed tasks
-//Todo.find({completed: true }, callback);
-// Get all tasks ending with `JS`
-//Todo.find({name: /^JS/ }, callback);
-
-/*var oneYearAgo = new Date();
-oneYearAgo.setYear(oneYearAgo.getFullYear() - 1);
-// Get all tasks staring with `Master`, completed
-Todo.find({name: /^Master/, completed: true }, callback);
-// Get all tasks staring with `Master`, not completed and created from year ago to now...
-Todo.find({name: /^Master/, completed: false }).where('updated_at').gt(oneYearAgo).exec(callback);
-
-// Model.update(conditions, update, [options], [callback])
-// update `multi`ple tasks from complete false to true
-Todo.update({ name: /master/i }, { completed: true }, { multi: true }, callback);
-//Model.findOneAndUpdate([conditions], [update], [options], [callback])
-Todo.findOneAndUpdate({name: /JS$/ }, {completed: false}, callback);
-*/

@@ -44,7 +44,7 @@ me.use(function(req, res, next) {
 
     auth_helper.validate_from(dataCheck, req.get('origin'), function(e){
         if(!e){
-            res.status(401).send({ message: "your server was not authorised", secret:dataCheck.options.secret, host:req.get('origin'), is_ok:""});
+            res.status(401).send({ message: "your server was not authorised", secret:dataCheck.data, host:req.get('origin'), is_ok:""});
         }else{
             // TODO : indexof not suffisant reason... check real request -- manage token request by URL GET? POST! PUT! DELETE!
             if(req.url.indexOf('/from') === -1){
@@ -91,100 +91,86 @@ me.get('/', function(req, res, next) {
     .get('/members', function(req, res, next) {
         Members_model.get(req.query.options.user_id, null, function(e){
             e.updated_token = req.query.updated_token;
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             res.end();
         });
     })
     .post('/members', function(req, res, next) {
-        Members_model.create(req.body.options.user_id, req.body, function(e){
+        Members_model.create(req.body.data.options.user_id, req.body.data, function(e){
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-            auth_helper.check_session(req, req.body.options.user_id, function(){
-                e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e);
+            //auth_helper.check_session(req, req.body.data.options.user_id, function(){
+            //    e.updated_token = req.query.updated_token;
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 res.end();
-            });
+            //});
         });
     })
     .put('/members', function(req, res, next) {
         Members_model.update(req.body.options.user_id, req.body.member_id, req.body, function(e){
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-            auth_helper.check_session(req, req.body.options.user_id, function(){
-                e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e);
+            //auth_helper.check_session(req, req.body.options.user_id, function(){
+            //    e.updated_token = req.query.updated_token;
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 res.end();
-            });
+            //});
         });
     })
     .delete('/members', function(req, res, next) {
         Members_model.delete(req.body.options.user_id, req.body.member_id, function(e){
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-            auth_helper.check_session(req, req.body.options.user_id, function(){
-                e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e);
+            //auth_helper.check_session(req, req.body.options.user_id, function(){
+            //    e.updated_token = req.query.updated_token;
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 res.end();
-            });
+            //});
         });
     })
     /* ------------ ORDERS MANAGMENT ----------- */
     .get('/friends', function(req, res, next) {
-        res.send({ message: "basket get is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.send({ message: "friends get is under development", updated_token:req.query.updated_token, host:req.get('host')});
         res.end();
     })
     .post('/friends', function(req, res, next) {
-        res.send({ message: "basket post is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.send({ message: "friends post is under development", updated_token:req.query.updated_token, host:req.get('host')});
         res.end();
     })
     .put('/friends', function(req, res, next) {
-        res.send({ message: "basket put is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.send({ message: "friends put is under development", updated_token:req.query.updated_token, host:req.get('host')});
         res.end();
     })
     .delete('/friends', function(req, res, next) {
-        res.send({ message: "basket delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
+        res.send({ message: "friends delete is under development", updated_token:req.query.updated_token, host:req.get('host')});
         res.end();
     })
     /* ------------ ADRESS MANAGMENT ------------- */
     .get('/address', function(req, res, next) {
         Address_model.get(req.query.options.user_id, null, function(e){
-            e.updated_token = req.query.updated_token;
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e));
             res.end();
         });
     })
     .post('/address', function(req, res, next) {
         Address_model.create(req.body.options.user_id, req.body, function(e){
-            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-            auth_helper.check_session(req, req.body.options.user_id, function(){
-                e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e);
-                res.end();
-            });
+            res.status(e.status).send(Auth_helper.addParams(e));
+            res.end();
         });
     })
     .put('/address', function(req, res, next) {
         Address_model.update(req.body.options.user_id, req.body.address_id, req.body, function(e){
-            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-            auth_helper.check_session(req, req.body.options.user_id, function(){
-                e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e);
-                res.end();
-            });
+            res.status(e.status).send(Auth_helper.addParams(e, req));
+            res.end();
         });
     })
     .delete('/address', function(req, res, next) {
         Address_model.delete(req.body.options.user_id, req.body.address_id, function(e){
-            /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-            auth_helper.check_session(req, req.body.options.user_id, function(){
-                e.updated_token = req.query.updated_token;
-                res.status(e.status).send(e);
-                res.end();
-            });
+            res.status(e.status).send(Auth_helper.addParams(e, req));
+            res.end();
         });
     })
     /* ------------ SERVICES MANAGMENT ----------- */
     .get('/services', function(req, res, next) {
         Auth_model.getServices(req.query.options.user_id, function(e){
-            e.updated_token = req.query.updated_token;
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             res.end();
         });
     })
@@ -254,7 +240,7 @@ me.get('/', function(req, res, next) {
     /* ------------ USER PRODUCTS ------------- */
     .get('/products', function(req, res, next){
         Userproducts_controller.get(req, res, function(e){
-            res.status(200).send(e);
+            res.status(200).send(Auth_helper.addParams(e, req));
             res.end();
         });
     })
@@ -263,7 +249,7 @@ me.get('/', function(req, res, next) {
         //Apps_controller.validate(req.query.options.secret, req.get('origin'), function(e){
         //    res.status(e.status).send(e);
         //});
-        res.status(200).send({status:"me from callback", origin:req.get('origin'), options:req.query.options.secret});
+        res.status(200).send(Auth_helper.addParams({status:"me from callback", origin:req.get('origin'), options:req.query.options.secret}, req));
         res.end();
     });
 module.exports = me;

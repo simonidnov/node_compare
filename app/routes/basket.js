@@ -45,12 +45,12 @@ basket.use(function(req, res, next){
 basket
     .get('/', function(req, res, next) {
         Basket_controller.get(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send(Auth_helper.addParams(e.datas, req));
         });
     })
     .get('/amount', function(req, res, next) {
         Basket_controller.getAmount(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send(Auth_helper.addParams(e.datas, req));
         });
     })
     .post('/', function(req, res, next) {
@@ -59,14 +59,13 @@ basket
         }
         /* ON CHECK SI L'UTILISATEUR N'AURAIT PAS DEJA ACHETE LE PRODUIT ES FOIS PAR HASARD */
         Userproducts_controller.allreadyBuy(req.body.options.user_id, req.body.product_id, function(e){
-            console.log("Userproducts_controller.allreadyBuy ::::::::::: ", e, req.body.product_id);
             if(e.status === 200){
               res.status(e.status).send(
-                {
+                Auth_helper.addParams({
                   status:e.status,
                   response_display:{
-                    title:"OUPS",
-                    message:"Vous avez déjà acheté ce produit, rendez-vous sur votre compte client pour le télécharger !",
+                    title:"PLAYLIST",
+                    message:"Vous avez déjà acheté ce produit, rendez-vous sur votre playlist pour l'écouter !",
                     type:"modal",
                     motion:{
                       color:"blue",
@@ -82,18 +81,16 @@ basket
                       }
                     ]
                   }
-                }
+                }, req)
               );
             }else{
               next();
             }
         });
     }, function(req, res, next){
-        console.log('ADD BASKET ', req.body);
         Basket_controller.create(req.body, res, function(e){
-            console.log('BASKET CREATE ', e);
             res.status(e.status).send(
-              {
+              Auth_helper.addParams({
                 status:e.status,
                 response_display:{
                   title:"Ajouté",
@@ -112,18 +109,18 @@ basket
                     }
                   ]
                 }
-              }
+              }, req)
             );
         });
     })
     .put('/', function(req, res, next) {
         Basket_controller.update(req.body.data, res, function(e){
-            res.status(e.status).send({status:e.status, infos:e.datas});
+            res.status(e.status).send(Auth_helper.addParams({status:e.status, infos:e.datas}, req));
         });
     })
     .delete('/', function(req, res, next) {
         Basket_controller.delete(req, res, function(e){
-            res.status(e.status).send({status:e.status, infos:e.datas});
+            res.status(e.status).send(Auth_helper.addParams({status:e.status, infos:e.datas}, req));
         });
     });
 

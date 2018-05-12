@@ -4,23 +4,43 @@
     position: fixed;
     top:0;
     left:0;
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(0,0,0,0);
     z-index: 999999;
     display: none;
 }
 .idkids_jssdk.loader.showed{
-    display: block;
+
+}
+.idkids_jssdk.loader.visible{
+  display: block;
 }
 .idkids_jssdk.loader .centered{
-    width:256px;
-    height:256px;
-    position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    margin:auto;
-    transform: scale(.5);
+  width: 149px;
+  height: 50px;
+  position: fixed;
+  top: -50px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background: #FFF;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+
+  -webkit-transition: top .2s ease-in;
+  -moz-transition: top .2s ease-in;
+  -o-transition: top .2s ease-in;
+  transition: top .2s ease-in;
+}
+.idkids_jssdk.loader.showed .centered{
+  top: 0px;
+}
+.idkids_jssdk.loader .centered svg{
+  height: 100%;
+  float: left;
+}
+.idkids_jssdk.loader .centered span{
+  line-height: 50px;
+  float: left;
 }
 .idkids_jssdk.loader .centered circle{
     stroke-dasharray: 300;

@@ -20,63 +20,50 @@ api.use(function(req, res, next){
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
         dataCheck = req.body;
-    }
-    next();
-});
-/* GET home page. */
-api
-    .get('/', function(req, res, next) {
-        res.status(200).send({title:"API"});
-    })
-    .post('/', function(req, res, next) {
-        Auth_helper.validate_admin(req, function(e){
-            if(e.status === 200){
-                res.status(200).send({title:"POST API"});
-            }else{
-                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
-            }
-        });
-    })
-    .put('/', function(req, res, next){
-        Auth_helper.validate_admin(req, function(e){
-            if(e.status === 200){
-                res.status(200).send({title:"PUT API"});
-            }else{
-                //next();
-                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
-            }
-        });
-        //Apps_controller.update(req, res, function(e){
-        //    res.status(e.status).send(e);
-        //    res.redirect(307, '/account/informations'+req.url.replace('/',''));
-        //});
-    })
-    .delete('/', function(req, res, next) {
+        /* UNCOMMENT TO ADMIN MODE API FOR ALL */
+        /*
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
                 next();
             }else{
-                //next();
                 res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
             }
         });
-        res.status(200).send({title:"DELETE API"});
-        //Apps_controller.delete(req, function(e){
-        //    res.status(e.status).send(e);
-            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
-        //});
+        */
+    }
+    Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
+      if(e.status === 200) {
+        next();
+      }else {
+        res.status(e.status).send(Auth_helper.addParams(e, req));
+      }
+    });
+    //next();
+});
+/* GET home page. */
+api
+    .get('/', function(req, res, next) {
+        res.status(200).send(Auth_helper.addParams({title:"API"}, req));
+    })
+    .post('/', function(req, res, next) {
+        res.status(200).send(Auth_helper.addParams({title:"POST API"}, req));
+    })
+    .put('/', function(req, res, next){
+        res.status(200).send(Auth_helper.addParams({title:"PUT API"}, req));
+    })
+    .delete('/', function(req, res, next) {
+        res.status(200).send(Auth_helper.addParams({title:"DELETE API"}, req));
     })
     .get('/apps', function(req, res, next) {
         Apps_controller.get(req, {}, function(e){
-            res.status(e.status).send(e);
-            //res.redirect(307, '/account/informations'+req.url.replace('/',''));
+            res.status(e.status).send(Auth_helper.addParams(e, req));
         });
     })
     .get('/apps/:action', function(req, res, next) {
         switch(action){
           case 'valid_sdk':
             Apps_controller.validate(req, res, function(e){
-                res.status(e.status).send(e);
+                res.status(e.status).send(Auth_helper.addParams(e, req));
                 //res.redirect(307, '/account/informations'+req.url.replace('/',''));
             });
             break;
@@ -86,46 +73,46 @@ api
         }
     })
     .post('/apps', function(req, res, next) {
-        console.log("POST APP :::::: ", req.session.Auth);
         Apps_controller.create(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .put('/apps', function(req, res, next) {
-        console.log("PUT APP :::::: ", req.session.Auth);
         Apps_controller.update(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .delete('/apps', function(req, res, next) {
         Apps_controller.delete(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .get('/pages', function(req, res, next) {
+        console.log('GET PAGE');
         Pages_controller.get(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .post('/pages', function(req, res, next) {
+        console.log('POST PAGE');
         Pages_controller.create(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .put('/pages', function(req, res, next) {
         Pages_controller.update(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .delete('/pages', function(req, res, next) {
         Pages_controller.delete(req, res, function(e){
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
@@ -133,15 +120,20 @@ api
         Auth_controller.request_validation_code(req, res, function(e){
             if(e.status === 200){
                 Email_controller.validate_account(req, e, function(e){
-                    res.status(e.status).send(e);
+                    res.status(e.status).send(Auth_helper.addParams(e, req));
                 });
             }else{
-                res.status(e.status).send(e);
+                res.status(e.status).send(Auth_helper.addParams(e, req));
             }
         });
     })
     .put('/change_password', function(req, res, next){
-        res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
+        req.email = req.body.decoded.email;
+        req.password = req.body.new_password;
+        Auth_controller.update_password(req.body, res, function(e){
+          console.log(e);
+          res.status(200).send(Auth_helper.addParams(e, req));
+        });
         /*
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){
@@ -199,12 +191,6 @@ api
             return;
           }
         });
-    })
-    .post('/testdatas', function(req, res, next){
-        res.status(200).send({title:"testdatas POST", datas:req.body});
-    })
-    .put('/testdatas', function(req, res, next){
-        res.status(200).send({title:"testdatas PUT", datas:req.body});
     });
 
 module.exports = api;

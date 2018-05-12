@@ -26,6 +26,7 @@ router.get('/', function(req, res, next) {
 });
 router.get('/:page_url', function(req, res, next) {
     Page_controller.get(req.params, res, function(e) {
+      console.log('PAGE CONTROLLER GET ', e.datas);
       if(e.datas.length === 1){
         res.render('page_templates/'+e.datas[0].template, {
             title: 'Welcome',

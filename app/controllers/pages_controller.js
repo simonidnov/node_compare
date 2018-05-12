@@ -9,7 +9,8 @@ exports.get = function(req, datas, callback) {
 };
 // check user login then return user_infos
 exports.create = function(req, datas, callback) {
-    Pages_model.create(req.session.Auth._id, req.body, function(e){
+  console.log('exports.create req.body ', req.body.data);
+    Pages_model.create(req.session.Auth._id, req.body.data, function(e){
         callback(e);
     });
 };

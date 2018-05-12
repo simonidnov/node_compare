@@ -17,10 +17,10 @@ var idkids_jssdk = function(options, callback){
           url:"https://auth.joyvox.fr",
           debug_url:"http://127.0.0.1:3000"
         },
-        get : function(request, params, callback, error_callback) {
-            this.call('GET', request, params, callback, error_callback);
+        get : function(request, params, callback, error_callback, always_callback) {
+            this.call('GET', request, params, callback, error_callback, always_callback);
         },
-        post : function(request, params, callback, error_callback) {
+        post : function(request, params, callback, error_callback, always_callback) {
             if(this.options.is_debug){
               this.config.url = this.config.debug_url;
             }
@@ -43,12 +43,15 @@ var idkids_jssdk = function(options, callback){
               }, this))
               .fail(function(e) {
                   console.log("FAIL STATUS ? ", e);
-                  if(typeof error_callback !== "undefined"){
+                  if(typeof error_callback !== "undefined" && error_callback !== null){
                     error_callback(e);
                   }
               })
               .always($.proxy(function(e) {
                   console.log("STATUS ? ", e);
+                  if(typeof always_callback !== "undefined" && always_callback !== null){
+                    always_callback(e);
+                  }
                   this.hide_loader();
                   this.check_response(e);
               },this));
@@ -56,13 +59,13 @@ var idkids_jssdk = function(options, callback){
 
             //this.call('POST', request, params, callback);
         },
-        put : function(request, params, callback, error_callback) {
-            this.call('PUT', request, params, callback, error_callback);
+        put : function(request, params, callback, error_callback, always_callback) {
+            this.call('PUT', request, params, callback, error_callback, always_callback);
         },
-        deleting : function(request, params, callback, error_callback) {
-            this.call('DELETE', request, params, callback, error_callback);
+        deleting : function(request, params, callback, error_callback, always_callback) {
+            this.call('DELETE', request, params, callback, error_callback, always_callback);
         },
-        call : function(method, request, params, callback, error_callback){
+        call : function(method, request, params, callback, error_callback, always_callback){
             if(this.options.is_debug){
               this.config.url = this.config.debug_url;
             }
@@ -89,7 +92,7 @@ var idkids_jssdk = function(options, callback){
                     callback(e);
                 }, this))
                 .fail(function(e) {
-                    if(typeof error_callback !== "undefined"){
+                    if(typeof error_callback !== "undefined" && error_callback !== null){
                       error_callback(e);
                     }
                 })
@@ -100,6 +103,11 @@ var idkids_jssdk = function(options, callback){
                             e.message = e.responseJSON.message;
                         }
                     }*/
+                    console.log('error_callback ', error_callback);
+                    console.log('always_callback ', always_callback);
+                    if(typeof always_callback !== "undefined" && always_callback !== null){
+                      always_callback(e);
+                    }
                     /* TODO CHECK IF HAS MESSAGE THEN DISPLAY POPIN MESSAGE OR TOAST ? */
                     this.check_response(e);
                 },this));
@@ -174,14 +182,20 @@ var idkids_jssdk = function(options, callback){
         },
         show_loader : function(){
             if($('.idkids_jssdk.loader').length === 0){
-                $('body').append('<div class="idkids_jssdk loader"><div class="centered"><svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve"><style type="text/css">	.st0{fill:none;stroke:#4F555A;stroke-width:28;stroke-miterlimit:10;}	.st1{fill:#C93632;}</style><circle class="st0" cx="128" cy="128" r="53"/><circle class="st1" cx="128" cy="128" r="26"/></svg></div></div>');
+                $('body').append('<div class="idkids_jssdk loader"><div class="centered"><svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve"><style type="text/css">	.st0{fill:none;stroke:#4F555A;stroke-width:28;stroke-miterlimit:10;}	.st1{fill:#C93632;}</style><circle class="st0" cx="128" cy="128" r="53"/><circle class="st1" cx="128" cy="128" r="26"/></svg><span>Chargement</span></div></div>');
             }
-            setTimeout(function(){
-                $('.idkids_jssdk.loader').addClass('showed');
-            }, 200);
+            //setTimeout(function(){
+                $('.idkids_jssdk.loader').addClass('showed').addClass('visible');
+            //}, 200);
         },
         hide_loader : function(){
-            $('.idkids_jssdk.loader').remove();
+            setTimeout(function(){
+              $('.idkids_jssdk.loader').removeClass('showed');
+              setTimeout(function(){
+                $('.idkids_jssdk.loader').removeClass('visible');
+                $('.idkids_jssdk.loader').remove();
+              }, 200);
+            }, 100);
         },
         add_params : function(params, callback){
             params.options = this.options;
@@ -315,6 +329,18 @@ var idkids_jssdk = function(options, callback){
     };
     this.isLogged = function(callback){
         callback(this.api.get_user_status());
+    };
+    this.getPage = function(url, datas, callback){
+      console.log(" getPage ");
+      this.api.get(
+        url,
+        datas,
+        callback,
+        null,
+        function(e){
+          callback(e);
+        }
+      );
     };
     this.template = function(template_name, params, callback){
         $.get(this.api.config.url+'/templating/'+template_name, params, function(e){callback(e);});

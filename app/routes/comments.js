@@ -12,13 +12,6 @@ comments.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
 
-    //res.setHeader("Access-Control-Allow-Origin", "*");
-    //res.setHeader("Content-Type: application/json", true);
-    //res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    //res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-
-    //res.setHeader('Content-Type', 'application/json');
-
     Auth_helper.validate_admin(req, function(e){
       if(e.status === 200){
         req.body.isAdmin = true;
@@ -46,28 +39,39 @@ comments.use(function(req, res, next){
 comments
     .get('/', function(req, res, next) {
         Comment_controller.get(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send(Auth_helper.addParams(e.datas, req));
         });
     })
     .get('/stats', function(req, res, next) {
         Comment_controller.getStats(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send(Auth_helper.addParams(e.datas, req));
         });
     })
     .post('/', function(req, res, next) {
         Comment_controller.create(req, res, function(e){
-            res.status(200).send({status:200, response_display:{title:"COMMENTAIRE", message:"Votre commentaire a bien été pris en compte et sera publié prochainement !<br>Merci !"}});
+          console.log('POST COMMENT ', e);
+            res.status(e.status).send(Auth_helper.addParams(
+              {
+                status:e.status,
+                datas:e.datas,
+                response_display:{
+                  title:"COMMENTAIRE",
+                  message:"Votre commentaire a bien été pris en compte et sera publié prochainement !<br>Merci !"
+                }
+              },
+              req
+            ));
         });
     })
     .put('/', function(req, res, next) {
         Comment_controller.update(req, res, function(e){
-            res.status(e.status).send(e.datas);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
         });
     })
     .delete('/', function(req, res, next) {
         Comment_controller.delete(req, res, function(e){
             e.response_display = {title:"COMMENTAIRE", message:"Votre commentaire a bien été supprimé !<br>Merci !"};
-            res.status(e.status).send(e);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
         });
     });
 

@@ -27,27 +27,23 @@ address.use(function(req, res, next){
 address
     .get('/', function(req, res, next) {
         Address_controller.get(req, res, function(e){
-            //res.status(e.status).send(e);
+            console.log(e);
             res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .post('/', function(req, res, next) {
         Address_controller.create(req, res, function(e){
-            //res.status(e.status).send(e);
-            console.log('Address_controller.create ', e);
-            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
+            res.status(e.status).send(Auth_helper.addParams(e, req));
         });
     })
     .put('/', function(req, res, next){
         Address_controller.update(req, res, function(e){
-            //res.status(e.status).send(e);
-            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
-        });
+          res.status(e.status).send(Auth_helper.addParams(e, req));
+      });
     })
     .delete('/', function(req, res, next) {
         Address_controller.delete(req, function(e){
-            res.status(e.status).send(e);
-            //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
+          res.status(e.status).send(Auth_helper.addParams(e, req));
         });
     });
 

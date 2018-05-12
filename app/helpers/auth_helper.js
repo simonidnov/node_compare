@@ -9,6 +9,20 @@ const db = require('mongoose'),
 module.exports = {
     validate_from:function(req, host, callback) {
       //callback(true);
+
+        if(typeof req.options === "undefined"){
+          if(typeof req.data !== "undefined"){
+            if(typeof req.data.options !== "undefined"){
+              req.options = req.data.options;
+            }
+          }
+        }
+        
+        if(req.options.from_origin === "http://localhost:3000" || host !== -1 || req.options.from_origin === app.locals.settings.host){
+            // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
+            callback(true);
+            return true;
+        }
         if(typeof req.options === "undefined"){
             callback(false);
             return false;
@@ -17,11 +31,7 @@ module.exports = {
             callback(false);
             return false;
         }
-        if(req.options.from_origin === "http://localhost:3000" || host !== -1 || req.options.from_origin === app.locals.settings.host){
-            // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
-            callback(true);
-            return true;
-        }
+
         Apps_model.validate(req.options.secret, host, function(e){
             /* TODO CHECK RESULT LENGTH OR TRUE */
             if(e.datas.length === 0){
@@ -42,48 +52,27 @@ module.exports = {
         });
     },
     validate_user : function(req, host, callback) {
-      //var datas = req.query;
-      /* check user id */
-
         if(typeof req.options === "undefined"){
           if(typeof req.data !== "undefined"){
             if(typeof req.data.options !== "undefined"){
               req.options = req.data.options;
-
             }
           }
         }
-        /*
-        if(typeof req.body !== "undefined"){
-          if(typeof req.body.data !== "undefined"){
-            req.body = req.body.data;
-          }
-        }
-        */
-
         if(typeof req.options === "undefined"){
             callback({status:401, "message":"UNAUTHARISED_NEED_LOGIN", response_display:{"title":"Connexion", "message":"Vous devez être connecté pour effectuer cette action."}});
         }else{
-          //req.body = req.options;
-          /*
-          if(typeof req.options.user_id === "undefined"){
-              callback({status:203, "message":"UNAUTHARISED need valid user ID"});
-          }else if(typeof req.options.user_secret === "undefined"){
-              callback({status:203, "message":"UNAUTHARISED need valid user secret"});
-          }else{
-            if(typeof req.options.user_token === "undefined"){
-                callback({status:203, "message":"UNAUTHARISED need valid user token"});
-            }else{*/
-              //jwt.verify(token, 'shhhhh', function(err, decoded) {console.log(decoded.foo) // bar});
-              //db.connect(config.database.users, {useMongoClient: true});
-              Auth_model.check_user(req, function(e){
-                  console.log('CHECK USER ', e);
-                  callback(e);
-              });
-            /*}
-          }*/
+          Auth_model.check_user(req, function(e){
+            callback(e);
+          });
         }
 
+    },
+    addParams : function(datas, req){
+      if(typeof datas.updated_token === "undefined" && typeof req.updated_token !== "undefined"){
+        datas.updated_token = req.updated_token;
+      }
+      return datas;
     },
     validate_session : function(req, callback) {
         if(typeof req.session.Auth === "undefined"){
