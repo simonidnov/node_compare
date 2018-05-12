@@ -81,7 +81,6 @@ auth.get('/', function(req, res, next) {
                     ],
                     css:[
                         '/public/stylesheets/components/formular.css',
-                        '/public/stylesheets/components/popeye.css',
                         '/public/stylesheets/auth.css',
                     ]
                 };
@@ -133,7 +132,6 @@ auth.get('/', function(req, res, next) {
                 '/public/javascripts/components/popeye.js'
             ], css:[
                 '/public/stylesheets/components/formular.css',
-                '/public/stylesheets/components/popeye.css',
                 '/public/stylesheets/auth.css',
             ]
           }
@@ -223,7 +221,6 @@ auth.get('/', function(req, res, next) {
                     '/public/javascripts/components/popeye.js'
                 ], css:[
                     '/public/stylesheets/components/formular.css',
-                    '/public/stylesheets/components/popeye.css',
                     '/public/stylesheets/auth.css',
                 ]
             };

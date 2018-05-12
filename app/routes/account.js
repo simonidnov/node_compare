@@ -108,8 +108,7 @@ account
                 '/public/stylesheets/account.css',
                 '/public/stylesheets/ui.css',
                 '/node_modules/cropperjs/dist/cropper.min.css',
-                '/public/stylesheets/components/formular.css',
-                '/public/stylesheets/components/popeye.css'
+                '/public/stylesheets/components/formular.css'
             ]
         });
         res.end();

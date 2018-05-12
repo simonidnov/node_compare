@@ -55,8 +55,7 @@ orders
           ], css:[
               '/public/stylesheets/order.css',
               '/public/stylesheets/ui.css',
-              '/public/stylesheets/components/formular.css',
-              '/public/stylesheets/components/popeye.css'
+              '/public/stylesheets/components/formular.css'
           ]
       });
       res.end();
@@ -83,8 +82,7 @@ orders
                 ], css:[
                     '/public/stylesheets/order.css',
                     '/public/stylesheets/ui.css',
-                    '/public/stylesheets/components/formular.css',
-                    '/public/stylesheets/components/popeye.css'
+                    '/public/stylesheets/components/formular.css'
                 ]
             });
             res.end();

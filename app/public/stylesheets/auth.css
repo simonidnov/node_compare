@@ -26,6 +26,9 @@ h1{
     height:64px;
     background: #FFF;
     border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
     background-size: cover;
 }
 .auth .account_list .avatar.notset{
@@ -59,6 +62,8 @@ h1{
     padding:10px;
     display: table;
     width:100%;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
     border-radius: 4px;
 }
 .footer_nav{
@@ -274,7 +279,24 @@ header .brands li.icon{
 }
 .app_infos .row{
   padding: 10px;
-  padding-left: 40px;
+  margin-top: 20px;
+  margin-left: 40px;
+  display: inline-flex;
+  color:#FFF;
+  background: #333;
+
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.app_infos .row span{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.app_infos .row .label{
+  font-size: 30px;
+  font-size: 24px;
+  line-height: 24px;
 }
 @media screen and (max-width: 420px) {
     .auth .account_list li{

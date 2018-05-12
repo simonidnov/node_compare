@@ -113,23 +113,26 @@ module.exports.getStats = function(req, res, callback){
 module.exports.create = function(req, res, callback){
     //datas.user = user._id;
     console.log("req.body ===== ", req.body);
+    if(typeof req.body.data !== "undefined"){
+      req.body = req.body.data;
+    }
     if(typeof req.body === "undefined"){
-      callback({status:400, datas:{message:"METHOD NOT ALLOWED"}});
+      callback({status:203, datas:{message:"METHOD NOT ALLOWED"}});
     }
     if(typeof req.body.label === "undefined"){
-      callback({status:400, datas:{message:"NEED_LABEL"}});
+      callback({status:203, datas:{message:"NEED_LABEL"}});
     }
     if(typeof req.body.page_url === "undefined"){
-      callback({status:400, datas:{message:"NEED_PAGE_URL"}});
+      callback({status:203, datas:{message:"NEED_PAGE_URL"}});
     }
     if(typeof req.body.content === "undefined"){
-      callback({status:400, datas:{message:"NEED_CONTENT"}});
+      callback({status:203, datas:{message:"NEED_CONTENT"}});
     }
     if(typeof req.body.stars === "undefined"){
-      callback({status:400, datas:{message:"NEED_STARS"}});
+      callback({status:203, datas:{message:"NEED_STARS"}});
     }
     if(typeof req.body.options.user_id === "undefined"){
-      callback({status:400, datas:{message:"NEED_USER_ID"}});
+      callback({status:203, datas:{message:"NEED_USER_ID"}});
     }
     //callback({status:200, body:req.body});
     var comment_datas = {
