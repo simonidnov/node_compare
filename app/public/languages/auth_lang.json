@@ -17,7 +17,7 @@
             "TOKEN_UPDATED":"Votre clé d'accès vient d'être mise à jour",
             "USER_DELETED":"Votre compte a bien été supprimé",
             "USER_LOGIN_ERROR":"Impossible de connecter",
-            "SUBSCRIBE_EMAIL_EXIST":"un compte existe déjà pour cet Email, veuillez vous connecter ou demander un nouveau mot de passe.",
+            "SUBSCRIBE_EMAIL_EXIST":"Un compte existe déjà pour cet Email, veuillez vous <a href=\"https://auth.joyvox.fr/auth/login\">connecter</a> ou demander un <a href=\"https://auth.joyvox.fr/auth/lost\">nouveau mot de passe.</a>",
             "USER_LOGIN_SUCCESS":"Utilisateur connecté",
             "USER_WRONG_EMAIL":"L'Email n'existe pas, veuillez créer un compte",
             "USER_WRONG_PASSWORD":"Le password est invalide",

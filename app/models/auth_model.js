@@ -142,8 +142,7 @@ module.exports.deleteDevice = function(req, datas, callback){
 // check user login then return user_infos
 module.exports.login = function(req, datas, callback) {
     var new_device = null;
-    if(typeof req.query.remember_me === "undefined"){
-    }else{
+    if(typeof req.query.remember_me !== "undefined"){
         if(typeof req.query.device_infos !== "undefined"){
             device_uid = req.query.device_infos.device_uid;
             new_device  = {
@@ -171,7 +170,7 @@ module.exports.login = function(req, datas, callback) {
         }
     }
 
-    /*
+    /* SAMPLE DEVICE INFOS FROM WEB
     {
         device_uid: '1be17d56f318dda2e37670a5eca8fc2a',
         appCodeName: 'Mozilla',
@@ -183,7 +182,7 @@ module.exports.login = function(req, datas, callback) {
     */
     //device_uid = machineId.machineIdSync({original: true});
     var self = this;
-
+    /* C'EST UNE CONNEXION CLASSQIUE EMAIL MOT DE PASSE */
     if(datas.password){
         if(validator.validate(datas.email)){
             /* REQUEST UPDATED USER */
@@ -191,6 +190,7 @@ module.exports.login = function(req, datas, callback) {
                 if (err){
                     callback({"status":"error", "code":err.code, "error":err, "message":err.message});
                 }else{
+                    // Si l'utilisateur est introuvable on test le formulaire
                     if(users.length === 0){
                         User.find({email: datas.email}, function (err, users) {
                             if(err){
@@ -207,11 +207,11 @@ module.exports.login = function(req, datas, callback) {
                     }
                     /* CHECK DEVICE */
 
-                    var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresIn: '2 days' });
+                    var new_token = jwt.sign({secret:users[0].secret}, config.secrets.global.secret, { expiresInMinutes: 1440, maxAge : '2 days'});
 
-                    if(typeof req.query.remember_me !== "undefined"){
+                    /*if(typeof req.query.remember_me !== "undefined"){
                         new_device.token = new_token;
-                        /* check if device exist */
+                        // check if device exist
                         User.find(
                             {
                                 _id:users[0]._id,
@@ -236,7 +236,7 @@ module.exports.login = function(req, datas, callback) {
                                     );
                                 }else{
                                     if(device.length === 0){
-                                        /* ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR */
+                                        // ON AJOUTE UN DeVICE INCONNU SUR l'UTILISATEUR
                                         User.update(
                                             { _id: users[0]._id },
                                             {
@@ -248,7 +248,7 @@ module.exports.login = function(req, datas, callback) {
                                             }
                                         );
                                     }else{
-                                        /* Update Object in Array Collection */
+                                        // Update Object in Array Collection
                                         //$set : {token : new_token},
                                         User.update(
                                             {id:users[0]._id, devices: {$elemMatch: {uid:device_uid}}}, // ON SELECTIONNE L'OBJECT DANS LE TABLEAU
@@ -267,12 +267,13 @@ module.exports.login = function(req, datas, callback) {
                                 }
                             }
                         );
-                    }
+                    }*/
 
                     /* UPDATE */
                     var avatar = users[0].avatar;
-                    if(users[0].avatar === "" || users[0].avatar == null){
-                        if(datas.avatar === "" || datas.avatar == null || typeof datas.avatar == "undefined"){
+                    if(users[0].avatar === "" || users[0].avatar === null){
+                        if(datas.avatar === "" || datas.avatar === null || typeof datas.avatar === "undefined"){
+                          // Si pas d'avatar on regarde si un gravatar existe
                           avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
                         }else{
                           avatar = datas.avatar;
@@ -301,7 +302,8 @@ module.exports.login = function(req, datas, callback) {
                           {
                               $set:{
                                   updated : Date.now(),
-                                  avatar : avatar
+                                  avatar : avatar,
+                                  token : new_token
                               }
                           },
                           function(err, user){
@@ -335,7 +337,6 @@ module.exports.logout = function(req, datas, callback) {
       //req.session.Auth.destroy();
       req.session.destroy();
     }
-    //console.log("AUTH MODEL LOGOUT AFTER >>>>> ", req.session);
     //req.session.destroy();
     callback({status:200, datas:{message:"SESSION_DELETED"}});
 };
@@ -354,6 +355,18 @@ module.exports.register = function(datas, callback) {
       //callback({"status":"error", "message":"NO_BODY"});
       return false;
     }
+
+    User.find({email: datas.body.subscribe_email}, function (err, users) {
+        if(err){
+            //callback({"status":400, "code":11, "error":err, "message":"USER_WRONG_EMAIL"});
+        }else{
+            if(users.length > 0){
+              callback({"status":203, "message":"SUBSCRIBE_EMAIL_EXIST", "email_already_exist":users.length});
+              return false;
+            }
+        }
+    });
+
     //sha1 = require('sha1');
     var pass = sha1(datas.body.subscribe_password);
     db.connect(config.database.users, {useMongoClient: true});
@@ -362,17 +375,17 @@ module.exports.register = function(datas, callback) {
             email   : datas.body.subscribe_email,
             password: pass,
             pseudo  : datas.body.pseudo,
-            secret  : jwt.sign({}, config.secrets.global.secret, {}, { expiresIn: '2 days' }),
+            secret  : jwt.sign({}, config.secrets.global.secret, { expiresIn: '2 days' }),
             termAccept : true,
             rights  : {
                 "type":'R',
                 "authorizations":['me']
             }
         }
-    new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' });
+    new_user_datas.token = jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresInMinutes: 1440, maxAge : '2 days'});
     new_user_datas.device = [{
         uid     : device_uid,
-        token   : jwt.sign({secret:new_user_datas.secret}, config.secrets.global.secret, { expiresIn: '2 days' }),
+        token   : new_user_datas.token,
         avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}, true).replace('//', 'http://')
     }];
     //network : os.networkInterfaces(),
@@ -395,7 +408,7 @@ module.exports.register = function(datas, callback) {
     new_user = new User(new_user_datas);
     new_user.save(function(err, usr){
         if(err){
-          callback({"status":400, "message":"SUBSCRIBE_EMAIL_EXIST", err:err});
+          callback({"status":203, "message":"SUBSCRIBE_EMAIL_EXIST", err:err});
         }
         else{
           self.reset_session(datas, usr._id, function(infos){
