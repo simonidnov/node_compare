@@ -24,26 +24,29 @@ address.use(function(req, res, next){
     });
 });
 /* GET home page. */
+// TODO RES SEND ON PUT POST DELETE NO REDIRECT ALLOWED
 address
     .get('/', function(req, res, next) {
         Address_controller.get(req, res, function(e){
-            console.log(e);
             res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .post('/', function(req, res, next) {
         Address_controller.create(req, res, function(e){
-            res.status(e.status).send(Auth_helper.addParams(e, req));
+            //res.status(e.status).send(Auth_helper.addParams(e, req));
+            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .put('/', function(req, res, next){
         Address_controller.update(req, res, function(e){
-          res.status(e.status).send(Auth_helper.addParams(e, req));
+          //res.status(e.status).send(Auth_helper.addParams(e, req));
+          res.redirect(307, '/account/addresses'+req.url.replace('/',''));
       });
     })
     .delete('/', function(req, res, next) {
         Address_controller.delete(req, function(e){
-          res.status(e.status).send(Auth_helper.addParams(e, req));
+          //res.status(e.status).send(Auth_helper.addParams(e, req));
+          res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     });
 
