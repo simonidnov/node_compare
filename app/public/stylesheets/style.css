@@ -18,6 +18,7 @@ a {
 }
 .app_item{
   width:450px;
+  max-width: 70%;
   left:0;
   right:0;
   margin:auto;

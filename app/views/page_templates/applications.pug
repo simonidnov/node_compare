@@ -3,16 +3,27 @@ extends ../header
 block content
   div.container.with_head.page
     div.head_title
-      h1 Bienvenue
+      h1 JOYVOX connect
     div.row
       div.col-md-8.centered
-        h3 Introduction
-        p Joyvox est le label musical d’ÏDKIDS.Community, qui édite et produit des contenus artistiques, culturels et musicaux contribuant à l’éveil et à l’éducation des enfants.
+        h3 À propos de Joyvox
+        p <b>Joyvox est le label musical de la communauté ÏDKIDS</b>, qui édite et produit des contenus artistiques, culturels et musicaux contribuant à l’éveil et à l’éducation des enfants.
+        a.btn(href="http://www.joyvox.fr") Visiter joyvox
+        h3 À propos de connect
+        p Joyvox connect vous permet de gérer vos informations personnelles sur l'ensemble des services internet proposés par Joyvox.
+        if user
+          p <b>Bonjour #{user.pseudo}</b>, vous êtes connecté sur JOYVOX connect
+          a.btn.btn-success(href="/account") Accéder à mon compte
+    
+        else
+          div(style="display:inline-flex")
+            a.btn.btn-success(href="/auth") Me connecter
+            a.btn.btn-warning(href="/auth") Créer mon compte
         h3 Histoire
         p Créé en 2012, Joyvox prend part au mouvement, et dénombre déjà 8 créations (CD, livre-CD et contes musicaux) en partenariat avec plusieurs labels de musique et maisons d’édition et portés par les voix de Domitille et Amaury : Maurice Carême, L’Ours et le Soleil, Ballades Enfantines, Les Petits Bonheurs, Le Fantôme de l’Opéra, Simple comme Bonjour, et tout récemment, Zanimomusic. Avec l’album We Are World Citizens, Joyvox s’engage spécifiquement pour les droits des enfants du monde, et la construction d’un monde meilleur, en délivrant un message optimiste de paix et de diversité.
     div.separator_title
       div.diagonal
-      h3 Nos services
+      h3 Nos services connectés
       br
       br
       div.swiper-container(data-swiper="apps_swiper")
@@ -32,8 +43,8 @@ block content
       
     div.row
       div.col-md-8.centered
-        h3 Productions
+        h3 Éditions et Productions
         p Les Ballades Enfantines, Les Petits Bonheurs ont fait l’objet de concerts en France et à l’étranger, notamment dans le cadre de festivals de la francophonie à New York, Hong-Kong, en Corée et en Chine. Domitille et Amaury se produisent actuellement sur scène avec le spectacle Simple comme bonjour.
-        a.btn.btn-success.centered(href="http://joyvox.fr" target="_blank") Découvrir nos productions
+        a.btn.btn-success.centered(href="http://joyvox.fr" target="_blank") Découvrir
         br
         br
