@@ -42,13 +42,11 @@ var idkids_jssdk = function(options, callback){
                   callback(e);
               }, this))
               .fail(function(e) {
-                  console.log("FAIL STATUS ? ", e);
                   if(typeof error_callback !== "undefined" && error_callback !== null){
                     error_callback(e);
                   }
               })
               .always($.proxy(function(e) {
-                  console.log("STATUS ? ", e);
                   if(typeof always_callback !== "undefined" && always_callback !== null){
                     always_callback(e);
                   }
@@ -103,8 +101,6 @@ var idkids_jssdk = function(options, callback){
                             e.message = e.responseJSON.message;
                         }
                     }*/
-                    console.log('error_callback ', error_callback);
-                    console.log('always_callback ', always_callback);
                     if(typeof always_callback !== "undefined" && always_callback !== null){
                       always_callback(e);
                     }
@@ -114,7 +110,6 @@ var idkids_jssdk = function(options, callback){
             }, this));
         },
         check_response : function(e){
-          console.log('check_response ', e);
           if(typeof e.responseJSON !== "undefined"){
             e = e.responseJSON;
           }
@@ -157,7 +152,6 @@ var idkids_jssdk = function(options, callback){
                   $('body'),
                   e.response_display,
                   function(e){
-                    console.log("POPEYE ::::: ", e);
                   }
               );
               pop.init();
@@ -331,7 +325,6 @@ var idkids_jssdk = function(options, callback){
         callback(this.api.get_user_status());
     };
     this.getPage = function(url, datas, callback){
-      console.log(" getPage ");
       this.api.get(
         url,
         datas,

@@ -4,3 +4,93 @@ block content
   div.container.with_head.page
     div.head_title
       h1 Contact
+    div.container
+      div.row.centered
+        div.col.col-md-8
+          div.formular#contact_formular
+            div.form#contact_form(method="post" action='/api/contact')
+              h2 Nous écrire
+              br
+              hr.separator
+              div.form_content
+                div.form-group.material_input.required
+                  p Pour mieux vous orienter, merci de préciser votre demande :
+                  select.required#email_filter(data-errormessage="Merci de préciser votre demande" name="email_filter" required="required")
+                    option(selected disabled hidden) Votre demande concerne ?
+                    optgroup(label="Édition")
+                      option Je souhaite être édité
+                      option Où trouver les éditions Joyvox ?
+                      option Autres demandes
+                    optgroup(label="Booking")
+                      option Je souhaites booker une date
+                      option Je souhaites obtenir les dates à venir
+                      option Autres demandes
+                    optgroup(label="Animations et ateliers")
+                      option Je souhaites créer un atelier
+                      option Autres demandes
+                    optgroup(label="Ma chanson personnalisée")
+                      option Je ne trouve pas le prénom de mon enfant
+                      option Je souhaites commander une chanson personnalisée
+                      option Mon coupon de téléchargement ne fonctionne pas
+                      option J'ai une carte cadeau, mais le prénom de mon enfant n'éxiste pas
+                      option Ma carte cadeau ne fonctionne pas
+                      option Autres demandes
+                    optgroup(label="Service Technique")
+                      option Connexion
+                      option Mot de passe perdu
+                      option Autres demandes
+                    optgroup(label="E-commerce")
+                      option Paiement 
+                      option Remboursement
+                      option Facturation
+                      option Autres demandes
+                    optgroup(label="Services")
+                      option Je ne reçois pas la Newsletter 
+                      option Me désinscrire à la Newsletter 
+                      option Je souhaites supprimer mon compte utilisateur
+                      option Autres demandes
+                hr
+                div.form-group.material_input
+                  input.form-control#email(type="email" name="email" required="required" value=(user)? user.email : "" data-errormessage="Votre email semble incorrect")
+                  label(for="email") Indiquez votre Email
+                div.form-group.material_input.notempty.required.minlength
+                  input.form-control#subject(type="text" name="subject" required="required" minlength="6" data-errormessage="Merci d'indiquer un sujet de 6 caractères mininm")
+                  label(for="subject") Indiquez un sujet
+                  
+                div.form-group.material_input.notempty.required.minlength
+                  textarea.form-control#message(name="message" required="required" minlength="50" data-errormessage="Merci d'de nous laisser un message personnalisé")
+                  label(for="message") Entrez votre message
+                button.btn.btn-success(type="submit" data-formaction="submit" data-formid="contact_form") Envoyer ma demande
+              hr.separator
+        div.col.col-md-4
+          div.formular
+            h2 Édition
+            div.form_content
+              p Pour toutes demandes concernant les éditions et les produits JOYVOX
+              a(href="mailto:contact@joyvox.fr") Contacter les éditions JOYVOX
+              br
+              a(href="http://www.joyvox.fr") Visiter le site internet JOYVOX
+            hr.separator
+            h2 Booking et spectacles
+            div.form_content
+              p Pour toutes demandes concernant les spectacles et évènements JOYVOX
+              a(href="contact@daproductions.fr") Contacter les éditions JOYVOX
+              br
+              a(href="www.daproductions.fr") Visiter le site internet D&A production
+            hr.separator
+            h2 Ateliers et Animations
+            div.form_content
+              p Pour toutes demandes concernant les animations et programmations d'ateliers JOYVOX
+              a(href="mailto:contact@njoy.fr") Contacter N'JOY
+              br
+              a(href="https://www.njoy.fr/") Visiter le site internet N'JOY
+  
+  //-div.separator_title
+      div.diagonal
+      div.container
+        div.row
+          div.col
+            h3 Nous écrire
+            p 162 boulevard de Fourmies 
+            p 59100 ROUBAIX 
+            p Nord France

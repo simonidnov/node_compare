@@ -1,11 +1,11 @@
 block navigation
     nav.hor_nav
         ul
-            a(href="/apps" data-navigate="page_reload")
+            a(href="/apps" data-navigate="page_reload" title="Accueil")
                 li(class= page === "apps" ? "selected" : "" data-for="apps")= "Accueil"
-            a(href="/services" data-navigate="page_reload")
+            a(href="/services" data-navigate="page_reload" title="Services")
                 li(class= page === "services" ? "selected" : "" data-for="services")= "Newsletter"
-            a(href="/customer_account" data-navigate="page_reload")
+            a(href="/customer_account" data-navigate="page_reload" title="Compte utilisateur")
                 li(class= page === "customer_account" ? "selected" : "" data-for="customer_account")= "Compte utilisateur"
-            a(href="/contact" data-navigate="page_reload")
+            a(href="/contact" data-navigate="page_reload" title="Contact")
                 li(class= page === "contact" ? "selected" : "" data-for="contact")= "Contact"

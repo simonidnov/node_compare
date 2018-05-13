@@ -72,6 +72,7 @@ var index = {
             var action = $(this).attr('data-navigate');
             switch(action){
                 case 'page_reload':
+                    document.title = $(this).attr('title');
                     window.history.pushState({"pageTitle":$(this).attr('title')},"", self.add_params($(this).attr('href')));
                     self.navigate();
                     break;

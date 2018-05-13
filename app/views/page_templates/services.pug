@@ -62,13 +62,14 @@ block content
       div.swiper-container(data-swiper="apps_swiper")
         div.swiper-wrapper
           each item in app.locals.applications
-            div.swiper-slide
-              div.app_item
-                div.icon(style="background-image:url("+item.icon+")")
-                div.label= item.label
-                div.description= item.description
-                br
-                a.btn.btn-success.centered.host(href=item.host) Visiter
+            if(item.has_newsletter)
+              div.swiper-slide
+                div.app_item
+                  div.icon(style="background-image:url("+item.icon+")")
+                  div.label= item.label
+                  div.description= item.description
+                  br
+                  a.btn.btn-success.centered.host(href=item.host) Visiter
         div.swiper-pagination.swiper-pagination-black
         //-div.swiper-button-prev.swiper-button-black
         //-div.swiper-button-next.swiper-button-black

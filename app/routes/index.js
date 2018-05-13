@@ -28,17 +28,19 @@ router.get('/:page_url', function(req, res, next) {
     Page_controller.get(req.params, res, function(e) {
       if(e.datas.length === 1){
         res.render('page_templates/'+e.datas[0].template, {
-            title: 'Welcome',
+            title: e.datas[0].label+" - "+app.locals.settings.label,
             user : req.session.Auth,
             locale:language_helper.getlocale(req),
             lang:lang,
-            page:req.params.page_name,
+            page:e.datas[0].url,
             page_datas:e.datas[0],
             js:[
-              "/node_modules/swiper/dist/js/swiper.min.js"
+              "/node_modules/swiper/dist/js/swiper.min.js",
+              "/public/javascripts/components/formular.min.js"
             ],
             css:[
-              "/node_modules/swiper/dist/css/swiper.min.css"
+              "/node_modules/swiper/dist/css/swiper.min.css",
+              "/public/stylesheets/components/formular.min.css"
             ]
         });
         res.end();
@@ -51,10 +53,12 @@ router.get('/:page_url', function(req, res, next) {
             page:req.params.page_name,
             page_datas:e.datas,
             js:[
-              "/node_modules/swiper/dist/js/swiper.min.js"
+              "/node_modules/swiper/dist/js/swiper.min.js",
+              "/public/javascripts/components/formular.min.js"
             ],
             css:[
-              "/node_modules/swiper/dist/css/swiper.min.css"
+              "/node_modules/swiper/dist/css/swiper.min.css",
+              "/public/stylesheets/components/formular.min.css"
             ]
         });
         res.end();
