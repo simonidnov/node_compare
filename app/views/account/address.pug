@@ -293,7 +293,7 @@ div.formular#address_form
         div#map_preview.map_preview
         
         hr
-        button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.saveAddress_cta
+        button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.saveAddress_cta
         p= lang[locale].keys.input_need_message
         div.form-group.material_input
             textarea#more_datas(placeholder="précisions pour la livraison." name="AddressLine3")

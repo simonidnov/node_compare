@@ -32,21 +32,30 @@ address
         });
     })
     .post('/', function(req, res, next) {
+        if(typeof req.body.data !== "undefined"){
+          req.body = req.body.data;
+        }
         Address_controller.create(req, res, function(e){
-            //res.status(e.status).send(Auth_helper.addParams(e, req));
-            res.redirect(307, '/account/addresses'+req.url.replace('/',''));
+            res.status(e.status).send(Auth_helper.addParams(e, req));
+            //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     })
     .put('/', function(req, res, next){
+        if(typeof req.body.data !== "undefined"){
+          req.body = req.body.data;
+        }
         Address_controller.update(req, res, function(e){
-          //res.status(e.status).send(Auth_helper.addParams(e, req));
-          res.redirect(307, '/account/addresses'+req.url.replace('/',''));
+          res.status(e.status).send(Auth_helper.addParams(e, req));
+          //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
       });
     })
     .delete('/', function(req, res, next) {
+        if(typeof req.body.data !== "undefined"){
+          req.body = req.body.data;
+        }
         Address_controller.delete(req, function(e){
-          //res.status(e.status).send(Auth_helper.addParams(e, req));
-          res.redirect(307, '/account/addresses'+req.url.replace('/',''));
+          res.status(e.status).send(Auth_helper.addParams(e, req));
+          //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });
     });
 

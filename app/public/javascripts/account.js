@@ -32,8 +32,8 @@ var account = {
                         $(this).attr('data-post'),
                         send_datas,
                         function(e){
-                          console.log(e);
-                            //window.location.reload();
+                          //console.log(e);
+                          window.location.reload();
                         }
                     );
                     break;
@@ -201,8 +201,15 @@ var account = {
                 var addr = $('#addressLine1').val()+'+'+$('#postalCode').val()+'+'+$('#city').val()+'+'+$('#addressCountry').val()
                 //$('#address_preview').attr('src', "https://maps.googleapis.com/maps/api/staticmap?center="+addr+"&key=AIzaSyB_MlYEDlRnNWYtrn-y63pbjrWecYaocqs");
             }
+            if(e.status==="hitted" && e.action==="submit"){
+                var address_datas = account.address_form.get_datas();
+                index.sdk.api.post("/address/", address_datas, function(e){
+                  window.location.reload();
+                });
+            }
             //"https://maps.googleapis.com/maps/api/staticmap?center="
-        }).init();
+        });
+        this.address_form.init();
 
         this.private_form = new formular('#private_datas', function(e){}).init();
 
@@ -258,8 +265,6 @@ var account = {
         };
         var session = Stripe.applePay.buildSession(paymentRequest,
           function(result, completion) {
-          console.log(result.token.card.address_line1); // 12 Main St
-          console.log(result.shippingContact.phoneNumber); // 8885551212
           completion(true);
         });
         session.begin();
