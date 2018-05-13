@@ -86,7 +86,10 @@ module.exports.create = function(user_id, datas, callback) {
             new_address = new Address(datas);
             new_address.save(function(err, infos){
                 if(err) callback({"status":405, "message":err});
-                else callback({"status":200, "datas":infos});
+                else {
+                  //Auth_model.reset_session(datas, user_id, function(){});
+                  callback({"status":200, "datas":infos});
+                }
             });
         });
 }
@@ -101,7 +104,10 @@ module.exports.update = function(user_id, address_id, datas, callback){
         },
         function(err, infos){
             if(err) callback({"status":405, "message":err});
-            else callback({"status":200, "address":infos});
+            else {
+              //Auth_model.reset_session(datas, user_id, function(){});
+              callback({"status":200, "address":infos});
+            }
         }
     )
 }

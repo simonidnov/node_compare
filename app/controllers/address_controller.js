@@ -1,4 +1,5 @@
 const Address_model = require('../models/address_model'),
+      Auth_model = require('../models/auth_model'),
       auth_helper     = require('../helpers/auth_helper');
 
 // check user login then return user_infos
@@ -12,9 +13,12 @@ exports.create = function(req, datas, callback) {
     Address_model.create(req.body.user_id, req.body, function(e){
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         console.log('create controller ', e);
+        Auth_model.reset_session(req, req.body.user_id, function(){
+          callback(e);
+        });
         //auth_helper.check_session(req, req.body.user_id, function(e){
         //    console.log('create controller check session ', e);
-            callback(e);
+
         //});
     });
 };
@@ -24,7 +28,10 @@ exports.update = function(req, datas, callback) {
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         //auth_helper.check_session(req, req.body.options.user_id, function(e){
         //    e.updated_token = req.query.updated_token;
-            callback(e);
+        Auth_model.reset_session(req, req.body.options.user_id, function(){
+          callback(e);
+        });
+
         //});
     });
 };
@@ -34,7 +41,9 @@ exports.delete = function(req, callback) {
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         //auth_helper.check_session(req, req.body.options.user_id, function(e){
         //    e.updated_token = req.query.updated_token;
+        Auth_model.reset_session(req, req.body.options.user_id, function(){
             callback(e);
+          });
         //});
     });
 };

@@ -333,7 +333,6 @@ module.exports.login = function(req, datas, callback) {
 };
 // check user logout then return user_infos
 module.exports.logout = function(req, datas, callback) {
-    //console.log("AUTH MODEL LOGOUT <<<<<< ", req.session);
     if(typeof req.session.Auth !== "undefined"){
       //req.session.Auth.destroy();
       req.session.destroy();
@@ -343,8 +342,6 @@ module.exports.logout = function(req, datas, callback) {
 };
 // check user register then return user_infos
 module.exports.register = function(datas, callback) {
-    console.log('register ', datas.body);
-    //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* UPDATE ALL datas set check email is uniq and valid then send confirmation email */
     if(typeof datas.body.data !== "undefined"){
@@ -376,10 +373,6 @@ module.exports.register = function(datas, callback) {
 
     var pass = sha1(datas.body.subscribe_password);
     db.connect(config.database.users, {useMongoClient: true});
-    console.log('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°');
-    console.log('REGISTER BODY ::: ', datas.body);
-    console.log('REGISTER PASSWORD ::: ', datas.body.subscribe_password);
-    console.log('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°');
 
     var self = this;
     var new_user_datas = {
@@ -431,7 +424,6 @@ module.exports.register = function(datas, callback) {
     //return datas.body;
 };
 module.exports.lost_password = function(req, res, callback){
-  console.log("............ lost_password ", req.body);
     if(typeof req.body.data !== "unefined"){
       req.body = req.body.data;
     }
@@ -599,6 +591,7 @@ module.exports.checking_session = function(req, user_id, callback){
     );
 }
 module.exports.reset_session = function(req, user_id, callback){
+  console.log('--------------- reset_session ', user_id);
     User.findOne(
         {
             _id: user_id
@@ -614,6 +607,7 @@ module.exports.reset_session = function(req, user_id, callback){
                     Address_model.get(user_id, null, function(e){
                         user_infos.address = e.datas;
                         //TODO FIX SSL
+                        console.log('--------------- user_infos RESET SESSION ', user_infos);
                         //if(req.get('origin').replace('http://', '').replace('https://', '') === app.locals.settings.host.replace('http://', '').replace('https://', '')){
                           req.session.Auth = user_infos;
                         //}

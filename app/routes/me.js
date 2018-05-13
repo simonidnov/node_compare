@@ -101,8 +101,11 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             //auth_helper.check_session(req, req.body.data.options.user_id, function(){
             //    e.updated_token = req.query.updated_token;
-                res.status(e.status).send(Auth_helper.addParams(e, req));
-                res.end();
+                Auth_model.reset_session(req, req.body.data.options.user_id, function(){
+                  res.status(e.status).send(Auth_helper.addParams(e, req));
+                  res.end();
+                });
+
             //});
         });
     })
@@ -111,8 +114,11 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             //auth_helper.check_session(req, req.body.options.user_id, function(){
             //    e.updated_token = req.query.updated_token;
-                res.status(e.status).send(Auth_helper.addParams(e, req));
-                res.end();
+                Auth_model.reset_session(req, req.body.options.user_id, function(e){
+                  res.status(e.status).send(Auth_helper.addParams(e, req));
+                  res.end();
+                });
+
             //});
         });
     })
@@ -121,8 +127,11 @@ me.get('/', function(req, res, next) {
             /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
             //auth_helper.check_session(req, req.body.options.user_id, function(){
             //    e.updated_token = req.query.updated_token;
-                res.status(e.status).send(Auth_helper.addParams(e, req));
-                res.end();
+            Auth_model.reset_session(req, req.body.options.user_id, function(){
+              res.status(e.status).send(Auth_helper.addParams(e, req));
+              res.end();
+            });
+
             //});
         });
     })
@@ -152,20 +161,26 @@ me.get('/', function(req, res, next) {
     })
     .post('/address', function(req, res, next) {
         Address_model.create(req.body.options.user_id, req.body, function(e){
+          Auth_model.reset_session(req, req.body.options.user_id, function(){
             res.status(e.status).send(Auth_helper.addParams(e));
             res.end();
+          });
         });
     })
     .put('/address', function(req, res, next) {
         Address_model.update(req.body.options.user_id, req.body.address_id, req.body, function(e){
+          Auth_model.reset_session(req, req.body.options.user_id, function(){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             res.end();
+          });
         });
     })
     .delete('/address', function(req, res, next) {
         Address_model.delete(req.body.options.user_id, req.body.address_id, function(e){
+          Auth_model.reset_session(req, req.body.options.user_id, function(){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             res.end();
+          });
         });
     })
     /* ------------ SERVICES MANAGMENT ----------- */

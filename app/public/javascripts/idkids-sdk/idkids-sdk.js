@@ -113,6 +113,18 @@ var idkids_jssdk = function(options, callback){
           if(typeof e.responseJSON !== "undefined"){
             e = e.responseJSON;
           }
+          if(typeof e.idkids_user !== "undefined"){
+
+            var jeton = {
+                "token":e.idkids_user.datas.token,
+                "_id":e.idkids_user.datas._id,
+                "secret":e.idkids_user.datas.secret,
+                "device":e.idkids_user.datas.current_device
+            };
+            this.store('idkids_local_user', jeton);
+            //console.log(JSON.stringify(e.idkids_user));
+            //alert('idkids_user');
+          }
           if(typeof e.response_display !== "undefined"){
               if(e.status === 203){
                 callback("logout");
@@ -381,6 +393,11 @@ var idkids_jssdk = function(options, callback){
                 quantity : $(this).attr('data-quantity')
               },
               function(e) {
+                if(e.status === 200){
+                  var total = parseInt($('#notifications .indice').html())+1;
+                  $('#notifications .indice').html(total);
+                  $('#total_basket').html('('+total+')');
+                }
                 self.callback({status:"ADD_BASKET"});
               }
             );
