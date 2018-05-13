@@ -353,7 +353,6 @@ footer ul li a:hover:after{
   right:0;
   margin: auto;
   display: table;
-  color: #FFF;
   font-weight: 100;
   text-transform: uppercase;
 }
@@ -376,6 +375,9 @@ footer ul li a:hover:after{
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6ebf1', endColorstr='#ede5e3',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
   position: absolute;
   z-index: -1;
+}
+.separator_title:nth-child(2n) .diagonal{
+  transform: skewY(-1deg);
 }
 
 .head_title{

@@ -4,3 +4,71 @@ block content
   div.container.with_head.page
     div.head_title
       h1 Newsletter
+    div.row
+      div.col-md-8.centered
+        h3 Nos contenus
+        p En vous inscrivant au service Newsletter sur joyvox, vous receverez des contenus adaptés à vos enfants.<br>Depuis 2012, joyvox et ses partenaires édite et publie des contenus destinés à la jeunesse musicale, avec notre newsletter vous serez avertis en avant première de chacunes de nos éditions, publications et autres évènements et spectacles jeunesse de Joyvox et ses partenaires.
+    div.separator_title
+      div.diagonal
+      div.swiper-container(data-swiper="apps_swiper")
+        div.swiper-wrapper
+          div.swiper-slide
+            div.app_item
+              div.icon(style="")
+                div.icon.idkids-icons.icon-play
+              div.label Édition
+              div.description les sorties d'album CD, livres et autres produits édités par JOYVOX
+              br
+              a.btn.btn-success.centered.host(href="http://joyvox.fr") Découvrir nos éditions
+          div.swiper-slide
+            div.app_item
+              div.icon(style="")
+                div.icon.idkids-icons.icon-play
+              div.label Spectacles
+              div.description Nos spectables autour de la jeunesse musicale<br>Dates et billeterie
+              br
+              a.btn.btn-success.centered.host(href="http://joyvox.fr") Découvrir nos spectables
+          div.swiper-slide
+            div.app_item
+              div.icon(style="")
+                div.icon.idkids-icons.icon-play
+              div.label Évènements
+              div.description Nos évènements et ateliers autour de la musique pour les plus jeunes.
+              br
+              a.btn.btn-success.centered.host(href="http://joyvox.fr") Découvrir nos évènements
+        div.swiper-pagination.swiper-pagination-black
+    div.row
+      div.col-md-8.centered
+        h3 Créer mon compte JOYVOX connect
+        if user
+          p <b>Bonjour #{user.pseudo}</b>, vous êtes connecté sur JOYVOX connect
+          a.btn.btn-success(href="/account/services") Gérer mes services
+    
+        else
+          p Pour recevoir et gérer vos inscriptions à nos services et Newsletter, vous devez être connecté !
+          div(style="display:inline-flex")
+            a.btn.btn-success(href="/auth") Me connecter
+            a.btn.btn-warning(href="/auth") Créer mon compte
+    
+        h3 Gérer mes inscriptions
+        p Joyvox vous propose de gérer les contenus envoyé par newsletter en toute simplicité.<br>Lorsque vous souscrivez à note newsletter vous pouvez gérer les contenus qui vous seront envoyé et changer de service à tout moment en passant par votre interface client.
+        h3 Partenaires
+        p Joyvox est membre de la communauté IDKIDS, c'est pourquoi nous vous proposons de recevoir des contenus de nos partenaires lors de votre inscription.<br>En acceptant de recevoir nos actus partenaires, vous acceptez recevoir les évènements de nos partenaires uniquement en relation avec JOYVOX.<br/>Vous trouverez la liste de ces partenaires ci-dessous :
+    div.separator_title
+      div.diagonal
+      h3 Nos partenaires
+      br
+      br
+      div.swiper-container(data-swiper="apps_swiper")
+        div.swiper-wrapper
+          each item in app.locals.applications
+            div.swiper-slide
+              div.app_item
+                div.icon(style="background-image:url("+item.icon+")")
+                div.label= item.label
+                div.description= item.description
+                br
+                a.btn.btn-success.centered.host(href=item.host) Visiter
+        div.swiper-pagination.swiper-pagination-black
+        //-div.swiper-button-prev.swiper-button-black
+        //-div.swiper-button-next.swiper-button-black

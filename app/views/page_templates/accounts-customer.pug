@@ -4,3 +4,37 @@ block content
   div.container.with_head.page
     div.head_title
       h1 Compte utilisateur
+    div.row
+      div.col-md-8.centered
+        h3 1 seul compte pour tous nos services !
+        p Pour améliorer votre exprérience utilisateur, nous vous proposons le <b>Compte Client JOYVOX connect</b>. En vous inscrivant, vous pourrez vous connecter sur l'ensemble des sevices développés par JOYVOX.
+        if user
+          p <b>Bonjour #{user.pseudo}</b>, vous êtes connecté sur JOYVOX connect
+          a.btn.btn-success(href="/account") Gérer mon compte
+          p Avec votre compte JOYVOX connect, <b>vous pouvez vous connecter sur les services ci-dessous :</b>
+    
+        else
+          div(style="display:inline-flex")
+            a.btn.btn-success(href="/auth") Me connecter
+            a.btn.btn-warning(href="/auth") Créer mon compte
+          p En créant votre compte utilisateur, <b>vous pourrez vous connecter facilement</b> sur les sites et services suivants :
+    
+    div.separator_title
+      div.diagonal
+      h3 JOYVOX connect
+      br
+      br
+      div.swiper-container(data-swiper="apps_swiper")
+        div.swiper-wrapper
+          each item in app.locals.applications
+            if(item.is_widget)
+              div.swiper-slide
+                div.app_item
+                  div.icon(style="background-image:url("+item.icon+")")
+                  div.label= item.label
+                  div.description= item.description
+                  br
+                  a.btn.btn-success.centered.host(href=item.host) Visiter
+        div.swiper-pagination.swiper-pagination-black
+        //-div.swiper-button-prev.swiper-button-black
+        //-div.swiper-button-next.swiper-button-black
