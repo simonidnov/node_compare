@@ -16,6 +16,49 @@ body {
 a {
   color: #00B7FF;
 }
+.app_item{
+  width:450px;
+  left:0;
+  right:0;
+  margin:auto;
+  background: #FFF;
+  color:#000;
+  margin-bottom:40px;
+  margin-top:40px;
+  padding:30px;
+  padding-top:50px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.1);
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=25);
+}
+.app_item .icon{
+  position: absolute;
+  width:80px;
+  height:80px;
+  top:0px;
+  background-size: cover;
+  left:0;
+  right: 0;
+  margin:auto;
+  border-radius: 100%;
+
+}
+.app_item .label{
+  font-size: 25px;
+    line-height: 35px;
+    color: #333;
+    font-weight: 200;
+}
+.app_item .description{
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 28px;
+  color: #797373;
+  max-width: 100%;
+  font-family: sans-serif;
+}
 #account_validation{
   position: relative;
   width: 100%;
@@ -294,13 +337,53 @@ footer ul li a:hover:after{
      overflow: hidden;
     position: relative;
 }
+.separator_title{
+  padding-bottom: 0;
+  position: relative;
+  margin-bottom: 40px;
+  color:#FFF;
+  margin-top:40px;
+  margin-bottom:40px;
+  padding-top:40px;
+  padding-bottom:40px;
+}
+.separator_title h3{
+  width: 100%;
+  left: 0;
+  right:0;
+  margin: auto;
+  display: table;
+  color: #FFF;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+.separator_title .diagonal{
+  content: '';
+  overflow: hidden;
+  top: 0;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  transform: skewY(1deg);
+  background-color: #2470c1;
+  transform-origin: 50% 0;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e6ebf1+0,ede5e3+100 */
+  background: #e6ebf1; /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #e6ebf1 0%, #ede5e3 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #e6ebf1 0%,#ede5e3 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #e6ebf1 0%,#ede5e3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6ebf1', endColorstr='#ede5e3',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  position: absolute;
+  z-index: -1;
+}
 
 .head_title{
   padding-bottom: 0;
   position: relative;
   margin-bottom: 40px;
   height: 135px;
-    color:#FFF;
+  color:#FFF;
 }
 .head_title h1{
   position: absolute;
@@ -547,7 +630,7 @@ p{
 }
 
 /* --------------- BRANDS --------------- */
-.header .logo{
+.header .logo, .logo{
     width:200px;
     height: 64px;
     margin-left:20px;

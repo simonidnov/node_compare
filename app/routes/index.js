@@ -26,7 +26,6 @@ router.get('/', function(req, res, next) {
 });
 router.get('/:page_url', function(req, res, next) {
     Page_controller.get(req.params, res, function(e) {
-      console.log('PAGE CONTROLLER GET ', e.datas);
       if(e.datas.length === 1){
         res.render('page_templates/'+e.datas[0].template, {
             title: 'Welcome',
@@ -36,10 +35,10 @@ router.get('/:page_url', function(req, res, next) {
             page:req.params.page_name,
             page_datas:e.datas[0],
             js:[
-
+              "/node_modules/swiper/dist/js/swiper.min.js"
             ],
             css:[
-
+              "/node_modules/swiper/dist/css/swiper.min.css"
             ]
         });
         res.end();
