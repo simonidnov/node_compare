@@ -33,6 +33,7 @@ module.exports = {
 };
 module.exports.get = function(datas, req, callback) {
     //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
+    console.log('AUTH REQ ??????? ', datas);
     var query = {};
     if(datas.isAdmin && typeof datas.basket_id !== "undefined"){
         query = {_id : datas.basket_id};
@@ -40,10 +41,10 @@ module.exports.get = function(datas, req, callback) {
         if(typeof datas.options.user_id !== "undefined"){
           query = {user_id : datas.options.user_id};
         }
-    }else if(typeof req.session.Auth !== "undefined"){
-        query = {user_id : req.session.Auth._id};
     }else if(typeof datas.user_id !== "undefined"){
         query = {user_id : datas.user_id};
+    }else if(typeof req.session.Auth !== "undefined"){
+        query = {user_id : req.session.Auth._id};
     }else{
         callback({status:401, message:"NOT_LOGGED_IN"});
         return false;
