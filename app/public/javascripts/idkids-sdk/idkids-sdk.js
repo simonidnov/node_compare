@@ -125,7 +125,7 @@ var idkids_jssdk = function(options, callback){
                 e.response_display.buttons = [
                   {
                     "class":"btn-success",
-                    "label":"Me reconnecter",
+                    "label":"Me connecter",
                     "value":0,
                     "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth?secret="+this.options.secret
                   },

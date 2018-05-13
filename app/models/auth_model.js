@@ -529,23 +529,13 @@ module.exports.check_user = function(req, callback){
     //var new_device  = {
     //        uid     : device_uid
     //    },
-    console.log('/////////');
-    console.log('/////////');
-    console.log('/////////');
-    console.log(req);
-    console.log('/////////');
-    console.log('/////////');
-    console.log('/////////');
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){
-        console.log('JWT CANT SIGN');
-        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
+        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}, "datas":err});
       }else{
-        console.log('JWT SIGN OK ', decoded);
         req.decoded = decoded;
         if(typeof decoded.password === "undefined" || typeof decoded.email === "undefined"){
-          console.log('STAY HERE ??????????');
-          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
+          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}});
           return false;
         }
         User.find(
@@ -555,12 +545,10 @@ module.exports.check_user = function(req, callback){
             },
             function(err, user) {
                 if(err){
-                    console.log('REQUEST ERROR ? ', err);
-                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
+                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}});
                 }else{
                     if(user.length === 0){
-                      console.log('NO USER FINDED ? ', user);
-                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
+                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}});
                     }else{
                       var new_token = jwt.sign({secret:user[0].user_secret, email:user[0].email, password:decoded.password}, config.secrets.global.secret, { expiresIn: '2 days' });
 

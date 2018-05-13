@@ -50,8 +50,12 @@ router.get('/:page_url', function(req, res, next) {
             lang:lang,
             page:req.params.page_name,
             page_datas:e.datas,
-            js:[],
-            css:[]
+            js:[
+              "/node_modules/swiper/dist/js/swiper.min.js"
+            ],
+            css:[
+              "/node_modules/swiper/dist/css/swiper.min.css"
+            ]
         });
         res.end();
       }
