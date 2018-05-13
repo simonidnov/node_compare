@@ -17,7 +17,7 @@ module.exports = {
             }
           }
         }
-        
+
         if(req.options.from_origin === "http://localhost:3000" || host !== -1 || req.options.from_origin === app.locals.settings.host){
             // SPECIAL DEBUG LOCAL HOST BEFORE WEBSITE ARE SETTED
             callback(true);
@@ -69,6 +69,7 @@ module.exports = {
 
     },
     addParams : function(datas, req){
+      console.log('add params ', datas);
       if(typeof datas.updated_token === "undefined" && typeof req.updated_token !== "undefined"){
         datas.updated_token = req.updated_token;
       }

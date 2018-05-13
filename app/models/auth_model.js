@@ -284,7 +284,8 @@ module.exports.login = function(req, datas, callback) {
 
                     urlExists(avatar, function(err, exists) {
                       if(!exists){
-                        avatar = app.locals.settings.host+"/public/images/assets/account.svg";
+                        //app.locals.settings.host+
+                        avatar = "/public/images/assets/account.svg";
                       }
                       /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
                       /*
@@ -342,17 +343,21 @@ module.exports.logout = function(req, datas, callback) {
 };
 // check user register then return user_infos
 module.exports.register = function(datas, callback) {
+    console.log('register ', datas.body);
     //device_uid = req.body.device_uid;
     //device_uid = machineId.machineIdSync({original: true});
     /* UPDATE ALL datas set check email is uniq and valid then send confirmation email */
+    if(typeof datas.body.data !== "undefined"){
+      datas.body = datas.body.data;
+    }
     /* ----- CHECK EMAIL UNIQ ----- */
     /* ----- GENERATE TOKEN FIRST expire in 24 H ----- */
     if(typeof datas.body === "undefined"){
-      //callback({"status":"error", "message":"NO_BODY"});
+      callback({"status":"error", "message":"NO_BODY"});
       return false;
     }
     if(typeof datas.body.subscribe_password === "undefined"){
-      //callback({"status":"error", "message":"NO_BODY"});
+      callback({"status":"error", "message":"NO_BODY"});
       return false;
     }
 
@@ -368,8 +373,14 @@ module.exports.register = function(datas, callback) {
     });
 
     //sha1 = require('sha1');
+
     var pass = sha1(datas.body.subscribe_password);
     db.connect(config.database.users, {useMongoClient: true});
+    console.log('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°');
+    console.log('REGISTER BODY ::: ', datas.body);
+    console.log('REGISTER PASSWORD ::: ', datas.body.subscribe_password);
+    console.log('°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°');
+
     var self = this;
     var new_user_datas = {
             email   : datas.body.subscribe_email,
@@ -383,7 +394,7 @@ module.exports.register = function(datas, callback) {
                 "authorizations":['me']
             }
         }
-    new_user_datas.token = jwt.sign({secret:new_user_datas.secret, email:datas.body.subscribe_email, pazssword:datas.body.subscribe_password}, config.secrets.global.secret, { expiresIn: '2 days'});
+    new_user_datas.token = jwt.sign({secret:new_user_datas.secret, email:datas.body.subscribe_email, password:datas.body.subscribe_password}, config.secrets.global.secret, { expiresIn: '2 days'});
     new_user_datas.device = [{
         uid     : device_uid,
         token   : new_user_datas.token
@@ -420,8 +431,12 @@ module.exports.register = function(datas, callback) {
     //return datas.body;
 };
 module.exports.lost_password = function(req, res, callback){
+  console.log("............ lost_password ", req.body);
+    if(typeof req.body.data !== "unefined"){
+      req.body = req.body.data;
+    }
     if(typeof req.body.email === "unefined"){
-      callback({status:403, message:"UNKNOW_USER_EMAIL"});
+      callback({status:203, message:"UNKNOW_USER_EMAIL"});
     }
     var self = this;
     User.findOne({
@@ -488,20 +503,20 @@ module.exports.update = function(req, user_id, datas, callback) {
     );
 };
 module.exports.updatePassword = function(req, res, callback){
-    var new_token = jwt.sign({secret:req.decoded.secret,email:req.decoded.email,password:req.password}, config.secrets.global.secret, {expiresIn: '2 days'});
+    //var new_token = jwt.sign({secret:req.decoded.secret,email:req.decoded.email,password:req.password}, config.secrets.global.secret, {expiresIn: '2 days'});
+    //token:new_token,
     User.update({
       email: req.email
     },{
       $set:{
         password:sha1(req.password),
-        token:new_token,
         updated : Date.now()
       }
     }, function(err, user){
       if(err){
-        callback({status:401, "message":"CANT_UPDATE_PASSWORD", "error":err, "updated_token":new_token});
+        callback({status:401, "message":"CANT_UPDATE_PASSWORD", "error":err});
       }else{
-        callback({status:200, "message":"PASSWORD_UPDATED", "infos":user, "updated_token":new_token});
+        callback({status:200, "message":"PASSWORD_UPDATED", "infos":user});
       }
     })
 }
@@ -514,13 +529,22 @@ module.exports.check_user = function(req, callback){
     //var new_device  = {
     //        uid     : device_uid
     //    },
-
+    console.log('/////////');
+    console.log('/////////');
+    console.log('/////////');
+    console.log(req);
+    console.log('/////////');
+    console.log('/////////');
+    console.log('/////////');
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){
+        console.log('JWT CANT SIGN');
         callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}, "datas":err});
       }else{
+        console.log('JWT SIGN OK ', decoded);
         req.decoded = decoded;
         if(typeof decoded.password === "undefined" || typeof decoded.email === "undefined"){
+          console.log('STAY HERE ??????????');
           callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
           return false;
         }
@@ -531,9 +555,11 @@ module.exports.check_user = function(req, callback){
             },
             function(err, user) {
                 if(err){
+                    console.log('REQUEST ERROR ? ', err);
                     callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
                 }else{
                     if(user.length === 0){
+                      console.log('NO USER FINDED ? ', user);
                       callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Session invalide", "message":"Vous n'êtes plus connecté.<br>veuillez vous reconnecter."}});
                     }else{
                       var new_token = jwt.sign({secret:user[0].user_secret, email:user[0].email, password:decoded.password}, config.secrets.global.secret, { expiresIn: '2 days' });

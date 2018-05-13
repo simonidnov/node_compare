@@ -26,7 +26,7 @@ exports.update = function(req, res) {
     Auth_model.update(req);
 };
 exports.request_validation_code = function(req, datas, callback){
-    Auth_model.getValidationCode(req.body.user_id, callback);
+    Auth_model.getValidationCode(req.session.Auth._id, callback);
 };
 exports.validCode = function(datas, callback){
     Auth_model.validCode(datas, callback);

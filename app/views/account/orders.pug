@@ -3,33 +3,36 @@ div.col.col-md-7
     h2= "Mes produits ("+((typeof userproducts !== "undefined")? userproducts.length : 0)+")"
     hr
     ul.products_list
-      each product in userproducts
-        li
-          div.col
-            if(product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined")
-              div.preview(style="background-image:url("+product.meta_datas.thumb+")")
-            else
-              div.preview
-          div.infos.col
-            div.label= product.meta_datas.label
-            //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
-            //-div.label= "Ajouté le : "+product.infos.created
-            div.brand
-              img(src=product.meta_datas.app_icon, width="24", height="24")
-              div.label= product.meta_datas.app_label
-              a.hyperlink(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Écouter
-            div.cat= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
-          
-          ul.medias_download.col
-            each media in product.meta_datas.medias
-              li
-                case media[0].mimetype
-                  when 'audio/mp3'
-                    audio(controls preload="none")
-                      source(src="/"+media[0].path type=media[0].mimetype)
-                  default
-                    p= media[0].originalname
-                    p= media[0].mimetype
+      if (typeof userproducts === "undefined" || userproducts.length === 0)
+        p Vous n'avez effectué aucun achat
+      else
+        each product in userproducts
+          li
+            div.col
+              if(product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined")
+                div.preview(style="background-image:url("+product.meta_datas.thumb+")")
+              else
+                div.preview
+            div.infos.col
+              div.label= product.meta_datas.label
+              //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
+              //-div.label= "Ajouté le : "+product.infos.created
+              div.brand
+                img(src=product.meta_datas.app_icon, width="24", height="24")
+                div.label= product.meta_datas.app_label
+                a.hyperlink(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Écouter
+              div.cat= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
+            
+            ul.medias_download.col
+              each media in product.meta_datas.medias
+                li
+                  case media[0].mimetype
+                    when 'audio/mp3'
+                      audio(controls preload="none")
+                        source(src="/"+media[0].path type=media[0].mimetype)
+                    default
+                      p= media[0].originalname
+                      p= media[0].mimetype
           
 div.col.col-md-5
   div.formular.basket

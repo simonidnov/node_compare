@@ -127,10 +127,10 @@ var index = {
           $('#'+data_for).css('display', 'block');
           $('html, body').animate({scrollTop:0}, 500, 'swing', function() {});
         }else{
+          $('html, body').animate({scrollTop:0}, 500, 'swing', function() {});
           index.sdk.getPage(window.location.pathname, {}, function(e){
             var tempDom = $('<output>').append($.parseHTML(e.responseText));
             var appContainer = $('#page_content', tempDom);
-            console.log('appContainer ', appContainer.html());
             $('#page_content').html(appContainer.html());
           });
         }

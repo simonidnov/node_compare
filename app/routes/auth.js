@@ -105,7 +105,9 @@ auth.get('/', function(req, res, next) {
         });
     })
     .post('/subscribe', function(req, res, next) {
+      console.log('subscribe');
         Auth_controller.register(req, function(e){
+          console.log('registered ', e);
             if(typeof e.user !== "undefined"){
                 e.idkids_user = {datas:e.user};
                 res.status(e.status).send(Auth_helper.addParams(e, req));
@@ -171,7 +173,7 @@ auth.get('/', function(req, res, next) {
             e.response_display.title = lang[language_helper.getlocale(req)].keys[e.response_display.title];
             e.response_display.message = lang[language_helper.getlocale(req)].keys[e.response_display.message];
           }
-          res.status(e.status).send(Auth_helper.addParams(e));
+          res.status(e.status).send(e);
         });
     })
     .put('/login', function(req, res, next) {
