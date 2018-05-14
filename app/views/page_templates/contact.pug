@@ -8,7 +8,12 @@ block content
       div.row.centered
         div.col.col-md-8
           div.formular#contact_formular
-            div.form#contact_form(method="post" action='/api/contact')
+            div.form#success_form(style="display:none;")
+              h2 Bien reçu !
+              br
+              div.form_content
+                p Nous avons bien reçu votre demande et nous allons vous répondre dans les plus bref délais.<br>Merci !
+            form.form#contact_form(method="post" action='/api/contact')
               h2 Nous écrire
               br
               hr.separator
@@ -51,13 +56,19 @@ block content
                       option Autres demandes
                 hr
                 div.form-group.material_input
+                  input.form-control#firstName(type="text" name="firstName" required="required" value=(user)? user.firstName : "" data-errormessage="Veuillez indiquer votre Prénom")
+                  label(for="firstName") Votre Prénom
+                div.form-group.material_input
+                  input.form-control#lastName(type="text" name="lastName" required="required" value=(user)? user.lastName : "" data-errormessage="Veuillez préciser votre Nom")
+                  label(for="lastName") Votre Nom
+                div.form-group.material_input
                   input.form-control#email(type="email" name="email" required="required" value=(user)? user.email : "" data-errormessage="Votre email semble incorrect")
                   label(for="email") Indiquez votre Email
-                div.form-group.material_input.notempty.required.minlength
+                div.form-group.material_input.minlength
                   input.form-control#subject(type="text" name="subject" required="required" minlength="6" data-errormessage="Merci d'indiquer un sujet de 6 caractères mininm")
                   label(for="subject") Indiquez un sujet
                   
-                div.form-group.material_input.notempty.required.minlength
+                div.form-group.material_input.minlength
                   textarea.form-control#message(name="message" required="required" minlength="50" data-errormessage="Merci d'de nous laisser un message personnalisé")
                   label(for="message") Entrez votre message
                 button.btn.btn-success(type="submit" data-formaction="submit" data-formid="contact_form") Envoyer ma demande

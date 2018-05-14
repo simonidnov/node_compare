@@ -24,13 +24,25 @@ orders.use(function(req, res, next){
     var dataCheck = req.query;
     if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
       dataCheck = req.body;
+      if(typeof req.body.data !== "undefined"){
+        dataCheck = req.body.data;
+      }
     }
     //dataCheck.options = dataCheck;
     Auth_helper.validate_session(req, function(e){
+      console.log('VALIDATE SESSION ', e);
       if(e.status === 200) {
         next();
       }else {
-        res.status(e.status).send(e.datas);
+        /* SI ON A PAS DE SESSION ON CHECK L'UTILISATEUR DEPUIS L'API OPTIONS PARAMS */
+        Auth_helper.validate_user(dataCheck, req.get('host'), function(e){
+          if(e.status === 200) {
+            next();
+          } else {
+            res.status(e.status).send(e);
+          }
+        });
+        //res.status(e.status).send(e.datas);
       }
     });
 });
@@ -105,6 +117,12 @@ orders
     .delete('/', function(req, res, next) {
         Orders_controller.delete(req, res, function(e){
             res.status(e.status).send({status:e.status, infos:e.datas});
+        });
+    })
+    .post('/buy_product_with_coupon_code', function(req, res, next){
+        Orders_controller.buy_with_coupon(req, res, function(e){
+            //res.status(200).send({status:200, message:"CURRENTLY IN PROGRESS"});
+            res.status(e.status).send(e);
         });
     });
 

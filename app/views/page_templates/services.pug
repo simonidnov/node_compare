@@ -39,12 +39,12 @@ block content
         div.swiper-pagination.swiper-pagination-black
     div.row
       div.col-md-8.centered
-        h3 Créer mon compte JOYVOX connect
         if user
           p <b>Bonjour #{user.pseudo}</b>, vous êtes connecté sur JOYVOX connect
           a.btn.btn-success(href="/account/services") Gérer mes services
     
         else
+          h3 Créer mon compte JOYVOX connect
           p Pour recevoir et gérer vos inscriptions à nos services et Newsletter, vous devez être connecté !
           div(style="display:inline-flex")
             a.btn.btn-success(href="/auth") Me connecter

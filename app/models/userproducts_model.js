@@ -62,6 +62,7 @@ module.exports.get = function(req, res, callback){
 
 };
 module.exports.allreadyBuy = function(user_id, product_id, callback){
+  console.log('allreadyBuy');
   Userproducts.findOne(
     {
       user_id:user_id,
@@ -78,7 +79,7 @@ module.exports.allreadyBuy = function(user_id, product_id, callback){
       }
     }
   );
-}
+};
 module.exports.checkOrders = function(req, res, callback){
   var self = this;
   Orders_model.get(req, res, function(e){
@@ -123,7 +124,7 @@ module.exports.create = function(datas, res, callback){
             });
           });
         }else{
-          callback({"status":200, "datas":infos});
+          callback({"status":201, "datas":infos, "message":"ALREADY_ADDED_PRODUCT_ON_USER"});
         }
       }
     );

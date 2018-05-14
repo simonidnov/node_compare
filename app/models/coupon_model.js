@@ -34,8 +34,8 @@ module.exports.get = function(req, res, callback){
     }
     if(typeof req.query.code !== "undefined"){
       query.code = req.query.code;
-      query.is_valid = 1;
-      query.already_used = 0;
+      query.is_valid = true;
+      query.already_used = false;
     }
     Coupon.find(query, function(err, infos) {
         if(err){
@@ -168,19 +168,21 @@ module.exports.create = function(req, res, callback){
 };
 module.exports.useOne = function(datas, callback){
   //datas.updated = Date.now();
+  console.log('exports.useOne datas ', datas);
   Coupon.updateOne(
       {
           _id  : datas._id
       },
       {
           $set : {
-            is_valid : 0,
-            already_used : 1,
+            is_valid : false,
+            already_used : true,
             user_id : datas.user_id,
             updated :Date.now()
           }
       },
       function(err, infos){
+          console.log("Coupon.updateOne ", err, infos);
           if(err) callback({"status":304, "message":err});
           else callback({"status":200, "datas":infos});
       }
@@ -234,3 +236,20 @@ module.exports.delete = function(req, res, callback){
         }
     )
 };
+module.exports.is_valid = function(code, _id, callback){
+  Coupon.find({
+    _id:_id,
+    code:code,
+    is_valid:true,
+    already_used:false
+  }, function(err, coupons){
+      if(err) callback({"status":405, "message":err});
+      else{
+        if(coupons.length >= 1){
+          callback({"status":200, "coupon":coupons[0]});
+        }else{
+          callback({"status":203, "coupon":coupons});
+        }
+      }
+  });
+}

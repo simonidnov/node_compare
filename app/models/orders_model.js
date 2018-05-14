@@ -4,6 +4,10 @@ const db = require('mongoose'),
       basket_model = require('../models/basket_model'),
       wallets_model = require('../models/wallets_model'),
       coupon_model = require('../models/coupon_model'),
+      Auth_model = require('../models/auth_model'),
+      Products_controller = require('../controllers/products_controller'),
+      Userproducts_controller = require('../controllers/userproducts_controller'),
+      Email_controller = require('../controllers/email_controller'),
       order_datas = {
           basket_id         : {type:"string"},
           user_id           : {type:"string"},
@@ -73,6 +77,145 @@ module.exports.getBill = function(user_id, datas, callback){
       }
   })
 }
+module.exports.buy_with_coupon = function(req, res, callback){
+  if(typeof req.body.data.coupon_code === "undefined"){
+    callback({status:400, message:"NEED_COUPON_CODE", response_display:{"title":"Coupon Code", "message":"Vous devez renseigner un Coupon Code valide pour effectuer cette opération."}});
+    return false;
+  }
+  if(typeof req.body.data.coupon_id === "undefined"){
+    callback({status:400, message:"NEED_COUPON_ID", response_display:{"title":"Coupon Code", "message":"Le coupon est incorrect ou mal renseigné, veuillez réessayer ultérieurement."}});
+    return false;
+  }
+  if(typeof req.body.data.product_id === "undefined"){
+    callback({status:400, message:"NEED_PRODUCT_ID", response_display:{"title":"Coupon Code", "message":"Pour utiliser votre Coupon Code, vous devez choisir un produit."}});
+    return false;
+  }
+  if(typeof req.body.data.options.user_id === "undefined"){
+    callback({status:400, message:"NEED_USER_ID", response_display:{"title":"Coupon Code", "message":"Vos identifiants sont incorrects, si le problème persiste veuillez vous déconnecter puis vous reconnecter"}});
+    return false;
+  }
+  var product = null,
+      coupon = null,
+      user = null;
+  /* ON CHECK SI LE PRODUIT EXISTE BIEN */
+  Products_controller.get(req.body.data, res, function(e){
+    /* TODO ON CHECK SI L'UTILISATEUR A DEJA ACHETE CE PRODUIT */
+    if(e.status === 200){
+      Userproducts_controller.allreadyBuy(req.body.data.options.user_id, req.body.data.product_id, function(e){
+        if(e.status === 200){
+          /* L'UTILISATEUR TENTE D'ACHETER UN PRODUIT QU'iL A DEJA ACHETE */
+          callback(
+            {
+              status:208,
+              message:"PRODUCT_ALREADY_BUY",
+              response_display : {
+                "title":"Coupon Code Produit déjà ajouté !",
+                "message":"Vous tentez d'ajouter un produit que vous avez déjà acheté !<br>rendez-vous sur votre compte pour le télécharger ou sur machanson.joyvox.fr/playlist pour l'écouter.",
+                buttons:[
+                  {
+                    class:"btn-success",
+                    label:"MES ACHATS",
+                    href:app.locals.settings.host+"/account/orders",
+                    target:"_blank",
+                    value:"/account/orders"
+                  },
+                  {
+                    class:"",
+                    label:"PLAYLIST",
+                    href:"/playlist",
+                    target:"_blank",
+                    value:"/playlist"
+                  }
+                ]
+              }
+            }
+          );
+        }else{
+          /* ON CHECK SI LE COUPON EXISTE ET EST VALIDE */
+          coupon_model.is_valid(req.body.data.coupon_code, req.body.data.coupon_id, function(e){
+            if(e.status === 200){
+              /* ON AJOUTE LE PRODUIT SUR L'UTILISATEUR */
+              Userproducts_controller.create({
+                user_id:req.body.data.options.user_id,
+                product_id:req.body.data.product_id
+              }, res, function(e){
+                if(e.status === 200){
+                  /* LE PRODUIT EST BIEN AJOUTE SUR L4UTILISATEUR */
+                  /* SUCCESS PRODUCT COUPON CODE ADDED */
+                  /* ON UTILISE LE COUPON POUR NE PLUS POUVOIR L'UTILISER */
+                  coupon_model.useOne({_id:req.body.data.coupon_id, user_id:req.body.data.options.user_id}, function(e){
+                    if(e.status === 200){
+                      callback(
+                        {
+                          status:200,
+                          message:"PRODUCT_ADDED",
+                          response_display : {
+                            "title":"Coupon Code - Produit ajouté !",
+                            "message":"Votre produit vient d'être ajouté sur votre profil !<br>Votre coupon code est à présent validé et ne peut plus être utilisé<br>Rendez-vous sur mes achats pour le télécharger ou sur machanson.joyvox.fr/playlist pour l'écouter.",
+                            buttons:[
+                              {
+                                class:"btn-success",
+                                label:"MES ACHATS",
+                                href:app.locals.settings.host+"/account/orders",
+                                target:"_blank",
+                                value:"/account/orders"
+                              },
+                              {
+                                class:"",
+                                label:"PLAYLIST",
+                                href:"/playlist",
+                                target:"_blank",
+                                value:"/playlist"
+                              }
+                            ]
+                          }
+                        }
+                      );
+                    }else{
+                      callback(
+                        {
+                          status:208,
+                          message:"UNABLE_TO_USE_COUPON_CODE",
+                          response_display:{
+                            title:"ERREUR",
+                            message:"une erreur est survenur, pas d'inquiètude, votre coupon code de téléchargement est toujours valide."
+                          }
+                        }
+                      );
+                    }
+                  });
+
+                }else{
+                  /* ERROR PRODUCT COUPON CODE ADDED */
+                  e.response_display = {title:"Coupon Code", message:"une erreur est survenur mais pas d'inquiètudes !<br>votre coupon code de téléchargement est toujours valide, vous pouvez toujours l'utiliser."};
+                  callback(e);
+                }
+              });
+            }else{
+              callback({status:208, message:"WRONG_COUPON_CODE", response_display:{
+                "title":"Coupon Code",
+                "message":"Le coupon renseigné est invalide, veuillez en utiliser un autre.<br>Si vous n'avez jamais utilisé ce coupon, veuillez nous contacter pour en obtenir un nouveau.",
+                "buttons":[
+                  {
+                    class:"btn-warning",
+                    label:"NOUS CONTACTER",
+                    href:app.locals.settings.host+"/contact",
+                    target:"_blank",
+                    value:"/account/contact"
+                  }
+                ]
+              }});
+            }
+          });
+        }
+      });
+    }
+  });
+
+  /*
+
+  */
+};
 module.exports.createCharge = function(datas, res, callback){
   if(app.locals.settings.StripeMode){
     keyPublishable = app.locals.settings.StripekeyPublishable;
@@ -106,7 +249,6 @@ module.exports.createCharge = function(datas, res, callback){
         /* TODO CHECK ALL COUPONS CODE VALIDITY ATTRIBUTS */
         for(var i=0; i<coupons_code.length; i++){
           /* TODO GET COUPONS THEN USE IT FROM coupons_code[i]._id */
-          console.log("coupons_code i :::: ", coupons_code[i]);
           reduced_amount-= coupons_code[i].amount;
         }
       }
@@ -120,10 +262,8 @@ module.exports.createCharge = function(datas, res, callback){
         description: 'payment ',
         source: token,
       }, function (err, charge) { // <-- callback
-        //console.log('CALLBACK STRIPE CHARGE ');
         if(err) {
-          //console.log("STRIPE ERROR HANDLER ", err);
-          callback({status:401, message:"BASKET_DOESNT_MATCH"});
+          callback({status:401, message:"BASKET_DOESNT_MATCH", response_display:{"title":"Mon Panier", "message":"Nous ne pouvons finaliser l'opération car votre panier est introuvable."}});
           //callback({status:401, message:"STIPE_ERROR_CHARGES", err:err});
         }else {
           Orders.find().count().exec(function(err, infos){
@@ -150,7 +290,7 @@ module.exports.createCharge = function(datas, res, callback){
             //is_valid
             if(typeof coupons_code !== "undefined"){
               for(var c=0; c<coupons_code.length; c++){
-                coupon_model.useOne({id:coupons_code[c].id, user_id:datas.user_id}, function(e){
+                coupon_model.useOne({_id:coupons_code[c].id, user_id:datas.user_id}, function(e){
                   console.log('coupon used : ', e);
                 });
               }
@@ -161,17 +301,50 @@ module.exports.createCharge = function(datas, res, callback){
             });
             self.create(new_order_datas, res, function(e){
               if(e.status === 200){
+                Auth_model.getUserInfosFromOrderController(datas.user_id, function(e){
+                  if(e.status === 200){
+                    Email_controller.send(
+                      null,
+                      {
+                        subject:"Votre facture Joyvox",
+                        title:"Votre commande vient d'être validée !",
+                        message:"Votre réglement pour la commande "+bill_number+" d'un montant de "+(charge.amount/100)+"€ a bien été pris en charge.<br>Pour plus d'informations et obetenir votre facture, rendez-vous sur <a href=\"https://auth.joyvox.fr/account/orders\">votre compte client dans la rubrique Achats</a>.<br>",
+                        email:e.user.email,
+                        to:e.user.email
+                      },
+                      function(e){
+                        console.log(e);
+                      }
+                    );
+
+                    Email_controller.send(
+                      null,
+                      {
+                        subject:"Nouvelle commande sur JOYVOX",
+                        title:"UNE NOUVELLE COMMANDE VIENT D'ÊTRE RÉGLÉE SUR JOYVOX",
+                        message:"Numéro de commande : "+bill_number+"<br>Montant : "+(charge.amount/100)+"€<br>a bien été pris en charge.<br>Pour plus d'informations et obetenir la facture, rendez-vous sur <a href=\"https://auth.joyvox.fr/admin\">Dans la rubrique facturation</a>.<br>",
+                        email:"service.transaction@joyvox.fr",
+                        to:"service.transaction@joyvox.fr"
+                      },
+                      function(e){
+                        console.log(e);
+                      }
+                    );
+                  }
+                });
                 callback({status:200, datas:new_order_datas});
               }else{
                 e.datas = new_order_datas;
-                callback(e)
+
+                callback(e);
+                /* GET USER INFOS IN DATAS ???? */
               }
             });
           });
         }
       });
     }else{
-      callback({status:401, message:"BASKET_DOESNT_MATCH"});
+      callback({status:401, message:"BASKET_DOESNT_MATCH", response_display:{"title":"Mon Panier", "message":"Impossible de continuer car les paramètres de votre requête sont invalides."}});
     }
   });
 }

@@ -6,14 +6,15 @@ block content
       h1 Compte utilisateur
     div.row
       div.col-md-8.centered
-        h3 1 seul compte pour tous nos services !
-        p Pour améliorer votre exprérience utilisateur, nous vous proposons le <b>Compte Client JOYVOX connect</b>. En vous inscrivant, vous pourrez vous connecter sur l'ensemble des sevices développés par JOYVOX.
         if user
           p <b>Bonjour #{user.pseudo}</b>, vous êtes connecté sur JOYVOX connect
           a.btn.btn-success(href="/account") Gérer mon compte
           p Avec votre compte JOYVOX connect, <b>vous pouvez vous connecter sur les services ci-dessous :</b>
-    
-        else
+        
+        h3 1 seul compte pour tous nos services !
+        p Pour améliorer votre exprérience utilisateur, nous vous proposons le <b>Compte Client JOYVOX connect</b>. En vous inscrivant, vous pourrez vous connecter sur l'ensemble des sevices développés par JOYVOX.
+        
+        if !user
           div(style="display:inline-flex")
             a.btn.btn-success(href="/auth") Me connecter
             a.btn.btn-warning(href="/auth") Créer mon compte

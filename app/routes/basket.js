@@ -64,16 +64,16 @@ basket
                 Auth_helper.addParams({
                   status:e.status,
                   response_display:{
-                    title:"PLAYLIST",
-                    message:"Vous avez déjà acheté ce produit, rendez-vous sur votre playlist pour l'écouter !",
+                    title:"Mon Panier",
+                    message:"Vous avez déjà acheté ce produit, rendez-vous sur <a href=\"http://machanson.joyvox.fr/playlist\">votre playlist</a> pour l'écouter !",
                     type:"modal",
                     motion:{
-                      color:"blue",
-                      src:app.locals.settings.host+"/public/images/assets/account_1.svg"
+                      color:"coral",
+                      src:app.locals.settings.host+"/public/images/assets/basket.svg"
                     },
                     buttons:[
                       {
-                        class:"btn-success centered",
+                        class:"btn-warning centered",
                         label:"MON COMPTE",
                         href:app.locals.settings.host+"/account/orders",
                         target:"_blank",

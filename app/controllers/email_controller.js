@@ -1,8 +1,11 @@
 const Email_model = require('../models/emails_model'),
       auth_helper     = require('../helpers/auth_helper');
 
-exports.send = function(req, datas, callback) {
-    Email_model.send(req, datas, callback);
+exports.send = function(template, datas, callback) {
+    if(template === null){
+      template = "emails/default";
+    }
+    Email_model.send(template, null, datas, callback);
 };
 exports.validate_account = function(req, datas, callback) {
     datas.to = datas.email;

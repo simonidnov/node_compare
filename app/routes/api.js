@@ -151,6 +151,12 @@ api
         });
         */
     })
+    .post('/contact', function(req, res, next){
+        var Contact_controller = require('../controllers/contact_controller');
+        Contact_controller.create(req, res, function(e){
+          res.status(e.status).send(e);
+        });
+    })
     .get('/users/:any', function(req, res, next){
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
     })

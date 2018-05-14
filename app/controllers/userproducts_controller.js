@@ -9,6 +9,7 @@ exports.allreadyBuy = function(user_id, product_id, callback){
 exports.checkorders = function(req, res, callback) {
     //Userproducts_model.create(req, res, callback);
 };
-exports.create = function(req, res, callback) {
+exports.create = function(datas, res, callback) {
     //Userproducts_model.update(req, res, callback);
+    Userproducts_model.create(datas, res, callback);
 };

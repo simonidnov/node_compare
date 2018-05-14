@@ -416,12 +416,34 @@ module.exports.register = function(datas, callback) {
         }
         else{
           self.reset_session(datas, usr._id, function(infos){
-              callback({"status":200, "user":usr});
+            callback({"status":200, "user":usr});
+            /* TODO VERIFY ITS RUN AFTER CALLBACK */
+            Email_controller.send(
+              null,
+              {
+                subject:"Bienvenue sur JOYVOX",
+                title:"Inscription sur JOYVOX",
+                message:"Votre inscription à bien été prise en compte, rendez-vous sur <a href=\"https://auth.joyvox.fr/auth\">JOYVOX pour valider votre inscription.</a>",
+                email:usr.email,
+                to:usr.email
+              },
+              function(e){
+                /* ON ENVOIE LE MAIL A JOYVOX */
+                console.log(e);
+              }
+            );
+
           });
         }
     });
-    //callback(new_user);
-    //return datas.body;
+};
+module.exports.getUserInfosFromOrderController = function(user_id, callback){
+  User.findOne({
+    _id:user_id
+  }, function(err, user){
+    if(err) callback({"status":403, datas:{"message":err}});
+    else callback({"status":200, user:user});
+  });
 };
 module.exports.lost_password = function(req, res, callback){
     if(typeof req.body.data !== "unefined"){

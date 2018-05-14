@@ -18,7 +18,9 @@ function formular(target, callback){
                 $(this).parent().remove();
             });
         });
-
+        $(target).find('select').off('change').on('change', function(e){
+          self.inputCheck($(this), true);
+        });
         $(target).find('[data-file]').off('change').on('change', function(e){
             var input = this,
                 input_id = $(this).attr("id");
@@ -150,14 +152,14 @@ function formular(target, callback){
             self.check_min_max();
         });
 
-        $(target).find('.material_input input').off('blur').on('blur', function(){
+        $(target).find('.material_input input, .material_input textarea').off('blur').on('blur', function(){
             self.check_min_max();
             self.inputCheck($(this), true);
             //self.checkInputs();
             $(this).parent().removeClass('focused');
             self.callback({"status":"blur", value:$(this)});
         });
-        $(target).find('.material_input input').off('input').on('input', function(){
+        $(target).find('.material_input input, .material_input textarea').off('input').on('input', function(){
             self.inputCheck($(this), false);
         });
         $(target).find('input[type="checkbox"]').off('change').on('change', function(){
@@ -206,7 +208,7 @@ function formular(target, callback){
     }
     this.checkInputs = function(with_message){
         var self = this;
-        $.each($(target).find('.material_input input'), function(index, input){
+        $.each($(target).find('.material_input input, .material_input select, .material_input textarea'), function(index, input){
             self.inputCheck($(this), with_message);
             //var type=$(this).attr('type');
         });
@@ -223,13 +225,47 @@ function formular(target, callback){
                 return true;
             }
         }
-        if(target.val() == ""){
+        if(target.prop("tagName") === "SELECT"){
+          console.log('????????? ', target.val());
+          console.log('????????? ', target.is(':required'));
+          if(target.val() === null && target.is(':required')){
+            if(with_message && target.is(':required')){
+              target.parent().addClass('invalid');
+              target.parent().removeClass('valid');
+              if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+                  target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+              }
+            }else{
+              target.parent().removeClass('invalid');
+              target.parent().removeClass('valid');
+              target.parent().removeClass('notempty');
+              target.parent().find('.input_error').remove();
+            }
+          }else{
+            console.log('HERE ', target.val());
             target.parent().removeClass('invalid');
-            target.parent().removeClass('valid');
-            target.parent().removeClass('notempty');
+            target.parent().addClass('valid');
+            target.parent().addClass('notempty');
             target.parent().find('.input_error').remove();
+          }
+          return false;
+        }
+        if(target.val() === ""){
+            if(with_message && target.is(':required')){
+              if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+                  target.parent().addClass('invalid');
+                  target.parent().removeClass('valid');
+                  target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+              }
+            }else{
+                target.parent().removeClass('invalid');
+                target.parent().removeClass('valid');
+                target.parent().removeClass('notempty');
+                target.parent().find('.input_error').remove();
+            }
             return;
         }else{
+            target.parent().addClass('notempty');
             var type = target.attr('type');
             switch(type){
                 case "email":
@@ -247,6 +283,11 @@ function formular(target, callback){
                     self.validform();
                     return;
                     break;
+                case "text":
+                    target.parent().addClass('valid');
+                    target.parent().removeClass('invalid');
+                    target.parent().find('.input_error').remove();
+                    break;
                 case "date":
                     target.parent().addClass('valid');
                     self.validform();
@@ -259,7 +300,7 @@ function formular(target, callback){
                     self.validform();
                     break;
             }
-            target.parent().addClass('notempty');
+
             if(typeof target.attr('data-regex') !== "undefined"){
                 if(target.attr('data-regex') === 'same'){
                     if(target.val() === $('#'+target.attr('data-target')).val()){
@@ -337,14 +378,23 @@ function formular(target, callback){
                         }
                     }
                 }
-            }else if(typeof target.attr('minlength') !== "undefined"){
+            }
+
+            if(typeof target.attr('minlength') !== "undefined"){
                 var minlength = target.attr('minlength');
-                if(target.val().length < minlength){
+                if(target.val().length < minlength && target.is(':required')){
                     target.parent().addClass('invalid');
                     target.parent().removeClass('valid');
+
+                    if(with_message){
+                      if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+                          target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+                      }
+                    }
                 }else{
                     target.parent().addClass('valid');
                     target.parent().removeClass('invalid');
+                    target.parent().find('.input_error').remove();
                 }
             }else{
                 target.parent().addClass('valid');
@@ -357,7 +407,7 @@ function formular(target, callback){
         $.each($(this.target).find('form'), function(index, form){
             var valid = true,
                 target_form = $(this);
-            $.each(target_form.find('input'), function(index, target){
+            $.each(target_form.find('input, textarea, select'), function(index, target){
                 if($(this).attr('required')){
                    if($(this).attr('type') === "checkbox"){
                         if(!$(this).is(':checked')){
@@ -372,6 +422,12 @@ function formular(target, callback){
                         if(!$(this).parent().hasClass('valid') && $(this).attr('required')){
                             valid = false;
                         }
+                    }
+                    if($(this).val() === null){
+                      valid = false;
+                    }
+                    if($(this).val() === ""){
+                      valid = false;
                     }
                 }
             });

@@ -25,8 +25,6 @@ var idkids_jssdk = function(options, callback){
               this.config.url = this.config.debug_url;
             }
             //this.call('POST', request, params, callback);
-
-
             this.add_params(params, $.proxy(function(params){
               $.post(this.config.url+request, {
                   Accept: "text/plain; charset=utf-8",
@@ -42,6 +40,7 @@ var idkids_jssdk = function(options, callback){
                   callback(e);
               }, this))
               .fail(function(e) {
+                  console.log('FAIL ', e);
                   if(typeof error_callback !== "undefined" && error_callback !== null){
                     error_callback(e);
                   }
@@ -110,6 +109,7 @@ var idkids_jssdk = function(options, callback){
             }, this));
         },
         check_response : function(e){
+          console.log("check_response ", e);
           if(typeof e.responseJSON !== "undefined"){
             e = e.responseJSON;
           }

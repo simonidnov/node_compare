@@ -28,3 +28,8 @@ exports.deleting = function(req, res, callback) {
         callback(e);
     });
 };
+exports.buy_with_coupon = function(req, res, callback){
+    Orders_model.buy_with_coupon(req, res, function(e){
+        callback(e);
+    });
+}
