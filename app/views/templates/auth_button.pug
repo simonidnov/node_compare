@@ -17,11 +17,11 @@ if(typeof query.user === "undefined" || query.user === null || query.user === ""
 else
   div#account_infos
       div.avatar.sm
-        img(src=((user[0].avatar !== "" && typeof user[0].avatar !== "undefined")? (user[0].avatar.indexOf('http') === -1)? app.locals.settings.host+user[0].avatar: user[0].avatar : app.locals.settings.host+"/public/images/assets/account.svg") alt="avatar")
+        img(src=((user[0].avatar !== "" && typeof user[0].avatar !== "undefined")? (user[0].avatar.indexOf('http') === -1)? app.locals.settings.host+user[0].avatar : user[0].avatar.replace('http://', 'https://') : app.locals.settings.host+"/public/images/assets/account.svg") alt="avatar")
   div.subnav.account
       div.account_infos
           div.avatar
-              img(src=((user[0].avatar !== "" && typeof user[0].avatar !== "undefined")? (user[0].avatar.indexOf('http') === -1)? app.locals.settings.host+user[0].avatar: user[0].avatar : app.locals.settings.host+"/public/images/assets/account.svg"))
+              img(src=((user[0].avatar !== "" && typeof user[0].avatar !== "undefined")? (user[0].avatar.indexOf('http') === -1)? app.locals.settings.host+user[0].avatar: user[0].avatar.replace('http://', 'https://') : app.locals.settings.host+"/public/images/assets/account.svg"))
           div.infos
               div.label= user[0].pseudo
               //-div.email= query.user.email
