@@ -326,8 +326,13 @@ var idkids_jssdk = function(options, callback){
             callback(e);
         });
         /* check uri params call action SDK tools */
-        var url = new URL(window.location.href),
-            action = url.searchParams.get("idkids-sdk-action");
+        var url = new URL(window.location.href);
+        if(typeof url.searchParams !== "undefined"){
+          var action = url.searchParams.get("idkids-sdk-action");
+        }else{
+          console.log('PATCH IE ?');
+          var action = null;
+        }
         switch(action){
           case 'logout':
             this.logout();
