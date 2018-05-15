@@ -638,6 +638,8 @@ p{
     height: 64px;
     margin-left:20px;
     float: left;
+    position: absolute;
+    z-index: 999;
 }
 
 
