@@ -54,8 +54,8 @@ block content
                             li.icon(style="background-image:url("+apps.icon+")")
                 div.app_infos
                     if current_app !== null && typeof current_app !== "undefined"
-                      div.row(style="background-color:"+current_app.color+";")
-                        img(src=current_app.icon, height="50")
+                      div.row(style="")
+                        img(src=current_app.icon, height="50", style="border-radius:4px;")
                         //-img(src=current_app.logo, height="50")
                         div 
                           span Me connecter sur
