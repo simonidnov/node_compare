@@ -261,6 +261,8 @@ header .hor_nav ul li:hover:after, header .hor_nav ul li.selected:after{
 footer{
     background: #f2f2f2;
     color:#222;
+    display: table;
+    width:100%;
 }
 footer hr{
     width:100%;
