@@ -394,18 +394,17 @@ footer ul li a:hover:after{
   margin-bottom: 40px;
   height: 135px;
   color:#FFF;
+  display: table;
+  width: 100%;
 }
 .head_title h1{
-  position: absolute;
+  position: relative;
   width: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  display: table;
+  display: table-cell;
   color: #FFF;
   font-weight: 100;
   text-transform: uppercase;
+  vertical-align: middle;
 }
 .head_title::before{
   content: '';
