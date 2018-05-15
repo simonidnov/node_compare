@@ -21,15 +21,6 @@ module.exports = {
     attributes: userproducts_datas
 };
 module.exports.get = function(req, res, callback){
-    console.log(":::::::::::::::: ");
-    console.log(":::::::::::::::: ");
-    console.log(":::::::::::::::: ");
-    console.log(":::::::::::::::: ");
-    console.log("datas get products :::::::::::::::: ", req.query);
-    console.log(":::::::::::::::: ");
-    console.log(":::::::::::::::: ");
-    console.log(":::::::::::::::: ");
-    console.log(":::::::::::::::: ");
     var query = {},
         self = this;
 
@@ -45,7 +36,6 @@ module.exports.get = function(req, res, callback){
           return false;
         }
     req.user_id = query.user_id;
-    console.log("datas get products :::::::::::::::: ", req.query);
     self.checkOrders(req, res, function(e){
       Userproducts.find(query, function(err, userproducts){
         if(err){

@@ -48,7 +48,6 @@ module.exports.get = function(req, res, callback){
     if(typeof req.query._id !== "undefined"){
       query._id = req.query._id;
     }
-    console.log('----------- ORDERS MODEL ', query);
     if(typeof query.user_id === "undefined"){
       callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
     }
@@ -56,7 +55,6 @@ module.exports.get = function(req, res, callback){
         if(err){
             callback({status:405, datas:err});
         }else{
-          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> infos ', infos);
             callback({status:200, datas:infos});
         }
     }).sort({'created':-1});

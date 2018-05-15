@@ -285,7 +285,11 @@ module.exports.login = function(req, datas, callback) {
                     urlExists(avatar, function(err, exists) {
                       if(!exists){
                         //app.locals.settings.host+
-                        avatar = app.locals.settings.host+"/public/images/assets/account.svg";
+                        if(typeof app.locals !== "undefined"){
+                          avatar = app.locals.settings.host+"/public/images/assets/account.svg";
+                        }else{
+                          avatar ="/public/images/assets/account.svg";
+                        }
                       }
                       /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
                       /*
