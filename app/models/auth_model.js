@@ -274,7 +274,7 @@ module.exports.login = function(req, datas, callback) {
                     if(users[0].avatar === "" || users[0].avatar === null){
                         if(datas.avatar === "" || datas.avatar === null || typeof datas.avatar === "undefined"){
                           // Si pas d'avatar on regarde si un gravatar existe
-                          avatar = gravatar.url(users[0].email, {s: '200', r: 'pg', d: '404'}).replace('//', 'http://');
+                          avatar = gravatar.url(users[0].email, {protocol: 'https', s: '100'});
                         }else{
                           avatar = datas.avatar;
                         }
@@ -285,7 +285,7 @@ module.exports.login = function(req, datas, callback) {
                     urlExists(avatar, function(err, exists) {
                       if(!exists){
                         //app.locals.settings.host+
-                        avatar = "/public/images/assets/account.svg";
+                        avatar = app.locals.settings.host+"/public/images/assets/account.svg";
                       }
                       /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
                       /*
@@ -369,6 +369,20 @@ module.exports.register = function(datas, callback) {
         }
     });
 
+    /*TODO CHECK GRAVATAR
+    var avatar = gravatar.url(datas.body.subscribe_email, {protocol: 'https', s: '100'});
+    urlExists(gravatar.url(avatar, function(err, exists) {
+      if(!exists) {
+        //app.locals.settings.host+
+        avatar = "/public/images/assets/account.svg";
+      }
+    }*/
+    //var avatar = gravatar.url(datas.body.subscribe_email, {protocol: 'https', s: '100'});
+    if(typeof app.locals !== "undefined" && typeof app.locals.settings !== "undefined"){
+      var avatar = app.locals.settings.host+"/public/images/assets/account.svg";
+    }else{
+      var avatar = "/public/images/assets/account.svg";
+    }
     //sha1 = require('sha1');
 
     var pass = sha1(datas.body.subscribe_password);
@@ -379,7 +393,7 @@ module.exports.register = function(datas, callback) {
             email   : datas.body.subscribe_email,
             password: pass,
             pseudo  : datas.body.pseudo,
-            avatar  : gravatar.url(datas.body.subscribe_email, {s: '200', r: 'pg', d: '404'}, true).replace('//', 'http://'),
+            avatar  : avatar,
             secret  : jwt.sign({pseudo:(datas.body.pseudo+"_"+datas.body.subscribe_email)}, config.secrets.global.secret, { expiresIn: '2 days' }),
             termAccept : true,
             rights  : {

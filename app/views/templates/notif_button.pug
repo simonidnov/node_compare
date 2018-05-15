@@ -10,18 +10,25 @@ li#notifications
     div.subnav
         ul
             li
-                a(href=app.locals.settings.host+"/account/basket" target="_blank")
-                  div.icon.idkids-icons.icon-basket
-                  span Mon panier
-                  if typeof basket[0] !== "undefined"
-                    span(id="total_basket") (#{basket[0].products.length})
-                  else 
-                    span(id="total_basket") (0)
+              a(href=app.locals.settings.host+"/account/basket" target="_blank")
+                div.icon.idkids-icons.icon-basket
+                span Mon panier
+                if typeof basket[0] !== "undefined"
+                  span(id="total_basket") (#{basket[0].products.length})
+                else 
+                  span(id="total_basket") (0)
+                
+                if typeof basket[0] !== "undefined"
+                  span(style="width:100%; height:40px; position:relative; display:block;") contenu du panier :
+                  ul
+                  each p in basket[0].products
+                    li
+                      span= p.infos.label+" - "+p.infos.extra_category
             li
-                a(href=app.locals.settings.host+"/account/orders" target="_blank")
-                  div.icon.idkids-icons.icon-cloud
-                  span Mes Achats
-                  span(id="total_orders") (0)
+              a(href=app.locals.settings.host+"/account/orders" target="_blank")
+                div.icon.idkids-icons.icon-cloud
+                span Mes Achats
+                span(id="total_orders") (0)
             //-li
                 a(href=app.locals.settings.host+"/account/messages" target="_blank")
                   div.idkids-icons.icon-email

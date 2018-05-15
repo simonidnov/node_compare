@@ -517,6 +517,7 @@ input:-webkit-autofill {
 .formular .material_input textarea:valid + label,
 .formular .material_input input[type="email"]:valid + label,
 .formular .material_input input[type="text"]:valid + label,
+.formular .material_input input[type="tel"]:valid + label,
 .formular .material_input input[type="number"]:valid + label,
 .formular .material_input.notempty label,
 .formular .material_input.invalid label,
@@ -606,6 +607,7 @@ input:-webkit-autofill {
     position: relative;
     float: left;
     margin-bottom:10px;
+    cursor: pointer;
 }
 .formular input[type="checkbox"]:before{
     content:'';
@@ -617,6 +619,7 @@ input:-webkit-autofill {
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
     border-radius: 12px;
+    cursor: pointer;
     -webkit-transition: background .2s ease-in;
     -moz-transition: background .2s ease-in;
     -o-transition: background .2s ease-in;
@@ -629,6 +632,7 @@ input:-webkit-autofill {
     height:20px;
     left:2px;
     top:2px;
+    cursor: pointer;
     background: #FFF;
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
