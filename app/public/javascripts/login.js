@@ -1,6 +1,8 @@
 "use strict";
 $(function(){
+  setTimeout(function(){
     login.init();
+  },1000);
 });
 var index = {};
 var login = {
