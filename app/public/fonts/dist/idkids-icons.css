@@ -2,6 +2,7 @@
 	font-family: "idkids-icons";
 	src: url('idkids-icons.eot');
 	src: url('idkids-icons.eot?#iefix') format('eot'),
+		url('idkids-icons.woff2') format('woff2'),
 		url('idkids-icons.woff') format('woff'),
 		url('idkids-icons.ttf') format('truetype'),
 		url('idkids-icons.svg#idkids-icons') format('svg');
