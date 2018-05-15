@@ -6,11 +6,10 @@ block content
         var response     = (!{JSON.stringify(response)});
     script.
         var translation  = (!{JSON.stringify(lang[locale].keys)});
-    script.
-        if(typeof current_app !== "undefined" && current_app !== "undefined" && current_app !== null && current_app !== ""){
-          var current_app  = "#{current_app}";
+    if typeof current_app !== "undefined" && current_app !== "undefined" && current_app !== null && current_app !== ""
+      script.
+          var test  = "#{current_app}";
           var current_app  = (!{JSON.stringify(current_app)});
-        }
     script.
         var referer  = "#{referer}";
     
