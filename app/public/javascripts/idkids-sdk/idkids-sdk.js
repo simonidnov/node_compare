@@ -227,6 +227,14 @@ var idkids_jssdk = function(options, callback){
             if(typeof url.searchParams !== "undefined"){
               var c = url.searchParams.get("idkids-token");
             }else{
+              var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+              if (results==null){
+                 console.log("NO RESULTS");
+              }
+              else{
+                 console.log("RESULTS");
+                 console.log(decodeURI(results[1]) || 0);
+              }
               console.log('PATCH IE ?');
               var c = null;
             }
