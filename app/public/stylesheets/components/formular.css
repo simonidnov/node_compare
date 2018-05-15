@@ -135,6 +135,7 @@ fieldset{
     overflow: hidden;
     height: initial;
     display: block;
+    height:0;
     -webkit-animation: displaynone_motion .6s;
     animation: displaynone_motion .6s;
     -webkit-animation-fill-mode: forwards;
