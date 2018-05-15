@@ -40,7 +40,6 @@ var idkids_jssdk = function(options, callback){
                   callback(e);
               }, this))
               .fail(function(e) {
-                  console.log('FAIL ', e);
                   if(typeof error_callback !== "undefined" && error_callback !== null){
                     error_callback(e);
                   }
@@ -109,7 +108,6 @@ var idkids_jssdk = function(options, callback){
             }, this));
         },
         check_response : function(e){
-          console.log("check_response ", e);
           if(typeof e.responseJSON !== "undefined"){
             e = e.responseJSON;
           }
@@ -122,8 +120,6 @@ var idkids_jssdk = function(options, callback){
                 "device":e.idkids_user.datas.current_device
             };
             this.store('idkids_local_user', jeton);
-            //console.log(JSON.stringify(e.idkids_user));
-            //alert('idkids_user');
           }
           if(typeof e.response_display !== "undefined"){
               if(e.status === 203){
@@ -242,7 +238,6 @@ var idkids_jssdk = function(options, callback){
             }else{
               var params = getLocationParameters(window.location, 'both');
               var c = params["idkids-token"];
-              console.log("SEARCH PARAMS ABOUT IDKIDS_TOKEN ::::: ", c);
               if(typeof c !== "undefined" && c !== null && c !== "undefined"){
                   var jeton = {
                       "token":params["idkids-token"],
@@ -333,7 +328,7 @@ var idkids_jssdk = function(options, callback){
             };
         }
         this.api.get_device_uid(function(e){
-          console.log('device uid ', e);
+          ///console.log('device uid ', e);
         });
         this.api.reset_user(function(datas){
         });
