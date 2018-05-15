@@ -243,7 +243,7 @@ var idkids_jssdk = function(options, callback){
               var params = getLocationParameters(window.location, 'both');
               var c = params["idkids-token"];
               console.log("SEARCH PARAMS ABOUT IDKIDS_TOKEN ::::: ", c);
-              if(c !== null){
+              if(typeof c !== "undefined" && c !== null && c !== "undefined"){
                   var jeton = {
                       "token":params["idkids-token"],
                       "_id":params["idkids-id"],
