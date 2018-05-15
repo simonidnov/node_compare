@@ -105,9 +105,7 @@ auth.get('/', function(req, res, next) {
         });
     })
     .post('/subscribe', function(req, res, next) {
-      console.log('subscribe');
         Auth_controller.register(req, function(e){
-          console.log('registered ', e);
             if(typeof e.user !== "undefined"){
                 e.idkids_user = {datas:e.user};
                 res.status(e.status).send(Auth_helper.addParams(e, req));

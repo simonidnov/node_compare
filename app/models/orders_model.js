@@ -38,15 +38,17 @@ module.exports = {
 };
 module.exports.get = function(req, res, callback){
     var query = {};
-
     if(typeof req.session.Auth !== "undefined"){
         query = {user_id : req.session.Auth._id};
     }else if(typeof req.query.user_id !== "undefined"){
-        query = {user_id : datas.user_id};
+        query = {user_id : req.query.user_id};
+    }else if(typeof req.query.options!== "undefined"){
+        query = {user_id : req.query.options.user_id};
     }
     if(typeof req.query._id !== "undefined"){
       query._id = req.query._id;
     }
+    console.log('----------- ORDERS MODEL ', query);
     if(typeof query.user_id === "undefined"){
       callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
     }
@@ -54,6 +56,7 @@ module.exports.get = function(req, res, callback){
         if(err){
             callback({status:405, datas:err});
         }else{
+          console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> infos ', infos);
             callback({status:200, datas:infos});
         }
     }).sort({'created':-1});
@@ -291,13 +294,11 @@ module.exports.createCharge = function(datas, res, callback){
             if(typeof coupons_code !== "undefined"){
               for(var c=0; c<coupons_code.length; c++){
                 coupon_model.useOne({_id:coupons_code[c].id, user_id:datas.user_id}, function(e){
-                  console.log('coupon used : ', e);
                 });
               }
             }
             /* TODO ON VIDE LE PANIER DE l'UTILISATEUR */
             basket_model.deleteUserBasket(datas.user_id, function(e){
-              console.log('BASKET DELETED ', e);
             });
             self.create(new_order_datas, res, function(e){
               if(e.status === 200){
@@ -313,7 +314,6 @@ module.exports.createCharge = function(datas, res, callback){
                         to:e.user.email
                       },
                       function(e){
-                        console.log(e);
                       }
                     );
 
@@ -327,7 +327,6 @@ module.exports.createCharge = function(datas, res, callback){
                         to:"service.transaction@joyvox.fr"
                       },
                       function(e){
-                        console.log(e);
                       }
                     );
                   }

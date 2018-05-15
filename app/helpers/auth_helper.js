@@ -69,7 +69,6 @@ module.exports = {
 
     },
     addParams : function(datas, req){
-      console.log('add params ', datas);
       if(typeof datas.updated_token === "undefined" && typeof req.updated_token !== "undefined"){
         datas.updated_token = req.updated_token;
       }

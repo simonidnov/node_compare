@@ -357,97 +357,100 @@ module.exports.register = function(datas, callback) {
       callback({"status":"error", "message":"NO_BODY"});
       return false;
     }
+    var self = this;
 
     User.find({email: datas.body.subscribe_email}, function (err, users) {
         if(err){
-            //callback({"status":400, "code":11, "error":err, "message":"USER_WRONG_EMAIL"});
+            callback({"status":400, "code":11, "error":err, "message":"USER_WRONG_EMAIL"});
         }else{
             if(users.length > 0){
-              callback({"status":203, "message":"SUBSCRIBE_EMAIL_EXIST", "email_already_exist":users.length});
+              callback({"status":201, "message":"SUBSCRIBE_EMAIL_EXIST", "email_already_exist":users.length, response_display:{title:'Email', "message":"Impossible de créer le compte car l'email que vous avez renseigné existe déjà."}});
               return false;
-            }
-        }
-    });
+            }else{
 
-    /*TODO CHECK GRAVATAR
-    var avatar = gravatar.url(datas.body.subscribe_email, {protocol: 'https', s: '100'});
-    urlExists(gravatar.url(avatar, function(err, exists) {
-      if(!exists) {
-        //app.locals.settings.host+
-        avatar = "/public/images/assets/account.svg";
-      }
-    }*/
-    //var avatar = gravatar.url(datas.body.subscribe_email, {protocol: 'https', s: '100'});
-    if(typeof app.locals !== "undefined" && typeof app.locals.settings !== "undefined"){
-      var avatar = app.locals.settings.host+"/public/images/assets/account.svg";
-    }else{
-      var avatar = "/public/images/assets/account.svg";
-    }
-    //sha1 = require('sha1');
 
-    var pass = sha1(datas.body.subscribe_password);
-    db.connect(config.database.users, {useMongoClient: true});
-
-    var self = this;
-    var new_user_datas = {
-            email   : datas.body.subscribe_email,
-            password: pass,
-            pseudo  : datas.body.pseudo,
-            avatar  : avatar,
-            secret  : jwt.sign({pseudo:(datas.body.pseudo+"_"+datas.body.subscribe_email)}, config.secrets.global.secret, { expiresIn: '2 days' }),
-            termAccept : true,
-            rights  : {
-                "type":'R',
-                "authorizations":['me']
-            }
-        }
-    new_user_datas.token = jwt.sign({secret:new_user_datas.secret, email:datas.body.subscribe_email, password:datas.body.subscribe_password}, config.secrets.global.secret, { expiresIn: '2 days'});
-    new_user_datas.device = [{
-        uid     : device_uid,
-        token   : new_user_datas.token
-    }];
-    //network : os.networkInterfaces(),
-    /* TODO CHECK ARRAY SEND FORM DATA */
-    if(datas.body.subscribe_newsletter){
-        new_user_datas.newsletter = true;
-        new_user_datas.newsletter_services = {};
-        if(typeof app.locals !== "undefined" && typeof app.locals.applications !== "undefined"){
-          for(var i=0; i<app.locals.applications.length; i++){
-            if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
-                new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
-            }
-          }
-        }
-    }else{
-        new_user_datas.newsletter = false;
-        new_user_datas.newsletter_services = {};
-    }
-
-    new_user = new User(new_user_datas);
-    new_user.save(function(err, usr){
-        if(err){
-          callback({"status":203, "message":"SUBSCRIBE_EMAIL_EXIST", err:err});
-        }
-        else{
-          self.reset_session(datas, usr._id, function(infos){
-            callback({"status":200, "user":usr});
-            /* TODO VERIFY ITS RUN AFTER CALLBACK */
-            Email_controller.send(
-              null,
-              {
-                subject:"Bienvenue sur JOYVOX",
-                title:"Inscription sur JOYVOX",
-                message:"Votre inscription à bien été prise en compte, rendez-vous sur <a href=\"https://auth.joyvox.fr/auth\">JOYVOX pour valider votre inscription.</a>",
-                email:usr.email,
-                to:usr.email
-              },
-              function(e){
-                /* ON ENVOIE LE MAIL A JOYVOX */
-                console.log(e);
+              /*TODO CHECK GRAVATAR
+              var avatar = gravatar.url(datas.body.subscribe_email, {protocol: 'https', s: '100'});
+              urlExists(gravatar.url(avatar, function(err, exists) {
+                if(!exists) {
+                  //app.locals.settings.host+
+                  avatar = "/public/images/assets/account.svg";
+                }
+              }*/
+              //var avatar = gravatar.url(datas.body.subscribe_email, {protocol: 'https', s: '100'});
+              if(typeof app.locals !== "undefined" && typeof app.locals.settings !== "undefined"){
+                var avatar = app.locals.settings.host+"/public/images/assets/account.svg";
+              }else{
+                var avatar = "/public/images/assets/account.svg";
               }
-            );
+              //sha1 = require('sha1');
 
-          });
+              var pass = sha1(datas.body.subscribe_password);
+              db.connect(config.database.users, {useMongoClient: true});
+
+
+              var new_user_datas = {
+                      email   : datas.body.subscribe_email,
+                      password: pass,
+                      pseudo  : datas.body.pseudo,
+                      avatar  : avatar,
+                      secret  : jwt.sign({pseudo:(datas.body.pseudo+"_"+datas.body.subscribe_email)}, config.secrets.global.secret, { expiresIn: '2 days' }),
+                      termAccept : true,
+                      rights  : {
+                          "type":'R',
+                          "authorizations":['me']
+                      }
+                  }
+              new_user_datas.token = jwt.sign({secret:new_user_datas.secret, email:datas.body.subscribe_email, password:datas.body.subscribe_password}, config.secrets.global.secret, { expiresIn: '2 days'});
+              new_user_datas.device = [{
+                  uid     : device_uid,
+                  token   : new_user_datas.token
+              }];
+              //network : os.networkInterfaces(),
+              /* TODO CHECK ARRAY SEND FORM DATA */
+              if(datas.body.subscribe_newsletter){
+                  new_user_datas.newsletter = true;
+                  new_user_datas.newsletter_services = {};
+                  if(typeof app.locals !== "undefined" && typeof app.locals.applications !== "undefined"){
+                    for(var i=0; i<app.locals.applications.length; i++){
+                      if(datas.body['newsletter_'+app.locals.applications[i].short_name]){
+                          new_user_datas.newsletter_services[app.locals.applications[i].short_name] = 1;
+                      }
+                    }
+                  }
+              }else{
+                  new_user_datas.newsletter = false;
+                  new_user_datas.newsletter_services = {};
+              }
+
+              new_user = new User(new_user_datas);
+              new_user.save(function(err, usr){
+                  if(err){
+                    callback({"status":203, "message":"SUBSCRIBE_EMAIL_EXIST", err:err});
+                  }
+                  else{
+                    self.reset_session(datas, usr._id, function(infos){
+                      callback({"status":200, "user":usr});
+                      /* TODO VERIFY ITS RUN AFTER CALLBACK */
+                      Email_controller.send(
+                        null,
+                        {
+                          subject:"Bienvenue sur JOYVOX",
+                          title:"Inscription sur JOYVOX",
+                          message:"Votre inscription à bien été prise en compte, rendez-vous sur <a href=\"https://auth.joyvox.fr/auth\">JOYVOX pour valider votre inscription.</a>",
+                          email:usr.email,
+                          to:usr.email
+                        },
+                        function(e){
+                          /* ON ENVOIE LE MAIL A JOYVOX */
+                          console.log(e);
+                        }
+                      );
+
+                    });
+                  }
+              });
+            }
         }
     });
 };
