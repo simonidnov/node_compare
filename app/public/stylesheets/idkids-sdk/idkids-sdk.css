@@ -145,7 +145,8 @@
 }
 .idkids_jssdk .short_cuts ul li .subnav ul{
     max-height: 60vh;
-    overflow: scroll;
+    overflow-x: none;
+    overflow-y: scroll;
     display: inline;
     width:206px;
     position: absolute;
