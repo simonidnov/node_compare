@@ -227,16 +227,7 @@ var idkids_jssdk = function(options, callback){
             if(typeof url.searchParams !== "undefined"){
               var c = url.searchParams.get("idkids-token");
             }else{
-              var result = null,
-                  tmp = [];
-              location.search
-                  .substr(1)
-                  .split("&")
-                  .forEach(function (item) {
-                    tmp = item.split("=");
-                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
-                  });
-              console.log('PATCH IE ? ', result);
+              console.log('PATCH IE ? ', getLocationParameters(window.location, 'both'));
               var c = null;
             }
             if(c !== null){
@@ -339,7 +330,7 @@ var idkids_jssdk = function(options, callback){
         if(typeof url.searchParams !== "undefined"){
           var action = url.searchParams.get("idkids-sdk-action");
         }else{
-          console.log('PATCH IE ?');
+          console.log('PATCH IE ? ', getLocationParameters(window.location, 'both'));
           var action = null;
         }
         switch(action){
@@ -443,4 +434,39 @@ var idkids_jssdk = function(options, callback){
     this.connect = function(){
       window.location.href = this.api.config.url+"/auth?secret="+this.options.secret;
     }
+}
+
+
+
+
+function decodeUriComponentWithSpace (component) {
+    return decodeURIComponent(component.replace(/\+/g, '%20'))
+  }
+
+  // type : 'hash', 'search' or 'both'
+  function getLocationParameters (location, type) {
+    if (type !== 'hash' && type !== 'search' && type !== 'both') {
+      throw 'getLocationParameters expect argument 2 "type" to be "hash", "search" or "both"'
+    }
+
+    let searchString = typeof location.search === 'undefined' ? '' : location.search.substr(1)
+    let hashString = typeof location.hash === 'undefined' ? '' : location.hash.substr(1)
+    let queries = []
+    if (type === 'search' || type === 'both') {
+      queries = queries.concat(searchString.split('&'))
+    }
+    if (type === 'hash' || type === 'both') {
+      queries = queries.concat(hashString.split('&'))
+    }
+
+    let params = {}
+    let pair
+
+    for (let i = 0; i < queries.length; i++) {
+      if (queries[i] !== '') {
+        pair = queries[i].split('=')
+        params[this.decodeUriComponentWithSpace(pair[0])] = this.decodeUriComponentWithSpace(pair[1])
+      }
+    }
+    return params
 }
