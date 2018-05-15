@@ -1,3 +1,29 @@
 extends admin_header
 block content
-  h1 baskets
+  div.container.dashboard
+    div.row.centered
+      h1 Informations sur les paniers
+      if baskets
+        div.col-md-4
+          div.block
+            h2 Nombre de Paniers en cours
+            p= baskets.length
+        div.col-md-12
+          h2 Tous les paniers en cours
+          - var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+          table
+            tr
+              th id
+              th user id
+              th nombre de produits
+              th amount
+              th date
+            each bsk in baskets
+              tr
+                td= bsk._id
+                td= bsk.user_id
+                td= bsk.products.length
+                td= (bsk.total/100).toFixed(2)+ " €"
+                td= new Date(bsk.updated).toLocaleDateString('fr-FR', options)
+          //-p= JSON.stringify(baskets)
+          

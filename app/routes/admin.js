@@ -503,7 +503,7 @@ admin
         });
     })
     .get('/baskets', function(req, res, next) {
-      Basket_controller.get(req, res, function(e){
+      Basket_controller.getStats(req, res, function(e){
           baskets = e.datas;
           res.render('admin/baskets', {
               title: 'Admin Baskets',

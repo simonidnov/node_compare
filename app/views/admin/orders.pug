@@ -1,3 +1,31 @@
 extends admin_header
 block content
-  h1 orders
+  div.container.dashboard
+    div.row.centered
+      h1 Inbformations sur les commandes
+      if orders
+        div.row.centered
+          div.col-md-4
+            div.block
+              h2 Total des commandes effectuées
+              p= orders.length
+              a.btn.btn-success(href="https://dashboard.stripe.com/dashboard") Accèder au Dashboard STRIPE
+          div.col-md-12
+            h2 Toutes les commandes
+            - var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+            table
+              tr
+                th id
+                th user id
+                th numéro de facture
+                th amount
+                th date
+              each ords in orders
+                tr
+                  td= ords._id
+                  td= ords.user_id
+                  td= ords.bill_number
+                  td= (ords.reduced_amount/100)+ " €"
+                  td= new Date(ords.created).toLocaleDateString('fr-FR', options)
+            
+            //-p= JSON.stringify(orders)

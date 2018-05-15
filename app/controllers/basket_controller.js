@@ -7,6 +7,11 @@ exports.get = function(req, res, callback) {
         callback(e);
     });
 };
+exports.getStats = function(req, res, callback) {
+    Basket_model.getStats(req, res, function(e){
+        callback(e);
+    });
+};
 exports.getAmount = function(req, res, callback) {
     Basket_model.getAmount(req.query, req, function(e){
         callback(e);

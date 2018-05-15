@@ -95,7 +95,7 @@
 .idkids_jssdk .short_cuts ul li:hover,
 .idkids_jssdk .short_cuts ul li:active,
 .idkids_jssdk .short_cuts ul li:focus{
-    background-color: #F0F0F0;
+    background-color: #e6ebf1;
     color: #000;
 }
 .idkids_jssdk .short_cuts ul li:hover .icon{
@@ -227,7 +227,7 @@
     border-top:1px solid #E3E3E3;
     padding-left:10px;
     text-align: center;
-    background:#F0F0F0;
+    background:#e6ebf1;
     width: 100%;
 }
 
@@ -320,7 +320,7 @@
 .idkids_jssdk .short_cuts ul li:hover,
 .idkids_jssdk .short_cuts ul li:active,
 .idkids_jssdk .short_cuts ul li:focus{
-    background-color: #F0F0F0;
+    background-color: #e6ebf1;
     color: #000;
 }
 .idkids_jssdk .short_cuts ul li .subnav{
@@ -436,13 +436,13 @@
     border-top:1px solid #E3E3E3;
     padding-left:10px;
     text-align: center;
-    background:#F0F0F0;
+    background:#e6ebf1;
     width: 100%;
 }
 .idkids_jssdk .avatar{
     width:64px;
     height:64px;
-    background:#CCC;
+    background:#e6ebf1;
     margin:10px;
     overflow: hidden;
     -moz-border-radius: 100%;

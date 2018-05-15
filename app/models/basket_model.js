@@ -31,6 +31,17 @@ const basketSchemas = new db.Schema(basket_datas),
 module.exports = {
     attributes: basket_datas
 };
+module.exports.getStats = function(req, res, callback){
+  Baskets.find({}, function(err, infos){
+      console.log("err :::: ", err);
+      console.log('infos ::::: ', infos);
+      if(err){
+          callback({status:405, datas:err});
+      }else{
+          callback({status:200, datas:infos});
+      }
+  });
+}
 module.exports.get = function(datas, req, callback) {
     //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
     console.log('AUTH REQ ??????? ', datas);
