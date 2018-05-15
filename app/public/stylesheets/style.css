@@ -12,6 +12,8 @@ body {
 }
 *{
     -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
 }
 a {
   color: #00B7FF;
