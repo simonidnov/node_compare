@@ -226,23 +226,37 @@ var idkids_jssdk = function(options, callback){
             var url = new URL(window.location.href);
             if(typeof url.searchParams !== "undefined"){
               var c = url.searchParams.get("idkids-token");
-            }else{
-              console.log('PATCH IE ? ', getLocationParameters(window.location, 'both'));
-              var c = null;
-            }
-            if(c !== null){
-                var jeton = {
-                    "token":url.searchParams.get("idkids-token"),
-                    "_id":url.searchParams.get("idkids-id"),
-                    "secret":url.searchParams.get("idkids-secret"),
-                    "device":url.searchParams.get("idkids-device")
-                };
-                this.store('idkids_local_user', jeton);
+              if(c !== null){
+                  var jeton = {
+                      "token":url.searchParams.get("idkids-token"),
+                      "_id":url.searchParams.get("idkids-id"),
+                      "secret":url.searchParams.get("idkids-secret"),
+                      "device":url.searchParams.get("idkids-device")
+                  };
+                  this.store('idkids_local_user', jeton);
 
-                this.set_user();
-                window.history.pushState({"pageTitle":document.title},document.title, window.location.origin + window.location.pathname);
-                callback(jeton);
+                  this.set_user();
+                  window.history.pushState({"pageTitle":document.title},document.title, window.location.origin + window.location.pathname);
+                  callback(jeton);
+              }
+            }else{
+              var params = getLocationParameters(window.location, 'both');
+              var c = params["idkids-token"];
+              if(c !== null){
+                  var jeton = {
+                      "token":params["idkids-token"],
+                      "_id":params["idkids-id"],
+                      "secret":params["idkids-secret"],
+                      "device":params["idkids-device"]
+                  };
+                  this.store('idkids_local_user', jeton);
+
+                  this.set_user();
+                  window.history.pushState({"pageTitle":document.title},document.title, window.location.origin + window.location.pathname);
+                  callback(jeton);
+              }
             }
+
         },
         set_user : function(){
             this.getStore('idkids_local_user');
@@ -330,8 +344,8 @@ var idkids_jssdk = function(options, callback){
         if(typeof url.searchParams !== "undefined"){
           var action = url.searchParams.get("idkids-sdk-action");
         }else{
-          console.log('PATCH IE ? ', getLocationParameters(window.location, 'both'));
-          var action = null;
+          var params = getLocationParameters(window.location, 'both');
+          var action = params['idkids-sdk-action'];
         }
         switch(action){
           case 'logout':
