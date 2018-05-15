@@ -227,15 +227,16 @@ var idkids_jssdk = function(options, callback){
             if(typeof url.searchParams !== "undefined"){
               var c = url.searchParams.get("idkids-token");
             }else{
-              var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-              if (results==null){
-                 console.log("NO RESULTS");
-              }
-              else{
-                 console.log("RESULTS");
-                 console.log(decodeURI(results[1]) || 0);
-              }
-              console.log('PATCH IE ?');
+              var result = null,
+                  tmp = [];
+              location.search
+                  .substr(1)
+                  .split("&")
+                  .forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                  });
+              console.log('PATCH IE ? ', result);
               var c = null;
             }
             if(c !== null){
