@@ -94,14 +94,17 @@ var login = {
                 }
             },
             function(response, params){
-                //console.log(response, params);
+                console.log("this.sdk ::: ", response, params);
             }
         );
         var self = this;
         this.sdk.init($.proxy(function(status){
+            console.log(status);
             this.sdk.isLogged($.proxy(function(e){
+                console.log("isLogged :::: ", e);
                 if(e.status === "logged"){
                   this.sdk.api.get('/me', {}, $.proxy(function(e){
+                      console.log('ME / ', e);
                       if($('[data-userid="'+e.datas._id+'"]').length == 0){
                           $('.account_list').prepend('<a href="/auth/login/email/'+e.datas.email+'" data-action="page_reload"><li data-userid="'+e.datas._id+'"><div class="avatar" style="background-image:url('+e.datas.avatar+')"></div><div class="option_infos"><div class="label">'+e.datas.pseudo+'</div><div class="email">'+e.datas.email+'</div><div class="status">connected</div></div></li></a>');
                       }
