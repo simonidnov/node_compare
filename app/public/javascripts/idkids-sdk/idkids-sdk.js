@@ -223,8 +223,12 @@ var idkids_jssdk = function(options, callback){
             });
         },
         reset_user : function(callback){
-            var url = new URL(window.location.href),
-                c = url.searchParams.get("idkids-token");
+            var url = new URL(window.location.href);
+            if(typeof url.searchParams !== "undefined"){
+              c = url.searchParams.get("idkids-token");
+            }else{
+              console.log('PATCH IE ?');
+            }
             if(c !== null){
                 var jeton = {
                     "token":url.searchParams.get("idkids-token"),
