@@ -193,7 +193,7 @@ header .hor_nav{
     text-align: center;
     background:#FCFCFC;
     width:100%;
-    overflow: scroll;
+    overflow-x: scroll;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.1);
