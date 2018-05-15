@@ -8,6 +8,7 @@ block content
         var translation  = (!{JSON.stringify(lang[locale].keys)});
     script.
         if(typeof current_app !== "undefined" && current_app !== "undefined" && current_app !== null && current_app !== ""){
+          var current_app  = "#{current_app}";
           var current_app  = (!{JSON.stringify(current_app)});
         }
     script.
