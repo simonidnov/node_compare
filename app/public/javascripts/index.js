@@ -34,6 +34,7 @@ var index = {
           this.sdk.isLogged($.proxy(function(e){
               if(e.status === "logged"){
                 //$('.short_cuts ul').prepend('<li id="notifs_taskbar"></li>');
+                $('#notifs_taskbar').css('display', 'block');
                 this.sdk.createNotificationButton('notifs_taskbar', $.proxy(function(e){
                   $('#notifs_taskbar').css('display', 'block');
                 },this));
