@@ -3,6 +3,7 @@
 //forever start "script": "index.js",
 const express = require('express'),
     path = require('path'),
+    ga = require('express-ga-middleware'),
     compression = require('compression'),
     config = require('./config/config'),
     favicon = require('serve-favicon'),
@@ -80,9 +81,9 @@ app.use(compression());
 
 // UNCOMMENT TO REST ANALYTICS WITH GOOGLE ANALYTICS
 //app.use(express.cookieParser());
-//app.use(ga(config.analytics.key, {
-//    safe: true
-//}));
+app.use(ga(config.analytics.key, {
+    safe: true
+}));
 
 //TODO CHECH IT store: sessionStore, // connect-mongo session store
 /*
