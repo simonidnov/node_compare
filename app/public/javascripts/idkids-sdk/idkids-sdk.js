@@ -225,9 +225,10 @@ var idkids_jssdk = function(options, callback){
         reset_user : function(callback){
             var url = new URL(window.location.href);
             if(typeof url.searchParams !== "undefined"){
-              c = url.searchParams.get("idkids-token");
+              var c = url.searchParams.get("idkids-token");
             }else{
               console.log('PATCH IE ?');
+              var c = null;
             }
             if(c !== null){
                 var jeton = {
