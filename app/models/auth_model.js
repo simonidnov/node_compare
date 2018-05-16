@@ -441,13 +441,13 @@ module.exports.register = function(datas, callback) {
                         {
                           subject:"Bienvenue sur JOYVOX",
                           title:"Inscription sur JOYVOX",
-                          message:"Votre inscription à bien été prise en compte, rendez-vous sur <a href=\"https://auth.joyvox.fr/auth\">JOYVOX pour valider votre inscription.</a>",
+                          message:"Votre inscription a bien été prise en compte, rendez-vous sur <a href=\"https://auth.joyvox.fr/auth\">JOYVOX pour valider votre inscription.</a>",
                           email:usr.email,
                           to:usr.email
                         },
                         function(e){
                           /* ON ENVOIE LE MAIL A JOYVOX */
-                          console.log(e);
+                          //console.log(e);
                         }
                       );
 
