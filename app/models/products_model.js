@@ -72,6 +72,14 @@ module.exports.get = function(datas, res, callback){
       };
       //query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
     }
+    if(typeof datas.alphabetik !== "undefined"){
+      query = {
+        "label": {
+          "$regex": new RegExp("^"+datas.alphabetik+"")
+        }
+      };
+    }
+    console.log('SEARCH QUERY ', query);
     let skip = 0,
         limit = 50;
     if(typeof datas.skip !== "undefined"){
