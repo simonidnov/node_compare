@@ -19,12 +19,15 @@ router.use(function(req, res, next) {
   next();
 });
 /* GET home page. */
-router.get('/', function(req, res, next) {
+/*router.get('/', function(req, res, next) {
 
     res.render('offline', {title: 'IDKIDS.community WELCOME'});
     res.end();
-});
-router.get('/:page_url', function(req, res, next) {
+});*/
+router.get(['/', '/:page_url'], function(req, res, next) {
+    if(typeof req.params.page_url === "undefined"){
+      req.params.page_url = "apps";
+    }
     Page_controller.get(req.params, res, function(e) {
       if(e.datas.length === 1){
         res.render('page_templates/'+e.datas[0].template, {
