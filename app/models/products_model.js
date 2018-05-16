@@ -58,24 +58,63 @@ module.exports = {
 module.exports.get = function(datas, res, callback){
     var query = {},
         self = this;
-    console.log("products GET :::::: ", datas);
     if(typeof datas.product_id !== "undefined"){
       query._id = datas.product_id;
     }
     if(typeof datas.label !== "undefined"){
-      //query.label = {$in:[datas.label]};
-      query.label = datas.label;
-      //{ $regex: new RegExp("^" + datas.label.toLowerCase(), "i") }
+      query.label = datas.label.toUpperCase();
     }
     if(typeof datas.phonetik !== "undefined"){
-      //console.log("WORDLAB :::: ", language_helper.wordlab(datas.phonetik).split('-'));
-      query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
+      query = {
+        phonetik : {
+          $in:language_helper.wordlab(datas.phonetik).split('-')
+        }
+      };
+      //query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
     }
     let skip = 0,
         limit = 50;
     if(typeof datas.skip !== "undefined"){
       skip = parseInt(datas.skip);
     }
+    let productQuery = Products.find(query).limit(limit).skip(skip).sort({'label': 1}).exec(function(err, products_datas){
+        if(err){
+            callback({status:208, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+        }else{
+            var index = 0;
+            if(products_datas.length === 0) {
+              callback({status:200, datas:products_datas});
+            }
+            products_datas.forEach(function(prod){
+              Apps_model.get(null, {_id : prod.app_id}, function(e){
+                if(e.datas.length > 0){
+                  prod.app_icon = e.datas[0].icon;
+                  prod.app_label = e.datas[0].label;
+                  prod.app_infos = [];
+                  index++;
+                  if(index === products_datas.length){
+                    callback({status:200, datas:products_datas});
+                  }
+                }else{
+                  callback({status:200, datas:products_datas});
+                }
+              });
+            });
+        }
+    });
+
+    /*
+    infos.forEach(function(info, index){
+      Apps_model.get(null, {_id:info.app_id}, function(e){
+        if(e.datas.length > 0){
+          info.app_label = e.datas[0].label;
+          info.app_icon = e.datas[0].icon;
+        }
+      });
+    });
+    */
+
+
     //query.limit = Number(5);
     /*query.$lookup = {
        from: "Apps_model.Apps",
@@ -105,42 +144,6 @@ module.exports.get = function(datas, res, callback){
       }
     }
     */
-    let productQuery = Products.find(query).limit(limit).skip(skip).sort({'label': 1}).exec(function(err, products_datas){
-        if(err){
-            callback({status:304, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
-        }else{
-            /*
-            infos.forEach(function(info, index){
-              Apps_model.get(null, {_id:info.app_id}, function(e){
-                if(e.datas.length > 0){
-                  info.app_label = e.datas[0].label;
-                  info.app_icon = e.datas[0].icon;
-                }
-              });
-            });
-            */
-            var index = 0;
-            if(products_datas.length === 0){
-              callback({status:200, datas:products_datas});
-            }
-            products_datas.forEach(function(prod){
-              Apps_model.get(null, {_id : prod.app_id}, function(e){
-                if(e.datas.length > 0){
-                  prod.app_icon = e.datas[0].icon;
-                  prod.app_label = e.datas[0].label;
-                  prod.app_infos = [];
-                  index++;
-                  if(index === products_datas.length){
-                    callback({status:200, datas:products_datas});
-                  }
-                }else{
-                  callback({status:200, datas:products_datas});
-                }
-              });
-            });
-            //callback({status:200, datas:infos});
-        }
-    });
 };
 module.exports.create = function(user_id, datas, callback){
     //datas.user = user._id;
