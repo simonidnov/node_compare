@@ -35,7 +35,8 @@ var login = {
               //console.log(form_datas);
               login.sdk.api[e.form.attr('method')](e.form.attr('action'), form_datas, function(e){
                 if(typeof e.idkids_user !== "undefined"){
-                  if(typeof referer !== "undefined"){
+                  console.log('referer ', referer);
+                  if(typeof referer !== "undefined" && referer.indexOf('/auth') === -1){
                     window.location.href = referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret;
                   }else{
                     window.location.href = '/account/account/?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret;

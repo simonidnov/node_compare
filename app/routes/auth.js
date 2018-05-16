@@ -29,7 +29,7 @@ var express = require('express'),
             }else{
 
               current_app = e;
-              referer = current_app.redirect_url;
+              //referer = current_app.redirect_url;
               //current_app.referer = referer;
               next();
             }
@@ -38,7 +38,7 @@ var express = require('express'),
           Apps_controller.get(req, {_id:req.query.app_id}, function(e){
             if(e.status === 200){
               current_app = e.datas[0];
-              referer = current_app.redirect_url;
+              //referer = current_app.redirect_url;
               next();
             }else{
               res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
@@ -49,7 +49,7 @@ var express = require('express'),
             if(e.status === 200){
               if(e.datas.length > 0){
                 current_app = e.datas[0];
-                referer = current_app.redirect_url;
+                //referer = current_app.redirect_url;
               }
               next();
             }else{
@@ -75,13 +75,13 @@ auth.get('/', function(req, res, next) {
                     referer:referer,
                     current_app:current_app,
                     js:[
-                        '/public/javascripts/login.js',
-                        '/public/javascripts/components/popeye.js',
-                        '/public/javascripts/components/formular.js'
+                        '/public/javascripts/login.js?v='+app.locals.version,
+                        '/public/javascripts/components/popeye.js?v='+app.locals.version,
+                        '/public/javascripts/components/formular.js?v='+app.locals.version
                     ],
                     css:[
-                        '/public/stylesheets/components/formular.css',
-                        '/public/stylesheets/auth.css',
+                        '/public/stylesheets/components/formular.css?v='+app.locals.version,
+                        '/public/stylesheets/auth.css?v='+app.locals.version,
                     ]
                 };
                 datas.user_session = req.session.Auth;
@@ -127,12 +127,12 @@ auth.get('/', function(req, res, next) {
             lang:lang,
             uri_params : uri_helper.get_params(req),
             js:[
-                '/public/javascripts/lost_password.js',
-                '/public/javascripts/components/formular.js',
-                '/public/javascripts/components/popeye.js'
+                '/public/javascripts/lost_password.js?v='+app.locals.version,
+                '/public/javascripts/components/formular.js?v='+app.locals.version,
+                '/public/javascripts/components/popeye.js?v='+app.locals.version
             ], css:[
-                '/public/stylesheets/components/formular.css',
-                '/public/stylesheets/auth.css',
+                '/public/stylesheets/components/formular.css?v='+app.locals.version,
+                '/public/stylesheets/auth.css?v='+app.locals.version,
             ]
           }
         );
@@ -143,7 +143,6 @@ auth.get('/', function(req, res, next) {
           if(e.status === 200){
             next();
           }else{
-            console.log('Auth_controller.validCode ', e);
             res.status(203).send(Auth_helper.addParams(e, req));
             res.end();
           }
@@ -158,10 +157,9 @@ auth.get('/', function(req, res, next) {
             res.end();
         }else{
           Auth_controller.update_password({email:req.body.data.email, password:req.body.data.password}, res, function(e){
-              console.log("update_password ::::: ", e);
-              res.status(e.status).send(Auth_helper.addParams(e, req));
-              res.end();
-              //res.redirect(307, "/auth?message="+e.message);
+            res.status(e.status).send(Auth_helper.addParams(e, req));
+            res.end();
+            //res.redirect(307, "/auth?message="+e.message);
           });
         }
     })
@@ -216,12 +214,12 @@ auth.get('/', function(req, res, next) {
                 form:req.params.form_name.replace('_form', ''),
                 form_name:req.params.form_name,
                 js:[
-                    '/public/javascripts/login.js',
-                    '/public/javascripts/components/formular.js',
-                    '/public/javascripts/components/popeye.js'
+                    '/public/javascripts/login.js?v='+app.locals.version,
+                    '/public/javascripts/components/formular.js?v='+app.locals.version,
+                    '/public/javascripts/components/popeye.js?v='+app.locals.version
                 ], css:[
-                    '/public/stylesheets/components/formular.css',
-                    '/public/stylesheets/auth.css',
+                    '/public/stylesheets/components/formular.css?v='+app.locals.version,
+                    '/public/stylesheets/auth.css?v='+app.locals.version,
                 ]
             };
             if(typeof e.idkids_user !== "undefined"){
@@ -253,11 +251,11 @@ auth.get('/', function(req, res, next) {
                 response:e,
                 facebook_call: facebook_call,
                 js:[
-                    '/public/javascripts/login.js',
-                    '/public/javascripts/components/formular.js'
+                    '/public/javascripts/login.js?v='+app.locals.version,
+                    '/public/javascripts/components/formular.js?v='+app.locals.version
                 ], css:[
-                    '/public/stylesheets/components/formular.css',
-                    '/public/stylesheets/auth.css',
+                    '/public/stylesheets/components/formular.css?v='+app.locals.version,
+                    '/public/stylesheets/auth.css?v='+app.locals.version,
                 ]
             };
             datas.user_session = req.session.Auth;
@@ -282,11 +280,11 @@ auth.get('/', function(req, res, next) {
                     users_device:users_device.users_device,
                     response:e,
                     js:[
-                        '/public/javascripts/login.js',
-                        '/public/javascripts/components/formular.js'
+                        '/public/javascripts/login.js?v='+app.locals.version,
+                        '/public/javascripts/components/formular.js?v='+app.locals.version
                     ], css:[
-                        '/public/stylesheets/components/formular.css',
-                        '/public/stylesheets/auth.css',
+                        '/public/stylesheets/components/formular.css?v='+app.locals.version,
+                        '/public/stylesheets/auth.css?v='+app.locals.version,
                     ]
                 };
                 datas.user_session = req.session.Auth;

@@ -57,18 +57,18 @@ block footer
                   a(href=apps.host)
                     div.icon(style="background-image:url("+apps.icon+"); background-size:contain;")
         hr
-        script(src="/node_modules/jquery/dist/jquery.min.js")
-        script(src="/node_modules/underscore/underscore-min.js")
+        script(src="/node_modules/jquery/dist/jquery.min.js?v="+app.locals.version)
+        script(src="/node_modules/underscore/underscore-min.js?v="+app.locals.version)
         
-        script(src="/public/javascripts/idkids-sdk/idkids-sdk.min.js")
-        script(src="/public/javascripts/contact.min.js") 
-        script(src="/public/javascripts/components/popeye.min.js")
+        script(src="/public/javascripts/idkids-sdk/idkids-sdk.min.js?v="+app.locals.version)
+        script(src="/public/javascripts/contact.min.js?v="+app.locals.version) 
+        script(src="/public/javascripts/components/popeye.min.js?v="+app.locals.version)
         //-link(rel='stylesheet', href='/public/stylesheets/components/popeye.min.css')
-        script(src="/public/javascripts/index.min.js")
+        script(src="/public/javascripts/index.min.js?v="+app.locals.version)
         if(js)
             each val in js
                 script(src=val) 
-        script(src="/node_modules/fingerprintjs2/dist/fingerprint2.min.js")
+        script(src="/node_modules/fingerprintjs2/dist/fingerprint2.min.js?v="+app.locals.version)
         <!-- Global site tag (gtag.js) - Google Analytics -->
         script(async src="https://www.googletagmanager.com/gtag/js?id=UA-119254190-1")
         script.
