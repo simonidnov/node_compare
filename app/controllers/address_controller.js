@@ -10,6 +10,7 @@ exports.get = function(req, datas, callback) {
 };
 // check user login then return user_infos
 exports.create = function(req, datas, callback) {
+  console.log('CREATE CONTROLLER');
     Address_model.create(req.body.user_id, req.body, function(e){
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
         console.log('create controller ', e);

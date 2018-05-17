@@ -39,7 +39,7 @@ const db = require('mongoose'),
       NodeGeocoder = require('node-geocoder'),
       options = {
           provider: 'google',
-          httpAdapter: 'https',
+          httpAdapter: 'http',
           apiKey: config.google.map,
           formatter: null
       },
@@ -65,7 +65,7 @@ module.exports.get = function(user_id, address_id, callback){
     if(address_id !== null){
         query['address_id'] = address_id;
     }
-    console.log('ADRESS MDEL GET ', query)
+    console.log('ADRESS MDEL GET ', query);
     Address.find(query, function(err, addresses){
         if(err) callback({status:405, datas:err});
         else callback({status:200, datas:addresses});
@@ -73,11 +73,13 @@ module.exports.get = function(user_id, address_id, callback){
 }
 module.exports.create = function(user_id, datas, callback) {
     datas.user_id = user_id;
-    geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.AddressLine3+" "+datas.cp+" "+datas.city+" "+datas.country)
+    geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
+            console.log('GEOCODER ', res);
             datas.geocoder = res[0];
             new_address = new Address(datas);
             new_address.save(function(err, infos){
+              console.log('SAVED ???? ', err, infos);
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
             });
@@ -85,6 +87,7 @@ module.exports.create = function(user_id, datas, callback) {
         .catch(function(err) {
             new_address = new Address(datas);
             new_address.save(function(err, infos){
+              console.log('SAVED ???? ', err, infos);
                 if(err) callback({"status":405, "message":err});
                 else {
                   //Auth_model.reset_session(datas, user_id, function(){});

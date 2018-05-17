@@ -8,22 +8,23 @@ div.col.col-md-7
       else
         each product in userproducts
           li
-            div.col
-              if(product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined")
+            if(product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined")
+              div.col
                 div.preview(style="background-image:url("+product.meta_datas.thumb+")")
-              else
-                div.preview
-            div.infos.col
+            div.infos
               div.label= product.meta_datas.label
               //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
               //-div.label= "Ajouté le : "+product.infos.created
               div.brand
                 img(src=product.meta_datas.app_icon, width="24", height="24")
                 div.label= product.meta_datas.app_label
+              div.cat
+                span= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
+                br
                 a.hyperlink(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Écouter
-              div.cat= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
+                //-a.hyperlink(download="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Télécharger
             
-            ul.medias_download.col
+            //-ul.medias_download.col
               each media in product.meta_datas.medias
                 li
                   case media[0].mimetype

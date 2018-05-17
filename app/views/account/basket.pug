@@ -11,11 +11,9 @@ div.col.col-md-7
         ul.products_list
           each product in basket[0].products
             li
-              div.col
-                if(product.infos.thumb !== "" && typeof product.infos.thumb !== "undefined")
+              if(product.infos.thumb !== "" && typeof product.infos.thumb !== "undefined")
+                div.col
                   div.preview(style="background-image:url("+product.infos.thumb+")")
-                else
-                  div.preview
               div.infos
                 div.label= product.infos.label
                 //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
@@ -23,8 +21,10 @@ div.col.col-md-7
                 div.brand
                   img(src=product.infos.app_icon, width="24", height="24")
                   div.label= product.infos.app_label
-                //$a.hyperlink(href="" target="_blank") Voir le produit
-                div.cat= product.infos.category+" | "+product.infos.sub_category+" | "+product.infos.extra_category
+                div.cat 
+                  span= product.infos.category+" | "+product.infos.sub_category+" | "+product.infos.extra_category
+                  br
+                  a.hyperlink(href=product.url target="_blank") accèder à la fiche produit
               div.details
                 div.price= (product.price/100)+"€"
                 //-input.quantity#quantity(name="quantity" type="number" value=product.quantity)
@@ -32,6 +32,7 @@ div.col.col-md-7
                   div.btn.btn-warning.btn-sm(data-basketid=basket[0]._id, data-productid=product.product_id, data-idkidssdk="delete_basket_product")
                     span.icon.idkids-icons.icon-trash
                     span.label Supprimer
+              
 
 div.col.col-md-5.first_order
   div.basket.formular
@@ -74,7 +75,6 @@ div.col.col-md-5.first_order
             data-name=app.locals.settings.label,
             data-source='tok_visa',
             data-description="Finaliser ma commande") Finaliser ma commande
-          
           //-hr.separator
           //-button.btn.btn-warning.centered#apple-pay-button APPLE PAY
           
@@ -84,3 +84,19 @@ div.col.col-md-5.first_order
           hr
           div.payment_methods.centered
             img.centered(src="/public/images/assets/payment_methods_stripe.png" width="140")
+              
+      hr.separator
+      div.formular.fullscreen
+        div.form_content
+          h3 Adresse de facturation
+          if(typeof user.address === "undefined")
+            p Vous n'avez pas encore ajouté d'adresse<br>Pour faciliter votre facture, entrez une adresse de facturation.
+          else 
+            p Choisissez votre adresse de facturation
+            each address in user.address
+              div.form-group.inline
+                input.form-control(data-for="bill_adress" type="radio" id=address.label name="bill_adress" checked)
+                span #{address.label}<br>#{address.first_name} #{address.last_name}<br>#{address.AddressLine1} #{address.cp} #{address.country}
+      hr.separator
+      a.btn.btn-success.centered(href="/account/addresses") Ajouter une adresse
+      br

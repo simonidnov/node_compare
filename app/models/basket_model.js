@@ -10,6 +10,7 @@ const db = require('mongoose'),
                 _id        : {type:"Schema.ObjectId"},
                 product_id : {type:"string", unique:true},
                 quantity   : {type:"number", default:1},
+                url        : {type:"string"},
                 datas      : {type:[]}, // push all products datas prperties
                 price      : {type:"Number"},
                 total      : {type:"Number"},
@@ -44,7 +45,6 @@ module.exports.getStats = function(req, res, callback){
 }
 module.exports.get = function(datas, req, callback) {
     //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
-    console.log('AUTH REQ ??????? ', datas);
     var query = {};
     if(datas.isAdmin && typeof datas.basket_id !== "undefined"){
         query = {_id : datas.basket_id};
@@ -170,7 +170,6 @@ module.exports.create = function(datas, res, callback) {
   var _self = this,
       product_infos = null;
 
-  console.log('datas basket model create ', datas);
   products_controller.get(datas, res, function(e){
     if(e.status === 200){
       product_infos = e.datas[0];
@@ -180,7 +179,6 @@ module.exports.create = function(datas, res, callback) {
       }
       /* TODO CHECK IF USER ALREADY HAS A BASKET NOT VALIDATED */
       _self.get(datas, res, function(e){
-        console.log('SELF GET ', e);
         if(e.status === 200 && e.datas.length > 0){
           var basket = e.datas[0];
           // l'utilisateur à déjà un panier en cours
@@ -198,10 +196,12 @@ module.exports.create = function(datas, res, callback) {
               // on met à jour la date de checking du produit...
               already_exist.updated = Date.now();
             }else {
+              console.log('datas PRODUCT BASKET ================== ', datas);
               // on push le nouveau produit dans products.
               basket.products.push({
                 product_id : datas.product_id,
                 datas      : datas.datas, // push all products datas prperties
+                url        : datas.url,
                 price      : product_infos.price, // TODO GET PRODUCT PRICE UPDATED
                 total      : (parseFloat(product_infos.price) * parseInt(datas.quantity)).toFixed(2), // TODO GET PRODUCT PRICE UPDATED * quantity
                 created    : Date.now(), // date d'jout au panier

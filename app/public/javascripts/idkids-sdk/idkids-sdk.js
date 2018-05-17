@@ -413,7 +413,8 @@ var idkids_jssdk = function(options, callback){
             self.api.post('/basket',
               {
                 product_id : $(this).attr('data-productid'),
-                quantity : $(this).attr('data-quantity')
+                quantity : $(this).attr('data-quantity'),
+                url:window.location.href
               },
               function(e) {
                 if(e.status === 200){
