@@ -129,6 +129,15 @@ var account = {
       });
     },
     create_forms : function(){
+        /* ------------ BILL ADDRESS -------------- */
+        this.bill_adress_form = new formular('#bill_address', function(e){
+          if(e.status === "checkbox"){
+            index.sdk.api.put('/basket', {basket_id:$('#bill_address').attr('data-basketid'), address_id:$('input[name="bill_adress"]:checked').val()}, function(e){
+              console.log(e);
+            });
+          }
+        });
+        this.bill_adress_form.init();
         /* --------------------------- BASKET FORM --------------------------- */
         this.checkout_form = new formular('#checkout_form', function(e){
           if(e.status === "blur"){

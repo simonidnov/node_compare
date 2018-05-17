@@ -162,7 +162,7 @@ function formular(target, callback){
         $(target).find('.material_input input, .material_input textarea').off('input').on('input', function(){
             self.inputCheck($(this), false);
         });
-        $(target).find('input[type="checkbox"]').off('change').on('change', function(){
+        $(target).find('input[type="checkbox"], input[type="radio"]').off('change').on('change', function(){
             console.log('INPUT CHECK CHANGE ');
             self.inputCheck($(this), true);
             //self.checkInputs(false);
@@ -319,6 +319,7 @@ function formular(target, callback){
                     return;
                     break;
                 case "radio":
+                    console.log('RADIO' );
                     self.validform();
                     break;
                 case "checkbox":

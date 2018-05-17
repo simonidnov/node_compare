@@ -5,6 +5,7 @@ const db = require('mongoose'),
       _ = require('underscore'),
       basket_datas = {
           user_id        : {type:"string"},
+          address_id     : {type:"string"},
           products       : {type:[], datas:
               {
                 _id        : {type:"Schema.ObjectId"},
@@ -264,18 +265,25 @@ module.exports.create = function(datas, res, callback) {
   });
 }
 module.exports.update = function(req, res, callback){
-    delete datas.options;
-    delete datas._id;
+    delete req.options;
+    delete req.decoded;
+    delete req.isAdmin;
+    delete req.updated_token;
+    delete req.device_infos;
+    var _id = req.basket_id;
+    delete req.basket_id;
+    console.log('UPDATE REQ ', req);
     var _self = this;
-    datas.updated = Date.now();
-    Baskets.updateOne(
+    req.updated = Date.now();
+    Baskets.update(
         {
-            _id     : req.body._id
+            _id     : _id
         },
         {
-            $set : datas
+            $set : req
         },
         function(err, infos){
+          console.log('err ', err)
             if(err){
               callback({"status":405, "datas":err});
             }

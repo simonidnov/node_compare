@@ -114,7 +114,9 @@ basket
         });
     })
     .put('/', function(req, res, next) {
-        Basket_controller.update(req.body.data, res, function(e){
+        //console.log("PUT BASKET INFOS ::::: ", req.body);
+        //res.status(200).send({body:req.body});
+        Basket_controller.update(req.body, res, function(e){
             res.status(e.status).send(Auth_helper.addParams({status:e.status, infos:e.datas}, req));
         });
     })
