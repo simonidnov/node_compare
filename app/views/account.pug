@@ -170,22 +170,22 @@ block content
                 div.formular#security_form
                     h1= lang[locale].keys.security_form_password_title
                     form.form_content(method="POST" action='/account/profile')
-                        div.form-group.material_input
-                            input#change_password_old.form-control(type='password' name='change_password_old' required="required" minlength="8" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" data-errormessage=lang[locale].keys.password_error)
+                        div.form-group.material_input.minlength
+                            input#change_password_old.form-control(type='password' name='change_password_old' required="required" minlength="6" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" data-errormessage=lang[locale].keys.password_error)
                             label(for='change_password_old')= lang[locale].keys.actual_password_holder
                         div.input_check(data-checkinput="change_password_old")
                             div.check.check_length= lang[locale].keys.input_check_length
                             div.check.check_capital= lang[locale].keys.input_check_capital
                             div.check.check_number= lang[locale].keys.input_check_number
-                        div.form-group.material_input
-                            input#change_password_new.form-control(type='password' name='change_password_new' required="required" minlength="8" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" data-errormessage=lang[locale].keys.password_error)
+                        div.form-group.material_input.minlength
+                            input#change_password_new.form-control(type='password' name='change_password_new' required="required" minlength="6" data-regex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$" data-errormessage=lang[locale].keys.password_error)
                             label(for='change_password_new')= lang[locale].keys.password_new_holder
                         div.input_check(data-checkinput="change_password_new")
                             div.check.check_length= lang[locale].keys.input_check_length
                             div.check.check_capital= lang[locale].keys.input_check_capital
                             div.check.check_number= lang[locale].keys.input_check_number
-                        div.form-group.material_input
-                            input#retype_change_password_new.form-control(type='password' name='retype_change_password_new' required="required" minlength="8" data-regex="same" data-target="change_password_new" data-errormessage=lang[locale].keys.retype_password_error)
+                        div.form-group.material_input.minlength
+                            input#retype_change_password_new.form-control(type='password' name='retype_change_password_new' required="required" minlength="6" data-regex="same" data-target="change_password_new" data-errormessage=lang[locale].keys.retype_password_error)
                             label(for='retype_change_password_new') !{lang[locale].keys.retype_password_new_holder}
                         div.btn.btn-m.btn-success(data-action="submit" data-userid=user._id)= lang[locale].keys.change_password_cta
             div.col.col-md-5

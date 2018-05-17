@@ -11,8 +11,14 @@ h1{
     width :100%;
     visibility: hidden;
 }
+#account_selection h1{
+  padding-top:10px;
+}
+.auth header{
+  height:60px;
+}
 .auth .account_list{
-    margin-bottom:40px;
+    margin-bottom:0px;
     display: inline-block;
     width :100%;
 }
@@ -160,6 +166,7 @@ header .logo{
     width:250px;
     height:60px;
     opacity: 0;
+    margin:0;
     -webkit-animation: logo 2s;
     animation: logo 2s;
     -webkit-animation-fill-mode: forwards;
@@ -278,6 +285,7 @@ header .brands li.icon{
 
 .app_infos{
   max-width: 90%;
+  margin-bottom:20px;
 }
 .app_infos .row{
   padding: 10px;

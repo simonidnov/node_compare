@@ -125,20 +125,23 @@ var idkids_jssdk = function(options, callback){
               if(e.status === 203){
                 callback("logout");
                 this.store('idkids_local_user', "");
-                e.response_display.buttons = [
-                  {
-                    "class":"btn-success",
-                    "label":"Me connecter",
-                    "value":0,
-                    "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth?secret="+this.options.secret
-                  },
-                  {
-                    "class":"btn-danger",
-                    "label":"Continuer sans connexion",
-                    "value":1,
-                    "href":"#logout"
-                  }
-                ];
+                if(typeof e.response_display.buttons === "undefined"){
+                  e.response_display.buttons = [
+                    {
+                      "class":"btn-success",
+                      "label":"Me connecter",
+                      "value":0,
+                      "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth?secret="+this.options.secret
+                    },
+                    {
+                      "class":"",
+                      "label":"Créer un compte",
+                      "value":1,
+                      "href":((typeof this.config.url !== "undefined")? this.config.url : "")+"/auth/subscribe?secret="+this.options.secret
+                    }
+                  ];
+                }
+
               }else if(e.status === 401){
                 e.response_display.buttons = [
                   {

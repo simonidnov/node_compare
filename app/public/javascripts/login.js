@@ -34,8 +34,14 @@ var login = {
 
               //console.log(form_datas);
               login.sdk.api[e.form.attr('method')](e.form.attr('action'), form_datas, function(e){
+                if(e.status !== 200){
+                  switch(e.message){
+                    case 'SUBSCRIBE_EMAIL_EXIST':
+                      $('#subscribe_email').parent().append('<div class="input_error">Cet email est déjà utilisé, veuillez vous connecter</div>');
+                      break;
+                  }
+                }
                 if(typeof e.idkids_user !== "undefined"){
-                  console.log('referer ', referer);
                   if(typeof referer !== "undefined" && referer.indexOf('/auth') === -1){
                     window.location.href = referer+'?idkids-token='+e.idkids_user.datas.token+'&idkids-id='+e.idkids_user.datas._id+'&idkids-device='+e.idkids_user.datas.current_device+'&idkids-secret='+e.idkids_user.datas.secret;
                   }else{
@@ -76,10 +82,7 @@ var login = {
                     login.navigate();
                     break;
                 case 'receive_password':
-                    console.log('GET NEW PASSWORD BY EMAIL');
-                    login.sdk.api.post('/auth/lost_password', {email:$('#lost_form #lost_email').val()}, function(e){
-                      console.log(e);
-                    });
+                    login.sdk.api.post('/auth/lost_password', {email:$('#lost_form #lost_email').val()}, function(e){});
                     break;
                 default:
                     console.log('default ', action);
@@ -102,9 +105,9 @@ var login = {
         );
         var self = this;
         this.sdk.init($.proxy(function(status){
-            console.log(status);
+            //console.log(status);
             this.sdk.isLogged($.proxy(function(e){
-                console.log("isLogged :::: ", e);
+                //console.log("isLogged :::: ", e);
                 if(e.status === "logged"){
                   this.sdk.api.get('/me', {}, $.proxy(function(e){
                       console.log('ME / ', e);
@@ -114,7 +117,7 @@ var login = {
                       this.set_listeners();
                   }, this));
                 }
-                login.form.checkInputs();
+                //login.form.checkInputs();
             }, this));
         }, this));
 
@@ -131,6 +134,9 @@ var login = {
                     $('#subscribe_form').css('display', 'none');
                     $('#lost_form').css('display', 'none');
                     $('[data-tab="login_form"]').addClass('selected');
+                    $('[data-tab="subscribe_form"]').removeClass('selected');
+                    $('#email').focus();
+                    login.form.checkInputs();
                     if(typeof params.email !== "undefined"){
                         $('#email').val(params.email);
                     }else{
@@ -147,6 +153,8 @@ var login = {
                     $('#subscribe_form').css('display', 'block');
                     $('#lost_form').css('display', 'none');
                     $('[data-tab="subscribe_form"]').addClass('selected');
+                    $('[data-tab="login_form"]').removeClass('selected');
+                    $('#pseudo').focus();
                     break;
                 case 'lost':
                     $('#account_selection').addClass('displaynone').removeClass('displayblock');
@@ -157,6 +165,7 @@ var login = {
                     $('#subscribe_form').css('display', 'none');
                     $('#lost_form').css('display', 'block');
                     $('.switch_tab .tab').removeClass('selected');
+                    $('#lost_email').focus();
                     break;
                 default:
                     $('#account_selection').removeClass('displaynone').addClass('displayblock');

@@ -509,10 +509,22 @@ input:-webkit-autofill {
 }
 .formular .material_input.minlength .number .icon,
 .formular .material_input.maxlength .number .icon,
-.formular .material_input.minmaxlength .numbe .icon{
+.formular .material_input.minmaxlength .number .icon{
     font-size: 24px;
     line-height: 12px;
     color:lightseagreen;
+}
+
+
+.formular .material_input.empty label,
+.formular .material_input.empty input[type="email"]:valid + label,
+.formular .material_input.empty input[type="text"]:valid + label,
+.formular .material_input.empty input[type="tel"]:valid + label,
+.formular .material_input.empty input[type="password"]:valid + label,
+.formular .material_input.empty input[type="number"]:valid + label{
+  font-size: 14px !important;
+  top:25px !important;
+  color:#4f5455 !important;
 }
 
 /*
@@ -526,16 +538,43 @@ input:-webkit-autofill {
 .formular .material_input input[type="email"]:valid + label,
 .formular .material_input input[type="text"]:valid + label,
 .formular .material_input input[type="tel"]:valid + label,
+.formular .material_input input[type="password"]:valid + label,
 .formular .material_input input[type="number"]:valid + label,
 .formular .material_input.notempty label,
 .formular .material_input.invalid label,
 .formular select + label{
     top:0px !important;
     font-size: 12px !important;
-    color:#CCC !important;
+    color:#5a5a5a !important;
+}
+.formular .error_check{
+  position: relative;
+}
+.formular .error_check .input_error{
+  position: absolute;
+  top:100%;
+  color:white;
+  padding:10px;
+  left:0;
+  z-index: 9;
+  background:coral;
+}
+.formular .error_check .input_error:before{
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 8px 8px;
+    border-color: transparent transparent coral transparent;
+    line-height: 0px;
+    _border-color: #000000 #000000 coral #000000;
+    _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+    position: absolute;
+    left:15px;
+    top:-8px;
 }
 .formular input:invalid:has(> .material_input):after {
-    background:coral;
+  background:coral;
 }
 /* --------- RADIO -------------- */
 .radio_list{

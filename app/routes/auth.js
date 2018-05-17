@@ -22,8 +22,10 @@ var express = require('express'),
         referer = getReferer(req);
         //res.setHeader('Content-Type', 'application/json');
         if(typeof req.query.secret !== "undefined"){
+          console.log('SECRET IS DEFINED');
           //TODO GET APP FROM REFERER + SECRET THEN SET REDIRECT URL TO REFERER
           auth_helper.validate_origin({options:{secret:req.query.secret, host:referer}}, req.get('origin'), function(e){
+            console.log('GET APP ', e);
             if(!e){
               res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
             }else{
@@ -126,6 +128,8 @@ auth.get('/', function(req, res, next) {
             locale:language_helper.getlocale(req),
             lang:lang,
             uri_params : uri_helper.get_params(req),
+            referer:referer,
+            current_app:current_app,
             js:[
                 '/public/javascripts/lost_password.js?v='+app.locals.version,
                 '/public/javascripts/components/formular.js?v='+app.locals.version,
@@ -213,6 +217,8 @@ auth.get('/', function(req, res, next) {
                 uri_params:uri_helper.get_params(req),
                 form:req.params.form_name.replace('_form', ''),
                 form_name:req.params.form_name,
+                referer:referer,
+                current_app:current_app,
                 js:[
                     '/public/javascripts/login.js?v='+app.locals.version,
                     '/public/javascripts/components/formular.js?v='+app.locals.version,

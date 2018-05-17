@@ -566,11 +566,11 @@ module.exports.check_user = function(req, callback){
     //    },
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){
-        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}, "datas":err});
+        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}, "datas":err});
       }else{
         req.decoded = decoded;
         if(typeof decoded.password === "undefined" || typeof decoded.email === "undefined"){
-          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}});
+          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}});
           return false;
         }
         User.find(
@@ -580,10 +580,10 @@ module.exports.check_user = function(req, callback){
             },
             function(err, user) {
                 if(err){
-                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}});
+                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}});
                 }else{
                     if(user.length === 0){
-                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez êrte connecté pour effectuer cette action."}});
+                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}});
                     }else{
                       var new_token = jwt.sign({secret:user[0].user_secret, email:user[0].email, password:decoded.password}, config.secrets.global.secret, { expiresIn: '2 days' });
 

@@ -186,12 +186,12 @@
     display: inline-block;
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li{
-    width: 64px;
-    height:100px;
-    margin:2px;
-    display: block;
-    float: left;
-    text-align: center;
+  width: 100%;
+  margin: 2px;
+  display: inline-flex;
+  float: left;
+  text-align: center;
+  height: 70px;
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li .icon{
     width: 44px;
@@ -201,6 +201,8 @@
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li span{
     padding:0;
+    padding-top:10px;
+
 }
 .idkids_jssdk .short_cuts ul li .subnav.account{
     width:304px;
@@ -395,10 +397,10 @@
     display: inline-block;
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li{
-    width: 64px;
-    height:100px;
+    width: 100%;
+    height:70px;
     margin:2px;
-    display: block;
+    display: inline-flex;
     float: left;
     text-align: center;
 }

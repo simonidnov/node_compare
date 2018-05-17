@@ -163,8 +163,9 @@ function formular(target, callback){
             self.inputCheck($(this), false);
         });
         $(target).find('input[type="checkbox"]').off('change').on('change', function(){
-            self.inputCheck($(this));
-            self.checkInputs(false);
+            console.log('INPUT CHECK CHANGE ');
+            self.inputCheck($(this), true);
+            //self.checkInputs(false);
             self.callback({"status":"checkbox", name:$(this).attr('name'), value:$(this).is(':checked')});
         });
         self.checkInputs(false);
@@ -213,28 +214,51 @@ function formular(target, callback){
             //var type=$(this).attr('type');
         });
     };
+    this.check_error = function(target, with_message){
+      if(!with_message){
+        return false;
+      }
+      if(target.val() === ""){
+        target.parent().addClass('empty').removeClass('notempty').removeClass('valid').removeClass('invalid');
+        target.parent().find('.input_error').remove();
+        return false;
+      }else{
+        target.parent().removeClass('empty').addClass('notempty');
+      }
+      if(target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length === 0){
+        target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+      }
+    };
     this.inputCheck = function(target, with_message){
         var self = this;
         if(target.attr('type') === "checkbox"){
             this.validform();
             if(!target.is(':checked')){
+                console.log('NOT CHECKED');
+                if(target.is(':required')){
+                  target.parent().addClass('error_check');
+                  console.log('NOT CHECKED AND REQUIRED');
+                  this.check_error(target, true);
+                }
                 $('[data-checkboxrelative="'+target.attr('id')+'"]').css('display', 'none');
                 return false;
             }else{
+                target.parent().removeClass('error_check');
+                target.parent().find('.input_error').remove();
                 $('[data-checkboxrelative="'+target.attr('id')+'"]').css('display', 'block');
                 return true;
             }
+
         }
         if(target.prop("tagName") === "SELECT"){
-          console.log('????????? ', target.val());
-          console.log('????????? ', target.is(':required'));
           if(target.val() === null && target.is(':required')){
             if(with_message && target.is(':required')){
               target.parent().addClass('invalid');
               target.parent().removeClass('valid');
-              if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+              this.check_error(target, with_message);
+              /*if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                   target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
-              }
+              }*/
             }else{
               target.parent().removeClass('invalid');
               target.parent().removeClass('valid');
@@ -242,7 +266,6 @@ function formular(target, callback){
               target.parent().find('.input_error').remove();
             }
           }else{
-            console.log('HERE ', target.val());
             target.parent().removeClass('invalid');
             target.parent().addClass('valid');
             target.parent().addClass('notempty');
@@ -251,21 +274,22 @@ function formular(target, callback){
           return false;
         }
         if(target.val() === ""){
+            target.parent().removeClass('notempty').addClass('empty');
             if(with_message && target.is(':required')){
               if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                   target.parent().addClass('invalid');
                   target.parent().removeClass('valid');
-                  target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
+                  this.check_error(target, with_message);
+                  //target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
               }
             }else{
                 target.parent().removeClass('invalid');
                 target.parent().removeClass('valid');
-                target.parent().removeClass('notempty');
                 target.parent().find('.input_error').remove();
             }
             return;
         }else{
-            target.parent().addClass('notempty');
+            target.parent().addClass('notempty').removeClass('empty');
             var type = target.attr('type');
             switch(type){
                 case "email":
@@ -276,9 +300,10 @@ function formular(target, callback){
                     }else{
                         target.parent().addClass('invalid');
                         target.parent().removeClass('valid');
-                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+                        this.check_error(target, with_message);
+                        /*if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                             target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
-                        }
+                        }*/
                     }
                     self.validform();
                     return;
@@ -310,17 +335,19 @@ function formular(target, callback){
                     }else{
                         target.parent().addClass('invalid');
                         target.parent().removeClass('valid');
-                        if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+                        this.check_error(target, with_message);
+                        /*if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                             target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
-                        }
+                        }*/
                     }
                     return false;
                 }
                 var validator = new RegExp(target.attr('data-regex').toString());
                 if(!validator.test(target.val())){
-                    if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
+                    this.check_error(target, with_message);
+                    /*if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                         target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
-                    }
+                    }*/
                     target.parent().addClass('invalid');
                     target.parent().removeClass('valid');
                 }else{
@@ -386,11 +413,12 @@ function formular(target, callback){
                     target.parent().addClass('invalid');
                     target.parent().removeClass('valid');
 
-                    if(with_message){
+                    this.check_error(target, with_message);
+                    /*if(with_message){
                       if(typeof target.attr('data-errormessage') !== "undefined" && target.parent().find('.input_error').length == 0 && with_message){
                           target.parent().append('<div class="input_error">'+target.attr('data-errormessage')+'</div>');
                       }
-                    }
+                    }*/
                 }else{
                     target.parent().addClass('valid');
                     target.parent().removeClass('invalid');
