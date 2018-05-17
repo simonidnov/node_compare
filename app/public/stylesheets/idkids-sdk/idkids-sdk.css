@@ -397,12 +397,12 @@
     display: inline-block;
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li{
-    width: 100%;
-    height:70px;
-    margin:2px;
-    display: inline-flex;
-    float: left;
-    text-align: center;
+  width: 100%;
+  height: 70px;
+  margin: 2px;
+  display: inline;
+  text-align: left;
+  position: relative;
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li .icon{
     width: 44px;
@@ -411,7 +411,10 @@
     background-color:#E3E3E3;
 }
 .idkids_jssdk .short_cuts ul li .subnav.widgets li span{
-    padding:0;
+  padding: 0;
+  text-align: left;
+  line-height: 18px;
+  padding-top: 11px;
 }
 .idkids_jssdk .short_cuts ul li .subnav.account{
     width:304px;
