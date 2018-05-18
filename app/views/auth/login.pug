@@ -185,9 +185,10 @@ block content
                                 input#retype_password.form-control(type='password', name='retype_password', required="required", minlength="6", data-regex="same", data-target="subscribe_password", data-errormessage=lang[locale].keys.retype_password_error)
                                 label(for='retype_password') !{lang[locale].keys.retype_password_holder}
                             hr
-                            div.form-group
-                                input#subscribe_term_accept.form-control(type='checkbox', name='subscribe_term_accept', required="required", data-errormessage=lang[locale].keys.accept_terms_error, checked)
+                            div.form-group.error_check
+                                input#subscribe_term_accept.form-control(type='checkbox', name='subscribe_term_accept', required="required", data-errormessage=lang[locale].keys.accept_terms_error)
                                 label(for="subscribe_term_accept") !{lang[locale].keys.accept_terms}
+                                div.input_error Pour continuer, vous devez accepter les conditions générales d'utilisation.
                             div.form-group
                                 input#subscribe_newsletter.form-control(type='checkbox', name='subscribe_newsletter')
                                 label(for="subscribe_newsletter") !{lang[locale].keys.accept_newsletter}

@@ -25,3 +25,7 @@ exports.lost_password = function(req, datas, callback) {
     datas.content = 'Bonjour '+datas.pseudo+' pour valider votre compte, veuillez cliquer sur le liens ci-dessous : <a href="'+datas.url+'">VALIDER MON COMTPE</a>';
     Email_model.send("emails/lost_password", req.body.user_id, datas, callback);
 };
+
+exports.sendMaChansonEcard = function(req, datas, callback) {
+    Email_model.send("emails/default", req, datas, callback);
+}

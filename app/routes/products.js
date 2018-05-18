@@ -3,6 +3,7 @@ var express = require('express'),
     path = require('path'),
     crypto = require('crypto'),
     product = express.Router(),
+    UserProducts_controller = require('../controllers/userproducts_controller'),
     Products_controller = require('../controllers/products_controller'),
     Auth_helper = require('../helpers/auth_helper'),
     language_helper = require('../helpers/languages_helper'),
@@ -43,22 +44,22 @@ product
         });
     })
     .get('/update_amount', function(req, res, next){
-        Products_controller.updateAmount(req, res, function(e){
-            res.status(e.status).send(e.datas);
-        });
+        //Products_controller.updateAmount(req, res, function(e){
+        //    res.status(e.status).send(e.datas);
+        //});
     })
     .get('/updatephonetik', function(req, res, next) {
         //res.status(200).send({title:"API"});
-        Products_controller.updatePhonetik(req, res, function(e){
-            res.status(e.status).send(e.datas);
-        });
+        //Products_controller.updatePhonetik(req, res, function(e){
+        //    res.status(e.status).send(e.datas);
+        //});
     })
 
     .get('/deleteallproducts', function(req, res, next) {
         //res.status(200).send({title:"API"});
-        Products_controller.deleteAllProducts(req, res, function(e){
-            res.status(e.status).send(e.datas);
-        });
+        //Products_controller.deleteAllProducts(req, res, function(e){
+        //    res.status(e.status).send(e.datas);
+        //});
     })
 
     .post('/', function(req, res, next) {
@@ -220,6 +221,18 @@ product
             //res.status(200).send({"message":"En cours de developpement", "req":req.body, "files":req.file});
           }else{
             res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers"});
+          }
+        });
+    })
+    .post('/share', function(req, res, next){
+        Auth_helper.validate_user(req.body, req.get('host'), function(e){
+          if(e.status === 200){
+            UserProducts_controller.shareProduct(req, res, function(e){
+              res.status(e.status).send(e);
+            });
+            //res.status(200).send({"message":"En cours de developpement", "req":req.body, "files":req.file});
+          }else{
+            res.status(203).send({"message":"Vous n'avez pas les droits nécéssaires pour partager ce fichier"});
           }
         });
     });

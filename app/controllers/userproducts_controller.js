@@ -13,3 +13,6 @@ exports.create = function(datas, res, callback) {
     //Userproducts_model.update(req, res, callback);
     Userproducts_model.create(datas, res, callback);
 };
+exports.shareProduct = function(req, res, callback){
+    Userproducts_model.share(req, res, callback);
+};

@@ -20,6 +20,7 @@ const express = require('express'),
     users = require('./routes/users'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
+    download = require('./routes/download'),
     admin = require('./routes/admin'),
     products = require('./routes/products'),
     redirect = require('./routes/redirect'),
@@ -173,6 +174,7 @@ router.use('/account/:any', account);
 router.use('/api', api);
 router.use('/media', media);
 router.use('/gmail', gmail);
+router.use('/download', download);
 router.use('/address', address);
 router.use('/validation', validation);
 router.use('/templating', templating);

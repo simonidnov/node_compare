@@ -9,13 +9,26 @@ const db = require('mongoose'),
           meta_datas        : {type:"Object"},
           created           : {type:'Date', default: Date.now},
           updated           : {type:'Date', default: Date.now}
+      },
+      usershare_datas = {
+          user_id           : {type:"string"},
+          product_id        : {type:"string"},
+          share_name        : {type:"string"},
+          share_email       : {type:"string"},
+          share_message     : {type:"string"},
+          share_link        : {type:"string"},
+          share_date        : {type:"Date"},
+          created           : {type:'Date', default: Date.now},
+          updated           : {type:'Date', default: Date.now}
       };
 
 if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
 const userproductsSchemas = new db.Schema(userproducts_datas),
-      Userproducts = db.model('Userproducts', userproductsSchemas);
+      Userproducts = db.model('Userproducts', userproductsSchemas),
+      usershareSchemas = new db.Schema(usershare_datas),
+      Usershares = db.model('Usershares', usershareSchemas);
 
 module.exports = {
     attributes: userproducts_datas
@@ -128,3 +141,100 @@ module.exports.create = function(datas, res, callback){
       }
     );
 };
+
+module.exports.share = function(req, res, callback){
+  var datas = req.body.data;
+  Userproducts.find({user_id:datas.options.user_id, product_id:datas.product_id}, function(err, userproducts){
+    if(err) callback({status:200, message:"ERROR_PRODUCT_GET", response_display:{title:"Erreur de partage", message:"Il semble que vous n'ayez pas acheté le produit que vous souhaitez partager."}});
+    else {
+      if(userproducts.length === 0){
+        callback({status:200, message:"UNKNOW_USER_PRODUCT", response_display:{title:"Erreur de Partage", message:"Il semble que vous n'ayez pas acheté le produit que vous souhaitez partager."}});
+      }else{
+        var Email_controller = require("../controllers/email_controller"),
+            Auth_controller = require("../controllers/auth_controller");
+
+        req.query.user = {
+          _id:datas.options.user_id
+        };
+        Auth_controller.getUserInfos(req, res, function(e){
+          if(e.status === 200){
+            var user = e.user[0];
+            var data_share = {
+
+            };
+            new_shareproduct = new Usershares({
+              user_id           : e.user[0]._id,
+              product_id        : datas.product_id,
+              share_name        : datas.share_name,
+              share_email       : datas.share_email,
+              share_message     : datas.share_message,
+              share_link        : datas.share_link,
+              share_date        : datas.share_date
+            });
+            new_shareproduct.save(function(err, infos){
+                if(err){
+                  callback({"status":200, "datas":e.datas, "response_display":{"title":"Erreur de Partage", "message":"Une erreur est survenue lors du partage de votre chanson personnalisée, nous vous conseillons de la télécharger et de l'envoyer manuellement.<br>Il est possible que nous n'arrivions pas à joindre la boite mail de votre ami(e)."}});
+                }else{
+                  //callback({"status":200, "datas":infos});
+                  if(datas.share_later === 'true'){
+                    var options = { month: 'long', day: 'numeric' };
+                    var date_send = new Date(datas.share_date).toLocaleDateString('fr-FR', options);
+                    Email_controller.send(
+                      null,
+                      {
+                        subject:"L'envoie de la chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été configuré",
+                        title:"L'envoie de votre chanson d'anniversaire à bien été configuré",
+                        message:"Bonjour "+user.pseudo+"<br>Vous avez configuré l'envoie d'une chanson d'anniversaire pour votre ami(e) "+datas.share_name+" pour le "+date_send+".<br>Cet email confirme que l'email sera envoyé à 9h00 ce jour précis sur l'adresse email de votre ami(e) : "+datas.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+datas.share_message,
+                        email:"contact@joyvox.fr",
+                        share_id:infos._id,
+                        to:user.email
+                      },
+                      function(e) {
+                        callback({"status":200, "datas":e.datas, "response_display":{"title":"Partager", "message":"Le partage de la chanson d'anniversaire pour "+datas.share_name+" a bien été configurée, elle sera envoyé à votre ami(e) sur son email "+datas.share_email+" le "+date_send+" !"}});
+                      }
+                    );
+                  }else{
+                    Email_controller.sendMaChansonEcard(
+                      req,
+                      {
+                        subject:"Bonjour"+datas.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
+                        title:"Bonjour"+datas.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
+                        default_message:"Bonjour "+datas.share_name+",<br>votre ami(e) "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson !",
+                        message:datas.share_message,
+                        product_id:datas.product_id,
+                        share_id:infos._id,
+                        email:user.email,
+                        to:datas.share_email
+                      },
+                      function(e) {
+                        if(e.status === 200){
+                          Email_controller.send(
+                            null,
+                            {
+                              subject:"La chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été envoyée",
+                              title:"La chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été envoyée",
+                              message:"Bonjour "+user.pseudo+"<br>Vous avez envoyé une chanson d'anniversaire pour votre ami(e) "+datas.share_name+".<br>Cet email confirme l'envoie de votre chanson sur l'adresse email de votre ami(e) : "+datas.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+datas.share_message,
+                              email:"contact@joyvox.fr",
+                              share_id:infos._id,
+                              to:user.email
+                            },
+                            function(e) {
+                              callback({"status":200, "datas":e.datas, "response_display":{"title":"Partager ma chanson", "message":"La chanson a bien été envoyée à "+datas.share_name+" sur son adresse email "+datas.share_email+" !"}});
+                            }
+                          );
+                        }else{
+                          callback({"status":203, "datas":e.datas, "response_display":{"title":"Erreur de Partage", "message":"Nous n'avons pas réussi à envoyer la chanson à votre ami(e)."}});
+                        }
+                      }
+                    );
+                  }
+                }
+            });
+          }else{
+            callback({"status":203, "datas":e.datas, "response_display":{"title":"Erreur de Partage", "message":"Nous n'avons pas réussi à vous authentifier pour créer l'envoie de votre chanson."}});
+          }
+        });
+      }
+    }
+  });
+}

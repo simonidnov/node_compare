@@ -36,15 +36,15 @@ module.exports.send = function(template, user_id, datas, callback){
     }
     new_email = new Email(data);
     new_email.save(function(err, infos){
-        if(err) callback({"status":405, "message":"error email sending impossible"});
+        if(err) console.log({"status":405, "message":"error saving sending impossible"});
         else console.log('success entry')
     });
     //callback({"status":200, "datas":infos});
     emailing.mailer.send(template, datas, function(err, infos){
         if (err) {
-            callback({status:405, response_display:{message:'Email ERROR', type:'modal'}, err:err, datas:datas, config:config});
-            return;
+          callback({status:405, response_display:{message:'Email ERROR', type:'modal'}, err:err, datas:datas, config:config});
+        }else{
+          callback({status:200, response_display:{message:'L\'email à bien été envoyé', type:'modal'}, datas:datas, infos:infos});
         }
-        callback({status:200, response_display:{message:'L\'email à bien été envoyé', type:'modal'}, datas:datas, infos:infos});
     });
 }
