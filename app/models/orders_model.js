@@ -157,7 +157,7 @@ module.exports.buy_with_coupon = function(req, res, callback){
                               {
                                 class:"btn-success",
                                 label:"PLAYLIST",
-                                href:"/playlist",
+                                href:"http://machanson.joyvox.fr/playlist",
                                 target:"_blank",
                                 value:"/playlist"
                               }
