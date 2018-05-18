@@ -224,6 +224,11 @@ product
           }
         });
     })
+    .get(['/sharing', '/sharing/:share_id', '/sharing/:share_id/:product_id', '/sharing/:share_id/:product_id/:user_email'], function(req, res, next){
+        UserProducts_controller.getShare(req, res, function(e){
+          res.status(e.status).send(e);
+        });
+    })
     .post('/share', function(req, res, next){
         Auth_helper.validate_user(req.body, req.get('host'), function(e){
           if(e.status === 200){

@@ -16,3 +16,6 @@ exports.create = function(datas, res, callback) {
 exports.shareProduct = function(req, res, callback){
     Userproducts_model.share(req, res, callback);
 };
+exports.getShare = function(req, res, callback){
+  Userproducts_model.getShare(req, res, callback);
+};

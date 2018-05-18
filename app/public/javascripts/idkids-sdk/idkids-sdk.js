@@ -452,7 +452,6 @@ var idkids_jssdk = function(options, callback){
 
 
 
-
 function decodeUriComponentWithSpace (component) {
     return decodeURIComponent(component.replace(/\+/g, '%20'))
   }

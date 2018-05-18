@@ -143,7 +143,24 @@ module.exports.create = function(datas, res, callback){
       }
     );
 };
-
+module.exports.getShare = function(req, res, callback){
+  Usershares.find({
+    share_email: req.params.user_email,
+    product_id: req.params.product_id,
+    _id: req.params.share_id,
+  }, function(err, share){
+      if(err) callback({status:404, message:"UNKNOW_SHARE_CONTENT"});
+      else{
+        if(share.length === 0){
+          callback({status:404, message:"UNKNOW_SHARE_CONTENT"});
+        }else{
+          Products_model.get({product_id:share[0].product_id}, res, function(e){
+            callback({status:200, datas:{share:share[0], product:e.datas[0]}});
+          });
+        }
+      }
+  });
+}
 module.exports.shares_of_the_day = function(req, res, callback){
   var currentDate = new Date();
 
