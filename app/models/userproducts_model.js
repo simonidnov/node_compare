@@ -17,7 +17,9 @@ const db = require('mongoose'),
           share_email       : {type:"string"},
           share_message     : {type:"string"},
           share_link        : {type:"string"},
+          share_later       : {type:"boolean", default:false},
           share_date        : {type:"Date"},
+          share_sent        : {type:"boolean", default:false},
           created           : {type:'Date', default: Date.now},
           updated           : {type:'Date', default: Date.now}
       };
@@ -142,6 +144,154 @@ module.exports.create = function(datas, res, callback){
     );
 };
 
+module.exports.shares_of_the_day = function(req, res, callback){
+  var currentDate = new Date();
+
+  /* PATCH WRONG DATES WHEN SHARE_LATER NOT DEFINED */
+  Usershares.find(
+    {
+      share_date: {
+        $not: {
+          $type: 9
+        }
+      }
+    }, function(err, data){
+      data.forEach(function(doc, index){
+        if(doc.share_date === null){
+          doc.share_date = new Date();
+        }
+        doc.share_date = new Date(doc.share_date);
+        Usershares.update(
+          {
+            _id:doc._id
+          },
+          {
+            $set:{
+              share_date : doc.share_date
+            }
+          },
+          function(err, updates){
+              console.log('err ', err);
+              console.log('updates ', updates);
+          }
+        );
+      });
+    }
+  );
+  /* GET SHARE OF THE DAY AGGREGATION ,
+  TODO ADD :::: share_sent : false :::: TO PATCH BLOCK REDONDANCE */
+  Usershares.aggregate(
+  [
+  	{
+  		$project: {
+  		    day               : {$dayOfMonth: "$share_date"},
+  		    month             : {$month: "$share_date"},
+  		    year              : {$year: "$share_date"},
+          user_id           : "$user_id",
+          product_id        : "$product_id",
+          share_name        : "$share_name",
+          share_email       : "$share_email",
+          share_message     : "$share_message",
+          share_link        : "$share_link",
+          share_later       : "$share_later",
+          share_date        : "$share_date",
+          share_sent        : "$share_sent",
+          created           : "$created",
+          updated           : "$updated"
+  		},
+  	},
+  	{
+  		$match: {
+        day: currentDate.getDate(),
+        month: currentDate.getMonth() + 1,
+        share_later : true
+  		}
+  	}
+  ],
+  function(err, shares){
+    if(err) callback({status:500, message:"ERROR_OCCURED_REQUEST", err:err});
+    else{
+      var count = 0,
+          total = shares.length,
+          success = 0;
+
+      if(shares.length === 0){
+        callback({status:200, message:"NO_EMAILS_FOR_TODAY", shares:shares});
+      }else{
+        var Email_controller = require("../controllers/email_controller"),
+            Auth_controller = require("../controllers/auth_controller");
+        shares.forEach(function(share, index){
+          req.query.user = {
+            _id:share.user_id
+          };
+          Auth_controller.getUserInfos(req, res, function(e){
+            if(e.status === 200){
+              var user = e.user[0];
+              var options = { month: 'long', day: 'numeric' };
+              var date_send = new Date(share.share_date).toLocaleDateString('fr-FR', options);
+              Email_controller.sendMaChansonEcard(
+                req,
+                {
+                  subject:"Bonjour "+share.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
+                  title:"Bonjour "+share.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
+                  name:share.share_name,
+                  friend:user.pseudo,
+                  friend_email:user.email,
+                  default_message:"Bonjour "+share.share_name+",<br>votre ami(e) "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson !",
+                  message:share.share_message,
+                  product_id:share.product_id,
+                  share_id:share._id,
+                  email:user.email,
+                  to:share.share_email
+                },
+                function(e) {
+                  if(e.status === 200){
+                    Usershares.update(
+                      {
+                        _id:share._id
+                      },
+                      {
+                        $set:{
+                          share_sent : true
+                        }
+                      },
+                      function(err, updates){
+                        console.log('SUCCESS SAVE SENT DATAS TRUE');
+                      }
+                    );
+                    success++;
+                    Email_controller.send(
+                      null,
+                      {
+                        subject:"La chanson d'anniversaire personnalisée pour "+share.share_name+" à bien été envoyée",
+                        title:"La chanson d'anniversaire personnalisée pour "+share.share_name+" à bien été envoyée",
+                        message:"Bonjour "+user.pseudo+"<br>Vous avez envoyé une chanson d'anniversaire pour votre ami(e) "+share.share_name+".<br>Cet email confirme l'envoie de votre chanson sur l'adresse email de votre ami(e) : "+share.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+share.share_message,
+                        email:"contact@joyvox.fr",
+                        share_id:share._id,
+                        to:user.email
+                      },
+                      function(e) {
+                      }
+                    );
+                  }
+                  count++;
+                  if(count === total-1){
+                    callback({status:200, message:"EMAILS_SENT", total:total, success:success});
+                  }
+                }
+              );
+            }else{
+              count++;
+              if(count === total-1){
+                callback({status:200, message:"EMAILS_SENT", total:total, success:success});
+              }
+            }
+          });
+        });
+      }
+    }
+  });
+}
 module.exports.share = function(req, res, callback){
   var datas = req.body.data;
   Userproducts.find({user_id:datas.options.user_id, product_id:datas.product_id}, function(err, userproducts){
@@ -169,7 +319,8 @@ module.exports.share = function(req, res, callback){
               share_email       : datas.share_email,
               share_message     : datas.share_message,
               share_link        : datas.share_link,
-              share_date        : datas.share_date
+              share_date        : (datas.share_date)? datas.share_date : new Date(),
+              share_later       : datas.share_later
             });
             new_shareproduct.save(function(err, infos){
                 if(err){

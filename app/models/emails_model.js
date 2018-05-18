@@ -40,6 +40,7 @@ module.exports.send = function(template, user_id, datas, callback){
         else console.log('success entry')
     });
     //callback({"status":200, "datas":infos});
+    console.log('datas ', datas);
     emailing.mailer.send(template, datas, function(err, infos){
         if (err) {
           callback({status:405, response_display:{message:'Email ERROR', type:'modal'}, err:err, datas:datas, config:config});

@@ -16,6 +16,7 @@ const express = require('express'),
     basket = require('./routes/basket'),
     billing = require('./routes/billing'),
     orders = require('./routes/orders'),
+    crons = require('./routes/crons'),
     comments = require('./routes/comments'),
     users = require('./routes/users'),
     media = require('./routes/media'),
@@ -170,6 +171,7 @@ router.use('/admin/:any', admin);
 router.use('/users', users);
 router.use('/me', me);
 router.use('/account', account);
+router.use('/crons', crons);
 router.use('/account/:any', account);
 router.use('/api', api);
 router.use('/media', media);

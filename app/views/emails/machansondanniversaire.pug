@@ -1,0 +1,28 @@
+extends email_layout
+
+block email_content
+    //-table.row(width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;")
+        tr
+            td(style="font-size:20px;" cellpadding="0" cellspacing="0")
+              img(src="http://machanson.joyvox.fr/public/images/emails/share_machanson.png" width="100%")
+    table.row(width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;")
+        tr
+            td(style="" cellpadding="0" cellspacing="0")
+              h1(style="font-size:40px;") JOYEUX ANNIVERSAIRE !{name}
+              h1= title
+              a.cta.btn(href="http://machanson.joyvox.fr/share/"+share_id+"/"+product_id+"/"+to title="écouter ma chanson" style="") Écouter ma chanson
+    table.row(width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;")
+        tr
+            td(style="font-size:15px; line-height:20px; color:#818181;") 
+                p 
+                  b voici le message personnalisé de !{friend} :
+                p !{message}
+                //- { subject: 'La chanson d\'anniversaire personnalisée pour STEPHANE à bien été envoyée',
+                    title: 'La chanson d\'anniversaire personnalisée pour STEPHANE à bien été envoyée',
+                    name:share.share_name,
+                    friend:user.pseudo,
+                    friend_email:user.email,
+                    message: 'Bonjour Simon<br>Vous avez envoyé une chanson d\'anniversaire pour votre ami(e) STEPHANE.<br>Cet email confirme l\'envoie de votre chanson sur l\'adresse email de votre ami(e) : sdelamarre@idnovant.fr<br>Voici votre message personnalisé qui accompagnera la chanson :<br>dscdsc sdc ds cds csd c ds',
+                    email: 'contact@joyvox.fr',
+                    share_id: 5afe9a2b5c7bf833304ab99f,
+                    to: 'landscape.viewer@gmail.com' }

@@ -27,5 +27,5 @@ exports.lost_password = function(req, datas, callback) {
 };
 
 exports.sendMaChansonEcard = function(req, datas, callback) {
-    Email_model.send("emails/default", req, datas, callback);
+    Email_model.send("emails/machansondanniversaire", req, datas, callback);
 }
