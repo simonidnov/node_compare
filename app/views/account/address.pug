@@ -10,13 +10,13 @@ div.formular#address_form
         div.form-group
             input.invisible(type='text' name="user_id" value=user._id)
         div.form-group.material_input.minlength
-            input#addressLabel.form-control(type='text', placeholder=lang[locale].keys.addressLabel_holder, name='label', required="required", value=((address_infos)? address_infos.label : ""), minlength="4", data-erromessage=lang[locale].keys.addressLabel_error)
+            input#addressLabel.form-control(type='text', placeholder=lang[locale].keys.addressLabel_holder, name='label', required="required", value=((address_infos)? address_infos.label : ""), minlength="3", data-erromessage=lang[locale].keys.addressLabel_error)
             label(for='addressLabel') !{lang[locale].keys.addressLabel_holder}
         div.form-group.material_input.minlength
-            input#addressFirstName.form-control(type='text', placeholder=lang[locale].keys.addressFirstName_holder, name='first_name', required="required", value=((address_infos)? address_infos.first_name : user.firstName), minlength="4", data-erromessage=lang[locale].keys.addressFirstName_error)
+            input#addressFirstName.form-control(type='text', placeholder=lang[locale].keys.addressFirstName_holder, name='first_name', required="required", value=((address_infos)? address_infos.first_name : user.firstName), minlength="3", data-erromessage=lang[locale].keys.addressFirstName_error)
             label(for='addressFirstName') !{lang[locale].keys.addressFirstName_holder}
         div.form-group.material_input.minlength
-            input#addressLastName.form-control(type='text', placeholder=lang[locale].keys.addressLastName_holder, name='last_name', required="required", value=((address_infos)? address_infos.last_name : user.lastName), minlength="4", data-erromessage=lang[locale].keys.addressLastName_error)
+            input#addressLastName.form-control(type='text', placeholder=lang[locale].keys.addressLastName_holder, name='last_name', required="required", value=((address_infos)? address_infos.last_name : user.lastName), minlength="3", data-erromessage=lang[locale].keys.addressLastName_error)
             label(for='addressLastName') !{lang[locale].keys.addressLastName_holder}
         div.form-group.material_input.minlength
             input#address.form-control(type='text', placeholder=lang[locale].keys.addess_holder, name='AddressLine1', required="required", value=((address_infos)? address_infos.AddressLine1 : ""), minlength="8", data-erromessage=lang[locale].keys.address_error)
@@ -296,6 +296,6 @@ div.formular#address_form
         button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.saveAddress_cta
         p= lang[locale].keys.input_need_message
         div.form-group.material_input
-            textarea#more_datas(placeholder="précisions pour la livraison." name="AddressLine3")
+            textarea#more_datas(placeholder="précisions." name="AddressLine3")
                 = ((address_infos)? address_infos.AddressLine3 : "")
-            label(for='more_datas') Précisions sur la livraison
+            label(for='more_datas') Précisions

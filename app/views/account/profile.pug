@@ -9,7 +9,7 @@ div.formular#public_datas
           img#avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="avatar_cropper" src=user.avatar  onerror="this.src='/images/assets/account.svg'")
           input#avatar.invisible(type="text" name="avatar" value=user.avatar)  
       div.form-group.material_input.minlength
-          input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="4", data-erromessage=lang[locale].keys.pseudo_error)
+          input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=user.pseudo, minlength="3", data-erromessage=lang[locale].keys.pseudo_error)
           label(for='pseudo') !{lang[locale].keys.pseudo_holder}
       div.form-group.material_input
           input#birthDate.form-control(type='date', placeholder=lang[locale].keys.birth_date_holder, name='birthDate' required="required", value=(new Date(user.birthDate).getFullYear()+"-"+((new Date(user.birthDate).getMonth() < 10) ? "0"+(new Date(user.birthDate).getMonth()+1) : (new Date(user.birthDate).getMonth()+1))+"-"+((new Date(user.birthDate).getDate() < 10)? "0"+new Date(user.birthDate).getDate() : new Date(user.birthDate).getDate())), data-erromessage=lang[locale].birth_date_error, min='1899-01-01' max='2018-01-01' data-minage="16")

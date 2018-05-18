@@ -44,7 +44,7 @@ module.exports.send = function(template, user_id, datas, callback){
         if (err) {
           callback({status:405, response_display:{message:'Email ERROR', type:'modal'}, err:err, datas:datas, config:config});
         }else{
-          callback({status:200, response_display:{message:'L\'email à bien été envoyé', type:'modal'}, datas:datas, infos:infos});
+          callback({status:200, response_display:{message:'L\'email a bien été envoyé', type:'modal'}, datas:datas, infos:infos});
         }
     });
 }

@@ -50,9 +50,9 @@ product
     })
     .get('/updatephonetik', function(req, res, next) {
         //res.status(200).send({title:"API"});
-        //Products_controller.updatePhonetik(req, res, function(e){
-        //    res.status(e.status).send(e.datas);
-        //});
+        Products_controller.updatePhonetik(req, res, function(e){
+            res.status(e.status).send(e.datas);
+        });
     })
 
     .get('/deleteallproducts', function(req, res, next) {

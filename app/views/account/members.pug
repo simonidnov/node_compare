@@ -26,7 +26,7 @@ div.formular#add_kid
         hr.separator
         div#child
             div.form-group.material_input.minlength
-                input#first_name.form-control(type='text', placeholder=lang[locale].keys.child_first_name_holder, name='first_name', required="required", value="", minlength="4", data-erromessage=lang[locale].keys.child_first_name_error)
+                input#first_name.form-control(type='text', placeholder=lang[locale].keys.child_first_name_holder, name='first_name', required="required", value="", minlength="3", data-erromessage=lang[locale].keys.child_first_name_error)
                 label(for='child_first_name') !{lang[locale].keys.child_first_name_holder}
             div.form-group.material_input
                 input#birth_date.form-control(type='date', placeholder=lang[locale].keys.child_birth_date_holder, name='birth_date', required="required", value="", data-erromessage=lang[locale].keys.child_birth_date_error)

@@ -169,7 +169,7 @@ block content
                             a.hyperlink(href="/auth/lost" data-action="page_reload") Mot de passe perdu ?
                         form#subscribe_form(method="post" action='/auth/subscribe/' style='display:"'+((form === "subscribe")? "block" : "none")+'"')
                             div.form-group.material_input.minlength
-                                input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=datas.pseudo, minlength="4", data-errormessage=lang[locale].keys.pseudo_length)
+                                input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=datas.pseudo, minlength="3", data-errormessage=lang[locale].keys.pseudo_length)
                                 label(for='pseudo') !{lang[locale].keys.pseudo_holder}
                             div.form-group.material_input
                                 input#subscribe_email.form-control(type='email', placeholder=lang[locale].keys.email_holder, name='subscribe_email', required="required", value=(typeof datas.email === "undefined" ? (typeof uri_params === "undefined" ? "" : (typeof uri_params.email === "undefined" ? "" : uri_params.email)) : datas.email), data-errormessage=lang[locale].keys.email_error)

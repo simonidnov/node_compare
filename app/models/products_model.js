@@ -79,11 +79,13 @@ module.exports.get = function(datas, res, callback){
         }
       };
     }
-    console.log('SEARCH QUERY ', query);
     let skip = 0,
         limit = 50;
     if(typeof datas.skip !== "undefined"){
       skip = parseInt(datas.skip);
+    }
+    if(typeof datas.limit !== "undefined"){
+      limit = parseInt(datas.limit);
     }
     let productQuery = Products.find(query).limit(limit).skip(skip).sort({'label': 1}).exec(function(err, products_datas){
         if(err){
@@ -246,15 +248,16 @@ module.exports.updatePhonetik = function(req, res, callback){
             if(products_datas.length === 0){
               callback({status:200, datas:products_datas});
             }
+            console.log('ehre');
             products_datas.forEach(function(prod){
-                //if(typeof prod.phonetik === "undefined" || prod.phonetik === "" || prod.phonetik.length === 0){
+                if(typeof prod.phonetik === "undefined" || prod.phonetik === "" || prod.phonetik.length === 0){
                   prod.label = prod.label.toUpperCase();
                   function onlyUnique(value, index, self) {
                       return self.indexOf(value) === index;
                   }
                   var a = language_helper.wordlab(prod.label+" "+prod.description).split('-');
                   prod.phonetik = a.filter( onlyUnique );
-
+                  console.log('phonetik ', prod.phonetik);
                   Products.updateOne(
                       {
                           _id: prod._id
@@ -267,11 +270,11 @@ module.exports.updatePhonetik = function(req, res, callback){
                           else console.log('updated ', infos);
                       }
                   );
-                //}
+                }
                 //callback({"status":200, "datas":{infos:infos, title:"PRODUCT_UPDATED", "message":"PRODUCT_UPDATED_MESSAGE", "media":"PRODUCT_UPDATED_MEDIA"}});
                 index++;
                 if(index === products_datas.length){
-                  callback({status:200, datas:products_datas});
+                  callback({status:200, datas:products_datas.length});
                 }
             });
         }
