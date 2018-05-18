@@ -124,6 +124,7 @@ function formular(target, callback){
         });
 
         $(target).find('.material_input input').off('focus').on('focus', function(){
+            self.check_error($(this), false);
             $(this).parent().addClass('focused');
             self.callback({"status":"focus", value:$(this)});
             if($(this).attr('type') === "date"){

@@ -136,7 +136,7 @@ var login = {
                     $('[data-tab="login_form"]').addClass('selected');
                     $('[data-tab="subscribe_form"]').removeClass('selected');
                     $('#email').focus();
-                    login.form.checkInputs();
+                    login.form.checkInputs(false);
                     if(typeof params.email !== "undefined"){
                         $('#email').val(params.email);
                     }else{
@@ -155,6 +155,7 @@ var login = {
                     $('[data-tab="subscribe_form"]').addClass('selected');
                     $('[data-tab="login_form"]').removeClass('selected');
                     $('#pseudo').focus();
+                    login.form.checkInputs(false);
                     break;
                 case 'lost':
                     $('#account_selection').addClass('displaynone').removeClass('displayblock');
@@ -166,6 +167,7 @@ var login = {
                     $('#lost_form').css('display', 'block');
                     $('.switch_tab .tab').removeClass('selected');
                     $('#lost_email').focus();
+                    login.form.checkInputs(false);
                     break;
                 default:
                     $('#account_selection').removeClass('displaynone').addClass('displayblock');

@@ -22,8 +22,13 @@ validation.get('/', function(req, res, next) {
         res.end();
     })
     .get('/account/:email/:validation_code', function (req, res, next) {
-        Auth_model.validAccount(req.params, function(e){
+        Auth_model.validAccount(req, req.params, function(e){
             //res.status(200).send(e);
+            if(e.status === 200){
+              e.message = "Félicitation, votre compte à bien été validé !";
+            }else{
+              e.message = "la clé de validation de votre compte Joyvox est périmée, veuillez vous connecter pour recevoir un nouveau lien.";
+            }
             res.status(200).render('validation', {
                 title: 'Validation',
                 infos : e,

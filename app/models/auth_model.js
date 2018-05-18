@@ -634,7 +634,6 @@ module.exports.checking_session = function(req, user_id, callback){
     );
 }
 module.exports.reset_session = function(req, user_id, callback){
-  console.log('--------------- reset_session ', user_id);
     User.findOne(
         {
             _id: user_id
@@ -650,7 +649,6 @@ module.exports.reset_session = function(req, user_id, callback){
                     Address_model.get(user_id, null, function(e){
                         user_infos.address = e.datas;
                         //TODO FIX SSL
-                        console.log('--------------- user_infos RESET SESSION ', user_infos);
                         //if(req.get('origin').replace('http://', '').replace('https://', '') === app.locals.settings.host.replace('http://', '').replace('https://', '')){
                           req.session.Auth = user_infos;
                         //}
@@ -755,7 +753,14 @@ module.exports.validCode = function(params, callback){
       }
     );
 };
-module.exports.validAccount = function(params, callback){
+module.exports.validAccount = function(req, params, callback){
+    jwt.verify(params.validation_code, config.secrets.global.secret, function(err, decoded) {
+      if (err){
+        console.log("ERROR JWT :::: ", err);
+      }else{
+        console.log("DECODED ", decoded);
+      }
+    });
     User.findOne(
         {
             email:params.email,
@@ -773,8 +778,13 @@ module.exports.validAccount = function(params, callback){
                         $set: { validated: true, certified: true }
                     },
                     function(err, validation){
-                        if(err) callback({status:304, message:"UNAUTHORISED_TOKEN", datas:err});
-                        else callback({status:200, message:"USER_VALIDATED", datas:validation});
+                      if(err) callback({status:204, message:"UNAUTHORISED_TOKEN", datas:err});
+                      else {
+                        //TODO CHECK RESET SESSION
+                        self.reset_session(req, user._id, function(infos){
+                          callback({status:200, message:"USER_VALIDATED", datas:validation});
+                        });
+                      }
                     }
                 );
             }
