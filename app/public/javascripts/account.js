@@ -168,8 +168,30 @@ var account = {
                     $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
                 }
             });
-            StripeCheckout.open(opts);
-
+            if(parseFloat($('#order_transaction').attr('data-amount')) === 0){
+              index.sdk.api.post("/orders/buy_product_with_coupon_code", {
+                product_id : $('[data-productid]').eq(0).attr('data-productid'),
+                coupon_code : account.coupons[0].code,
+                coupon_id : account.coupons[0]._id,
+                amount : account.coupons[0].amount
+              }, function(e){
+                if(e.status === 200){
+                  index.sdk.api.deleting('/basket',
+                    {
+                      basket_id : $('[data-basketid]').eq(0).attr('data-basketid'),
+                      product_id : $('[data-productid]').eq(0).attr('data-productid')
+                    },
+                    function(e){
+                      if(e.status === 200){
+                        //window.location.href = "/account/orders";
+                      }
+                    }
+                  );
+                }
+              });
+            }else{
+              StripeCheckout.open(opts);
+            }
             //index.sdk.api.post('/orders/transaction', {basket_id:$('#order_transaction').attr('data-basketid'), coupons:account.coupons}, function(){});
           }
         });

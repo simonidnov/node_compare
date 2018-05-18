@@ -152,10 +152,10 @@ module.exports.buy_with_coupon = function(req, res, callback){
                           message:"PRODUCT_ADDED",
                           response_display : {
                             "title":"Votre chanson !",
-                            "message":"Votre chanson est sur votre playlist !<br>Votre code de téléchargement est à présent validé et ne peut plus être utilisé.",
+                            "message":"Votre chanson est à présent disponible sur votre playlist !<br>Votre code de téléchargement est à présent validé et ne peut plus être utilisé.",
                             buttons:[
                               {
-                                class:"",
+                                class:"btn-success",
                                 label:"PLAYLIST",
                                 href:"/playlist",
                                 target:"_blank",
