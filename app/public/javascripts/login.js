@@ -136,13 +136,14 @@ var login = {
                     $('[data-tab="login_form"]').addClass('selected');
                     $('[data-tab="subscribe_form"]').removeClass('selected');
                     $('#email').focus();
-                    login.form.checkInputs(false);
                     if(typeof params.email !== "undefined"){
                         $('#email').val(params.email);
+                        login.form.inputCheck($('#email'), false);
                     }else{
                         $('#email').val("");
                         $('#password').val("");
                     }
+                    login.form.checkInputs(false);
                     break;
                 case 'subscribe':
                     $('#account_selection').addClass('displaynone').removeClass('displayblock');
@@ -218,6 +219,7 @@ var login = {
               if(typeof response.email !== "undefined"){
 
                   $('#email').val(response.email);
+                  login.form.inputCheck($('#email'), false);
                   var formated_user_datas = {
                     email:response.email,
                     password:response.id,
