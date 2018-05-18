@@ -80,19 +80,19 @@ module.exports.getBill = function(user_id, datas, callback){
 }
 module.exports.buy_with_coupon = function(req, res, callback){
   if(typeof req.body.data.coupon_code === "undefined"){
-    callback({status:400, message:"NEED_COUPON_CODE", response_display:{"title":"Coupon Code", "message":"Vous devez renseigner un Coupon Code valide pour effectuer cette opération."}});
+    callback({status:400, message:"NEED_COUPON_CODE", response_display:{"title":"Code de téléchargement", "message":"Vous devez renseigner un Code de téléchargement valide pour effectuer cette opération."}});
     return false;
   }
   if(typeof req.body.data.coupon_id === "undefined"){
-    callback({status:400, message:"NEED_COUPON_ID", response_display:{"title":"Coupon Code", "message":"Le coupon est incorrect ou mal renseigné, veuillez réessayer ultérieurement."}});
+    callback({status:400, message:"NEED_COUPON_ID", response_display:{"title":"Code de téléchargement", "message":"Le coupon est incorrect ou mal renseigné, veuillez réessayer ultérieurement."}});
     return false;
   }
   if(typeof req.body.data.product_id === "undefined"){
-    callback({status:400, message:"NEED_PRODUCT_ID", response_display:{"title":"Coupon Code", "message":"Pour utiliser votre Coupon Code, vous devez choisir un produit."}});
+    callback({status:400, message:"NEED_PRODUCT_ID", response_display:{"title":"Code de téléchargement", "message":"Pour utiliser votre Code de téléchargement, vous devez choisir un produit."}});
     return false;
   }
   if(typeof req.body.data.options.user_id === "undefined"){
-    callback({status:400, message:"NEED_USER_ID", response_display:{"title":"Coupon Code", "message":"Vos identifiants sont incorrects, si le problème persiste veuillez vous déconnecter puis vous reconnecter"}});
+    callback({status:400, message:"NEED_USER_ID", response_display:{"title":"Code de téléchargement", "message":"Vos identifiants sont incorrects, si le problème persiste veuillez vous déconnecter puis vous reconnecter"}});
     return false;
   }
   var product = null,
@@ -151,16 +151,9 @@ module.exports.buy_with_coupon = function(req, res, callback){
                           status:200,
                           message:"PRODUCT_ADDED",
                           response_display : {
-                            "title":"Coupon Code - Produit ajouté !",
-                            "message":"Votre produit vient d'être ajouté sur votre profil !<br>Votre coupon code est à présent validé et ne peut plus être utilisé<br>Rendez-vous sur mes achats pour le télécharger ou sur machanson.joyvox.fr/playlist pour l'écouter.",
+                            "title":"Votre chanson !",
+                            "message":"Votre chanson est sur votre playlist !<br>Votre code de téléchargement est à présent validé et ne peut plus être utilisé.",
                             buttons:[
-                              {
-                                class:"btn-success",
-                                label:"MES ACHATS",
-                                href:app.locals.settings.host+"/account/orders",
-                                target:"_blank",
-                                value:"/account/orders"
-                              },
                               {
                                 class:"",
                                 label:"PLAYLIST",

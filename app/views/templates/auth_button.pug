@@ -13,7 +13,7 @@ if(typeof query.user === "undefined" || query.user === null || query.user === ""
       div.other_accounts
       div.options
           a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth?"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")  target="_self") Ajouter un compte
-          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")  target="_self") Créer un compte
+          a.btn.btn-default.btn-sm.btn-warning(href=app.locals.settings.host+"/auth/subscribe"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "")  target="_self") Créer un compte
 else
   div#account_infos
       div.avatar.sm

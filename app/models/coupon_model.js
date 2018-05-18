@@ -206,7 +206,6 @@ module.exports.update = function(req, res, callback){
 module.exports.updateAmount = function(req, res, callback){
     Coupon.updateMany(
        {
-          offer: "chansonspersonnalisees"
        },
        {
           $set :{

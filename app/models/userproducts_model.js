@@ -249,12 +249,12 @@ module.exports.shares_of_the_day = function(req, res, callback){
               Email_controller.sendMaChansonEcard(
                 req,
                 {
-                  subject:"Bonjour "+share.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
-                  title:"Bonjour "+share.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
+                  subject:"Bonjour "+share.share_name+", "+user.pseudo+" vous souhaite un joyeux anniversaire en chanson",
+                  title:"Bonjour "+share.share_name+", "+user.pseudo+" vous souhaite un joyeux anniversaire en chanson",
                   name:share.share_name,
                   friend:user.pseudo,
                   friend_email:user.email,
-                  default_message:"Bonjour "+share.share_name+",<br>votre ami(e) "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson !",
+                  default_message:"Bonjour "+share.share_name+",<br>votre ami(e) "+user.pseudo+" vous souhaite un joyeux anniversaire en chanson !",
                   message:share.share_message,
                   product_id:share.product_id,
                   share_id:share._id,
@@ -282,7 +282,7 @@ module.exports.shares_of_the_day = function(req, res, callback){
                       {
                         subject:"La chanson d'anniversaire personnalisée pour "+share.share_name+" à bien été envoyée",
                         title:"La chanson d'anniversaire personnalisée pour "+share.share_name+" à bien été envoyée",
-                        message:"Bonjour "+user.pseudo+"<br>Vous avez envoyé une chanson d'anniversaire pour votre ami(e) "+share.share_name+".<br>Cet email confirme l'envoie de votre chanson sur l'adresse email de votre ami(e) : "+share.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+share.share_message,
+                        message:"Bonjour "+user.pseudo+"<br>Vous avez envoyé une chanson d'anniversaire pour votre ami(e) "+share.share_name+".<br>Cet email confirme l'envoi de votre chanson sur l'adresse email de votre ami(e) : "+share.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+share.share_message,
                         email:"contact@joyvox.fr",
                         share_id:share._id,
                         to:user.email
@@ -350,9 +350,9 @@ module.exports.share = function(req, res, callback){
                     Email_controller.send(
                       null,
                       {
-                        subject:"L'envoie de la chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été configuré",
-                        title:"L'envoie de votre chanson d'anniversaire à bien été configuré",
-                        message:"Bonjour "+user.pseudo+"<br>Vous avez configuré l'envoie d'une chanson d'anniversaire pour votre ami(e) "+datas.share_name+" pour le "+date_send+".<br>Cet email confirme que l'email sera envoyé à 9h00 ce jour précis sur l'adresse email de votre ami(e) : "+datas.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+datas.share_message,
+                        subject:"L'envoi de la chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été configuré",
+                        title:"L'envoi de votre chanson d'anniversaire à bien été configuré",
+                        message:"Bonjour "+user.pseudo+"<br>Vous avez configuré l'envoi d'une chanson d'anniversaire pour votre ami(e) "+datas.share_name+" pour le "+date_send+".<br>Cet email confirme que l'email sera envoyé à 9h00 ce jour précis sur l'adresse email de votre ami(e) : "+datas.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+datas.share_message,
                         email:"contact@joyvox.fr",
                         share_id:infos._id,
                         to:user.email
@@ -365,10 +365,12 @@ module.exports.share = function(req, res, callback){
                     Email_controller.sendMaChansonEcard(
                       req,
                       {
-                        subject:"Bonjour"+datas.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
-                        title:"Bonjour"+datas.share_name+", "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson",
-                        default_message:"Bonjour "+datas.share_name+",<br>votre ami(e) "+user.pseudo+" vous souhaites un joyeux anniversaire en chanson !",
+                        subject:"Bonjour "+datas.share_name+", "+user.pseudo+" vous souhaite un joyeux anniversaire en chanson",
+                        title:"Bonjour "+datas.share_name+", "+user.pseudo+" vous souhaite un joyeux anniversaire en chanson",
+                        default_message:"Bonjour "+datas.share_name+",<br>votre ami(e) "+user.pseudo+" vous souhaite un joyeux anniversaire en chanson !",
                         message:datas.share_message,
+                        friend:user.pseudo,
+                        friend_email:user.email,
                         product_id:datas.product_id,
                         share_id:infos._id,
                         email:user.email,
@@ -381,7 +383,7 @@ module.exports.share = function(req, res, callback){
                             {
                               subject:"La chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été envoyée",
                               title:"La chanson d'anniversaire personnalisée pour "+datas.share_name+" à bien été envoyée",
-                              message:"Bonjour "+user.pseudo+"<br>Vous avez envoyé une chanson d'anniversaire pour votre ami(e) "+datas.share_name+".<br>Cet email confirme l'envoie de votre chanson sur l'adresse email de votre ami(e) : "+datas.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+datas.share_message,
+                              message:"Bonjour "+user.pseudo+"<br>Vous avez envoyé une chanson d'anniversaire pour votre ami(e) "+datas.share_name+".<br>Cet email confirme l'envoi de votre chanson sur l'adresse email de votre ami(e) : "+datas.share_email+"<br>Voici votre message personnalisé qui accompagnera la chanson :<br>"+datas.share_message,
                               email:"contact@joyvox.fr",
                               share_id:infos._id,
                               to:user.email
@@ -399,7 +401,7 @@ module.exports.share = function(req, res, callback){
                 }
             });
           }else{
-            callback({"status":203, "datas":e.datas, "response_display":{"title":"Erreur de Partage", "message":"Nous n'avons pas réussi à vous authentifier pour créer l'envoie de votre chanson."}});
+            callback({"status":203, "datas":e.datas, "response_display":{"title":"Erreur de Partage", "message":"Nous n'avons pas réussi à vous authentifier pour créer l'envoi de votre chanson."}});
           }
         });
       }

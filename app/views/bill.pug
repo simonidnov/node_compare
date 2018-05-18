@@ -125,7 +125,6 @@ html
                                 !{user.first_name} !{user.last_name}<br>
                               !{user.pseudo}<br><a href="mailto:!{user.email}">!{user.email}</a><br>
                             //-{JSON.stringify(user)}
-            
             tr.heading
                 td Produits
                 td Prix
@@ -143,7 +142,12 @@ html
                     td -!{coupon.amount/100} €
             tr.total
                 td
-                
+                td Total HT : !{((order.datas.reduced_amount/100)/1.2).toFixed(2)} €
+            tr.total
+                td
+                td T.V.A 20% : !{(((order.datas.reduced_amount/100)/1.2).toFixed(2)*0.2).toFixed(2)} €
+            tr.total
+                td
                 td Total: !{order.datas.reduced_amount/100} €
             
             tr.heading
@@ -155,7 +159,7 @@ html
                 td 4 derniers numéros ...!{order.datas.response.source.last4}
             
             tr.heading
-                td Status du réglement
+                td Statut du réglement
                 td Vérification
                     
             tr.details
