@@ -110,9 +110,9 @@ var login = {
                 //console.log("isLogged :::: ", e);
                 if(e.status === "logged"){
                   this.sdk.api.get('/me', {}, $.proxy(function(e){
-                      console.log('ME / ', e);
                       if($('[data-userid="'+e.datas._id+'"]').length == 0){
                           $('.account_list').prepend('<a href="/auth/login/email/'+e.datas.email+'" data-action="page_reload"><li data-userid="'+e.datas._id+'"><div class="avatar" style="background-image:url('+e.datas.avatar+')"></div><div class="option_infos"><div class="label">'+e.datas.pseudo+'</div><div class="email">'+e.datas.email+'</div><div class="status">connected</div></div></li></a>');
+                          self.resize();
                       }
                       this.set_listeners();
                   }, this));
@@ -178,9 +178,12 @@ var login = {
             $('#account_selection').removeClass('displaynone').addClass('displayblock');
             $('#account_forms').addClass('displaynone').removeClass('displayblock');
         }
-        $('.formular.auth').css({
-            height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"
-        });
+        this.resize();
+    },
+    resize : function(){
+      $('.formular.auth').css({
+          height:($('.displayblock').height()+$('.app_infos').height()+140)+"px"
+      });
     },
     add_params : function(href){
         /*
