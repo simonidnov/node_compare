@@ -66,7 +66,7 @@ app.use(session({
     secret: "secret",
     cookie: {
 	      secure: true,
-        httpOnly: true,
+        httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24
     },
     name: "Auth",
