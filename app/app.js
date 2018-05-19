@@ -70,7 +70,7 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24
     },
     name: "Auth",
-    proxy: true,
+    proxy: false,
     resave: true,
     saveUninitialized: true
 }));
