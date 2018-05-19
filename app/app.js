@@ -65,7 +65,7 @@ app.listen(9000);
 app.use(session({
     secret: "secret",
     cookie: {
-	      secure: true,
+	      secure: false,
         httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24
     },
