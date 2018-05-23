@@ -459,13 +459,14 @@ function decodeUriComponentWithSpace (component) {
 
   // type : 'hash', 'search' or 'both'
   function getLocationParameters (location, type) {
+    console.log('getLocationParameters ', location, type);
     if (type !== 'hash' && type !== 'search' && type !== 'both') {
       throw 'getLocationParameters expect argument 2 "type" to be "hash", "search" or "both"';
     }
 
-    let searchString = typeof location.search === 'undefined' ? '' : location.search.substr(1);
-    let hashString = typeof location.hash === 'undefined' ? '' : location.hash.substr(1);
-    let queries = [];
+    var searchString = typeof location.search === 'undefined' ? '' : location.search.substr(1);
+    var hashString = typeof location.hash === 'undefined' ? '' : location.hash.substr(1);
+    var queries = [];
     if (type === 'search' || type === 'both') {
       queries = queries.concat(searchString.split('&'));
     }
@@ -473,10 +474,10 @@ function decodeUriComponentWithSpace (component) {
       queries = queries.concat(hashString.split('&'));
     }
 
-    let params = {};
-    let pair;
+    var params = {};
+    var pair;
 
-    for (let i = 0; i < queries.length; i++) {
+    for (var i = 0; i < queries.length; i++) {
       if (queries[i] !== '') {
         pair = queries[i].split('=');
         params[this.decodeUriComponentWithSpace(pair[0])] = this.decodeUriComponentWithSpace(pair[1]);
