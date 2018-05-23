@@ -9,6 +9,7 @@ var idkids_jssdk = function(options, callback){
         //window.location.href = window.location.origin + window.location.pathname;
         window.history.pushState({"pageTitle":document.title}, document.title, window.location.origin + window.location.pathname);
     };
+    $('html, body, *').off('click').on("click", function(event){});
     this.api = {
         user : null,
         parent : null,

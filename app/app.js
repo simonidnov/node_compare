@@ -50,7 +50,7 @@ Apps_controller.get(null, {}, function(e){
 Settings_model.get(null, {}, function(e){
     app.locals.settings = e;
 });
-app.locals.version = "1.0.3";
+app.locals.version = "1.0.4";
 app.locals.auth_lang = require('./public/languages/auth_lang');
 app.locals.api_lang = require('./public/languages/api_lang');
 app.locals.admin_lang = require('./public/languages/admin_lang');
