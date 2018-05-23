@@ -8,17 +8,19 @@ exports.get = function(req, datas, callback) {
         callback(e);
     });
 };
+exports.getById = function(_id, callback) {
+  Address_model.getById(_id, function(e){
+      callback(e);
+  });
+};
 // check user login then return user_infos
 exports.create = function(req, datas, callback) {
-  console.log('CREATE CONTROLLER');
     Address_model.create(req.body.user_id, req.body, function(e){
         /* IF REQ SESSIONS AUTH HAVE TO SET MEMBERS */
-        console.log('create controller ', e);
         Auth_model.reset_session(req, req.body.user_id, function(){
           callback(e);
         });
         //auth_helper.check_session(req, req.body.user_id, function(e){
-        //    console.log('create controller check session ', e);
 
         //});
     });

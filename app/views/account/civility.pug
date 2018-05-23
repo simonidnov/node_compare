@@ -12,16 +12,16 @@ div.formular#private_datas
             input#email.form-control(disabled="true" type='email' placeholder=lang[locale].keys.email_holder name='pseudo' value=user.email data-erromessage=lang[locale].keys.email_error)
             label(for='email') !{lang[locale].keys.email_holder}
         div.form-group.material_input.minlength
-            input#firstName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.firstName_holder, name='firstName' value=user.firstName)
+            input#firstName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.firstName_holder, name='firstName' value=user.firstName data-erromessage="Veuillez indiquer un Prénom")
             label(for='firstName') !{lang[locale].keys.firstName_holder}
         div.form-group.material_input.minlength
-            input#lastName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.lastName_holder, name='lastName' value=user.lastName)
+            input#lastName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.lastName_holder, name='lastName' value=user.lastName data-erromessage="Veuillez indiquer un Nom")
             label(for='lastName') !{lang[locale].keys.lastName_holder}
         div.form-group.material_input.minlength
-            input#phone.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.phone_holder, name='phone' value=user.phone)
+            input#phone.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.phone_holder, name='phone' value=user.phone data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
             label(for='phone') !{lang[locale].keys.phone_holder}
         div.form-group.material_input.minlength
-            input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile)
+            input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
             label(for='mobile') !{lang[locale].keys.mobile_holder}
         hr
         button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.save_cta

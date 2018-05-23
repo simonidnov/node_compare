@@ -65,21 +65,24 @@ module.exports.get = function(user_id, address_id, callback){
     if(address_id !== null){
         query['address_id'] = address_id;
     }
-    console.log('ADRESS MDEL GET ', query);
     Address.find(query, function(err, addresses){
         if(err) callback({status:405, datas:err});
         else callback({status:200, datas:addresses});
     });
 }
+module.exports.getById = function(_id, callback){
+  Address.findOne({_id:_id}, function(err, addresses){
+      if(err) callback({status:405, datas:err});
+      else callback({status:200, datas:addresses});
+  });
+}
 module.exports.create = function(user_id, datas, callback) {
     datas.user_id = user_id;
     geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.cp+" "+datas.city+" "+datas.country)
         .then(function(res) {
-            console.log('GEOCODER ', res);
             datas.geocoder = res[0];
             new_address = new Address(datas);
             new_address.save(function(err, infos){
-              console.log('SAVED ???? ', err, infos);
                 if(err) callback({"status":405, "message":err});
                 else callback({"status":200, "datas":infos});
             });
@@ -87,7 +90,6 @@ module.exports.create = function(user_id, datas, callback) {
         .catch(function(err) {
             new_address = new Address(datas);
             new_address.save(function(err, infos){
-              console.log('SAVED ???? ', err, infos);
                 if(err) callback({"status":405, "message":err});
                 else {
                   //Auth_model.reset_session(datas, user_id, function(){});
@@ -97,26 +99,59 @@ module.exports.create = function(user_id, datas, callback) {
         });
 }
 module.exports.update = function(user_id, address_id, datas, callback){
-    Address.updateOne(
-        {
-            user_id : user_id,
-            _id     : address_id
-        },
-        {
-            $set : datas
-        },
-        function(err, infos){
-            if(err) callback({"status":405, "message":err});
-            else {
-              //Auth_model.reset_session(datas, user_id, function(){});
-              callback({"status":200, "address":infos});
-            }
-        }
-    )
+  var update_datas = {
+    label: datas.label,
+    first_name: datas.first_name,
+    last_name: datas.last_name,
+    AddressLine1: datas.AddressLine1,
+    AddressLine2: datas.AddressLine2,
+    city: datas.city,
+    cp: datas.cp,
+    country: datas.country,
+    phone: datas.phone,
+    AddressLine3: datas.AddressLine3,
+    more_datas: datas.more_datas
+  }
+  geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.cp+" "+datas.city+" "+datas.country)
+      .then(function(res) {
+        console.log('geocoder success');
+          update_datas.geocoder = res[0];
+          Address.update(
+              {
+                  _id     : datas._id
+              },
+              {
+                  $set : update_datas
+              },
+              function(err, infos){
+                  if(err) callback({"status":405, "message":err, response_display:{title:"Adresse", message:"Une erreur est survenur lors de la mise à jour de votre adresse."}});
+                  else {
+                    //Auth_model.reset_session(datas, user_id, function(){});
+                    callback({"status":200, "address":infos, response_display:{title:"Adresse", message:"Votre adresse a bien été mise à jour."}});
+                  }
+              }
+          )
+      })
+      .catch(function(err) {
+        console.log('geocoder error ', err);
+          Address.update(
+              {
+                  _id     : datas._id
+              },
+              {
+                  $set : update_datas
+              },
+              function(err, infos){
+                  if(err) callback({"status":405, "message":err, response_display:{title:"Adresse", message:"Une erreur est survenur lors de la mise à jour de votre adresse."}});
+                  else {
+                    //Auth_model.reset_session(datas, user_id, function(){});
+                    callback({"status":200, "address":infos, response_display:{title:"Adresse", message:"Votre adresse a bien été mise à jour."}});
+                  }
+              }
+          )
+      });
 }
 module.exports.delete = function(user_id, address_id, callback){
-    console.log('user id', user_id);
-    console.log('address_id id', address_id);
     Address.deleteOne(
         {
             user_id : user_id,

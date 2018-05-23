@@ -2,6 +2,7 @@ var express = require('express'),
     billing = express.Router(),
     Orders_controller = require('../controllers/orders_controller'),
     Auth_helper = require('../helpers/auth_helper'),
+    Address_controller = require('../controllers/address_controller'),
     language_helper = require('../helpers/languages_helper'),
     uri_helper = require('../helpers/uri_helper'),
     lang = require('../public/languages/auth_lang');
@@ -51,40 +52,51 @@ billing
     })
     .get('/:bill_id', function(req, res, next) {
 
+      next();
+    }, function(req, res, next){
       Orders_controller.getBill(req.session.Auth._id, {_id:req.params.bill_id}, function(e){
-            res.render('bill', {
-                title : 'Ma facture '+e.bill_number,
-                user  : req.session.Auth,
-                locale: language_helper.getlocale(req),
-                lang  : lang,
-                order : e,
-                js:[
-                ], css:[
-                    '/public/stylesheets/billing.css'
-                ]
-            }, function(err, html) {
-                var fs = require('fs');
-                var pdf = require('html-pdf');
-                var filename = '/uploads/ma-facture-'+req.params.bill_id+'.pdf';
-                //var html = fs.readFileSync(app.locals.settings.host+"/billing/"+req.params.bill_id, 'utf8');
-                var options = { format: 'Letter' };
-
-                pdf.create(html, options).toStream(function(err, stream) {
-                  if (err) return console.log(err);
-                  stream.pipe(fs.createWriteStream('.'+filename));
-                  setTimeout(function(){
-                    res.status(200).redirect(filename);
-                  },100);
-                  setTimeout(function(){
-                    fs.unlink('.'+filename, function(err, infos){
-                      if (err) throw err;
-                    });
-                  },20000);
-                });
-            });
-
-            //res.end();
-        });
+        req.bill = e;
+        if(typeof req.bill.datas.metadata.address_id !== "undefined" && req.bill.datas.metadata.address_id !== null && req.bill.datas.metadata.address_id !== ""){
+          Address_controller.getById(req.bill.datas.metadata.address_id, function(e){
+            if(e.status === 200){
+              req.bill.datas.address = e.datas;
+            }
+            next();
+          });
+        }else{
+          next();//res.end();
+        }
+      });
+    }, function(req, res, next){
+      res.render('bill', {
+          title : 'Ma facture '+req.bill.bill_number,
+          user  : req.session.Auth,
+          locale: language_helper.getlocale(req),
+          lang  : lang,
+          order : req.bill,
+          js:[
+          ], css:[
+              '/public/stylesheets/billing.css'
+          ]
+      }, function(err, html) {
+          var fs = require('fs');
+          var pdf = require('html-pdf');
+          var filename = '/uploads/facture-'+req.bill.datas.bill_number+'.pdf';
+          //var html = fs.readFileSync(app.locals.settings.host+"/billing/"+req.params.bill_id, 'utf8');
+          var options = { format: 'Letter' };
+          pdf.create(html, options).toStream(function(err, stream) {
+            if (err) return console.log(err);
+            stream.pipe(fs.createWriteStream('.'+filename));
+            setTimeout(function(){
+              res.status(200).redirect(filename);
+            },100);
+            setTimeout(function(){
+              fs.unlink('.'+filename, function(err, infos){
+                if (err) throw err;
+              });
+            },20000);
+          });
+      });
     });
 
 module.exports = billing;

@@ -32,13 +32,10 @@ address
         });
     })
     .post('/', function(req, res, next) {
-        console.log('ADD ADDRESS');
         if(typeof req.body.data !== "undefined"){
           req.body = req.body.data;
         }
-        console.log('ADD ADDRESS ', req.body);
         Address_controller.create(req, res, function(e){
-          console.log('CREATED ? ', e);
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/addresses'+req.url.replace('/',''));
         });

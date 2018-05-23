@@ -54,10 +54,18 @@ block content
                             li.icon(style="background-image:url("+apps.icon+")")
                 div.app_infos
                     if current_app !== null && typeof current_app !== "undefined"
-                      div.row(style="")
-                        img(src=current_app.icon, height="50", style="border-radius:4px;")
+                      if(typeof user_session !== "undefined")
+                        if current_app !== null && typeof current_app !== "undefined"
+                          a.row(style="" href=current_app.redirect_url+"?idkids-token="+user_session.token+"&idkids-id="+user_session._id+"&idkids-device=&idkids-secret="+user_session.secret)
+                            img(src=current_app.logo, height="50", style="border-radius:4px;")
+                        else
+                          a.row(href="/auth/login/" style="")
+                            img(src=current_app.logo, height="50", style="border-radius:4px;")
+                      else
+                        a.row(href="/auth/login/" style="")
+                          img(src=current_app.logo, height="50", style="border-radius:4px;")
                         //-img(src=current_app.logo, height="50")
-                        div 
+                        //-div 
                           span Me connecter sur
                           br
                           span.label #{current_app.label}
@@ -117,7 +125,7 @@ block content
                     h1 Vous n'avez pas encore de compte ?
                     div.formular.fullscreen
                       div.form_content
-                        a.btn.btn-success(href="/auth/subscribe" data-action="page_reload") Créer un compte
+                        a.btn.btn-danger(href="/auth/subscribe" data-action="page_reload") Créer un compte
                 div#account_forms.form_content(class=typeof form === "undefined" ? "displaynone" : "displayblock")
                     //-if(datas.message)
                         div.message= datas.message

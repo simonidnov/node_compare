@@ -288,7 +288,15 @@ footer .icon{
     -o-transition: all .2s ease-in;
     transition: all .2s ease-in;
 }
-footer .icon:hover{
+
+footer .logo{
+  border-radius: 4px;
+  -webkit-transition: all .2s ease-in;
+  -moz-transition: all .2s ease-in;
+  -o-transition: all .2s ease-in;
+  transition: all .2s ease-in;
+}
+footer .icon:hover, footer .logo:hover{
     transform: scale(.95);
 }
 footer .col{
@@ -642,12 +650,11 @@ p{
 
 /* --------------- BRANDS --------------- */
 .header .logo, .logo{
-    width:200px;
+    width:160px;
     height: 64px;
     margin-left:20px;
     float: left;
 }
-
 
 /* --------------- LOGOS --------------- */
 .logo.brand{

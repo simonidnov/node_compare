@@ -120,10 +120,19 @@ html
                 td(colspan="2")
                     table
                         tr
-                            td Joyvox<br>162 boulevard de Fourmies<br>59100, ROUBAIX<br><a href="tel:!{app.locals.settings.phone}">!{app.locals.settings.phone}</a><br><a href="mailto:!{app.locals.settings.email}">!{app.locals.settings.email}</a>
-                            td.
+                            td Joyvox<br>162 boulevard de Fourmies<br>59100, ROUBAIX<br><a href="tel:!{app.locals.settings.phone}">!{app.locals.settings.phone}</a><br><a href="mailto:!{app.locals.settings.email}">!{app.locals.settings.email}</a><br>TVA : FR74 529196842
+                            
+                            if typeof order.datas.address !== "undefined"
+                              td.
+                                !{order.datas.address.first_name} !{order.datas.address.last_name}<br>
+                                !{order.datas.address.cp} !{order.datas.address.city}<br>
+                                <a href="mailto:!{user.email}">!{user.email}</a><br>
+                                !{user.mobile} !{user.phone}<br>
+                            else
+                              td.
                                 !{user.first_name} !{user.last_name}<br>
-                              !{user.pseudo}<br><a href="mailto:!{user.email}">!{user.email}</a><br>
+                                !{user.pseudo}<br><a href="mailto:!{user.email}">!{user.email}</a><br>
+                                
                             //-{JSON.stringify(user)}
             tr.heading
                 td Produits
@@ -142,16 +151,34 @@ html
                     td -!{coupon.amount/100} €
             tr.total
                 td
-                td Total HT : !{((order.datas.reduced_amount/100)/1.2).toFixed(2)} €
+                td Total H.T : !{((order.datas.reduced_amount/100)/1.2).toFixed(2)} €
             tr.total
                 td
                 td T.V.A 20% : !{(((order.datas.reduced_amount/100)/1.2).toFixed(2)*0.2).toFixed(2)} €
             tr.total
                 td
-                td Total: !{order.datas.reduced_amount/100} €
-            
+                td Total T.T.C : !{order.datas.reduced_amount/100} €
+        br
+        table
+            tr.details.item
+              td 
+                b Montant réglé
+              td 
+                b !{order.datas.reduced_amount/100} €
+            tr.details.item
+              td 
+                b Total restant dû
+              td 
+                b 0.00 €
+            tr.details.item
+              - var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+              td 
+                b Date de paiement
+              td 
+                b !{new Date(order.datas.created).toLocaleDateString('fr-FR', options)}
+        table
             tr.heading
-                td Methode de paiement
+                td mode de paiement
                 td Carte bancaire
                 
             tr.details
@@ -166,6 +193,7 @@ html
                 td= (order.datas.response.paid)? "PAYÉ" : "NON-PAYÉ"
                      
                 td= (order.datas.response.status === "succeeded")? "VÉRIFIÉ" : "NON-VÉRIFIÉ"
+      
                 
-        p.identity identifiant de la facture !{order.datas._id}
+        //-p.identity identifiant de la facture !{order.datas._id}
                 

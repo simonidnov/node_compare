@@ -243,9 +243,16 @@ var account = {
             }
             if(e.status==="hitted" && e.action==="submit"){
                 var address_datas = account.address_form.get_datas();
-                index.sdk.api.post("/address/", address_datas, function(e){
-                  window.location.reload();
-                });
+                if($('#address_form form').attr('method') === "PUT"){
+                  index.sdk.api.put("/address/", address_datas, function(e){
+                    console.log(e);
+                    //window.location.reload();
+                  });
+                }else{
+                  index.sdk.api.post("/address/", address_datas, function(e){
+                    window.location.reload();
+                  });
+                }
             }
             //"https://maps.googleapis.com/maps/api/staticmap?center="
         });

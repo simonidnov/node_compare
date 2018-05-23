@@ -1,9 +1,10 @@
 div.formular#address_form
     if(typeof address_infos === "undefined")
-        h1= lang[locale].keys.address_form_title
+      h1= lang[locale].keys.address_form_title
     else
-        h1 Éditer mon adresse
-    form.form_content(method="POST" action='/address/')
+      h1 Éditer mon adresse
+    if (!address_infos)
+    form.form_content(method=(!address_infos)? "POST" : "PUT" action='/address/')
         if(!address_infos)
             p= lang[locale].keys.address_form_message
         hr
@@ -293,7 +294,10 @@ div.formular#address_form
         div#map_preview.map_preview
         
         hr
-        button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.saveAddress_cta
+        if (!address_infos)
+          button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.saveAddress_cta
+        else
+          button.btn.btn-success.btn-m(data-action='submit') Mettre à jour
         p= lang[locale].keys.input_need_message
         div.form-group.material_input
             textarea#more_datas(placeholder="précisions." name="AddressLine3")

@@ -645,7 +645,6 @@ module.exports.checking_session = function(req, user_id, callback){
     );
 }
 module.exports.reset_session = function(req, user_id, callback){
-  console.log('reset_session user_id ', user_id);
     User.findOne(
         {
             _id: user_id
