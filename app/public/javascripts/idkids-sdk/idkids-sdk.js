@@ -226,7 +226,7 @@ var idkids_jssdk = function(options, callback){
             var url = new URL(window.location.href);
             if(typeof url.searchParams !== "undefined"){
               var c = url.searchParams.get("idkids-token");
-              if(c !== null){
+              if(c !== null && c !== "" && typeof c !== "undefined"){
                   var jeton = {
                       "token":url.searchParams.get("idkids-token"),
                       "_id":url.searchParams.get("idkids-id"),
