@@ -38,6 +38,7 @@ router.get(['/', '/:page_url'], function(req, res, next) {
             page:e.datas[0].url,
             page_datas:e.datas[0],
             js:[
+              "/public/javascripts/contact.min.js",
               "/node_modules/swiper/dist/js/swiper.min.js",
               "/public/javascripts/components/formular.min.js"
             ],
@@ -56,6 +57,7 @@ router.get(['/', '/:page_url'], function(req, res, next) {
             page:req.params.page_name,
             page_datas:e.datas,
             js:[
+              "/public/javascripts/contact.min.js",
               "/node_modules/swiper/dist/js/swiper.min.js",
               "/public/javascripts/components/formular.min.js"
             ],

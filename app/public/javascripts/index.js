@@ -117,6 +117,10 @@ var index = {
         var params = this.parse_url(window.location.pathname),
             keys = Object.keys(params),
             data_for = keys[1];
+        console.log('navigate ', params, keys, data_for);
+        if(keys[1]==="contact"){
+          contact.init();
+        }
         if(typeof params[data_for] !== "undefined"){
             data_for = params[data_for];
         }
