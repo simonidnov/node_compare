@@ -262,12 +262,14 @@ var idkids_jssdk = function(options, callback){
             this.getStore('idkids_local_user');
         },
         store:function(key, datas){
+          console.log('STORE DATAS ', key, datas);
             try {
                 window.localStorage.setItem(key, JSON.stringify(datas));
             } catch(e) {
             }
         },
         getStore:function(key){
+          console.log('GET STORE DATAS ', window.localStorage.getItem(key));
             try {
                 this.user = JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
