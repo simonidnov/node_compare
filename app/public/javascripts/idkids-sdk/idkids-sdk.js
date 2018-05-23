@@ -460,27 +460,27 @@ function decodeUriComponentWithSpace (component) {
   // type : 'hash', 'search' or 'both'
   function getLocationParameters (location, type) {
     if (type !== 'hash' && type !== 'search' && type !== 'both') {
-      throw 'getLocationParameters expect argument 2 "type" to be "hash", "search" or "both"'
+      throw 'getLocationParameters expect argument 2 "type" to be "hash", "search" or "both"';
     }
 
-    let searchString = typeof location.search === 'undefined' ? '' : location.search.substr(1)
-    let hashString = typeof location.hash === 'undefined' ? '' : location.hash.substr(1)
-    let queries = []
+    let searchString = typeof location.search === 'undefined' ? '' : location.search.substr(1);
+    let hashString = typeof location.hash === 'undefined' ? '' : location.hash.substr(1);
+    let queries = [];
     if (type === 'search' || type === 'both') {
-      queries = queries.concat(searchString.split('&'))
+      queries = queries.concat(searchString.split('&'));
     }
     if (type === 'hash' || type === 'both') {
-      queries = queries.concat(hashString.split('&'))
+      queries = queries.concat(hashString.split('&'));
     }
 
-    let params = {}
-    let pair
+    let params = {};
+    let pair;
 
     for (let i = 0; i < queries.length; i++) {
       if (queries[i] !== '') {
-        pair = queries[i].split('=')
-        params[this.decodeUriComponentWithSpace(pair[0])] = this.decodeUriComponentWithSpace(pair[1])
+        pair = queries[i].split('=');
+        params[this.decodeUriComponentWithSpace(pair[0])] = this.decodeUriComponentWithSpace(pair[1]);
       }
     }
-    return params
+    return params;
 }
