@@ -7,6 +7,7 @@ const db = require('mongoose'),
       Members_model = require('../models/members_model'),
       Address_model = require('../models/address_model'),
       Email_controller = require('../controllers/email_controller'),
+      Settings_model = require('../models/settings_model'),
       config = require('../config/config'),
       gravatar = require('gravatar'),
       urlExists = require('url-exists'),
@@ -436,20 +437,30 @@ module.exports.register = function(datas, callback) {
                     self.reset_session(datas, usr._id, function(infos){
                       callback({"status":200, "user":usr});
                       /* TODO VERIFY ITS RUN AFTER CALLBACK */
-                      Email_controller.send(
-                        null,
-                        {
-                          subject:"Bienvenue sur JOYVOX",
-                          title:"Inscription sur JOYVOX",
-                          message:"Votre inscription a bien été prise en compte, rendez-vous sur <a href=\"https://auth.joyvox.fr/auth\">JOYVOX pour valider votre inscription.</a>",
-                          email:usr.email,
-                          to:usr.email
-                        },
-                        function(e){
-                          /* ON ENVOIE LE MAIL A JOYVOX */
-                          //console.log(e);
-                        }
-                      );
+                      Settings_model.get(null, {}, function(e){
+                          var settings = e;
+                          self.getValidationCode(usr._id, function(e){
+                            if(e.status === 200){
+                              Email_controller.send(
+                                null,
+                                {
+                                  subject:"Bienvenue sur JOYVOX",
+                                  title:"Inscription sur JOYVOX",
+                                  message:"Votre inscription a bien été prise en compte, rendez-vous sur <a href=\""+settings.host+"/validation/account/"+usr.email+"/"+e.validation_code+"\">JOYVOX pour valider votre inscription.</a>",
+                                  email:usr.email,
+                                  to:usr.email
+                                },
+                                function(e){
+                                  /* ON ENVOIE LE MAIL A JOYVOX */
+                                  //console.log(e);
+                                  //checking_session?_id=5b053f060991856163461bf9&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNkZWxhbWFycmVAaWRub3ZhbnQuZnIiLCJwYXNzd29yZCI6IkFsbG9SYWtpMSIsImlhdCI6MTUyNzA3MDUwMSwiZXhwIjoxNTI3MjQzMzAxfQ.5eIcxWjFdZHiosUJ-8SrUajx8MesHo-HfMQ4Gp7bX2o&secret=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc2V1ZG8iOiJzaW1vbl9zZGVsYW1hcnJlQGlkbm92YW50LmZyIiwiaWF0IjoxNTI3MDcwNDcwLCJleHAiOjE1MjcyNDMyNzB9.xa_7L-_-t2ysg1QCNTi6WR1WS_yNt_SpsOs6mW58AM0
+                                }
+                              );
+                            }else{
+                              //callback({"status":e.status, datas:e});
+                            }
+                          });
+                      });
 
                     });
                   }
@@ -566,11 +577,11 @@ module.exports.check_user = function(req, callback){
     //    },
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){
-        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}, "datas":err});
+        callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Connexion requise", "message":"Vous devez-être connecté pour effectuer cette action."}, "datas":err});
       }else{
         req.decoded = decoded;
         if(typeof decoded.password === "undefined" || typeof decoded.email === "undefined"){
-          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}});
+          callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion requise", "message":"Vous devez-être connecté pour effectuer cette action."}});
           return false;
         }
         User.find(
@@ -580,10 +591,10 @@ module.exports.check_user = function(req, callback){
             },
             function(err, user) {
                 if(err){
-                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}});
+                    callback({status:203, "message":"UNAUTHORISED_TOKEN", "datas":err, "response_display":{"title":"Connexion requise", "message":"Vous devez-être connecté pour effectuer cette action."}});
                 }else{
                     if(user.length === 0){
-                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion recquise", "message":"Vous devez-être connecté pour effectuer cette action."}});
+                      callback({status:203, "message":"UNAUTHORISED", "response_display":{"title":"Connexion requise", "message":"Vous devez-être connecté pour effectuer cette action."}});
                     }else{
                       var new_token = jwt.sign({secret:user[0].user_secret, email:user[0].email, password:decoded.password}, config.secrets.global.secret, { expiresIn: '2 days' });
 
@@ -634,6 +645,7 @@ module.exports.checking_session = function(req, user_id, callback){
     );
 }
 module.exports.reset_session = function(req, user_id, callback){
+  console.log('reset_session user_id ', user_id);
     User.findOne(
         {
             _id: user_id
@@ -642,8 +654,12 @@ module.exports.reset_session = function(req, user_id, callback){
             if (err){
                 callback({"status":401, "code":err.code, "error":err, "message":err.message});
             }else{
+              console.log('user ', user);
+              if(user === null){
+                callback({status:203, "message":"UNKNOW_USER", "datas":user});
+              }else{
                 user_infos = JSON.parse(JSON.stringify(user));
-                user_infos.current_device = device_uid;
+                //user_infos.current_device = device_uid;
                 Members_model.get(user_id, null, function(e){
                     user_infos.members = e.datas;
                     Address_model.get(user_id, null, function(e){
@@ -655,6 +671,7 @@ module.exports.reset_session = function(req, user_id, callback){
                         callback({status:200, "message":"SESSION_UPDATED", "datas":user_infos});
                     });
                 });
+              }
             }
         }
     );
@@ -698,6 +715,7 @@ module.exports.getFullUser = function(_id, callback){
             if(err){
                 callback({status:401, "message":"UNAUTHORISED_TOKEN", "datas":err});
             }else{
+                console.log('GET FULL USER ', user);
                 if(user !== null){
                     Members_model.get(_id, null, function(e){
                         user['members'] = e.datas;
@@ -754,6 +772,7 @@ module.exports.validCode = function(params, callback){
     );
 };
 module.exports.validAccount = function(req, params, callback){
+    var self = this;
     jwt.verify(params.validation_code, config.secrets.global.secret, function(err, decoded) {
       if (err){
         console.log("ERROR JWT :::: ", err);

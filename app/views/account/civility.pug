@@ -24,4 +24,4 @@ div.formular#private_datas
             input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile)
             label(for='mobile') !{lang[locale].keys.mobile_holder}
         hr
-        button.btn.btn-success.btn-m(type='submit')= lang[locale].keys.save_cta
+        button.btn.btn-success.btn-m(data-action='submit')= lang[locale].keys.save_cta

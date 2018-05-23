@@ -92,11 +92,12 @@
     text-align: center;
     width:100%;
 }
-.idkids_jssdk .short_cuts ul li:hover,
-.idkids_jssdk .short_cuts ul li:active,
-.idkids_jssdk .short_cuts ul li:focus{
+.idkids_jssdk .short_cuts ul li:hover{
     background-color: #e6ebf1;
     color: #000;
+}
+div:not(:focus):hover {
+  color: red;
 }
 .idkids_jssdk .short_cuts ul li:hover .icon{
   color:black;

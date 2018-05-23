@@ -197,7 +197,6 @@ var account = {
         });
         this.checkout_form.init();
         /* --------------------------- BASKET FORM --------------------------- */
-
         this.public_form = new formular("#public_datas", function(e){
           if(e.status==="hitted" && e.action==="submit"){
               var public_datas = account.public_form.get_datas();
@@ -205,6 +204,16 @@ var account = {
           }
         });
         this.public_form.init();
+
+        this.private_form = new formular('#private_datas', function(e){
+          if(e.status==="hitted" && e.action==="submit"){
+              var private_datas = account.private_form.get_datas();
+              private_datas.gender = $('input[name=gender]:checked').val();
+              index.sdk.api.put("/account/profile/", private_datas, function(e){});
+          }
+        });
+        this.private_form.init();
+
         this.kid_form = new formular("#add_kid", function(e){
             if(e.status === "hitted" && e.action === "submit"){
                 var form_datas = {};
@@ -242,7 +251,7 @@ var account = {
         });
         this.address_form.init();
 
-        this.private_form = new formular('#private_datas', function(e){}).init();
+
 
         this.services_form = new formular('#services_form', function(e){
             if(e.status==="hitted" && e.action==="submit"){

@@ -23,7 +23,9 @@ checking_session.get('/', function(req, res, next) {
         res.end();
       }else{
         Auth_model.checking_session(req, req.query._id, function(e){
-          if(typeof e.datas.password !== "undefined"){
+          console.log('checking session ', e);
+          if(typeof e.datas !== "undefined" && e.datas !== null){
+              console.log('checking session datas ', e.datas !== null);
               res.redirect(307, "/account"+'?idkids-token='+e.datas.token+'&idkids-id='+e.datas._id+'&idkids-device='+e.datas.current_device);
               res.end();
           }else{

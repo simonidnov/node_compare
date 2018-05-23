@@ -23,6 +23,9 @@
     -o-transition: height .6s ease-in-out;
     transition: height .6s ease-in-out;
 }
+.formular.overflow{
+  overflow: inherit;
+}
 *{
     -moz-box-shadow:none;
     -webkit-box-shadow:none;
