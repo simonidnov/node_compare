@@ -497,10 +497,22 @@
 .idkids_cookies p{
   color:#FFF !important;
   text-align: center !important;
+  position: relative;
+  width: 90%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-bottom:10px;
+  box-sizing: border-box;
 }
 @media screen and (max-width: 640px) {
+  .idkids_cookies{
+    background-color: rgba(0,0,0,.9);
+  }
   .idkids_cookies p{
     font-size: 9px;
+    padding: 0;
+    line-height: 15px;
   }
 }
 @keyframes spin {
