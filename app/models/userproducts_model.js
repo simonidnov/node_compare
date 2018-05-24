@@ -50,6 +50,9 @@ module.exports.get = function(req, res, callback){
           callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
           return false;
         }
+        if(typeof req.query.product_id !== "undefined"){
+          query.product_id = req.query.product_id;
+        }
     req.user_id = query.user_id;
     self.checkOrders(req, res, function(e){
       Userproducts.find(query, function(err, userproducts){
