@@ -498,6 +498,11 @@
   color:#FFF !important;
   text-align: center !important;
 }
+@media screen and (max-width: 640px) {
+  .idkids_cookies p{
+    font-size: 9px;
+  }
+}
 @keyframes spin {
     0% {
         transform: rotate(240deg);
