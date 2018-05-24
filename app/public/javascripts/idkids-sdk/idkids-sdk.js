@@ -266,6 +266,7 @@ var idkids_jssdk = function(options, callback){
             try {
                 window.localStorage.setItem(key, JSON.stringify(datas));
             } catch(e) {
+              console.log('EXECPTION E ERROR STORE ::::  ', e);
             }
         },
         getStore:function(key){
