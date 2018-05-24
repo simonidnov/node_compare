@@ -76,7 +76,7 @@ basket
                         class:"btn-warning centered",
                         label:"MON COMPTE",
                         href:app.locals.settings.host+"/account/orders",
-                        target:"_blank",
+                        target:"_self",
                         value:"/account/orders"
                       }
                     ]
@@ -104,7 +104,7 @@ basket
                       class:"btn-success centered",
                       label:"MON PANIER",
                       href:app.locals.settings.host+"/account/basket",
-                      target:"_blank",
+                      target:"_self",
                       value:"/account/basket"
                     }
                   ]

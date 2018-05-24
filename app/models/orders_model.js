@@ -117,14 +117,14 @@ module.exports.buy_with_coupon = function(req, res, callback){
                     class:"btn-success",
                     label:"MES ACHATS",
                     href:app.locals.settings.host+"/account/orders",
-                    target:"_blank",
+                    target:"_self",
                     value:"/account/orders"
                   },
                   {
                     class:"",
                     label:"PLAYLIST",
                     href:"/playlist",
-                    target:"_blank",
+                    target:"_self",
                     value:"/playlist"
                   }
                 ]
@@ -158,7 +158,7 @@ module.exports.buy_with_coupon = function(req, res, callback){
                                 class:"btn-success",
                                 label:"PLAYLIST",
                                 href:"http://machanson.joyvox.fr/playlist",
-                                target:"_blank",
+                                target:"_self",
                                 value:"/playlist"
                               }
                             ]
@@ -194,7 +194,7 @@ module.exports.buy_with_coupon = function(req, res, callback){
                     class:"btn-warning",
                     label:"NOUS CONTACTER",
                     href:app.locals.settings.host+"/contact",
-                    target:"_blank",
+                    target:"_self",
                     value:"/account/contact"
                   }
                 ]

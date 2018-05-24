@@ -25,7 +25,7 @@ else
           div.infos
               div.label= user[0].pseudo
               //-div.email= query.user.email
-              a(href=app.locals.settings.host+"/account/account" target=((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "_blank" : "_self")).btn.btn-success Mon compte
+              a(href=app.locals.settings.host+"/account/account" target=((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "_self" : "_self")).btn.btn-success Mon compte
       div.other_accounts
       div.options
           a.btn.btn-default.btn-sm(href=app.locals.settings.host+"/auth"+((typeof query.options.secret !== "undefined" && query.options.secret !== "")? "?secret="+query.options.secret : "") target="_self") Ajouter un compte

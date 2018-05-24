@@ -10,7 +10,7 @@ li#notifications
     div.subnav
         ul
             li
-              a(href=app.locals.settings.host+"/account/basket" target="_blank")
+              a(href=app.locals.settings.host+"/account/basket" target="_self")
                 div.icon.idkids-icons.icon-basket
                 span Mon panier
                 if typeof basket[0] !== "undefined"
@@ -25,7 +25,7 @@ li#notifications
                     li
                       span= p.infos.label+" - "+p.infos.extra_category
             li
-              a(href=app.locals.settings.host+"/account/orders" target="_blank")
+              a(href=app.locals.settings.host+"/account/orders" target="_self")
                 div.icon.idkids-icons.icon-cloud
                 span Mes Achats
                 span(id="total_orders") (0)
