@@ -492,6 +492,7 @@
   background-color: rgba(0,0,0,.6);
   color:#FFF;
   padding:10px;
+  z-index: 9999;
 }
 .idkids_cookies p{
   color:#FFF !important;
