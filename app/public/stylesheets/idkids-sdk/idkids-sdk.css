@@ -14,6 +14,7 @@
 .idkids_jssdk.loader.visible{
   display: block;
 }
+
 .idkids_jssdk.loader .centered{
   width: 149px;
   height: 50px;
@@ -482,7 +483,16 @@
     padding-left:10px;
 }
 
-
+.idkids_cookies{
+  position: fixed;
+  left:0;
+  bottom:0;
+  width:100%;
+  font-size: 12px;
+  background-color: rgba(0,0,0,.6);
+  color:#FFF;
+  padding:10px;
+}
 @keyframes spin {
     0% {
         transform: rotate(240deg);

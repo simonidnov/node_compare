@@ -300,7 +300,13 @@ module.exports.createCharge = function(datas, res, callback){
                       {
                         subject:"Votre facture Joyvox",
                         title:"Votre commande vient d'être validée !",
-                        message:"Votre réglement pour la commande "+bill_number+" d'un montant de "+(charge.amount/100)+"€ a bien été pris en charge.<br>Pour plus d'informations et obetenir votre facture, rendez-vous sur <a href=\"https://auth.joyvox.fr/account/orders\">votre compte client dans la rubrique Achats</a>.<br>",
+                        message:"Votre réglement pour la commande "+bill_number+" d'un montant de "+(charge.amount/100)+"€ a bien été pris en charge.<br>Pour plus d'informations et obetenir votre facture, rendez-vous sur <a href=\"https://auth.joyvox.fr/account/orders\">votre compte client dans la rubrique Achats</a>.<br>Pour écouter votre chanson, rendez-vous dans votre playlist !<br>Merci et à bientôt sur joyvox !<br>",
+                        buttons:[
+                          {
+                            title:"Ma playlist",
+                            url:"http://machanson.joyvox.fr/playlist"
+                          }
+                        ],
                         email:e.user.email,
                         to:e.user.email
                       },

@@ -269,7 +269,6 @@ var idkids_jssdk = function(options, callback){
             }
         },
         getStore:function(key){
-          console.log('GET STORE DATAS ', window.localStorage.getItem(key));
             try {
                 this.user = JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
@@ -447,6 +446,13 @@ var idkids_jssdk = function(options, callback){
             break;
         }
       });
+    }
+    this.check_cookies = function(){
+      var accept = this.api.getStore('accept_cookies');
+      if(typeof accept === "undefined" || accept === null || accept === "null"){
+        var template = '<div class="idkids_cookies" id="idkids_cookies"><p>En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de cookies à des fins de partage sur les réseaux sociaux et de statistiques de visites, afin de bénéficier d\'une navigation et d\'offres personnalisées à vos besoins. Pour en savoir plus cliquez ici et pour paramétrer les cookies cliquez ici.</p><div class="btn btn-danger centered>J\'accepte</div></div>';
+        $(document).append(template);
+      }
     }
     this.connect = function(){
       window.location.href = this.api.config.url+"/auth?secret="+this.options.secret;
