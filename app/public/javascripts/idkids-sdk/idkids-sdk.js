@@ -265,7 +265,7 @@ var idkids_jssdk = function(options, callback){
             try {
                 window.localStorage.setItem(key, JSON.stringify(datas));
             } catch(e) {
-              Cookies.set(key, JSON.stringify(datas));
+              Cookies.set(key, JSON.stringify(datas), { expires: 7 });
             }
         },
         getStore:function(key){
