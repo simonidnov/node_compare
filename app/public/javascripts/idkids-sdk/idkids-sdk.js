@@ -457,7 +457,7 @@ var idkids_jssdk = function(options, callback){
             template+= '</div>';
         $('body').append(template);
         $('#accept_cookies').on('click', $.proxy(function(e){
-          this.api.store('accept_cookies', 'checked');
+          this.api.store('accept_cookies', {status:'checked'});
           $('#idkids_cookies').remove();
         }, this));
       }
@@ -475,7 +475,6 @@ function decodeUriComponentWithSpace (component) {
 
   // type : 'hash', 'search' or 'both'
   function getLocationParameters (location, type) {
-    console.log('getLocationParameters ', location, type);
     if (type !== 'hash' && type !== 'search' && type !== 'both') {
       throw 'getLocationParameters expect argument 2 "type" to be "hash", "search" or "both"';
     }
