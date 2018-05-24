@@ -25,7 +25,6 @@ var applications_page = {
                         var form_datas = applications_page.edit_app_form.get_datas();
                         //{};
                         index.sdk.api.put($("#edit_app form").attr('action'), form_datas, function(e){
-                            //console.log(e);
                             window.location.href= "/admin/apps/";
                         });
                         break;
@@ -33,21 +32,16 @@ var applications_page = {
 
                         var form_datas = {};
                         index.sdk.api.deleting($("#edit_app form").attr('action'), {_id:$("#edit_app form").attr('data-id')}, function(e){
-                            console.log(e);
                         });
                         break;
                 }
             }
         });
         this.edit_app_form.init();
-        //console.log("this.edit_app_form ::: ", this.edit_app_form);
         $( ".order_left_panel_list" ).sortable({
             update: function( event, ui ) {
               $.each($('.app_list li'), function(order, app){
-                //console.log($(app).attr('data-id'), " index order ", order);
                 index.sdk.api.put("/api/apps", {_id:$(app).attr('data-id'), order:order}, function(e){
-                    console.log(e);
-                    //window.location.href= "/admin/apps/";
                 });
               });
             }

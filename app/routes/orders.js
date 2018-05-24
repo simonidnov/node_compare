@@ -30,7 +30,6 @@ orders.use(function(req, res, next){
     }
     //dataCheck.options = dataCheck;
     Auth_helper.validate_session(req, function(e){
-      console.log('VALIDATE SESSION ', e);
       if(e.status === 200) {
         next();
       }else {

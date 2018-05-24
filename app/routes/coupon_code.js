@@ -87,9 +87,6 @@ coupon_code.get('/download/:offer', function(req, res, next){
         res.end();
       }
     });
-    //console.log(csv);
-    //res.send(new Buffer(csv));
-    //res.end();
   });
 });
 coupon_code.get('/offers', function(req, res, next) {

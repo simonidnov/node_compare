@@ -164,7 +164,6 @@ function formular(target, callback){
             self.inputCheck($(this), false);
         });
         $(target).find('input[type="checkbox"], input[type="radio"]').off('change').on('change', function(){
-            console.log('INPUT CHECK CHANGE ');
             self.inputCheck($(this), true);
             //self.checkInputs(false);
             self.callback({"status":"checkbox", name:$(this).attr('name'), value:$(this).is(':checked')});
@@ -235,10 +234,8 @@ function formular(target, callback){
         if(target.attr('type') === "checkbox"){
             this.validform();
             if(!target.is(':checked')){
-                console.log('NOT CHECKED');
                 if(target.is(':required')){
                   target.parent().addClass('error_check');
-                  console.log('NOT CHECKED AND REQUIRED');
                   this.check_error(target, true);
                 }
                 $('[data-checkboxrelative="'+target.attr('id')+'"]').css('display', 'none');
@@ -320,7 +317,6 @@ function formular(target, callback){
                     return;
                     break;
                 case "radio":
-                    console.log('RADIO' );
                     self.validform();
                     break;
                 case "checkbox":

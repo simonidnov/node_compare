@@ -8,8 +8,6 @@ var settings = {
             //    form_datas[serie.name] = serie.value;
             //});
             index.sdk.api.put($("#update_settings form").attr('action'), form_datas, function(e){
-                // window.location.reload();
-                console.log(e);
             });
         }
     });

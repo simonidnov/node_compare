@@ -6,7 +6,6 @@ var lost_password = {
   init:function(){
     this.form = new formular('#update_password', function(e){
       if(e.status === "hitted" && e.action === "submit_form"){
-        console.log(e);
         $.post("/auth/update_password", {
             method: "POST",
             contentType: 'application/json',
@@ -14,10 +13,8 @@ var lost_password = {
             data: lost_password.form.get_datas()
         })
         .done($.proxy(function(e) {
-            console.log(e);
         }, this))
         .fail(function(e) {
-            console.log(e);
         })
         .always($.proxy(function(e) {
             if(typeof e.message !== "undefined"){

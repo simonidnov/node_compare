@@ -101,10 +101,8 @@ module.exports.create = function(req, res, callback){
                 function(e){
                   /* ON ENVOIE LE MAIL A JOYVOX */
                   callback({"status":200, "datas":infos, "response_display":{"title":"Contact", "message":"Nous avons bien reçu votre demande et nous vous recontacterons dans les plus bref délais"}});
-                  console.log(e);
                 }
               );
-              console.log(e);
             }
           );
 

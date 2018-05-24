@@ -35,8 +35,6 @@ module.exports = {
 };
 module.exports.getStats = function(req, res, callback){
   Baskets.find({}, function(err, infos){
-      console.log("err :::: ", err);
-      console.log('infos ::::: ', infos);
       if(err){
           callback({status:405, datas:err});
       }else{
@@ -197,7 +195,6 @@ module.exports.create = function(datas, res, callback) {
               // on met à jour la date de checking du produit...
               already_exist.updated = Date.now();
             }else {
-              console.log('datas PRODUCT BASKET ================== ', datas);
               // on push le nouveau produit dans products.
               basket.products.push({
                 product_id : datas.product_id,
@@ -272,7 +269,6 @@ module.exports.update = function(req, res, callback){
     delete req.device_infos;
     var _id = req.basket_id;
     delete req.basket_id;
-    console.log('UPDATE REQ ', req);
     var _self = this;
     req.updated = Date.now();
     Baskets.update(
@@ -283,7 +279,6 @@ module.exports.update = function(req, res, callback){
             $set : req
         },
         function(err, infos){
-          console.log('err ', err)
             if(err){
               callback({"status":405, "datas":err});
             }
@@ -300,10 +295,8 @@ module.exports.deleteUserBasket = function(user_id, callback){
 }
 module.exports.delete = function(req, res, callback){
     if(typeof req.body.product_id !== "undefined"){
-      console.log('req.body.product_id ', req.body.product_id);
     }
     if(typeof req.body.basket_id !== "undefined"){
-      console.log('req.body.basket_id ', req.body.basket_id);
     }
     Baskets.update(
         {

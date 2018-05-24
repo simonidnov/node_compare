@@ -38,9 +38,7 @@ templating.get('/:template', function(req, res, next) {
     switch(req.params.template){
       case 'notif_button':
         if(typeof req.query.user !== "undefined"){
-          console.log('HAS USER ? ', req.query.user);
           Basket_model.get({user_id:req.query.user._id}, req, function(e){
-            console.log('GET BASKET USER FROM TEMPLATING ', e);
             req.datas_set.basket = e.datas;
             next();
           });

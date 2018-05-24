@@ -26,14 +26,11 @@ var products_page = {
                         var form_datas = products_page.edit_product_form.get_datas();
                         //{};
                         index.sdk.api.put($("#edit_product form").attr('action'), form_datas, function(e){
-                            console.log(e);
-                            //window.location.href= "/admin/apps/";
                         });
                         break;
                     case "delete":
                         var form_datas = {};
                         index.sdk.api.deleting($("#edit_product form").attr('action'), {_id:$("#edit_product form").attr('data-id')}, function(e){
-                            console.log(e);
                         });
                         break;
                 }
@@ -46,7 +43,6 @@ var products_page = {
       $('[data-action="delete-media"]').off('click').on('click', function(e){
         var target = $(this).parent().parent();
         index.sdk.api.deleting("/products/medias", {product_id:target.attr('data-productid'), filename:target.attr('data-filename')}, function(e){
-          console.log("success or fail ? ", e);
           target.remove();
         });
       });

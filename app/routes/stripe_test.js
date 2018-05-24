@@ -43,11 +43,8 @@ stripe_test
 
   })
   .get("/charge", function(req, res) {
-    console.log("req.query ::::: ", req.query);
   })
   .post("/charge", function(req, res) {
-    console.log("req.body ::::: ", req.body);
-    //console.log(JSON.stringify(req.body, null, 2));
     var stripeToken = req.body.token;
     const token = req.body.stripeToken; // Using Express
 
@@ -61,37 +58,6 @@ stripe_test
         if(charge) console.log("ERROR ----- ", charge);
         res.send({"charge":charge}).end();
     });
-
-
-
-
-    /*
-    var charge = stripe.charges.create({
-        amount: 0005, // amount in cents, again
-        currency: "eur",
-        card: req.body.stripeToken,
-        description: req.body.stripeEmail
-    }, function(err, charge) {
-        console.log('ERROR ? ', err);
-        if (err && err.type === 'StripeCardError') {
-            console.log(JSON.stringify(err, null, 2));
-        }
-        console.log('charge :::: ', charge);
-        res.send("completed payment!")
-    });
-    */
-
-    /*
-    var amount = 500;
-    console.log("STRIPE CHARGE REQ ::: ", req);
-    console.log("STRIPE CHARGE RES ::: ", res);
-    stripe.customers.create({
-       email: req.body.stripeEmail,
-       source: req.body.stripeToken
-    }, function(customer){
-        console.log('customer');
-    });
-    */
   });
 
 module.exports = stripe_test;

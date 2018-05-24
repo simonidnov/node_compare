@@ -32,7 +32,6 @@ var account = {
                         $(this).attr('data-post'),
                         send_datas,
                         function(e){
-                          //console.log(e);
                           window.location.reload();
                         }
                     );
@@ -133,7 +132,6 @@ var account = {
         this.bill_adress_form = new formular('#bill_address', function(e){
           if(e.status === "checkbox"){
             index.sdk.api.put('/basket', {basket_id:$('#bill_address').attr('data-basketid'), address_id:$('input[name="bill_adress"]:checked').val()}, function(e){
-              console.log(e);
             });
           }
         });
@@ -245,8 +243,6 @@ var account = {
                 var address_datas = account.address_form.get_datas();
                 if($('#address_form form').attr('method') === "PUT"){
                   index.sdk.api.put("/address/", address_datas, function(e){
-                    console.log(e);
-                    //window.location.reload();
                   });
                 }else{
                   index.sdk.api.post("/address/", address_datas, function(e){

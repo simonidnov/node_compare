@@ -168,7 +168,6 @@ module.exports.create = function(req, res, callback){
 };
 module.exports.useOne = function(datas, callback){
   //datas.updated = Date.now();
-  console.log('exports.useOne datas ', datas);
   Coupon.updateOne(
       {
           _id  : datas._id
@@ -182,7 +181,6 @@ module.exports.useOne = function(datas, callback){
           }
       },
       function(err, infos){
-          console.log("Coupon.updateOne ", err, infos);
           if(err) callback({"status":304, "message":err});
           else callback({"status":200, "datas":infos});
       }

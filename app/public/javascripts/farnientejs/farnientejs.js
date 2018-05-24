@@ -24,18 +24,14 @@ function farnientejs(_callback, _api){
               _api["deleting"](datas.url, datas, _callback);
               break;
             case 'template':
-              console.log('get template + params');
               break;
             default:
-              console.log('default');
               break;
         }
     });
   }
   this.update = function(){
-    console.log('destroy ferniente');
   }
   this.destroy = function(){
-    console.log('destroy ferniente');
   }
 }

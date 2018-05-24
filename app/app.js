@@ -125,46 +125,7 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-/*
-router.use (function (req, res, next) {
-      var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-      if (schema === 'https') {
-        console.log('HAS HTTPS ', schema);
-        next();
-      } else {
-        console.log('DOESNT HAVE HTTPS ', schema);
-        console.log("req.get('host') ", req.get('host'));
-        console.log("req.get('origin') ", req.get('origin'));
-        if(req.headers.host.indexOf('127.0.0.1:3000') === -1){
-          res.redirect('https://' + req.headers.host + req.url);
-        }else{
-          next();
-        }
-      }
-    });
-*/
-//router.use(bodyParser.json({limit: '50mb'}));
-//router.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 router.all('*', function (req, res, next) {
-  //var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
-  /*console.log("req.protocol ", req.protocol);
-  console.log("req.get('X-Forwarded-Host') >>>>> ", req.get('X-Forwarded-Host'));
-  var schema = req.protocol.toLowerCase();
-  if (schema === 'https') {
-    console.log('HAS HTTPS ', schema);
-    next();
-  } else {
-    if(typeof req.get('X-Forwarded-Host') !== "undefined"){
-      if(req.get('X-Forwarded-Host').indexOf('127.0.0.1') === -1){
-        res.redirect('https://' + req.get('X-Forwarded-Host') + req.url);
-      }else{
-        next();
-      }
-    }else{
-      next();
-    }
-  }*/
   next(); // pass control to the next handler
 });
 router.use('/admin', admin);

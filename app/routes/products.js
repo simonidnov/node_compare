@@ -96,18 +96,9 @@ product
         });
     })
     .get('/medias/:filename', function(req, res, next){
-        /*
-        Auth_helper.has_media_right(req, function(e){
-          if(e.status === 200){
-            next();
-            return;
-          }
-        });
-        */
         var fs = require('fs'),
             shortcut = 15;
 
-        //console.log('FILE EXIST ::: ', req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"));
         if (fs.existsSync("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"))) {
             // Do something
             req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
@@ -129,8 +120,6 @@ product
               res.status("400").send(err);
             })
             .on('progress', function (progress) {
-              // console.log(JSON.stringify(progress));
-              console.log('Processing: ' + progress.targetSize + ' KB converted');
             })
             .on('end', function () {
               req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
@@ -144,11 +133,9 @@ product
     }, function(req, res, next){
         res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
             if (err) {
-              console.log('errror ', err);
                   //res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour uploader des fichiers", err:err});
                   //next(err);
             } else {
-              console.log('success ');
                   //res.status(200).send({"message":"le fichier est autorisé à la lecture", filename:req.params.filename});
             }
         });

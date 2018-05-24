@@ -30,7 +30,6 @@ var pages = {
                     case "delete":
                         var form_datas = {};
                         index.sdk.api.deleting($("#edit_page form").attr('action'), {_id:$("#edit_page form").attr('data-id')}, function(e){
-                            console.log(e);
                         });
                         break;
                 }
@@ -44,7 +43,6 @@ var pages = {
       }
       this.pager = new pager();
       this.pager.init($('#pager_interface'), function(e){
-        console.log(e);
       });
     }
 }

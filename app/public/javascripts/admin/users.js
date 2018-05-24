@@ -30,7 +30,6 @@ var users = {
     },
     create_filter_form : function(){
         this.filter_form = new formular('#users_filter', function(e){
-            console.log("users_filter ",  e);
         }).init();
     }
 }

@@ -60,18 +60,6 @@ module.exports.get = function(req, res, callback){
             callback({status:405, datas:err});
             return false;
         }else{
-          /*
-          for(var num=0; num<userproducts.length; num++){
-            Products_model.get(userproducts[num], res, function(e){
-              console.log(e.datas);
-              //infos[d].details = e.datas;
-              if(num === userproducts.length - 1){
-                console.log("num === userproducts.length >< ", num, " length = ", userproducts.length);
-
-              }
-            });
-          }
-          */
           callback({status:200, datas:userproducts});
           return false;
         }
@@ -191,8 +179,6 @@ module.exports.shares_of_the_day = function(req, res, callback){
             }
           },
           function(err, updates){
-              console.log('err ', err);
-              console.log('updates ', updates);
           }
         );
       });
@@ -276,7 +262,6 @@ module.exports.shares_of_the_day = function(req, res, callback){
                         }
                       },
                       function(err, updates){
-                        console.log('SUCCESS SAVE SENT DATAS TRUE');
                       }
                     );
                     success++;

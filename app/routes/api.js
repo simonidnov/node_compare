@@ -91,14 +91,12 @@ api
         });
     })
     .get('/pages', function(req, res, next) {
-        console.log('GET PAGE');
         Pages_controller.get(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .post('/pages', function(req, res, next) {
-        console.log('POST PAGE');
         Pages_controller.create(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
@@ -131,7 +129,6 @@ api
         req.email = req.body.decoded.email;
         req.password = req.body.new_password;
         Auth_controller.update_password(req.body, res, function(e){
-          console.log(e);
           res.status(200).send(Auth_helper.addParams(e, req));
         });
         /*

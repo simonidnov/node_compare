@@ -31,8 +31,6 @@ var login = {
               $.each(e.form.serializeArray(), function(index, serie){
                   form_datas[serie.name] = serie.value;
               });
-
-              //console.log(form_datas);
               login.sdk.api[e.form.attr('method')](e.form.attr('action'), form_datas, function(e){
                 if(e.status !== 200){
                   switch(e.message){
@@ -85,7 +83,6 @@ var login = {
                     login.sdk.api.post('/auth/lost_password', {email:$('#lost_form #lost_email').val()}, function(e){});
                     break;
                 default:
-                    console.log('default ', action);
                     break;
             }
         });
@@ -100,14 +97,11 @@ var login = {
                 }
             },
             function(response, params){
-                console.log("this.sdk ::: ", response, params);
             }
         );
         var self = this;
         this.sdk.init($.proxy(function(status){
-            //console.log(status);
             this.sdk.isLogged($.proxy(function(e){
-                //console.log("isLogged :::: ", e);
                 if(e.status === "logged"){
                   this.sdk.api.get('/me', {}, $.proxy(function(e){
                       if($('[data-userid="'+e.datas._id+'"]').length == 0){
@@ -229,7 +223,6 @@ var login = {
                     fb_likes:response.likes
                   }
                   login.sdk.api.get('/auth/login/facebook', formated_user_datas, function(e){
-                      console.log(e);
                   });
                   //window.location.href = "/auth/login/?email="+response.email+"&fb_id="+response.id;
                   //$('#fb_id').val(response.id);

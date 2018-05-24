@@ -26,7 +26,6 @@ var index = {
                 }
             },
             function(response, params){
-                //console.log(response, params);
             }
         );
         var self = this;
@@ -47,22 +46,16 @@ var index = {
 
               /*
               this.sdk.api.get('/me/members', {}, function(e){
-                  console.log('/me/members :::: ', e);
               });
               this.sdk.api.get('/me/address', {}, function(e){
-                  console.log('/me/address :::: ', e);
               });
               this.sdk.api.get('/me/services', {}, function(e){
-                  console.log('/me/services :::: ', e);
               });
               this.sdk.api.get('/me/basket', {}, function(e){
-                  console.log('/me/basket :::: ', e);
               });
               this.sdk.api.get('/me/orders', {}, function(e){
-                  console.log('/me/orders :::: ', e);
               });
               this.sdk.api.get('/me/notifications', {}, function(e){
-                  console.log('/me/notifications :::: ', e);
               });
               */
               //this.set_listeners();
@@ -78,7 +71,6 @@ var index = {
                     self.navigate();
                     break;
                 default:
-                    console.log('default ', action);
                     break;
             }
         });
@@ -92,7 +84,6 @@ var index = {
                         self.navigate();
                         break;
                     default:
-                        console.log('default ', action);
                         break;
                 }
             });
@@ -117,7 +108,6 @@ var index = {
         var params = this.parse_url(window.location.pathname),
             keys = Object.keys(params),
             data_for = keys[1];
-        console.log('navigate ', params, keys, data_for);
         if(keys[1]==="contact"){
           contact.init();
         }

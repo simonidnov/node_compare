@@ -85,8 +85,6 @@ module.exports.getStats = function(req, res, callback){
           }
         }
       ], function(err, infos){
-        console.log("err :::: ", err);
-        console.log('infos ::::: ', infos);
         if(err){
             callback({status:405, datas:err});
         }else{
@@ -98,21 +96,9 @@ module.exports.getStats = function(req, res, callback){
             callback({status:200, datas:infos});
         }
     });
-    /*
-    var query = {"page_url":req.query.page_url};
-    Comments.find(query).limit(50).exec(function(err, infos){
-        if(err) {
-          callback({status:405, datas:err});
-        }else {
-          console.log(' COMMENT GET ------------- ', infos);
-          callback({status:200, datas:infos});
-        }
-    });
-    */
 };
 module.exports.create = function(req, res, callback){
     //datas.user = user._id;
-    console.log("req.body ===== ", req.body);
     if(typeof req.body.data !== "undefined"){
       req.body = req.body.data;
     }

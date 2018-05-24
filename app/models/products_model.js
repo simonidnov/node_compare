@@ -249,7 +249,6 @@ module.exports.updatePhonetik = function(req, res, callback){
             if(products_datas.length === 0){
               callback({status:200, datas:products_datas});
             }
-            console.log('ehre');
             products_datas.forEach(function(prod){
                 if(typeof prod.phonetik === "undefined" || prod.phonetik === "" || prod.phonetik.length === 0){
                   prod.label = prod.label.toUpperCase();
@@ -258,7 +257,6 @@ module.exports.updatePhonetik = function(req, res, callback){
                   }
                   var a = language_helper.wordlab(prod.label+" "+prod.description).split('-');
                   prod.phonetik = a.filter( onlyUnique );
-                  console.log('phonetik ', prod.phonetik);
                   Products.updateOne(
                       {
                           _id: prod._id
@@ -282,8 +280,6 @@ module.exports.updatePhonetik = function(req, res, callback){
     });
 }
 module.exports.createProductFromFile = function(datas, file_infos, callback){
-    //console.log("datas product received :::: ", datas);
-    //console.log("file created received ::::: ", file_infos);
 
     var products_datas = {},
         parse_string_file_name = datas.parse_string_file_name.split(';'),
@@ -313,7 +309,6 @@ module.exports.createProductFromFile = function(datas, file_infos, callback){
         if(err){
           callback({"status":304, "datas":{title:"PRODUCT_CREATED_ERROR", "message":"PRODUCT_CREATED_ERROR_MESSAGE", "media":"PRODUCT_CREATED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
         }else{
-          console.log(infos);
           self.addFile(infos._id, file_infos, function(){
             callback({"status":200, "datas":{infos:infos, title:"PRODUCT_CREATED", "message":"PRODUCT_CREATED_MESSAGE", "media":"PRODUCT_CREATED_MEDIA"}});
           });

@@ -1,6 +1,5 @@
 "use strict";
 $(function(){
-  console.log('inited');
     contact.init();
 });
 var contact = {
@@ -21,10 +20,8 @@ var contact = {
           $('#contact_form').css('display', 'none');
         }
       }, function(e){
-        console.log(e);
       });
     });
     this.form.init();
   }
 }
-console.log('embed contact');

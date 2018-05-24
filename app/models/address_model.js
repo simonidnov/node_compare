@@ -114,7 +114,6 @@ module.exports.update = function(user_id, address_id, datas, callback){
   }
   geocoder.geocode(datas.AddressLine1+" "+datas.AddressLine2+" "+datas.cp+" "+datas.city+" "+datas.country)
       .then(function(res) {
-        console.log('geocoder success');
           update_datas.geocoder = res[0];
           Address.update(
               {
@@ -133,7 +132,6 @@ module.exports.update = function(user_id, address_id, datas, callback){
           )
       })
       .catch(function(err) {
-        console.log('geocoder error ', err);
           Address.update(
               {
                   _id     : datas._id

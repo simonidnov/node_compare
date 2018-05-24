@@ -55,7 +55,6 @@ me.use(function(req, res, next) {
                         }
                         next();
                     }else{
-                      console.log('VALIDATE USER ', response);
                         res.status(response.status).send(response);
                         return false;
                     }

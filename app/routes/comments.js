@@ -49,7 +49,6 @@ comments
     })
     .post('/', function(req, res, next) {
         Comment_controller.create(req, res, function(e){
-          console.log('POST COMMENT ', e);
             res.status(e.status).send(Auth_helper.addParams(
               {
                 status:e.status,

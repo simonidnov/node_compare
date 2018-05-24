@@ -479,7 +479,6 @@ admin
         Coupon_controller.getOffers(req, res, function(e){
           var offers = e.datas;
           Coupon_controller.get(req, res, function(e){
-            console.log("coupons ", e);
             res.render('admin/coupons', {
                 title: 'Admin Coupons',
                 user : req.session.Auth,
