@@ -455,6 +455,7 @@ var idkids_jssdk = function(options, callback){
     }
     this.check_cookies = function(){
       var accept = this.api.getStore('accept_cookies');
+      console.log('ACCEPT COOKIES ', accept);
       if(typeof accept === "undefined" || accept === null || accept === "null"){
         var template = '<div class="idkids_cookies" id="idkids_cookies">';
               template+= '<p>En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de cookies à des fins de partage sur les réseaux sociaux et de statistiques de visites, afin de bénéficier d\'une navigation et d\'offres personnalisées à vos besoins. Pour en savoir plus cliquez ici et pour paramétrer les cookies <a href="https://auth.joyvox.fr/uses-of-cookies">cliquez ici.</a></p>';
