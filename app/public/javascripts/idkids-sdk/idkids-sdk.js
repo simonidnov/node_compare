@@ -271,8 +271,12 @@ var idkids_jssdk = function(options, callback){
         },
         getStore:function(key){
             try {
+              if(key === "idkids_local_user"){
                 this.user = JSON.parse(window.localStorage.getItem(key));
+              }
+              return JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
+              console.log('EXCEPTION GET STORE ::: ', e);
             }
         },
         get_device_uid : function(callback){
