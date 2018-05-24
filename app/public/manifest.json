@@ -32,7 +32,7 @@
   "start_url": "/",
   "display": "fullscreen",
   "serviceworker": {
-    "src": "/public/sw.js",
+    "src": "/public/javascripts/sw.min.js",
     "scope": "/",
     "update_via_cache": "none"
   },
