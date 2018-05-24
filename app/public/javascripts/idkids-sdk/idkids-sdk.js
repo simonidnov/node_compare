@@ -262,11 +262,10 @@ var idkids_jssdk = function(options, callback){
             this.getStore('idkids_local_user');
         },
         store:function(key, datas){
-          console.log('STORE DATAS ', key, datas);
             try {
                 window.localStorage.setItem(key, JSON.stringify(datas));
             } catch(e) {
-              console.log('EXECPTION E ERROR STORE ::::  ', e);
+              Cookies.set(key, JSON.stringify(datas));
             }
         },
         getStore:function(key){
@@ -276,7 +275,10 @@ var idkids_jssdk = function(options, callback){
               }
               return JSON.parse(window.localStorage.getItem(key));
             } catch(e) {
-              console.log('EXCEPTION GET STORE ::: ', e);
+              if(key === "idkids_local_user"){
+                this.user = JSON.parse(Cookies.get(key));
+              }
+              return JSON.parse(JSON.parse(Cookies.get(key)));
             }
         },
         get_device_uid : function(callback){
