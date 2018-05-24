@@ -493,6 +493,10 @@
   color:#FFF;
   padding:10px;
 }
+.idkids_cookies p{
+  color:#FFF !important;
+  text-align: center !important;
+}
 @keyframes spin {
     0% {
         transform: rotate(240deg);
