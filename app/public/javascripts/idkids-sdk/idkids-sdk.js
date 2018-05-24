@@ -319,6 +319,7 @@ var idkids_jssdk = function(options, callback){
     this.api.parent = this;
     this.api.options = options;
     this.init = function(callback){
+        this.check_cookies();
         if (window.matchMedia('(display-mode: standalone)').matches) {
           console.log("Thank you for installing our app!");
         }
@@ -452,9 +453,13 @@ var idkids_jssdk = function(options, callback){
       if(typeof accept === "undefined" || accept === null || accept === "null"){
         var template = '<div class="idkids_cookies" id="idkids_cookies">';
               template+= '<p>En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de cookies à des fins de partage sur les réseaux sociaux et de statistiques de visites, afin de bénéficier d\'une navigation et d\'offres personnalisées à vos besoins. Pour en savoir plus cliquez ici et pour paramétrer les cookies <a href="https://auth.joyvox.fr/uses-of-cookies">cliquez ici.</a></p>';
-              template+= '<div class="btn btn-danger centered">J\'accepte</div>';
+              template+= '<div class="btn btn-danger centered" id="accept_cookies">J\'accepte</div>';
             template+= '</div>';
         $('body').append(template);
+        $('#accept_cookies').on('click', $.proxy(function(e){
+          this.api.store('accept_cookies', 'checked');
+          $('#idkids_cookies').remove();
+        }, this));
       }
     }
     this.connect = function(){
