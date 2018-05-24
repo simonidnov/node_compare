@@ -8,13 +8,11 @@ div.col.col-md-7
       else
         each product in userproducts
           li
-            if(product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined")
-              div
-                div.preview(style="background-image:url("+product.meta_datas.thumb+")")
-              //-div.label= _.where(app.locals.applications, {_id:product.infos.app_id})
-              //-div.label= "Ajouté le : "+product.infos.created
             div.brand
-              img.app_icon(src=product.meta_datas.app_icon, width="102", height="102")
+              if product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined"
+                img.app_icon(src=product.meta_datas.app_icon, width="102", height="102")
+              else
+                img.app_icon(src=product.meta_datas.app_icon, width="102", height="102")
               div.label_product= product.meta_datas.label
               div.label= product.meta_datas.app_label
               div.cat= product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
