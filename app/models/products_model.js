@@ -98,6 +98,7 @@ module.exports.get = function(datas, res, callback){
             products_datas.forEach(function(prod){
               Apps_model.get(null, {_id : prod.app_id}, function(e){
                 if(e.datas.length > 0){
+                  prod.app_logo = e.datas[0].logo;
                   prod.app_icon = e.datas[0].icon;
                   prod.app_label = e.datas[0].label;
                   prod.app_infos = [];

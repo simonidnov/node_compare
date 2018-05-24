@@ -126,7 +126,6 @@ product
               }
             ])
             .on('error', function (err) {
-              console.log('An error occurred: ' + err.message);
               res.status("400").send(err);
             })
             .on('progress', function (progress) {
@@ -134,7 +133,6 @@ product
               console.log('Processing: ' + progress.targetSize + ' KB converted');
             })
             .on('end', function () {
-              console.log('Processing finished !');
               req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
               /* TODO CREATE CHECKING EVENT FS EXIST ? */
               setTimeout(function(){
@@ -154,23 +152,6 @@ product
                   //res.status(200).send({"message":"le fichier est autorisé à la lecture", filename:req.params.filename});
             }
         });
-
-            /* TODO CHECK ORDERS USER KEY THEN AUTHORIZE OR NOT DIRECTLY ON HAS MEDIA RIGHT ?
-            Products_controller.getFile(req, res, function(e){
-              if(e.status === 200){
-                res.status(e.status).send(e);
-              }else{
-                res.status(e.status).send(e);
-              }
-            });
-            */
-
-
-
-          //}else{
-          //  res.status(e.status).send(e);
-          //}
-        //});
     })
     .post('/medias', upload.single('file'), function(req, res, next){
         Auth_helper.validate_admin(req, function(e){

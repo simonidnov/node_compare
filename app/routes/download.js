@@ -20,7 +20,6 @@ download.get('/', function(req, res, next) {
   //res.setHeader('Content-disposition', 'attachment; filename=ma_chanson_personnalisee.mp3');
   var file =  __dirname + "/../" +req.query.file;
   res.download(file, 'ma_chanson_personnalisee.mp3');
-
 });
 
 module.exports = download;

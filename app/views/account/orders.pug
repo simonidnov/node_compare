@@ -21,8 +21,8 @@ div.col.col-md-7
               div.cat
                 span= product.meta_datas.category+" | "+product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
                 br
-                a.hyperlink(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Écouter
-                a.hyperlink(download="/download/"+product.meta_datas.medias[0][0].pathname, target="_blank") Télécharger
+                a.btn.btn-success.btn-sm(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_blank") Écouter
+                //-a.hyperlink(download="/download/"+product.meta_datas.medias[0][0].pathname, target="_blank") Télécharger
             
             //-ul.medias_download.col
               each media in product.meta_datas.medias

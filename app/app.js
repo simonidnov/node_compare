@@ -19,6 +19,7 @@ const express = require('express'),
     crons = require('./routes/crons'),
     comments = require('./routes/comments'),
     users = require('./routes/users'),
+    metas = require('./routes/metas'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
     download = require('./routes/download'),
@@ -174,6 +175,7 @@ router.use('/account', account);
 router.use('/crons', crons);
 router.use('/account/:any', account);
 router.use('/api', api);
+router.use('/metas', metas);
 router.use('/media', media);
 router.use('/gmail', gmail);
 router.use('/download', download);
