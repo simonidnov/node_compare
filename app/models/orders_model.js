@@ -50,7 +50,8 @@ module.exports.get = function(req, res, callback){
     if(typeof req.query._id !== "undefined"){
       query._id = req.query._id;
     }
-    if(typeof query.user_id === "undefined"){
+    if(typeof query.user_id === "undefined" && typeof req.is_admin === "undefined"){
+      
       callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
     }
     Orders.find(query, function(err, infos){
