@@ -1,5 +1,6 @@
 const express = require('express'),
     router = express.Router(),
+    path = require('path'),
     language_helper = require('../helpers/languages_helper'),
     Page_controller = require('../controllers/pages_controller'),
     Apps_controller = require('../controllers/apps_controller'),
@@ -25,8 +26,10 @@ router.use(function(req, res, next) {
     res.end();
 });*/
 router.get('/google62e1de2dacd60926.html', function(req, res, next){
-  res.render('google62e1de2dacd60926', {title:"google site verification"});
-  res.end();
+  //res.render('google-site-verification: google62e1de2dacd60926.html');
+  console.log("/public/google_site_verification/google62e1de2dacd60926.html");
+  res.sendFile("/public/google_site_verification/google62e1de2dacd60926.html");
+  //res.end();
 });
 
 router.get(['/', '/:page_url'], function(req, res, next) {
