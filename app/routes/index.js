@@ -24,8 +24,8 @@ router.use(function(req, res, next) {
     res.render('offline', {title: 'IDKIDS.community WELCOME'});
     res.end();
 });*/
-router.get('google62e1de2dacd60926.html', function(){
-  res.render('google62e1de2dacd60926', {});
+router.get('/google62e1de2dacd60926.html', function(req, res, next){
+  res.render('google62e1de2dacd60926', {title:"google site verification"});
   res.end();
 });
 
