@@ -24,6 +24,11 @@ router.use(function(req, res, next) {
     res.render('offline', {title: 'IDKIDS.community WELCOME'});
     res.end();
 });*/
+router.get('google62e1de2dacd60926.html', function(){
+  res.render('google62e1de2dacd60926', {});
+  res.end();
+});
+
 router.get(['/', '/:page_url'], function(req, res, next) {
     if(typeof req.params.page_url === "undefined"){
       req.params.page_url = "apps";
