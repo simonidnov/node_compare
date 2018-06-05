@@ -1,6 +1,9 @@
 const Email_model = require('../models/emails_model'),
       auth_helper     = require('../helpers/auth_helper');
 
+exports.get = function(req, res, callback) {
+    Email_model.get(req, res, callback);
+};
 exports.send = function(template, datas, callback) {
     if(template === null){
       template = "emails/default";

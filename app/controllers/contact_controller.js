@@ -2,7 +2,8 @@ const Contact_model = require('../models/contact_model');
 
 // check user login then return user_infos
 exports.get = function(req, res, callback) {
-    callback({status:200, message:"CONTACT GET IS ON DEVELOPPEMENT"});
+    Contact_model.get(req, res, callback);
+    //callback({status:200, message:"CONTACT GET IS ON DEVELOPPEMENT"});
 };
 // check user login then return user_infos
 exports.create = function(req, res, callback) {

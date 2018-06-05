@@ -21,6 +21,8 @@ block navigation
                 li(class= page === "notifications" ? "selected" : "" data-for="newsletters")= app.locals.admin_lang[locale].keys['NOTIFICATIONS_NAV']
             a(href="/admin/settings/")
                 li(class= page === "settings" ? "selected" : "" data-for="settings")= app.locals.admin_lang[locale].keys['SETTINGS_NAV']
+            a(href="/admin/emails/")
+                li(class= page === "emails" ? "selected" : "" data-for="emails")= app.locals.admin_lang[locale].keys['EMAILS_NAV']
             a(href="/admin/translations/")
                 li(class= page === "translations" ? "selected" : "" data-for="translations")= app.locals.admin_lang[locale].keys['TRANSLATIONS_NAV']
             

@@ -27,7 +27,16 @@ const emailSchemas = new db.Schema(email_datas),
 module.exports = {
     attributes: email_datas
 };
-
+module.exports.get = function(req, res, callback){
+    query = {}
+    Email.find(query, function(err, infos) {
+        if(err){
+            callback({status:405, datas:err});
+        }else{
+            callback({status:200, datas:infos});
+        }
+    });
+}
 module.exports.send = function(template, user_id, datas, callback){
     data = {
         user_id : user_id,

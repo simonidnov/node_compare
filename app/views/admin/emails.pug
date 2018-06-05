@@ -1,0 +1,25 @@
+extends admin_header
+block content
+  div.container.dashboard
+    div.row.centered
+      h1 Liste des emails envoyés depuis le front
+      if emails
+        div.col-md-4
+          div.block
+            h2 Nombre d'emails 
+            p= emails.length
+        div.col-md-12
+          h2 Tous les emails 
+          - var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+          table
+            tr
+              th email
+              th sujet
+              th message
+            each email in emails
+              tr
+                td= email.email
+                td= email.subject
+                td= email.message
+          //-p= JSON.stringify(baskets)
+          
