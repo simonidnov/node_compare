@@ -43,21 +43,21 @@ block content
           p Vos données sont strictement confidentielles
           hr
           div.form_group.radio_list
-              input#male(type="radio" name="gender" value="male" required='required', checked=user.gender=="male")
+              input#male(type="radio" name="gender" value="male" required='required', checked=current_user.gender=="male")
               label(for='male')= lang[locale].keys.gender_male
-              input#female(type="radio" name="gender" value="female", checked=user.gender=="female")
+              input#female(type="radio" name="gender" value="female", checked=current_user.gender=="female")
               label(for='female')= lang[locale].keys.gender_female
           div.form-group.material_input.minlength
-              input#firstName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.firstName_holder, name='firstName' value=user.firstName data-erromessage="Veuillez indiquer un Prénom")
+              input#firstName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.firstName_holder, name='firstName' value=current_user.firstName data-erromessage="Veuillez indiquer un Prénom")
               label(for='firstName') !{lang[locale].keys.firstName_holder}
           div.form-group.material_input.minlength
-              input#lastName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.lastName_holder, name='lastName' value=user.lastName data-erromessage="Veuillez indiquer un Nom")
+              input#lastName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.lastName_holder, name='lastName' value=current_user.lastName data-erromessage="Veuillez indiquer un Nom")
               label(for='lastName') !{lang[locale].keys.lastName_holder}
           div.form-group.material_input.minlength
-              input#phone.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.phone_holder, name='phone' value=user.phone data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
+              input#phone.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.phone_holder, name='phone' value=current_user.phone data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
               label(for='phone') !{lang[locale].keys.phone_holder}
           div.form-group.material_input.minlength
-              input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
+              input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=current_user.mobile data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
               label(for='mobile') !{lang[locale].keys.mobile_holder}
           
 
