@@ -167,6 +167,45 @@ admin
             res.end();
         });
     })
+    .get('/user/edit/:user_id', function(req, res, next) {
+        var Auth_controller = require('../controllers/auth_controller');
+        req.query.user = {
+          _id: req.params.user_id
+        };
+        Auth_controller.getUserInfos(req, res, function(e) {
+          req.current_user = e.user[0];
+          next();
+        });
+    }, function(req, res, next) {
+        Orders_controller.getUserOrders(req, res, function(e) {
+          req.current_orders = e.datas;
+          next();
+        });
+    }, function(req, res, next) {
+        Basket_controller.getUserBasket(req, res, function(e) {
+          req.current_basket = e.datas;
+          next();
+        });
+    }, function(req, res, next) {
+        res.render('admin/user', {
+            title: 'Admin User',
+            user : req.session.Auth,
+            locale:language_helper.getlocale(req),
+            lang:lang,
+            page:'user',
+            current_user:req.current_user,
+            current_orders:req.current_orders,
+            current_basket:req.current_basket,
+            js:[
+                '/public/javascripts/components/formular.js',
+            ], css:[
+                '/public/stylesheets/admin/admin.css',
+                '/public/stylesheets/ui.css',
+                '/public/stylesheets/components/formular.css'
+            ]
+        });
+        res.end();
+    })
     .get('/users', function(req, res, next) {
          var Auth_controller = require('../controllers/auth_controller');
          Auth_controller.get(req, res, function(e){

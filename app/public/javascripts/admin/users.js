@@ -5,7 +5,7 @@ var users = {
     fjs:null,
     init:function(){
         this.create_filter_form();
-        this.fjs=null;
+        /*this.fjs=null;
         this.fjs = new farnientejs(
           function(e){
             if(typeof e.datas !== "undefined"){
@@ -26,7 +26,13 @@ var users = {
           },
           index.sdk.api
         );
-        this.fjs.init();
+        this.fjs.init();*/
+        $('[data-farniente]').off('click').on('click', function(){
+          alert('Nous n\'avez pas accès à cette fonctionnalité pour éviter de foutre le souk');
+        });
+        $('[data-navigate]').off('click').on('click', function(){
+          window.location.href=$(this).attr('data-navigate');
+        });
     },
     create_filter_form : function(){
         this.filter_form = new formular('#users_filter', function(e){

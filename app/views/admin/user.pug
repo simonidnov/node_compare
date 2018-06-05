@@ -1,0 +1,108 @@
+extends admin_header
+block content
+  div.row
+    div.col.col-md-4
+      div.formular
+        h1 Éditer l'utilisateur
+        form.form_content
+          div.form_group
+            input#avatar_cropper.image_cropper.invisible(type="file" data-width="256" data-height="256" data-target="avatar" name="avatar_cropper")
+            label(for="avatar_cropper") Avatar 256*256
+            br
+            img#avatar_cropper_preview.preview.cropper_preview(width="150" height="150" data-for="avatar_cropper" src=current_user.avatar  onerror="this.src='/images/assets/account.svg'")
+            input#avatar.invisible(type="text" name="avatar" value=current_user.avatar)  
+          div.form-group.material_input
+            input#pseudo(type="text" name="pseudo" value=current_user.pseudo)
+            label(for="pseudo") Pseudo
+          div.form-group.material_input
+            input#email(type="email" name="email" value=current_user.email)
+            label(for="email") Email
+          div.form-group.material_input
+            input#birthDate(type="date" name="birthDate" value=(new Date(current_user.birthDate).getFullYear()+"-"+((new Date(current_user.birthDate).getMonth() < 10) ? "0"+(new Date(current_user.birthDate).getMonth()+1) : (new Date(current_user.birthDate).getMonth()+1))+"-"+((new Date(current_user.birthDate).getDate() < 10)? "0"+new Date(current_user.birthDate).getDate() : new Date(current_user.birthDate).getDate())))
+            label(for="birthDate") birthDate
+          hr
+          h3 Données publiques et privées
+          p !{lang[locale].keys.public_checks}
+          div.form-group.inline
+            input#public_locale.form-control(type='checkbox' name='public_locale' checked=current_user.public_locale)
+            label(for="public_locale") !{lang[locale].keys.public_locale_check}
+          div.form-group.inline
+            input#public_kids.form-control(type='checkbox' name='public_kids' checked=current_user.public_kids)
+            label(for="public_kids") !{lang[locale].keys.public_kids_check}
+          div.form-group.inline
+            input#public_gamification.form-control(type='checkbox' name='public_gamification' checked=current_user.public_gamification)
+            label(for="public_gamification") !{lang[locale].keys.public_gamification_check}
+          div.form-group.inline
+            input#public_created.form-control(type='checkbox' name='public_created' checked=current_user.public_created)
+            label(for="public_created") !{lang[locale].keys.public_created_check}
+          div.form-group.inline
+            input#public_interest.form-control(type='checkbox' name='public_interest' checked=current_user.public_interest)
+            label(for="public_interest") !{lang[locale].keys.public_interest_check}
+          hr
+          h3 Civilité
+          p Vos données sont strictement confidentielles
+          hr
+          div.form_group.radio_list
+              input#male(type="radio" name="gender" value="male" required='required', checked=user.gender=="male")
+              label(for='male')= lang[locale].keys.gender_male
+              input#female(type="radio" name="gender" value="female", checked=user.gender=="female")
+              label(for='female')= lang[locale].keys.gender_female
+          div.form-group.material_input.minlength
+              input#firstName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.firstName_holder, name='firstName' value=user.firstName data-erromessage="Veuillez indiquer un Prénom")
+              label(for='firstName') !{lang[locale].keys.firstName_holder}
+          div.form-group.material_input.minlength
+              input#lastName.form-control(type='text', minlength="2", required="required", placeholder=lang[locale].keys.lastName_holder, name='lastName' value=user.lastName data-erromessage="Veuillez indiquer un Nom")
+              label(for='lastName') !{lang[locale].keys.lastName_holder}
+          div.form-group.material_input.minlength
+              input#phone.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.phone_holder, name='phone' value=user.phone data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
+              label(for='phone') !{lang[locale].keys.phone_holder}
+          div.form-group.material_input.minlength
+              input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=user.mobile data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
+              label(for='mobile') !{lang[locale].keys.mobile_holder}
+          
+
+    div.col.col-md-3
+      div.formular
+        h2 DROITS ADMIN 
+        hr.separator
+        form.form_content
+          p en cours d'intégration
+          p rights !{JSON.stringify(current_user.rights)}
+      div.formular
+        h2 Services
+        hr.separator
+        form.form_content
+          p en cours d'intégration
+          p newsletter !{current_user.newsletter}
+          p sms !{current_user.sms}
+      div.formular
+        h2 Enfants
+        hr.separator
+        form.form_content
+          p en cours d'intégration
+    div.col.col-md-3
+      div.formular
+        h2 Commandes effectuées
+        hr.separator
+        form.form_content
+          p= current_orders.length
+          if current_orders.length === 0
+            p Vous n'avez effectué aucun achat
+          else
+            p Liste des achats
+            table.prod_list
+              tr
+                th N° de facture
+                th Total
+              each order in current_orders
+                tr
+                  td 
+                    a(href="/billing/"+order._id+"?current_user_id="+current_user._id) !{order.bill_number}
+                  td !{order.reduced_amount/100} €
+      div.formular
+        h2 Panier en cours
+        hr.separator
+        form.form_content
+          p= current_basket.length
+
+  //-p= JSON.stringify(current_orders)

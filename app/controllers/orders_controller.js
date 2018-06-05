@@ -1,5 +1,9 @@
 const Orders_model = require('../models/orders_model');
-
+exports.getUserOrders = function(req, res, callback) {
+    Orders_model.getUserOrders(req, res, function(e){
+        callback(e);
+    });
+}
 exports.get = function(req, res, callback) {
     Orders_model.get(req, res, function(e){
         callback(e);

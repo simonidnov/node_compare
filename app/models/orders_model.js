@@ -36,6 +36,19 @@ const ordersSchemas = new db.Schema(order_datas),
 module.exports = {
     attributes: order_datas
 };
+module.exports.getUserOrders = function(req, res, callback){
+  if(typeof req.current_user._id === "undefined"){
+    callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
+  }else{
+    Orders.find({user_id:req.current_user._id}, function(err, infos){
+      if(err){
+        callback({status:405, datas:err});
+      }else{
+        callback({status:200, datas:infos});
+      }
+    }).sort({'created':-1});
+  }
+}
 module.exports.get = function(req, res, callback){
     var query = {};
     if(req.is_admin){
@@ -44,22 +57,21 @@ module.exports.get = function(req, res, callback){
         query = {user_id : req.session.Auth._id};
     }else if(typeof req.query.user_id !== "undefined"){
         query = {user_id : req.query.user_id};
-    }else if(typeof req.query.options!== "undefined"){
+    }else if(typeof req.query.options !== "undefined"){
         query = {user_id : req.query.options.user_id};
     }
     if(typeof req.query._id !== "undefined"){
       query._id = req.query._id;
     }
     if(typeof query.user_id === "undefined" && typeof req.is_admin === "undefined"){
-      
       callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
     }
     Orders.find(query, function(err, infos){
-        if(err){
-            callback({status:405, datas:err});
-        }else{
-            callback({status:200, datas:infos});
-        }
+      if(err){
+        callback({status:405, datas:err});
+      }else{
+        callback({status:200, datas:infos});
+      }
     }).sort({'created':-1});
 }
 module.exports.getBill = function(user_id, datas, callback){
@@ -74,11 +86,11 @@ module.exports.getBill = function(user_id, datas, callback){
     query._id = datas._id;
   }
   Orders.findOne(query, function(err, infos){
-      if(err){
-          callback({status:405, datas:err});
-      }else{
-          callback({status:200, datas:infos});
-      }
+    if(err){
+      callback({status:405, datas:err});
+    }else{
+      callback({status:200, datas:infos});
+    }
   })
 }
 module.exports.buy_with_coupon = function(req, res, callback){
@@ -208,10 +220,6 @@ module.exports.buy_with_coupon = function(req, res, callback){
       });
     }
   });
-
-  /*
-
-  */
 };
 module.exports.createCharge = function(datas, res, callback){
   if(app.locals.settings.StripeMode){
@@ -334,7 +342,6 @@ module.exports.createCharge = function(datas, res, callback){
                 callback({status:200, datas:new_order_datas});
               }else{
                 e.datas = new_order_datas;
-
                 callback(e);
                 /* GET USER INFOS IN DATAS ???? */
               }

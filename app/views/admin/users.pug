@@ -118,7 +118,7 @@ block content
                             div.first_name= user.pseudo 
                             div.birth_date= user.email
                         ul.options
-                            li.primary(data-farniente="template" data-edittemplate="member_edit_template" data-post="/me/members" data-value=user._id)
+                            li.primary(data-value=user._id, data-navigate="/admin/user/edit/"+user._id)
                                 div.icon.icon-pencil.idkids-icons
                                 div.label= app.locals.admin_lang[locale].keys['EDIT_CTA']
                             li.danger(data-farniente="delete" data-url="/api/users/"+user._id data-type="delete" data-id=user._id)

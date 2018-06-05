@@ -51,10 +51,13 @@ billing
         res.status(304).send({message:"UNAUTHORISED"});
     })
     .get('/:bill_id', function(req, res, next) {
-
       next();
     }, function(req, res, next){
-      Orders_controller.getBill(req.session.Auth._id, {_id:req.params.bill_id}, function(e){
+      var my_id = req.session.Auth._id;
+      if(typeof req.query.current_user_id !== "undefined" && req.query.isAdmin){
+        my_id = req.query.current_user_id;
+      }
+      Orders_controller.getBill(my_id, {_id:req.params.bill_id}, function(e){
         req.bill = e;
         if(typeof req.bill.datas.metadata.address_id !== "undefined" && req.bill.datas.metadata.address_id !== null && req.bill.datas.metadata.address_id !== ""){
           Address_controller.getById(req.bill.datas.metadata.address_id, function(e){

@@ -2,6 +2,11 @@ const Basket_model = require('../models/basket_model'),
       auth_helper     = require('../helpers/auth_helper');
 
 // check user login then return user_infos
+exports.getUserBasket = function(req, res, callback) {
+    Basket_model.getUserBasket(req, res, function(e){
+        callback(e);
+    });
+}
 exports.get = function(req, res, callback) {
     Basket_model.get(req.query, req, function(e){
         callback(e);

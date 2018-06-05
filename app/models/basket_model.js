@@ -88,9 +88,45 @@ module.exports.get = function(datas, req, callback) {
                 callback({status:200, datas:infos});
               }
             });
-
         }
     });
+}
+module.exports.getUserBasket = function(req, res, callback) {
+    if(typeof req.current_user._id === "undefined") {
+      callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
+    }else{
+      Baskets.find({user_id:req.current_user._id}, function(err, infos) {
+        if(err){
+          callback({status:401, datas:err});
+        }else{
+          if(infos.length === 0) {
+            callback({status:200, datas:infos});
+          }
+          infos.forEach(function(basket) {
+            basket.total_amount = 0;
+            var index = 0.00;
+            if(basket.products.length > 0) {
+              basket.products.forEach(function(product){
+                products_controller.get({product_id : product.product_id}, req, function(e){
+                  if(e.datas.length === 0) {
+                    product.infos = {label:"DOSNT_EXIST", message:"PRODUIT_INTROUVABLE_OU_SUPPRIME"}
+                  } else {
+                    product.infos = e.datas[0];
+                    basket.total_amount+= product.price * ((typeof product.quantity !== 'undefined')? product.quantity : 1);
+                  }
+                  index++;
+                  if(index >= basket.products.length){
+                    callback({status:200, datas:infos});
+                  }
+                });
+              });
+            }else{
+              callback({status:200, datas:infos});
+            }
+          });
+        }
+      });
+    }
 }
 module.exports.getAmount = function(datas, req, callback) {
     //TODO EXECPT IS ADMIN WITH BASKET ID ONLY
