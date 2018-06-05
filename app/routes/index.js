@@ -28,7 +28,7 @@ router.use(function(req, res, next) {
 router.get('/google62e1de2dacd60926.html', function(req, res, next){
   //res.render('google-site-verification: google62e1de2dacd60926.html');
   console.log("/public/google_site_verification/google62e1de2dacd60926.html");
-  res.sendFile("/public/google_site_verification/google62e1de2dacd60926.html");
+  res.sendFile(__dirname.replace('routes', '')+"./public/google_site_verification/google62e1de2dacd60926.html");
   //res.end();
 });
 

@@ -38,7 +38,9 @@ module.exports = {
 };
 module.exports.get = function(req, res, callback){
     var query = {};
-    if(typeof req.session.Auth !== "undefined"){
+    if(req.is_admin){
+
+    }else if(typeof req.session.Auth !== "undefined"){
         query = {user_id : req.session.Auth._id};
     }else if(typeof req.query.user_id !== "undefined"){
         query = {user_id : req.query.user_id};

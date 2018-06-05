@@ -25,6 +25,7 @@ admin.use(function(req, res, next){
         if(e.status === 200){
             Auth_helper.validate_admin(req, function(e){
                 if(e.status === 200){
+                    req.is_admin = true;
                     next();
                 }else{
                     //next();
