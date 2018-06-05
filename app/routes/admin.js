@@ -7,6 +7,7 @@ var express = require('express'),
     Coupon_controller = require('../controllers/coupon_controller'),
     Basket_controller = require('../controllers/basket_controller'),
     Contact_controller = require('../controllers/contact_controller'),
+    Metas_controller = require('../controllers/metas_controller'),
     Orders_controller = require('../controllers/orders_controller'),
     Pages_controller = require('../controllers/pages_controller'),
     Products_controller = require('../controllers/products_controller'),
@@ -527,25 +528,35 @@ admin
     })
     .get('/emails', function(req, res, next) {
       Contact_controller.get(req, res, function(e){
-        res.render('admin/emails', {
-           title: 'Admin Emails',
-           emails : e.datas,
-           user : req.session.Auth,
-           locale:language_helper.getlocale(req),
-           lang:lang,
-           page:'emails',
-           js:[
-               '/public/javascripts/admin/emails.js',
-               '/public/javascripts/components/formular.js',
-               '/node_modules/qrcode/build/qrcode.min.js'
-           ], css:[
-               '/public/stylesheets/admin/emails.css',
-               '/public/stylesheets/admin/dashboard.css',
-               '/public/stylesheets/components/formular.css'
-           ]
-       });
-       res.end();
+        req.emails = e.datas;
+        next();
       });
+    }, function(req, res, next){
+      req.query.key = "request_name_chansonpersonnalisee";
+      Metas_controller.get(req, res, function(e){
+        req.wish_record = e.datas;
+        next();
+      });
+    }, function(req, res, next){
+      res.render('admin/emails', {
+         title: 'Admin Emails',
+         emails : req.emails,
+         wish_records : req.wish_record,
+         user : req.session.Auth,
+         locale:language_helper.getlocale(req),
+         lang:lang,
+         page:'emails',
+         js:[
+             '/public/javascripts/admin/emails.js',
+             '/public/javascripts/components/formular.js',
+             '/node_modules/qrcode/build/qrcode.min.js'
+         ], css:[
+             '/public/stylesheets/admin/emails.css',
+             '/public/stylesheets/admin/dashboard.css',
+             '/public/stylesheets/components/formular.css'
+         ]
+     });
+     res.end();
     });
 
 module.exports = admin;

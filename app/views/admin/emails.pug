@@ -22,4 +22,25 @@ block content
                 td= email.subject
                 td= email.message
           //-p= JSON.stringify(baskets)
+    div.row.centered
+      h1 Liste des demandes d'enregistrement envoyées depuis le front machanson
+      if wish_records
+        div.col-md-4
+          div.block
+            h2 Nombre de demandes 
+            p= wish_records.length
+        div.col-md-12
+          h2 Toutes les demandes 
+          - var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+          table
+            tr
+              th key
+              th value
+              th email
+            each wish in wish_records
+              tr
+                td= wish.key
+                td= wish.value
+                td= (typeof wish.content !== "undefined")? (typeof wish.content.email !== "undefined")? wish.content.email : "email not defined" : "email not defined"
+          //-p= JSON.stringify(baskets)
           
