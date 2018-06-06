@@ -126,6 +126,7 @@ var idkids_jssdk = function(options, callback){
               if(e.status === 203){
                 callback("logout");
                 this.store('idkids_local_user', "");
+                this.get('/auth/logout', {}, function(){});
                 if(typeof e.response_display.buttons === "undefined"){
                   e.response_display.buttons = [
                     {
@@ -143,6 +144,7 @@ var idkids_jssdk = function(options, callback){
                   ];
                 }
               }else if(e.status === 401){
+                this.get('/auth/logout', {}, function(){});
                 e.response_display.buttons = [
                   {
                     "class":"btn-success",
