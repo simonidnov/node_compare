@@ -71,7 +71,13 @@ const db = require('mongoose'),
           public_kids : {type:'Boolean'},
           public_created : {type:'Boolean'},
           public_gamification : {type:'Boolean'},
-          public_interest : {type:'Boolean'}
+          public_interest : {type:'Boolean'},
+          has_kids : {type:'Boolean'},
+          has_girl : {type:'Boolean'},
+          has_boy  : {type:'Boolean'},
+          has_address  : {type:'Boolean'},
+          has_basket  : {type:'Boolean'},
+          has_orders  : {type:'Boolean'}
       },
       machineId = require('node-machine-id'),
       ua_parser = require('ua-parser-js');
@@ -573,7 +579,7 @@ module.exports.check_user = function(req, callback){
     //device_uid = machineId.machineIdSync({original: true});
     //var new_device  = {
     //        uid     : device_uid
-    //    },
+    //},
     jwt.verify(req.options.user_token, config.secrets.global.secret, function(err, decoded) {
       if (err){
         callback({status:203, "message":"UNAUTHORISED_TOKEN", "response_display":{"title":"Connexion requise", "message":"Vous devez-être connecté pour effectuer cette action."}, "datas":err});
@@ -826,7 +832,6 @@ module.exports.getUsersDevice = function(device_uid, callback){
             }
         }
     )
-
 }
 module.exports.deleteDevice = function(req, callback){
     var self = this,
@@ -853,6 +858,129 @@ module.exports.deleteDevice = function(req, callback){
             }
         }
     )
+}
+module.exports.getWithFilters = function(req, res, callback){
+  User.find(
+    req.filters,
+    function(err, users){
+      if (err){
+        callback({"status":401, "code":err.code, "error":err, "message":err.message});
+      }else{
+        callback({"status":200, "users":users});
+      }
+    }
+  );
+}
+module.exports.checkFilterDatas = function(req, res, callback){
+  var self = this;
+  User.find(
+      {},
+      function(err, users){
+          if (err){
+            callback({"status":401, "code":err.code, "error":err, "message":err.message});
+          }else{
+            for(var i=0; i<users.length; i++){
+              self.checkMembers(users[i]._id);
+              self.checkAddress(users[i]._id);
+              self.checkBasket(req, users[i]._id);
+              self.checkOrders(req, users[i]._id);
+            }
+            callback({"status":200, "message":"traitement en cours, les données seront rafraîchies prochainement"});
+          }
+      }
+  );
+}
+module.exports.checkMembers = function(user_id){
+  Members_model.get(user_id, null, function(e){
+      var updt_datas = {
+        has_kids : false,
+        has_girl : false,
+        has_boy : false
+      }
+      if(e.datas.length > 0){
+        updt_datas.has_kids = true;
+      }
+      for(var i=0; i<e.datas.length; i++){
+        if(e.datas[i].gender === "male"){
+          updt_datas.has_boy = true;
+        }else if(e.datas[i].gender === "female"){
+          updt_datas.has_girl = true;
+        }
+      }
+      User.updateOne(
+          {
+              user_id     : user_id
+          },
+          {
+              $set : updt_datas
+          },
+          function(err, infos){}
+      );
+  });
+}
+module.exports.checkAddress = function(user_id){
+  Address_model.get(user_id, null, function(e){
+      var updt_datas = {
+        has_address : false
+      }
+      if(e.datas.length > 0){
+        updt_datas.has_address = true;
+      }
+      User.updateOne(
+          {
+              user_id     : user_id
+          },
+          {
+              $set : updt_datas
+          },
+          function(err, infos){}
+      );
+  });
+}
+module.exports.checkBasket = function(req, user_id){
+  req.current_user = {_id:user_id};
+
+  let Basket_model = require('../models/basket_model');
+  Basket_model.getUserBasket(req, null, function(e){
+      var updt_datas = {
+        has_basket : false
+      }
+      if(e.datas.length > 0){
+        if(e.datas[0].products.length > 0){
+          updt_datas.has_basket = true;
+        }
+      }
+      User.updateOne(
+          {
+              user_id     : user_id
+          },
+          {
+              $set : updt_datas
+          },
+          function(err, infos){}
+      );
+  });
+}
+module.exports.checkOrders = function(req, user_id){
+  req.current_user = {_id:user_id};
+  let Orders_model = require('../models/orders_model');
+  Orders_model.getUserOrders(req, null, function(e){
+      var updt_datas = {
+        has_orders : false
+      }
+      if(e.datas.length > 0){
+        updt_datas.has_orders = true;
+      }
+      User.updateOne(
+          {
+              user_id     : user_id
+          },
+          {
+              $set : updt_datas
+          },
+          function(err, infos){}
+      );
+  });
 }
 /* SPECIAL REQUEST SCHEMA SAMPLE CODE */
 user_datas.getAge = function(){

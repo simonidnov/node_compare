@@ -66,7 +66,7 @@ module.exports.get = function(user_id, address_id, callback){
         query['address_id'] = address_id;
     }
     Address.find(query, function(err, addresses){
-        if(err) callback({status:405, datas:err});
+        if(err) callback({status:405, error:err});
         else callback({status:200, datas:addresses});
     });
 }

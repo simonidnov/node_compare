@@ -78,7 +78,7 @@ orders
     })
     .post('/transaction', function(req, res, next){
         //res.status(200).send({status:"POST", body:req.body});
-        Orders_controller.createCharge(req, res, function(e){
+        Orders_controller.createCharge(req, res, function(e) {
             res.render('order', {
                 title : 'User Account',
                 user  : req.session.Auth,
@@ -99,8 +99,23 @@ orders
             res.end();
         });
     })
+    .post('/refund', function(req, res, next){
+        Auth_helper.validate_admin(req, function(e){
+          if(e.status === 200){
+              next();
+          }else{
+            res.status(e.status).send(e);
+          }
+        });
+    }, function(req, res, next){
+        //res.status(200).send({status:"POST", body:req.body});
+        Orders_controller.refundCharge(req, res, function(e) {
+          res.status(e.status).send(e);
+          res.end();
+        });
+    })
     .post('/', function(req, res, next) {
-        Orders_controller.create(req.body.data, res, function(e){
+        Orders_controller.create(req.body.data, res, function(e) {
           if(e.status === 200){
             res.status(e.status).send({status:e.status, response_display:{title:"Commande", message:"Votre commande est prête à être réglée.", buttons:["OK"]}});
           }else{
@@ -109,17 +124,17 @@ orders
         });
     })
     .put('/', function(req, res, next) {
-        Orders_controller.update(req.body.data, res, function(e){
+        Orders_controller.update(req.body.data, res, function(e) {
             res.status(e.status).send({status:e.status, infos:e.datas});
         });
     })
     .delete('/', function(req, res, next) {
-        Orders_controller.delete(req, res, function(e){
+        Orders_controller.delete(req, res, function(e) {
             res.status(e.status).send({status:e.status, infos:e.datas});
         });
     })
     .post('/buy_product_with_coupon_code', function(req, res, next){
-        Orders_controller.buy_with_coupon(req, res, function(e){
+        Orders_controller.buy_with_coupon(req, res, function(e) {
             //res.status(200).send({status:200, message:"CURRENTLY IN PROGRESS"});
             res.status(e.status).send(e);
         });

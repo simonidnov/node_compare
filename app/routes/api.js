@@ -43,16 +43,16 @@ api.use(function(req, res, next){
 /* GET home page. */
 api
     .get('/', function(req, res, next) {
-        res.status(200).send(Auth_helper.addParams({title:"API"}, req));
+        res.status(200).send(Auth_helper.addParams({title:"API RESPONSE RIGHT"}, req));
     })
     .post('/', function(req, res, next) {
-        res.status(200).send(Auth_helper.addParams({title:"POST API"}, req));
+        res.status(200).send(Auth_helper.addParams({title:"POST API NOT ALLOWED"}, req));
     })
     .put('/', function(req, res, next){
-        res.status(200).send(Auth_helper.addParams({title:"PUT API"}, req));
+        res.status(200).send(Auth_helper.addParams({title:"PUT API NOT ALLOWED"}, req));
     })
     .delete('/', function(req, res, next) {
-        res.status(200).send(Auth_helper.addParams({title:"DELETE API"}, req));
+        res.status(200).send(Auth_helper.addParams({title:"DELETE API NOT ALLOWED"}, req));
     })
     .get('/apps', function(req, res, next) {
         Apps_controller.get(req, {}, function(e){
@@ -73,18 +73,42 @@ api
         }
     })
     .post('/apps', function(req, res, next) {
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Apps_controller.create(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .put('/apps', function(req, res, next) {
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Apps_controller.update(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .delete('/apps', function(req, res, next) {
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Apps_controller.delete(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
@@ -97,18 +121,42 @@ api
         });
     })
     .post('/pages', function(req, res, next) {
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Pages_controller.create(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .put('/pages', function(req, res, next) {
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Pages_controller.update(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
         });
     })
     .delete('/pages', function(req, res, next) {
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Pages_controller.delete(req, res, function(e){
             res.status(e.status).send(Auth_helper.addParams(e, req));
             //res.redirect(307, '/account/informations'+req.url.replace('/',''));
@@ -131,22 +179,6 @@ api
         Auth_controller.update_password(req.body, res, function(e){
           res.status(200).send(Auth_helper.addParams(e, req));
         });
-        /*
-        Auth_helper.validate_admin(req, function(e){
-            if(e.status === 200){
-                next();
-            }else{
-                //next();
-                res.redirect(307, '/auth?message=NO_ACCESS_RIGHTS_API');
-            }
-        });
-        */
-        //res.status(200).send({title:"POST UPDATE PASSWORD IS CURRENTLY ON TODO LIST"});
-        /*
-        Auth_controller.update_password(req, res, function(e){
-            res.status(e.status).send(e);
-        });
-        */
     })
     .post('/contact', function(req, res, next){
         var Contact_controller = require('../controllers/contact_controller');
@@ -164,6 +196,14 @@ api
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
     })
     .delete('/users/:any', function(req, res, next){
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         Auth_controller.unregister(req, res, function(e){
             res.status(200).send({title:"USER DELETED", datas:e});
         });
@@ -180,8 +220,41 @@ api
     .delete('/oauth/:any', function(req, res, next){
         res.status(200).send({title:"SERVICE CURRENTLY UNAIVALABLE"});
     })
+    .get('/userFilters', function(req, res, next){
+        Auth_helper.validate_admin(req, function(e){
+          if(e.status === 200){
+              next();
+          }else{
+              res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+          }
+        });
+    }, function(req, res, next){
+        Auth_controller.getWithFilters(req, res, function(e){
+          res.status(200).send(e);
+        });
+    })
+    .get('/checkUserFilterTask', function(req, res, next){
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
+        Auth_controller.checkFilterDatas(req, res, function(e){
+          res.status(200).send(e);
+        });
+    })
     .get('/send-sms', function(req, res, next){
-        //textbelt key : 57652f35ce6bd73e072a37701775ee0e3dec4194VPqWleqqdvVMWkw0VLpUasUvu
+        Auth_helper.validate_admin(req, function(e){
+            if(e.status === 200){
+                next();
+            }else{
+                res.status(200).send({title:"ACCESS_NOT_ALLOWED"});
+            }
+        });
+    }, function(req, res, next){
         var request = require('request');
         request.post('https://textbelt.com/text', {
           form: {

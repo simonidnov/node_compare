@@ -197,11 +197,12 @@ admin
             current_orders:req.current_orders,
             current_basket:req.current_basket,
             js:[
-                '/public/javascripts/components/formular.js',
+                '/public/javascripts/admin/user.min.js',
+                '/public/javascripts/components/formular.min.js',
             ], css:[
-                '/public/stylesheets/admin/admin.css',
-                '/public/stylesheets/ui.css',
-                '/public/stylesheets/components/formular.css'
+                '/public/stylesheets/admin/admin.min.css',
+                '/public/stylesheets/ui.min.css',
+                '/public/stylesheets/components/formular.min.css'
             ]
         });
         res.end();

@@ -60,7 +60,6 @@ block content
               input#mobile.form-control(type='tel', minlength="8", placeholder=lang[locale].keys.mobile_holder, name='mobile' value=current_user.mobile data-erromessage="Votre numéro de téléphone doit comporter 8 caractères")
               label(for='mobile') !{lang[locale].keys.mobile_holder}
           
-
     div.col.col-md-3
       div.formular
         h2 DROITS ADMIN 
@@ -80,8 +79,13 @@ block content
         hr.separator
         form.form_content
           p en cours d'intégration
-    div.col.col-md-3
       div.formular
+        h2 Panier en cours
+        hr.separator
+        form.form_content
+          p= current_basket.length
+    div.col.col-md-12
+      div
         h2 Commandes effectuées
         hr.separator
         form.form_content
@@ -94,15 +98,26 @@ block content
               tr
                 th N° de facture
                 th Total
+                th object
+                th status
+                th date
+                th action
               each order in current_orders
                 tr
                   td 
                     a(href="/billing/"+order._id+"?current_user_id="+current_user._id) !{order.bill_number}
                   td !{order.reduced_amount/100} €
-      div.formular
-        h2 Panier en cours
-        hr.separator
-        form.form_content
-          p= current_basket.length
+                  td= order.response.object
+                  td= order.response.status
+                  td= new Date(order.response.created)
+                  td 
+                    if typeof order.refund === "undefined"
+                      .btn.btn-success(data-refund=order._id) Rembourser
+                    else
+                      if typeof order.refund !== "undefined"
+                        le client a été remboursé
+                      else
+                        remboursement non effectif, contactez un administrateur.
+      
 
-  //-p= JSON.stringify(current_orders)
+  p= JSON.stringify(current_orders)

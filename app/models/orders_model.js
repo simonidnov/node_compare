@@ -19,6 +19,7 @@ const db = require('mongoose'),
           bill_number       : {type:"string"},
           metadata          : {type:"Object"},
           response          : {type:"Object"},
+          refund            : {type:"Object"},
           basketdatas       : {type:"Object"},
           status            : {type:"Boolean"},
           created           : {type:'Date', default: Date.now},
@@ -38,11 +39,11 @@ module.exports = {
 };
 module.exports.getUserOrders = function(req, res, callback){
   if(typeof req.current_user._id === "undefined"){
-    callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
+    callback({status:401, message:{message:"UNAUTHORISED_NEED_USER"}});
   }else{
     Orders.find({user_id:req.current_user._id}, function(err, infos){
       if(err){
-        callback({status:405, datas:err});
+        callback({status:405, error:err});
       }else{
         callback({status:200, datas:infos});
       }
@@ -221,7 +222,104 @@ module.exports.buy_with_coupon = function(req, res, callback){
     }
   });
 };
-module.exports.createCharge = function(datas, res, callback){
+module.exports.refundCharge = function(datas, res, callback) {
+  if(typeof datas.data !== "undefined"){
+    datas = datas.data;
+  }
+  if(app.locals.settings.StripeMode){
+    keyPublishable = app.locals.settings.StripekeyPublishable;
+    keySecret = app.locals.settings.StripekeySecret;
+  }else{
+    keyPublishable = app.locals.settings.StripekeyPublishableTest;
+    keySecret = app.locals.settings.StripekeySecretTest;
+  }
+  var stripe = require("stripe")(keySecret);
+  if(typeof datas.order_id === "undefined") {
+    callback({status:401, message:"NEED_ORDER_ID"});
+  }
+
+  Orders.findOne({
+    _id:datas.order_id
+  }, function(err, order){
+    if(err) {
+      callback({status:403, message:"ORDER_DOESNT_MATCH", response_display:{"title":"Remboursement", "message":"La transaction que vous tentez de rembourser est introuvable, assurez-vous de ne pas faire nimporte quoi avant de contacter un administrateur."}});
+    }else {
+      stripe.refunds.create({
+        charge: order.response.id
+      }, function(err, refund) {
+        // asynchronously called
+        if(err){
+          if(err.code === "charge_already_refunded"){
+            Orders.updateOne({
+              _id:datas.order_id
+            },
+            {
+              refund:err
+            }, function(err, success){
+              if(err){
+                callback({status:403, message:"ALREADY_REFUNDED_BY_STRIPE", response_display:{"title":"Attention Remboursement", "message":"Il semble que la commande soit déjà remboursée par Stripe, pour plus d'informations rendez-vous sur Stripe."}});
+              }else{
+                Email_controller.send(
+                  null,
+                  {
+                    subject:"Votre remboursement Joyvox",
+                    title:"Votre paiement vient d'être remboursé !",
+                    message:"Votre remboursement pour la commande "+order.bill_number+" d'un montant de "+(order.reduced_amount/100)+"€ a bien été pris en charge.<br>Le remboursement est en cours de traitement par votre banque et sera bientôt effectif sur votre compte bancaire.<br><br>Le statu de votre facture est à présent marqué comme étant remboursé et les produits en téléchargement concernant cette commande ne sont à présent plus accéssibles via votre compte utilisateur Joyvox.<br><br>Cordialiement,<br> l'équipe Joyvox.<br>",
+                    buttons:[
+                      {
+                        title:"Mon compte",
+                        url:"http://auth.joyvox.fr/account"
+                      }
+                    ],
+                    email:order.response.source.name,
+                    to:order.response.source.name
+                  },
+                  function(e){
+                  }
+                );
+                callback({status:200, message:"ALREADY_REFUNDED_BY_STRIPE_AND_UPDATED_BY_JOYVOX", response_display:{"title":"Remboursement", "message":"Le remboursement que vous tentez d'effectuer est déjà effectif sur la console Stripe. Nous venons de mofidier le status de la commande en REMBOURSÉ."}});
+              }
+            });
+          }else{
+            callback({status:403, message:"REFUND_IMPOSSIBLE", response_display:{"title":"Remboursement", "message":"Stripe refuse d'effectuer le remboursement, vous trouverez plus d'informations dans la console, si le problème perciste veuillez contacter un administrateur ayant accès à la console Stripe."}, err:err});
+          }
+        }else{
+          Orders.updateOne({
+            _id:datas.order_id
+          },
+          {
+            refund:refund
+          }, function(err, success){
+            if(err){
+              callback({status:403, message:"CANT_UPDATE_ORDER_STATUS", response_display:{"title":"Attention Remboursement", "message":"Le remboursement est bien effectif sur stripe mais nous n'avons pas réussi à mettre à jour le status de la facture. Veuillez contacter un administrateur pour le changer manuellement."}});
+            }else{
+              Email_controller.send(
+                null,
+                {
+                  subject:"Votre remboursement Joyvox",
+                  title:"Votre paiement vient d'être remboursé !",
+                  message:"Votre remboursement pour la commande "+order.bill_number+" d'un montant de "+(order.reduced_amount/100)+"€ a bien été pris en charge.<br>Le remboursement est en cours de traitement par votre banque et sera bientôt effectif sur votre compte bancaire.<br>Vos produits concernant cette commande ne sont à présent plus accéssibles.<br>À bientôt sur joyvox !<br>",
+                  buttons:[
+                    {
+                      title:"Mon compte",
+                      url:"http://auth.joyvox.fr/account"
+                    }
+                  ],
+                  email:order.response.source.name,
+                  to:order.response.source.name
+                },
+                function(e){
+                }
+              );
+              callback({status:200, message:"ORDER_REFUND_STATUS_UPDATED", response_display:{"title":"Remboursement", "message":"Le remboursement a bien été pris en charge, il sera effectif après traitement de la plateforme de paiement Stripe, le statu de la facture du client a égélament bien été mis à jour et le client sera averti lorsque son remboursement sera effectif."}});
+            }
+          });
+        }
+      });
+    }
+  });
+}
+module.exports.createCharge = function(datas, res, callback) {
   if(app.locals.settings.StripeMode){
     keyPublishable = app.locals.settings.StripekeyPublishable;
     keySecret = app.locals.settings.StripekeySecret;
@@ -354,7 +452,7 @@ module.exports.createCharge = function(datas, res, callback){
     }
   });
 }
-module.exports.create = function(datas, res, callback){
+module.exports.create = function(datas, res, callback) {
     //var datas = {};
     new_order = new Orders(datas);
     new_order.save(function(err, infos){
@@ -366,7 +464,7 @@ module.exports.create = function(datas, res, callback){
     });
 
 }
-module.exports.update = function(req, res, callback){
+module.exports.update = function(req, res, callback) {
     var datas = {};
     datas.updated = Date.now();
     Orders.updateOne(
@@ -386,7 +484,7 @@ module.exports.update = function(req, res, callback){
         }
     )
 }
-module.exports.delete = function(req, res, callback){
+module.exports.delete = function(req, res, callback) {
     callback({"status":401, "message":"UNAUTHORISED_METHOD"});
     /*
     Orders.deleteOne(

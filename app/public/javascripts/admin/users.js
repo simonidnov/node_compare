@@ -2,7 +2,8 @@ $(document).ready(function(){
     users.init();
 });
 var users = {
-    fjs:null,
+    fjs : null,
+    filter_form : null,
     init:function(){
         this.create_filter_form();
         /*this.fjs=null;
@@ -33,9 +34,14 @@ var users = {
         $('[data-navigate]').off('click').on('click', function(){
           window.location.href=$(this).attr('data-navigate');
         });
+        $('#refreshUsersFilters').on('click', function(){
+          index.sdk.api.get('/api/checkUserFilterTask', {}, function(e){console.log(e);});
+        });
     },
     create_filter_form : function(){
         this.filter_form = new formular('#users_filter', function(e){
-        }).init();
+          console.log(e);
+        });
+        this.filter_form.init();
     }
 }

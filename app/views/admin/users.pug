@@ -49,9 +49,9 @@ block content
                                 input#app_user_okaidi.form-control(type='checkbox', name='app_user_okaidi', checked='true')
                                 label(for="app_user_okaidi") Okaidi
                     div.form-group
-                        input#has_kid.form-control(type='checkbox', name='has_kid')
-                        label(for="has_kid")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_KIDS']
-                    div.form-group.checkbox_relative_container(data-checkboxrelative="has_kid")
+                        input#has_kids.form-control(type='checkbox', name='has_kids')
+                        label(for="has_kids")= app.locals.admin_lang[locale].keys['USERS_FILTERS_HAS_KIDS']
+                    div.form-group.checkbox_relative_container(data-checkboxrelative="has_kids")
                         div.checkbox_relative
                             div.form-group
                                 input#kid_male.form-control(type='checkbox', name='kid_male')
@@ -110,21 +110,21 @@ block content
         div#users.container
             h1= app.locals.admin_lang[locale].keys['USERS_TITLE']
             ul.users_list.col_options_list
-                each user in users
-                    li(data-memberid=user._id)
-                        div.infos
-                            div.avatar
-                                img(src=user.avatar+"" onerror="this.src='/images/assets/account.svg'")
-                            div.first_name= user.pseudo 
-                            div.birth_date= user.email
-                        ul.options
-                            li.primary(data-value=user._id, data-navigate="/admin/user/edit/"+user._id)
-                                div.icon.icon-pencil.idkids-icons
-                                div.label= app.locals.admin_lang[locale].keys['EDIT_CTA']
-                            li.danger(data-farniente="delete" data-url="/api/users/"+user._id data-type="delete" data-id=user._id)
-                                div.icon.icon-trash.idkids-icons
-                                div.label= app.locals.admin_lang[locale].keys['DELETE_CTA']
-            div.col-md-4
+              each user in users
+                li(data-memberid=user._id)
+                    div.infos
+                      div.avatar
+                        img(src=user.avatar+"" onerror="this.src='/images/assets/account.svg'")
+                      div.first_name= user.pseudo 
+                      div.birth_date= user.email
+                    ul.options
+                      li.primary(data-value=user._id, data-navigate="/admin/user/edit/"+user._id)
+                        div.icon.icon-pencil.idkids-icons
+                        div.label= app.locals.admin_lang[locale].keys['EDIT_CTA']
+                      li.danger(data-farniente="delete" data-url="/api/users/"+user._id data-type="delete" data-id=user._id)
+                        div.icon.icon-trash.idkids-icons
+                        div.label= app.locals.admin_lang[locale].keys['DELETE_CTA']
+            //-div.col-md-4
               h2= app.locals.admin_lang[locale].keys['USERS_GROUPS_TITLE']
               p= app.locals.admin_lang[locale].keys['USERS_GROUPS_MESSAGE']
               div.formular.fullscreen#users_groups

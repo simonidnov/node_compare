@@ -91,11 +91,21 @@ module.exports.checkOrders = function(req, res, callback){
     if(e.status === 200){
       for(var i=0; i<e.datas.length; i++){
         for(var p=0; p<e.datas[i].basketdatas.products.length; p++){
-          self.create({
-            user_id : req.user_id,
-            product_id :e.datas[i].basketdatas.products[p].product_id
-          }, res, function(e){
-          });
+          if(typeof datas[i].refund !== "undefined"){
+            if(datas[i].refund.code === "charge_already_refunded" || typeof datas[i].refund.status === "succeeded"){
+              self.remove({
+                user_id : req.user_id,
+                product_id :e.datas[i].basketdatas.products[p].product_id
+              }, res, function(e){
+              });
+            }
+          }else{
+            self.create({
+              user_id : req.user_id,
+              product_id :e.datas[i].basketdatas.products[p].product_id
+            }, res, function(e){
+            });
+          }
         }
       }
       //callback(e);
@@ -130,6 +140,21 @@ module.exports.create = function(datas, res, callback){
           });
         }else{
           callback({"status":201, "datas":infos, "message":"ALREADY_ADDED_PRODUCT_ON_USER"});
+        }
+      }
+    );
+};
+module.exports.remove = function(datas, res, callback){
+    Userproducts.deleteOne(
+      {
+        user_id:datas.user_id,
+        product_id:datas.product_id
+      },
+      function(err, infos){
+        if(err || infos.length === 0){
+          callback({"status":401, "err":err, "message":"PRODUCT_DELETED_ERROR"});
+        }else{
+          callback({"status":201, "datas":infos, "message":"PRODUCT_DELETED"});
         }
       }
     );

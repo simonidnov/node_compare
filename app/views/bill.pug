@@ -4,7 +4,7 @@
 html
   head
     meta(charset="utf-8")
-    title A simple, clean, and responsive HTML invoice template
+    title JOYVOX, facture
     
     style(type='text/css').
       .invoice-box {
@@ -72,6 +72,10 @@ html
       .invoice-box table tr.total td:nth-child(2) {
           border-top: 2px solid #eee;
           font-weight: bold;
+      }
+      .refunded {
+          color:red;
+          font-size : 40px;
       }
       
       @media only screen and (max-width: 600px) {
@@ -194,6 +198,8 @@ html
                      
                 td= (order.datas.response.status === "succeeded")? "VÉRIFIÉ" : "NON-VÉRIFIÉ"
       
-                
+        if typeof order.datas.refund !== "undefined"
+          if order.datas.refund.status === "succeeded" || order.datas.refund.code === "charge_already_refunded"
+            p.refunded REMBOURSÉ
         //-p.identity identifiant de la facture !{order.datas._id}
                 

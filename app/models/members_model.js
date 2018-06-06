@@ -14,7 +14,7 @@ const db = require('mongoose'),
           }
       };
 
-if(db.connection.readyState === 0){ 
+if(db.connection.readyState === 0){
     db.connect(config.database.users, {useMongoClient: true});
 }
 const memberSchemas = new db.Schema(member_datas),
@@ -27,7 +27,7 @@ module.exports = {
 // check user login then return user_infos
 
 module.exports.get = function(user_id, member_id, callback){
-    var query = {};  
+    var query = {};
     if(user_id !== null){
         query['user_id'] = user_id;
         //callback({status:403, datas:[], message:"NO USER ID SPECIFIED"});
@@ -36,14 +36,14 @@ module.exports.get = function(user_id, member_id, callback){
         query['member_id'] = member_id;
     }
     Member.find(query, function(err, members){
-        if(err) callback({status:405, datas:err});
+        if(err) callback({status:405, error:err});
         else callback({status:200, datas:members});
     });
 }
 module.exports.create = function(user_id, datas, callback){
     datas.user_id = user_id;
     new_member = new Member(datas);
-    new_member.save(function(err, infos){  
+    new_member.save(function(err, infos){
         if(err) callback({"status":405, "message":err});
         else callback({"status":200, "datas":infos});
     });
@@ -61,7 +61,7 @@ module.exports.update = function(user_id, member_id, datas, callback){
             if(err) callback({"status":405, "message":err});
             else callback({"status":200, "user":infos});
         }
-    )
+    );
 }
 module.exports.delete = function(user_id, member_id, callback){
     Member.deleteOne(

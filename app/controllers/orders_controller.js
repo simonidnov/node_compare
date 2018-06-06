@@ -3,7 +3,7 @@ exports.getUserOrders = function(req, res, callback) {
     Orders_model.getUserOrders(req, res, function(e){
         callback(e);
     });
-}
+};
 exports.get = function(req, res, callback) {
     Orders_model.get(req, res, function(e){
         callback(e);
@@ -13,10 +13,16 @@ exports.getBill = function(user_id, datas, callback){
     Orders_model.getBill(user_id, datas, function(e){
         callback(e);
     });
+};
+exports.checkOrders = function(req, res, callback){
+    Orders_model.checkOrders(req, res, callback);
 }
 exports.createCharge = function(req, res, callback){
     Orders_model.createCharge(req.body, res, callback);
-}
+};
+exports.refundCharge = function(req, res, callback){
+    Orders_model.refundCharge(req.body, res, callback);
+};
 exports.create = function(req, res, callback) {
     Orders_model.create(req, res, function(e){
         callback(e);
@@ -36,4 +42,4 @@ exports.buy_with_coupon = function(req, res, callback){
     Orders_model.buy_with_coupon(req, res, function(e){
         callback(e);
     });
-}
+};
