@@ -25,7 +25,11 @@ var express = require('express'),
           //TODO GET APP FROM REFERER + SECRET THEN SET REDIRECT URL TO REFERER
           auth_helper.validate_origin({options:{secret:req.query.secret, host:referer}}, req.get('origin'), function(e){
             if(!e){
-              res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
+              if(typeof req.get('origin') === "undefined"){
+                res.redirect(307, "/auth?message=UNAUTHORISED_SERVER");
+              }else{
+                res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
+              }
             }else{
 
               current_app = e;
@@ -41,7 +45,11 @@ var express = require('express'),
               //referer = current_app.redirect_url;
               next();
             }else{
-              res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
+              if(typeof req.get('origin') === "undefined"){
+                res.redirect(307, "/auth?message=UNAUTHORISED_SERVER");
+              }else {
+                res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
+              }
             }
           });
         }else if(typeof req.body.app_id !== "undefined"){
@@ -53,7 +61,11 @@ var express = require('express'),
               }
               next();
             }else{
-              res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
+              if(typeof req.get('origin') === "undefined"){
+                res.redirect(307, "/auth?message=UNAUTHORISED_SERVER");
+              }else {
+                res.redirect(307, req.get('origin')+"/auth?message=UNAUTHORISED_SERVER");
+              }
             }
           });
         }else{
