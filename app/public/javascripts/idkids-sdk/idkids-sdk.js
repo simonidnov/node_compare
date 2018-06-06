@@ -51,7 +51,7 @@ var idkids_jssdk = function(options, callback){
                   }
                   this.hide_loader();
                   this.check_response(e);
-              },this));
+              }, this));
             }, this));
 
             //this.call('POST', request, params, callback);
@@ -142,7 +142,6 @@ var idkids_jssdk = function(options, callback){
                     }
                   ];
                 }
-
               }else if(e.status === 401){
                 e.response_display.buttons = [
                   {
@@ -507,14 +506,6 @@ function decodeUriComponentWithSpace (component) {
 }
 
 
-
-/*!
- * JavaScript Cookie v2.2.0
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
 ;(function (factory) {
 	var registeredInModuleLoader = false;
 	if (typeof define === 'function' && define.amd) {

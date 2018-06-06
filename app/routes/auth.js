@@ -21,7 +21,7 @@ var express = require('express'),
         //SET OUTPUT FORMAT
         referer = getReferer(req);
         //res.setHeader('Content-Type', 'application/json');
-        if(typeof req.query.secret !== "undefined"){
+        if(typeof req.query.secret !== "undefined" && req.query.secret !== ""){
           //TODO GET APP FROM REFERER + SECRET THEN SET REDIRECT URL TO REFERER
           auth_helper.validate_origin({options:{secret:req.query.secret, host:referer}}, req.get('origin'), function(e){
             if(!e){
