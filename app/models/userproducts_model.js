@@ -91,8 +91,8 @@ module.exports.checkOrders = function(req, res, callback){
     if(e.status === 200){
       for(var i=0; i<e.datas.length; i++){
         for(var p=0; p<e.datas[i].basketdatas.products.length; p++){
-          if(typeof datas[i].refund !== "undefined"){
-            if(datas[i].refund.code === "charge_already_refunded" || typeof datas[i].refund.status === "succeeded"){
+          if(typeof e.datas[i].refund !== "undefined"){
+            if(e.datas[i].refund.code === "charge_already_refunded" || typeof e.datas[i].refund.status === "succeeded"){
               self.remove({
                 user_id : req.user_id,
                 product_id :e.datas[i].basketdatas.products[p].product_id
