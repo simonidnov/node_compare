@@ -53,6 +53,7 @@ orders
         });
     })
     .get('/transaction', function(req, res, next){
+      console.log('TRANSACTION');
       res.render('order', {
           title : 'User Account',
           user  : req.session.Auth,
@@ -78,6 +79,7 @@ orders
     })
     .post('/transaction', function(req, res, next){
         //res.status(200).send({status:"POST", body:req.body});
+        console.log('CREATE CHARGE');
         Orders_controller.createCharge(req, res, function(e) {
             res.render('order', {
                 title : 'User Account',

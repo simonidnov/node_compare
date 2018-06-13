@@ -12,7 +12,6 @@ const express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     index = require('./routes/index'),
-    stripe_test = require('./routes/stripe_test'),
     basket = require('./routes/basket'),
     billing = require('./routes/billing'),
     orders = require('./routes/orders'),
@@ -152,7 +151,6 @@ router.use('/basket', basket);
 router.use('/billing', billing);
 router.use('/orders', orders);
 router.use('/comments', comments);
-router.use('/stripe_test', stripe_test);
 router.use('/coupon_code', coupon_code);
 router.use('/coupon_code/:any', coupon_code);
 router.use('/', index);

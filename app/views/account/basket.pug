@@ -62,8 +62,7 @@ div.col.col-md-5.first_order
           script(src="https://checkout.stripe.com/v2/checkout.js")
           button.btn.btn-success.btn-lg.centered#order_transaction(
             data-action="submit",
-            data-basketid=basket[0]._id, 
-            data-value="Valider mon panier", 
+            data-value="Valider mon panier "+basket[0]._id, 
             data-key=keyPublishable, 
             data-amount=basket[0].total_amount, 
             data-currency="eur", 
@@ -73,7 +72,6 @@ div.col.col-md-5.first_order
             data-lastname=user.lastname,
             data-image="/public/images/assets/icon_brand.svg",
             data-name=app.locals.settings.label,
-            data-source='tok_visa',
             data-description="Finaliser ma commande") Finaliser ma commande
           //-hr.separator
           //-button.btn.btn-warning.centered#apple-pay-button APPLE PAY

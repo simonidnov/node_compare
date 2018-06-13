@@ -161,8 +161,10 @@ var account = {
           if(e.status==="hitted" && e.action==="submit"){
             var $button = $("#order_transaction"),
                 $form = $button.parents('form');
+            console.log('HIT ???');
             var opts = $.extend({}, $button.data(), {
                 token: function(result) {
+                  console.log('result ', result);
                     $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
                 }
             });
