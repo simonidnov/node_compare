@@ -363,10 +363,10 @@ module.exports.createCharge = function(datas, res, callback) {
         amount: reduced_amount,
         currency: 'eur',
         description: 'payment ',
-        source: token,
+        source: token
       }, function (err, charge) { // <-- callback
         if(err) {
-          callback({status:401, message:"BASKET_DOESNT_MATCH", response_display:{"title":"Mon Panier", "message":"Nous ne pouvons finaliser l'opération car votre panier est introuvable."}});
+          callback({status:401, message:"BASKET_DOESNT_MATCH", response_display:{"title":"Paiement", "message":"Un problème est survenu lors du règlement de votre commande. Celle-ci n’a pas été validée et votre compte ne sera pas débité.<br>Nous vous prions de nous excuser et vous invitons à renouveler l’opération ultérieurement."}});
           //callback({status:401, message:"STIPE_ERROR_CHARGES", err:err});
         }else {
           Orders.find().count().exec(function(err, infos){

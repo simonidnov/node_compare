@@ -6,7 +6,12 @@ block content
                 span.icon.icon-more.idkids-icons
                 div.label Nouveau produit
             h3= app.locals.admin_lang[locale].keys['PRODUCTS_LEFT_PANEL']
-            ul.app_list
+            div.formular.fullscreen#searchProductForm
+              form(action="search")
+                div.form-group.material_input
+                  input#searchlabel(type="search" placeholder="recherche par label")
+                  label(for="searchlabel") Rechercher un produit
+            ul.app_list#productList
                 each product in products
                     a(href="/admin/products/edit_product/"+product._id title="éditer le produit")
                         li
@@ -110,21 +115,22 @@ block content
                           option(value="SERVICE" selected=((edit_product.category === "SERVICE")? true : false)) service
                     div.form-group.material_input
                         select#sub_category(name="sub_category")
-                          option(value="MUSIC" selected=((edit_product.sub_category === "MUSIC")? true : false)) Audio
+                          option(value="MUSIC" selected=((edit_product.sub_category === "MUSIC")? true : false)) Audio music
                           option(value="VIDEOGAME" selected=((edit_product.sub_category === "VIDEOGAME")? true : false)) Jeu vidéo
                           option(value="CHANSONPERSONNALISEE" selected=((edit_product.sub_category === "CHANSONPERSONNALISEE")? true : false)) Chanson personnalisée
                     div.form-group.material_input
                         select#extra_category(name="extra_category")
-                          option(value="MUSIC" selected=((edit_product.extra_category === "MUSIC")? true : false)) Musique MP3
+                          option(value="LIVRECD" selected=((edit_product.sub_category === "LIVRECD")? true : false)) Livre CD
                           option(value="APPLICATION" selected=((edit_product.extra_category === "APPLICATION")? true : false)) application
                           option(value="POP" selected=((edit_product.extra_category === "POP")? true : false)) Chansons POP
                           option(value="COMPTINE" selected=((edit_product.extra_category === "COMPTINE")? true : false)) Chansons COMPTINE
                           option(value="FEERIQUE" selected=((edit_product.extra_category === "FEERIQUE")? true : false)) Chansons FEERIQUE
                     div.form-group.material_input
-                        select#app_id(name="app_id", value=edit_product.app_id)
-                          each apps in app.locals.applications
-                            option(value=apps._id)= apps.label
+                        select#app_id(name="app_id" value=edit_product.app_id)
+                          each n_application in app.locals.applications
+                            option(value=n_application._id selected=((edit_product.app_id.toString() === n_application._id.toString())? true : false))= n_application.label
                     hr.separator
+                    
                     p= JSON.stringify(edit_product.phonetik)
                     div.form-group.buttons.inline
                         div.btn.btn-success.btn-lg(data-action="submit")= app.locals.admin_lang[locale].keys['SAVE_CTA']
@@ -133,28 +139,31 @@ block content
                   hr.separator
                   h3 Liste des médias en téléchargement
                   br
-                  each media in edit_product.medias
-                    if typeof media[0] !== "undefined" && media[0] !== null
-                      case media[0].mimetype
-                          when 'audio/mp3'
-                            div.media(data-filename=media[0].filename, data-productid=edit_product._id)
-                              audio(controls='', autoplay=false)
-                                source(src='/products/medias/'+media[0].filename, type='audio/mpeg')
-                              div= media[0].originalname
-                              div.form-group.buttons.inline
-                                div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
-                          when 'image/png'
-                            div.media(data-filename=media[0].filename, data-productid=edit_product._id)
-                              img(src='/products/medias/'+media[0].filename, height="80")
-                              div= media[0].originalname
-                              div.form-group.buttons.inline
+                  ul.product_media_list
+                    script.
+                      var product_datas = (!{JSON.stringify(edit_product.medias)})
+                    each media in edit_product.medias
+                      if typeof media[0] !== "undefined" && media[0] !== null
+                        case media[0].mimetype
+                            when 'audio/mp3'
+                              li.media(data-filename=media[0].filename, data-productid=edit_product._id)
+                                audio(controls='', autoplay=false)
+                                  source(src='/products/medias/'+media[0].filename, type='audio/mpeg')
+                                div= media[0].originalname + " " + media[0].order
+                                div.form-group.buttons.inline
                                   div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
-                          default
-                            div.media(data-filename=media[0].filename, data-productid=edit_product._id)
-                              div= "default"+media[0].mimetype
-                              div= media[0].originalname
-                              div.form-group.buttons.inline
-                                div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                            when 'image/png'
+                              li.media(data-filename=media[0].filename, data-productid=edit_product._id)
+                                img(src='/products/medias/'+media[0].filename, height="80")
+                                div= media[0].originalname
+                                div.form-group.buttons.inline
+                                    div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
+                            default
+                              li.media(data-filename=media[0].filename, data-productid=edit_product._id)
+                                div= "default"+media[0].mimetype
+                                div= media[0].originalname
+                                div.form-group.buttons.inline
+                                  div.btn.btn-danger.btn-sm(data-action="delete-media")= app.locals.admin_lang[locale].keys['DELETE_CTA']
                             
                   hr.separator
                   h3 Media upload

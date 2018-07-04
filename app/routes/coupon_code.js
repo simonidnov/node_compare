@@ -83,8 +83,8 @@ coupon_code.get('/download/:offer', function(req, res, next){
         res.status(200).send(err);
       }else{
         res.redirect(307, path.replace('./', '/'));
-        res.status(200).send({csv:csv, datas:e.datas});
-        res.end();
+        //res.status(200).send({csv:csv, datas:e.datas});
+        //res.end();
       }
     });
   });
@@ -123,7 +123,15 @@ coupon_code.post('/create_offer', function(req, res, next) {
     });
 });
 coupon_code.put('/', function(req, res, next) {
+  console.log('PUT COUPON UPDATE !!!!!!!!!!');
     Coupon_controller.update(req, res, function(e){
+      res.status(e.status).send(e);
+      res.end();
+    });
+});
+coupon_code.put('/update_offer', function(req, res, next) {
+  console.log('PUT OFFER UPDATE !!!!!!!!!!');
+    Coupon_controller.updateOffer(req, res, function(e){
       res.status(e.status).send(e);
       res.end();
     });

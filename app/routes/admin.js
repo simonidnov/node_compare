@@ -384,6 +384,7 @@ admin
               page: 'products',
               products: products,
               js:[
+                  '/public/javascripts/components/jquery-ui/jquery-ui.min.js',
                   '/public/javascripts/admin/products.js',
                   '/public/javascripts/components/formular.js'
               ], css:[
@@ -406,6 +407,7 @@ admin
             page:req.params.page,
             products: products,
             js:[
+                '/public/javascripts/components/jquery-ui/jquery-ui.min.js',
                 '/public/javascripts/admin/products.js',
                 '/public/javascripts/components/formular.js',
                 '/node_modules/dropzone/dist/dropzone.js'
@@ -434,6 +436,7 @@ admin
               products: products,
               edit_product : product_datas,
               js:[
+                  '/public/javascripts/components/jquery-ui/jquery-ui.min.js',
                   '/public/javascripts/admin/products.js',
                   '/public/javascripts/components/formular.js',
                   '/node_modules/cropperjs/dist/cropper.min.js',

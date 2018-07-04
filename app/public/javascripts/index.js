@@ -108,6 +108,14 @@ var index = {
         var params = this.parse_url(window.location.pathname),
             keys = Object.keys(params),
             data_for = keys[1];
+        switch(keys[1]){
+          case 'contact':
+            contact.init();
+            break;
+          case 'code-de-telechargement':
+            coupon_code.init();
+            break;
+        }
         if(keys[1]==="contact"){
           contact.init();
         }

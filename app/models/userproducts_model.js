@@ -90,29 +90,29 @@ module.exports.checkOrders = function(req, res, callback){
   Orders_model.get(req, res, function(e){
     if(e.status === 200){
       for(var i=0; i<e.datas.length; i++){
-        for(var p=0; p<e.datas[i].basketdatas.products.length; p++){
-          if(typeof e.datas[i].refund !== "undefined"){
-            if(e.datas[i].refund.code === "charge_already_refunded" || typeof e.datas[i].refund.status === "succeeded"){
-              self.remove({
+        if(typeof e.datas[i].basketdatas !== "undefined"){
+          for(var p=0; p<e.datas[i].basketdatas.products.length; p++){
+            if(typeof e.datas[i].refund !== "undefined"){
+              if(e.datas[i].refund.code === "charge_already_refunded" || typeof e.datas[i].refund.status === "succeeded"){
+                self.remove({
+                  user_id : req.user_id,
+                  product_id :e.datas[i].basketdatas.products[p].product_id
+                }, res, function(e){
+                });
+              }
+            }else{
+              self.create({
                 user_id : req.user_id,
                 product_id :e.datas[i].basketdatas.products[p].product_id
               }, res, function(e){
               });
             }
-          }else{
-            self.create({
-              user_id : req.user_id,
-              product_id :e.datas[i].basketdatas.products[p].product_id
-            }, res, function(e){
-            });
-          }
-        }
+        };
       }
       //callback(e);
-    }else{
-
     }
-  });
+  }
+});
   callback({status:200, message:"CHECKING"});
 }
 module.exports.create = function(datas, res, callback){

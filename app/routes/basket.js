@@ -29,7 +29,7 @@ basket.use(function(req, res, next){
       }
     });
     var dataCheck = req.query;
-    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE"){
+    if(req.method === "PUT" || req.method === "POST" || req.method === "DELETE") {
       dataCheck = req.body;
     }
     //dataCheck.options = dataCheck;

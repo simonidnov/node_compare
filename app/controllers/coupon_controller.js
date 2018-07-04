@@ -33,6 +33,11 @@ exports.createOffer = function(req, res, callback){
         callback(e);
     });
 };
+exports.updateOffer = function(req, res, callback){
+  Coupon_model.updateOffer(req, res, function(e){
+      callback(e);
+  });
+}
 // check user logout then return user_infos
 exports.update = function(req, res, callback) {
     Coupon_model.update(req, res, function(e){

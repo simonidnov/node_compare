@@ -72,6 +72,12 @@ module.exports.get = function(datas, res, callback){
       };
       //query.phonetik = {$in:language_helper.wordlab(datas.phonetik).split('-')};
     }
+    if(typeof datas.sub_category !== "undefined"){
+      query.sub_category = datas.sub_category;
+    }
+    if(typeof datas.extra_category !== "undefined"){
+      query.extra_category = datas.extra_category;
+    }
     if(typeof datas.alphabetik !== "undefined"){
       query = {
         "label": {
@@ -79,6 +85,7 @@ module.exports.get = function(datas, res, callback){
         }
       };
     }
+
     let skip = 0,
         limit = 50;
     if(typeof datas.skip !== "undefined"){
@@ -158,9 +165,12 @@ module.exports.get = function(datas, res, callback){
 };
 module.exports.create = function(user_id, datas, callback){
     //datas.user = user._id;
+    if(typeof datas.data !== "undefined"){
+      datas = datas.data;
+    }
     delete datas.options;
     delete datas.device_infos;
-
+    console.log('NEW PRODUCTS SENDED DATAS ::::: ', datas);
     datas.label = datas.label.toUpperCase();
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -322,6 +332,34 @@ module.exports.deleteAllProducts = function(req, res, callback){
     callback({status:200, error:err, datas:infos});
   })
 };
+module.exports.updateFileOrder = function(product_id, filename, order, callback){
+  this.get({product_id:product_id}, {_id:product_id}, function(e){
+    if(e.status === 200){
+      for(var i=0; i<e.datas[0].medias.length; i++){
+        if(e.datas[0].medias[i][0].filename === filename){
+          e.datas[0].medias[i][0].order = order;
+        }
+        if(i === e.datas[0].medias.length - 1){
+          Products.updateOne(
+              {
+                  _id  : product_id
+              },
+              {
+                medias : e.datas[0].medias
+              },
+              function(err, infos){
+                  if(err) callback({"status":403, "datas":{title:"PRODUCT_UPDATED_ERROR", "message":"PRODUCT_UPDATED_ERROR_MESSAGE", "media":"PRODUCT_UPDATED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+                  else callback({"status":200, "datas":{infos:infos, title:"PRODUCT_UPDATED", "message":"ORDER_UPGRADED", "order":order}});
+              }
+          );
+        }
+      }
+
+    }else{
+      callback({"status":403, "datas":{title:"PRODUCT_UPDATED_ERROR", "message":"PRODUCT_UPDATED_ERROR_MESSAGE", "media":"PRODUCT_UPDATED_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+    }
+  });
+};
 module.exports.addFile = function(product_id, file, callback){
     Products.updateOne(
         {
@@ -336,6 +374,7 @@ module.exports.addFile = function(product_id, file, callback){
                 mimetype: file.mimetype,
                 destination: file.destination,
                 filename: file.filename,
+                order: 0,
                 path: file.path,
                 size: file.size
               }
@@ -349,7 +388,7 @@ module.exports.addFile = function(product_id, file, callback){
 };
 module.exports.removeFile = function(product_id, filename, callback){
     fs.unlink('./uploads/'+filename, function(){});
-    this.get(null, {_id:product_id}, function(e){
+    this.get({product_id:product_id}, {_id:product_id}, function(e){
       if(e.status === 200){
         var medias = [];
         for(var i=0; i<e.datas[0].medias.length; i++){

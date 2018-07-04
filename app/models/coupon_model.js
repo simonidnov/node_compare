@@ -8,6 +8,7 @@ const db = require('mongoose'),
           description       : {type:"string"},
           code              : {type:"string"},
           amount            : {type:"number"},
+          product_id        : {type:"string"},
           parts             : {type:"number", default:1},
           partLen           : {type:"number", default:4},
           admin_id          : {type:"string"},
@@ -185,6 +186,27 @@ module.exports.useOne = function(datas, callback){
           else callback({"status":200, "datas":infos});
       }
   )
+}
+module.exports.updateOffer = function(req, res, callback){
+    update_datas = {
+      description : req.body.description,
+      label : req.body.label,
+      amount : req.body.amount,
+      product_id : req.body.product_id,
+      updated: Date.now()
+    };
+    Coupon.updateMany(
+      {
+        offer:req.body.offer
+      },
+      {
+          $set : update_datas
+      },
+      function(err, infos){
+          if(err) callback({"status":304, "message":err});
+          else callback({"status":200, "datas":infos});
+      }
+    )
 }
 module.exports.update = function(req, res, callback){
     req.body.updated = Date.now();

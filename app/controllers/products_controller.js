@@ -56,6 +56,11 @@ exports.getFile = function(req, res, callback) {
         callback(e);
     });
 };
+exports.updateFileOrder = function(req, res, callback){
+  Products_model.updateFileOrder(req.body.product_id, req.body.filename, req.body.order, function(e){
+      callback(e);
+  });
+};
 exports.removeFile = function(req, res, callback) {
     Products_model.removeFile(req.body.product_id, req.body.filename, function(e){
         callback(e);

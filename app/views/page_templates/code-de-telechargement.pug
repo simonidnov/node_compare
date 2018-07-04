@@ -1,0 +1,29 @@
+extends ../header
+
+block content
+  div.container.with_head.page
+    div.head_title
+      h1 Codes de téléchargement
+    div.row
+      div.col-md-8.centered(style="text-align:center;")
+        p(style="text-align:center;") <b>Vous avez reçu un code de téléchargement avec un de nos produits,</b><br>livres CD, cartes d'anniversaire pour une chanson personnalisée ou par le biais d'une offre spéciale ?
+        div.coupon_code_form
+          form#coupon_code_form
+            input.form-control#coupon_code(type="text" placeholder="Entrez votre code ici")
+            button.btn_coupon_code#submit_code(disabled type="submit" data-formaction="submit" data-formid="coupon_code_form") &#10008;
+          div.coupon_datas
+        if !user
+          p Pour bénéficier de votre code de téléchargement, vous devez vous connecter ou créer un compte utilisateur.
+          div(style="display:inline-flex")
+            a.btn.btn-success(href="/auth") Me connecter
+            a.btn.btn-warning(href="/auth") Créer mon compte
+    
+    
+        //-div.coupon_datas
+            div.picture
+            div.label
+            div.description
+            button.btn.btn-success#use_code(data-id="") Télécharger
+        h3 Qu'est-ce qu'un code de téléchargement ?
+        p Lors de l'achat d'un de nos produits, livres cd, cartes d'anniversaire ou encore par le biais d'une offre spéciale, Joyvox vous propose de bénéficier de votre produit de façon dématérialisée.
+        

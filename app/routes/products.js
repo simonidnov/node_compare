@@ -1,6 +1,7 @@
 var express = require('express'),
     Mime = require('mime'),
     path = require('path'),
+    mkdirp = require('mkdirp'),
     crypto = require('crypto'),
     product = express.Router(),
     UserProducts_controller = require('../controllers/userproducts_controller'),
@@ -12,11 +13,22 @@ var express = require('express'),
     multer  = require('multer'),
     storage = multer.diskStorage({
       destination: function (req, file, cb) {
-        cb(null, './uploads/')
+        var dateObj = new Date();
+        var month = dateObj.getUTCMonth() + 1; //months from 1-12
+        var day = dateObj.getUTCDate();
+        var year = dateObj.getUTCFullYear();
+
+        var dest = './uploads/'+year+'-'+month+'-'+day;
+        mkdirp.sync(dest);
+        cb(null, dest);
       },
       filename: function (req, file, cb) {
+        var dateObj = new Date();
+        var month = dateObj.getUTCMonth() + 1; //months from 1-12
+        var day = dateObj.getUTCDate();
+        var year = dateObj.getUTCFullYear();
         crypto.pseudoRandomBytes(16, function (err, raw) {
-           cb(null, raw.toString('hex') + Date.now() + '.' + Mime.getExtension(file.mimetype));
+           cb(null, year+'-'+month+'-'+day +'-'+ raw.toString('hex') + '.' + Mime.getExtension(file.mimetype));
         });
       }
     }),
@@ -96,17 +108,35 @@ product
         });
     })
     .get('/medias/:filename', function(req, res, next){
-        var fs = require('fs'),
-            shortcut = 15;
+        var path = "";
+        if(req.params.filename.indexOf('-') !== -1){
+          var row_path = req.params.filename.split('-');
+          for(var i=0; i<row_path.length-1; i++){
+            path += row_path[i];
+            if(i === row_path.length-2){
+              req.params.fullpath = path;
+              next();
+            }else{
+              path += "-";
+            }
+          }
+        }else{
+          req.params.fullpath = path;
+          next();
+        }
 
-        if (fs.existsSync("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"))) {
+      }, function(req, res, next){
+        var fs = require('fs'),
+            shortcut = 15,
+            path = req.params.fullpath;
+        if (fs.existsSync("./uploads/"+path+"/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"))) {
             // Do something
-            req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
+            req.params.filename = path+"/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
             next();
         }else{
 
             var ffmpeg = require('fluent-ffmpeg');
-            var track = "./uploads/"+req.params.filename;//your path to source file
+            var track = "./uploads/"+path+'/'+req.params.filename;//your path to source file
             ffmpeg(track)
             .duration(shortcut)
             .toFormat('mp3')
@@ -122,13 +152,13 @@ product
             .on('progress', function (progress) {
             })
             .on('end', function () {
-              req.params.filename = req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
+              req.params.filename = path+"/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3");
               /* TODO CREATE CHECKING EVENT FS EXIST ? */
               setTimeout(function(){
                 next();
               }, 500);
             })
-            .save("./uploads/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"));
+            .save("./uploads/"+path+"/"+req.params.filename.replace('.mp3', "_shortcut"+shortcut+".mp3"));
         }
     }, function(req, res, next){
         res.sendFile(req.params.filename, {root: path.join(__dirname, '../uploads')}, function(err){
@@ -138,6 +168,17 @@ product
             } else {
                   //res.status(200).send({"message":"le fichier est autorisé à la lecture", filename:req.params.filename});
             }
+        });
+    })
+    .put('/medias', function(req, res, next){
+        Auth_helper.validate_admin(req, function(e){
+          if(e.status === 200){
+            Products_controller.updateFileOrder(req, res, function(e){
+              res.status(e.status).send(e.datas);
+            });
+          }else{
+            res.status(403).send({"message":"Vous n'avez pas les droits nécéssaires pour mettre a jour les fichiers"});
+          }
         });
     })
     .post('/medias', upload.single('file'), function(req, res, next){

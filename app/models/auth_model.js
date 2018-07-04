@@ -278,6 +278,11 @@ module.exports.login = function(req, datas, callback) {
 
                     /* UPDATE */
                     var avatar = users[0].avatar;
+                    console.log('AVATAR ' , avatar);
+                    console.log('AVATAR ' , avatar);
+                    console.log('AVATAR ' , avatar);
+                    console.log('AVATAR ' , avatar);
+                    console.log('AVATAR ' , avatar);
                     if(users[0].avatar === "" || users[0].avatar === null){
                         if(datas.avatar === "" || datas.avatar === null || typeof datas.avatar === "undefined"){
                           // Si pas d'avatar on regarde si un gravatar existe
@@ -288,15 +293,19 @@ module.exports.login = function(req, datas, callback) {
                     }else{
                         avatar = users[0].avatar;
                     }
-
                     urlExists(avatar, function(err, exists) {
                       if(!exists){
                         //app.locals.settings.host+
+                        /// HUMMM CAN GET EXISTS FROM LOCAL WITHOUT HTTP WITH URLEXIST....
+                        /*
                         if(typeof app.locals !== "undefined"){
                           avatar = app.locals.settings.host+"/public/images/assets/account.svg";
                         }else{
                           avatar ="/public/images/assets/account.svg";
                         }
+                        */
+                        console.log('AVATAR RESET ? ', avatar);
+
                       }
                       /* TODO !IMPORTANT REMOVE USER RIGHTS AFTER FIRST ONE IS SETTED */
                       /*
@@ -323,7 +332,7 @@ module.exports.login = function(req, datas, callback) {
                                   callback({"status":400, "code":err.code, "error":err, "message":"USER_LOGIN_ERROR"});
                               }else{
                                   self.reset_session(req, users[0]._id, function(infos){
-                                      infos.avatar = infos.avatar;
+                                      infos.avatar = avatar;
                                       callback({status:200, "message":"USER_LOGIN_SUCCESS", "idkids_user":infos});
                                   });
                               }

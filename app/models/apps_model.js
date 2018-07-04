@@ -8,7 +8,7 @@ const db = require('mongoose'),
           splash            : {type:"string"},
           color             : {type:"string"},
           label             : {type:"string"},
-          name              : {type:"string", unique: true},
+          name              : {type:"string"},
           short_name        : {type:"string"},
           bundle            : {type:"string", unique: true},
           description       : {type:"string"},
@@ -89,6 +89,10 @@ module.exports.get = function(user_id, query, callback){
 }
 module.exports.create = function(user_id, datas, callback){
     var _self = this;
+    console.log('datas add apps :::::::::::: ', datas);
+    if(typeof datas.data !== "undefined"){
+      datas = datas.data;
+    }
     datas.secret = jwt.sign({secret:user_id}, config.secrets.global.secret);
     datas.token = jwt.sign({secret:user_id+Date.now()}, config.secrets.global.secret);
     new_apps = new Apps(datas);

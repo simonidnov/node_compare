@@ -13,7 +13,11 @@ var applications_page = {
                     form_datas[serie.name] = serie.value;
                 });
                 index.sdk.api.post($("#create_app form").attr('action'), form_datas, function(e){
+                  if(e.status === 200){
                     window.location.reload();
+                  }else if(e.status === 405){
+                    alert(e.message.errmsg);
+                  }
                 });
             }
         });
