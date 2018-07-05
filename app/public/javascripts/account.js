@@ -15,12 +15,13 @@ var account = {
         $('.downloadable').off('click').on('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            //index.sdk.createProgressBar("Téléchargement...", $('body'));
             index.sdk.api.get($(this).attr('href'), {}, function(e) {
               if(typeof e.zip_file !== "undefined"){
-                //window.location.href = e.zip_file;
-                console.log(e);
-                index.sdk.downloadFile(e.zip_file);
+                index.sdk.downloadFile(e.zip_file, $('body'), function(e){
+                  if(e.status === "completed"){
+                    //TODO clean server side zip and folder
+                  }
+                });
               }
             }, function(e){
             }, function(e){

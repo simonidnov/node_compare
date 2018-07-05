@@ -115,12 +115,14 @@ product
         // DUPLICATE AND MOVE IT TO dest+"/"+media[0].originalname
         fse.copy(media[0].path, dest+"/"+media[0].originalname)
           .then(() => {
+            console.log('COPY SUCCESS');
             itemsProcessed++;
-            if(itemsProcessed === req.product_datas[0].medias.length - 1) {
+            if(itemsProcessed === req.product_datas[0].medias.length - 1 || req.product_datas[0].medias.length === 1) {
               next();
             }
           })
           .catch(err => {
+            console.log('COPY ERROR');
             itemsProcessed++;
             error_files_process.push({message:media[0].originalname+" can't be moved !", file:media[0].path, err:err});
           })
@@ -134,10 +136,10 @@ product
           './uploads/products/'+req.product_datas[0].label+'.zip',
           function(err) {
             if(err) {
-                //console.log('oh no!', err);
+                console.log('oh no!', err);
                 res.status(203).send({status:203, err:err, message:"Impossible de zipper les ressources"});
             } else {
-                //console.log('ZIP CREATED SUCCESFUL');
+                console.log('ZIP CREATED SUCCESFUL');
                 next();
             }
           }

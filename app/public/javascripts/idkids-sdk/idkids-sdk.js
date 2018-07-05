@@ -471,27 +471,31 @@ var idkids_jssdk = function(options, callback){
     this.connect = function(){
       window.location.href = this.api.config.url+"/auth?secret="+this.options.secret;
     }
-    this.downloadFile = function(file){
+    this.downloadFile = function(file, target, callback){
       var request = new XMLHttpRequest(),
-          fileName = file.split('/')[file.split('/').length-1];
-      index.sdk.createProgressBar("Téléchargement de "+fileName, $('body'));
+          fileName = file.split('/')[file.split('/').length-1],
+          self = this;
+      self.createProgressBar("Téléchargement de "+fileName, target);
 
       request.responseType = 'blob';
       request.open('GET', file);
       request.addEventListener('error', function(event) {
-        console.log('error ' + request);
+        callback({status:"error", message:"request file error, unable to find this file "+file});
       });
       request.addEventListener('progress', function(event) {
         var bitLoaded = (event.loaded/1000000).toFixed(2),
             bitTotal  = (event.total/1000000).toFixed(2),
             percentProgress = ((event.loaded/event.total)*100).toFixed(2);
-        index.sdk.updateProgressBar(percentProgress, bitLoaded+" / "+bitTotal+" Mb | "+Math.round(percentProgress)+"%");
+        callback({status:"progress", loaded:bitLoaded, total:bitTotal, percent:percentProgress});
+        self.updateProgressBar(percentProgress, bitLoaded+" / "+bitTotal+" Mb | "+Math.round(percentProgress)+"%");
       });
       request.addEventListener('load', function (event) {
-        index.sdk.deleteProgressBar();
+        self.deleteProgressBar();
+        callback({status:"completed", message:"file will be saved locally in few seconds, becareful with iOS and Android."});
         if (request.readyState == 4 && request.status == 200) {
           var blob = new Blob([request.response], {type: "application/zip"});
           saveAs(blob, fileName);
+          callback({status:"saved", message:"save was called, please wait a second, if it doesn't work use the link", link:file});
         }
       });
       request.send();
