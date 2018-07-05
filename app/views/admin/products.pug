@@ -101,7 +101,7 @@ block content
                         input#label(type="text" name="label" minlength="4" value=edit_product.label required)
                         label(for="label") Label * uniq
                     div.form-group.material_input.minlength
-                        textarea#description(type="text" name="description" maxlength="255" minlength="75" value=edit_product.description required)= edit_product.description
+                        textarea#description(type="text" name="description" maxlength="255" minlength="75" required)= edit_product.description
                         label(for="description") description (255 max char)
                     div.form-group.material_input
                         input#price(type="number" name="price" step="0.01" required value=edit_product.price)
@@ -125,10 +125,11 @@ block content
                           option(value="POP" selected=((edit_product.extra_category === "POP")? true : false)) Chansons POP
                           option(value="COMPTINE" selected=((edit_product.extra_category === "COMPTINE")? true : false)) Chansons COMPTINE
                           option(value="FEERIQUE" selected=((edit_product.extra_category === "FEERIQUE")? true : false)) Chansons FEERIQUE
-                    div.form-group.material_input
-                        select#app_id(name="app_id" value=edit_product.app_id)
+                    if(typeof app.locals.applications !== "undefined")
+                      div.form-group.material_input
+                        select#app_id(name="app_id")
                           each n_application in app.locals.applications
-                            option(value=n_application._id selected=((edit_product.app_id.toString() === n_application._id.toString())? true : false))= n_application.label
+                            option(value=n_application._id selected=((typeof edit_product.app_id !== "undefined" && edit_product.app_id.toString() === n_application._id.toString())? true : false))= n_application.label
                     hr.separator
                     
                     p= JSON.stringify(edit_product.phonetik)

@@ -66,7 +66,6 @@ module.exports = {
             callback(e);
           });
         }
-
     },
     addParams : function(datas, req){
       if(typeof datas.updated_token === "undefined" && typeof req.updated_token !== "undefined"){

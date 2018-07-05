@@ -1,6 +1,8 @@
 var express = require('express'),
     Mime = require('mime'),
     path = require('path'),
+    fs = require('fs'),
+    fse = require('fs-extra'),
     mkdirp = require('mkdirp'),
     crypto = require('crypto'),
     product = express.Router(),
@@ -73,7 +75,103 @@ product
         //    res.status(e.status).send(e.datas);
         //});
     })
+    .get('/download/:product_id', function(req, res, next) {
+      Auth_helper.validate_user(req.query, req.get('host'), function(e) {
+        if(e.status === 200) {
+          next();
+        }else {
+          res.status(203).send({"message":"You need to connect to download."});
+        }
+      });
+    }, function(req, res, next) {
+      // GET PRODUCT INFOS
+      Products_controller.get({product_id:req.params.product_id}, {product_id:req.params.product_id}, function(e) {
+          if(e.status === 200 && e.datas.length === 1) {
+            req.product_datas = e.datas;
+            next();
+          }else {
+            res.status(404).send({"message":"Product not found."});
+          }
+      });
+    }, function(req, res, next) {
+      // CHECK USER HAS PRODUCT ENROLEMENT
+      UserProducts_controller.allreadyBuy(req.query.options.user_id, req.params.product_id, function(e){
+        if(e.status === 200) {
+          next();
+        }else {
+          res.status(404).send({"message":"you don't have rights to download this product."});
+        }
+      });
+    }, function(req, res, next) {
+      // DOWNLOAD
+      //CREATE TEMP PRODUCT FOLDER WITH ressources
+      var dest = './uploads/products/'+req.product_datas[0].label;
+      mkdirp.sync(dest);
+      // DUPLICATE AND MOVE ALL MEDIA FILES IN SPECIFIC FOLDER WITH ORIGINAL NAMESPACE
+      var itemsProcessed = 0;
+      req.error_files_process = [];
+      req.product_datas[0].medias.forEach(function(media){
+        // GET FS media[0].path
+        // DUPLICATE AND MOVE IT TO dest+"/"+media[0].originalname
+        fse.copy(media[0].path, dest+"/"+media[0].originalname)
+          .then(() => {
+            itemsProcessed++;
+            if(itemsProcessed === req.product_datas[0].medias.length - 1) {
+              next();
+            }
+          })
+          .catch(err => {
+            itemsProcessed++;
+            error_files_process.push({message:media[0].originalname+" can't be moved !", file:media[0].path, err:err});
+          })
+      });
+    },
+    function(req, res, next){
+        // ZIP FOLDER zip(dest);
+        var zipFolder = require('zip-folder');
+        zipFolder(
+          './uploads/products/'+req.product_datas[0].label,
+          './uploads/products/'+req.product_datas[0].label+'.zip',
+          function(err) {
+            if(err) {
+                //console.log('oh no!', err);
+                res.status(203).send({status:203, err:err, message:"Impossible de zipper les ressources"});
+            } else {
+                //console.log('ZIP CREATED SUCCESFUL');
+                next();
+            }
+          }
+        );
+    },
+    function(req, res, next){
+        // START DOWNLOAD
+        res.status(200).send({status:200, message:"DOWNLOAD will be start in few seconds", zip_file:app.locals.settings.host+'/uploads/products/'+req.product_datas[0].label+'.zip', product_datas:req.product_datas});
+        // its look great but not that
+        // res.download(path.join(__dirname, '../uploads/products/'+req.product_datas[0].label+'.zip'));
+        // res.end('../uploads/products/'+req.product_datas[0].label+'.zip');
+        //res.sendFile(path.join(__dirname, '../uploads/products/'+req.product_datas[0].label+'.zip'));
 
+        // attahcment look great to so no received has download
+        //res.attachment(path.join(__dirname, '/uploads/products/'+req.product_datas[0].label+'.zip'));
+        //archive.pipe(res);
+        //res.on('close', function() {
+        //  console.log('Archive wrote %d bytes', archive.pointer());
+        //  return res.status(200).send({status:200, message:"DOWNLOAD will be start in few seconds", zip_file:app.locals.settings.host+'/uploads/products/'+req.product_datas[0].label+'.zip', product_datas:req.product_datas});
+        //});
+
+        //download to ...
+        //.download('./uploads/products/'+req.product_datas[0].label+'.zip', req.product_datas[0].label+'.zip');
+        //.send({status:200, message:"DOWNLOAD will be start in few seconds", zip_file:app.locals.settings.host+'/uploads/products/'+req.product_datas[0].label+'.zip', product_datas:req.product_datas});
+
+        //WTF ***
+        /*var http = require('http');
+        var file = fs.createWriteStream('./uploads/products/'+req.product_datas[0].label+'.zip');
+        var request = http.get(app.locals.settings.host, function(response) {
+          console.log('response ', response);
+          response.pipe(file);
+          res.status(200).send({status:200, message:"DOWNLOAD will be start in few seconds", zip_file:app.locals.settings.host+'/uploads/products/'+req.product_datas[0].label+'.zip', product_datas:req.product_datas});
+        });*/
+    })
     .post('/', function(req, res, next) {
         Auth_helper.validate_admin(req, function(e){
             if(e.status === 200){

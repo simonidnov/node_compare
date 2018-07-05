@@ -4,8 +4,8 @@ exports.get = function(req, res, callback) {
     Userproducts_model.get(req, res, callback);
 };
 exports.allreadyBuy = function(user_id, product_id, callback){
-  Userproducts_model.allreadyBuy(user_id, product_id, callback);
-}
+    Userproducts_model.allreadyBuy(user_id, product_id, callback);
+};
 exports.checkorders = function(req, res, callback) {
     //Userproducts_model.create(req, res, callback);
 };
@@ -17,5 +17,5 @@ exports.shareProduct = function(req, res, callback){
     Userproducts_model.share(req, res, callback);
 };
 exports.getShare = function(req, res, callback){
-  Userproducts_model.getShare(req, res, callback);
+    Userproducts_model.getShare(req, res, callback);
 };

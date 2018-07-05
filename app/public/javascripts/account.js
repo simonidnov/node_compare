@@ -12,6 +12,20 @@ var account = {
         //this.init_apple_pay();
     },
     set_listeners : function(){
+        $('.downloadable').off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            //index.sdk.createProgressBar("Téléchargement...", $('body'));
+            index.sdk.api.get($(this).attr('href'), {}, function(e) {
+              if(typeof e.zip_file !== "undefined"){
+                //window.location.href = e.zip_file;
+                console.log(e);
+                index.sdk.downloadFile(e.zip_file);
+              }
+            }, function(e){
+            }, function(e){
+            });
+        });
         $('#request_validation_code').off('click').on('click', function() {
             index.sdk.api.post('/api/request_validation_code', {
                 user_id:$(this).attr('data-userid'),
@@ -161,7 +175,6 @@ var account = {
           if(e.status==="hitted" && e.action==="submit"){
             var $button = $("#order_transaction"),
                 $form = $button.parents('form');
-            console.log('HIT ???');
             var opts = $.extend({}, $button.data(), {
                 token: function(result) {
                   console.log('result ', result);

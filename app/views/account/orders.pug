@@ -18,7 +18,10 @@ div.col.col-md-7
               div.cat= product.meta_datas.sub_category+" | "+product.meta_datas.extra_category
             
             div.cat
-              a.btn.btn-success.btn-sm(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_self") Écouter
+              if(product.meta_datas.sub_category === "CHANSONPERSONNALISEE")
+                a.btn.btn-success.btn-sm(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id, target="_self") Écouter
+              else
+                a.btn.btn-success.btn-sm.downloadable(href="/products/download/"+product.product_id, target="_self") Télécharger
                 //-a.hyperlink(download="/download/"+product.meta_datas.medias[0][0].pathname, target="_blank") Télécharger
             
             //-ul.medias_download.col

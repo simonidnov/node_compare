@@ -39,51 +39,51 @@ module.exports.get = function(req, res, callback){
     var query = {},
         self = this;
 
-        if(typeof req.session.Auth !== "undefined"){
-            query = {user_id : req.session.Auth._id};
-        }else if(typeof req.query.user_id !== "undefined"){
-            query = {user_id : datas.user_id};
-        }else if(typeof req.query.options !== "undefined"){
-          query = {user_id:req.query.options.user_id}
-        }
-        if(typeof query.user_id === "undefined"){
-          callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
-          return false;
-        }
-        if(typeof req.query.product_id !== "undefined"){
-          query.product_id = req.query.product_id;
-        }
+    if(typeof req.session.Auth !== "undefined"){
+        query = {user_id : req.session.Auth._id};
+    }else if(typeof req.query.user_id !== "undefined"){
+        query = {user_id : datas.user_id};
+    }else if(typeof req.query.options !== "undefined"){
+      query = {user_id:req.query.options.user_id}
+    }
+    if(typeof query.user_id === "undefined"){
+      callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});
+      return false;
+    }
+    if(typeof req.query.product_id !== "undefined"){
+      query.product_id = req.query.product_id;
+    }
     req.user_id = query.user_id;
     self.checkOrders(req, res, function(e){
       Userproducts.find(query, function(err, userproducts){
         if(err){
-            callback({status:405, datas:err});
-            return false;
+          callback({status:405, datas:err});
+          return false;
         }else{
           callback({status:200, datas:userproducts});
           return false;
         }
       }).sort({'created':-1});
     });
-
 };
 module.exports.allreadyBuy = function(user_id, product_id, callback){
-  Userproducts.findOne(
-    {
-      user_id:user_id,
-      product_id:product_id
-    },
-    function(err, hasone){
-      if(err) callback({status:404, message:"NEVER_BUY"});
-      else{
-        if(hasone === null){
-          callback({status:404, message:"NEVER_BUY", datas:hasone});
-        }else{
-          callback({status:200, message:"ALREADY_BUY", datas:hasone});
+    console.log("allreadyBuy :::::: ", user_id, " :::::: req.session.Auth._id before ::::::: product id  :::::: ", product_id)
+    Userproducts.findOne(
+      {
+        user_id : user_id,
+        product_id : product_id
+      },
+      function(err, hasone){
+        if(err) callback({status:404, message:"NEVER_BUY"});
+        else{
+          if(hasone === null){
+            callback({status:404, message:"NEVER_BUY", datas:hasone});
+          }else{
+            callback({status:200, message:"ALREADY_BUY", datas:hasone});
+          }
         }
       }
-    }
-  );
+    );
 };
 module.exports.checkOrders = function(req, res, callback){
   var self = this;
@@ -107,12 +107,11 @@ module.exports.checkOrders = function(req, res, callback){
               }, res, function(e){
               });
             }
-        };
+          };
+        }
       }
-      //callback(e);
     }
-  }
-});
+  });
   callback({status:200, message:"CHECKING"});
 }
 module.exports.create = function(datas, res, callback){

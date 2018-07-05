@@ -94,31 +94,33 @@ module.exports.get = function(datas, res, callback){
     if(typeof datas.limit !== "undefined"){
       limit = parseInt(datas.limit);
     }
+    console.log('product get query ;;; ', query);
     let productQuery = Products.find(query).limit(limit).skip(skip).sort({'label': 1}).exec(function(err, products_datas){
-        if(err){
-            callback({status:208, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+      if(err){
+        callback({status:208, "datas":{title:"PRODUCT_GET_ERROR", "message":"PRODUCT_GET_ERROR_MESSAGE", "media":"PRODUCT_GET_ERROR_MEDIA", "code":err.code, "errmsg":err.errmsg}});
+      }else{
+        var index = 0;
+        if(products_datas.length === 0) {
+          callback({status:200, datas:products_datas});
         }else{
-            var index = 0;
-            if(products_datas.length === 0) {
-              callback({status:200, datas:products_datas});
-            }
-            products_datas.forEach(function(prod){
-              Apps_model.get(null, {_id : prod.app_id}, function(e){
-                if(e.datas.length > 0){
-                  prod.app_logo = e.datas[0].logo;
-                  prod.app_icon = e.datas[0].icon;
-                  prod.app_label = e.datas[0].label;
-                  prod.app_infos = [];
-                  index++;
-                  if(index === products_datas.length){
-                    callback({status:200, datas:products_datas});
-                  }
-                }else{
+          products_datas.forEach(function(prod){
+            Apps_model.get(null, {_id : prod.app_id}, function(e){
+              if(e.datas.length > 0){
+                prod.app_logo = e.datas[0].logo;
+                prod.app_icon = e.datas[0].icon;
+                prod.app_label = e.datas[0].label;
+                prod.app_infos = [];
+                index++;
+                if(index === products_datas.length){
                   callback({status:200, datas:products_datas});
                 }
-              });
+              }else{
+                callback({status:200, datas:products_datas});
+              }
             });
+          });
         }
+      }
     });
 
     /*
@@ -170,7 +172,6 @@ module.exports.create = function(user_id, datas, callback){
     }
     delete datas.options;
     delete datas.device_infos;
-    console.log('NEW PRODUCTS SENDED DATAS ::::: ', datas);
     datas.label = datas.label.toUpperCase();
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -387,7 +388,18 @@ module.exports.addFile = function(product_id, file, callback){
     )
 };
 module.exports.removeFile = function(product_id, filename, callback){
-    fs.unlink('./uploads/'+filename, function(){});
+    var path = "";
+    if(filename.indexOf('-') !== -1){
+      var row_path = filename.split('-');
+      for(var i=0; i<row_path.length-1; i++){
+        path += row_path[i];
+        if(i < row_path.length-2){
+          path += "-";
+        }
+      }
+    }
+    console.log('UNLINK ', './uploads/'+path+'/'+filename);
+    fs.unlink('./uploads/'+path+'/'+filename, function(){});
     this.get({product_id:product_id}, {_id:product_id}, function(e){
       if(e.status === 200){
         var medias = [];

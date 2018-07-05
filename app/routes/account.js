@@ -98,17 +98,17 @@ account
             keyPublishable:keyPublishable,
             _:_,
             js:[
-                '/public/javascripts/account.js',
+                '/public/javascripts/account.min.js',
                 '/node_modules/cropperjs/dist/cropper.min.js',
-                '/public/javascripts/components/formular.js',
-                '/public/javascripts/components/popeye.js',
+                '/public/javascripts/components/formular.min.js',
+                '/public/javascripts/components/popeye.min.js',
                 '/node_modules/qrcode/build/qrcode.min.js',
                 'https://maps.googleapis.com/maps/api/js?key='+config.google.map
             ], css:[
-                '/public/stylesheets/account.css',
-                '/public/stylesheets/ui.css',
+                '/public/stylesheets/account.min.css',
+                '/public/stylesheets/ui.min.css',
                 '/node_modules/cropperjs/dist/cropper.min.css',
-                '/public/stylesheets/components/formular.css'
+                '/public/stylesheets/components/formular.min.css'
             ]
         });
         res.end();
