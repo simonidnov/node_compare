@@ -1,13 +1,13 @@
 block navigation
-    nav.hor_nav
-        ul
-            a(href="/apps" data-navigate="page_reload" title="Accueil")
-                li(class= page === "apps" ? "selected" : "" data-for="apps")= "Accueil"
-            a(href="/services" data-navigate="page_reload" title="Services")
-                li(class= page === "services" ? "selected" : "" data-for="services")= "Newsletter"
-            a(href="/customer_account" data-navigate="page_reload" title="Compte utilisateur")
-                li(class= page === "customer_account" ? "selected" : "" data-for="customer_account")= "Compte utilisateur"
-            a(href="/code-de-telechargement" data-navigate="page_reload" title="Code de téléchargement")
-                li(class= page === "code-de-telechargement" ? "selected" : "" data-for="code-de-telechargement")= "Code de téléchargement"
-            a(href="/contact" data-navigate="page_reload" title="Contact")
-                li(class= page === "contact" ? "selected" : "" data-for="contact")= "Contact"
+  nav.hor_nav
+    ul
+      a(href="/apps" data-navigate="page_reload" title="Accueil")
+        li(class= page === "apps" ? "selected" : "" data-for="apps")= "Accueil"
+      a(href="/services" data-navigate="page_reload" title="Services")
+        li(class= page === "services" ? "selected" : "" data-for="services")= "Newsletter"
+      a(href="/customer_account" data-navigate="page_reload" title="Compte utilisateur")
+        li(class= page === "customer_account" ? "selected" : "" data-for="customer_account")= "Compte utilisateur"
+      a(href="/code-de-telechargement" data-navigate="page_reload" title="Code de téléchargement")
+        li(class= page === "code-de-telechargement" ? "selected" : "" data-for="code-de-telechargement")= "Téléchargements"
+      a(href="/contact" data-navigate="page_reload" title="Contact")
+        li(class= page === "contact" ? "selected" : "" data-for="contact")= "Contact"

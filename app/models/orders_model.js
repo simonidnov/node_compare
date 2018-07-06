@@ -126,8 +126,8 @@ module.exports.buy_with_coupon = function(req, res, callback){
               status:208,
               message:"PRODUCT_ALREADY_BUY",
               response_display : {
-                "title":"Coupon Code Produit déjà ajouté !",
-                "message":"Vous tentez d'ajouter un produit que vous avez déjà acheté !<br>rendez-vous sur votre compte pour le télécharger ou sur machanson.joyvox.fr/playlist pour l'écouter.",
+                "title":"Produit déjà ajouté !",
+                "message":"Vous tentez d'ajouter un produit que vous avez déjà acheté !<br>rendez-vous sur votre compte pour le télécharger ou sur sur votre playlist pour l'écouter.",
                 buttons:[
                   {
                     class:"btn-success",
