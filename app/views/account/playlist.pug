@@ -1,0 +1,87 @@
+html
+  head
+    title= title
+    meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+    meta(name='viewport' content ='width=device-width, initial-scale=1, user-scalable=no')
+    link(rel='stylesheet', href='/stylesheets/playlist.min.css')
+    link(rel='stylesheet', href='/public/fonts/dist/idkids-icons.min.css')
+  body
+    div.playlist
+      div.waves
+        div#waveform
+        div.second#second
+        <!-- main wavesurfer.js lib -->
+      div.navBar
+        button.playButton(onclick="wavesurfer.playPause()")
+          i.glyphicon.glyphicon-play.icon-video
+      script(src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/wavesurfer.min.js")
+      script.
+        var player_options = {
+          barGap:0, 
+          barWidth:1, 
+          cursorWidth:1, 
+          fillParent:true, 
+          autoCenter:true, 
+          height:256, 
+          scrollParent:true, 
+          barHeight:1, 
+          responsive:true, 
+          container: '#waveform', 
+          cursorColor: "#FFFFFF",
+          waveColor: '#FB897F',
+          progressColor: '#2C4F9B'
+        };
+        var wavesurfer = WaveSurfer.create(player_options);
+        wavesurfer.load('/uploads/2018-7-4/2018-7-4-08a6920bd32863dc4334d79433ef584b.mp3');
+        wavesurfer.on('pause', function () {
+          console.log('paused');
+        });
+        wavesurfer.on('play', function () {
+          console.log('play');
+        });
+        wavesurfer.on('audioprocess', function (e) {
+          console.log('audioprocess ', e, wavesurfer.getDuration());
+          var percent = (e/wavesurfer.getDuration()*100).toFixed(2);
+          console.log(percent);
+          document.getElementById("second").style.left = percent+"%";
+        });
+        wavesurfer.on('destroy', function () {
+          console.log('destroy');
+        });
+        wavesurfer.on('error', function () {
+          console.log('error');
+        });
+        wavesurfer.on('finish', function () {
+          console.log('finish');
+        });
+        wavesurfer.on('interaction', function (e) {
+          console.log('interaction ', e);
+        });
+        wavesurfer.on('loading', function (e) {
+          console.log('loading ', e);
+        });
+        wavesurfer.on('mute', function (e) {
+          console.log('mute ', e);
+        });
+        wavesurfer.on('volume', function (e) {
+          console.log('volume ', e);
+        });
+        wavesurfer.on('zoom', function (e) {
+          console.log('zoom ', e);
+        });
+        wavesurfer.on('seek', function (e) {
+          console.log('seek ', e);
+        });
+        wavesurfer.on('waveform-ready', function (e) {
+          console.log('waveform-ready ', e);
+        });
+        wavesurfer.on('ready', function (e) {
+          console.log('ready ', e);
+        });
+      each product in userproducts
+        if product.meta_datas.sub_category !== "CHANSONPERSONNALISEE"
+          a(href="/playlist/"+product.meta_datas.label)= product.meta_datas.label
+      p= JSON.stringify(params)
+      p= (typeof params.color1 !== "undefined")? params.color1 : '#FB897F'
+      
+    

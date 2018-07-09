@@ -1,0 +1,43 @@
+html, body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow: hidden;
+}
+.playlist{
+  width:100%;
+  position: relative;
+}
+.playlist .waves{
+  width:100%;
+  height:130px;
+  background-color:#f44744;
+  overflow: hidden;
+  position: relative;
+}
+.playlist .waves wave:nth-child(2){
+  background:#737EB7;
+}
+.playlist .navBar{
+  background: #f44744;
+  width:100%;
+  height:45px;
+}
+.playlist .playButton{
+  left: 0;
+  right: 0;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  position: absolute;
+  bottom: -20px;
+  z-index: 9;
+  background: #f44744;
+  color:#FFF;
+  font-size: 30px;
+  font-family: 'idkids-icons';
+}

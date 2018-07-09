@@ -21,6 +21,7 @@ const express = require('express'),
     metas = require('./routes/metas'),
     media = require('./routes/media'),
     gmail = require('./routes/gmail'),
+    playlist = require('./routes/playlist'),
     download = require('./routes/download'),
     admin = require('./routes/admin'),
     products = require('./routes/products'),
@@ -153,6 +154,8 @@ router.use('/orders', orders);
 router.use('/comments', comments);
 router.use('/coupon_code', coupon_code);
 router.use('/coupon_code/:any', coupon_code);
+router.use('/playlist', playlist);
+router.use('/playlist/:any', playlist);
 router.use('/', index);
 
 app.use('/', router);
