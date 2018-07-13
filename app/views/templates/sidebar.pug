@@ -1,34 +1,34 @@
 block sidebar
-  div.page-sidebar(v-bind:class="(openSide)? 'opened' : ''")#sidepanel
-    div.open-sidebar(v-on:click="openSide = !openSide")
+  .page-sidebar(v-bind:class="(openSide)? 'opened' : ''")#sidepanel
+    .open-sidebar(v-on:click="openSide = !openSide")
       span
       span
       span
-    div.logo()
+    .logo()
       a(href="/")
         include ../../public/images/assets/icon_brand.svg
-    div.scrollview
+    .scrollview
       if(typeof user!== "undefined")
-        div.account(v-on:click="userPanel != userPanel")
-          div.avatar(style="background-image:url("+user.avatar+")")
-          div.pseudo= user.pseudo
+        .account(v-on:click="userPanel != userPanel")
+          .avatar(style="background-image:url("+user.avatar+")")
+          .pseudo= user.pseudo
       else
         a(href="/auth")
-          div.account
-            div.avatar(style="background-image:url(../../images/assets/account.svg)")
-            div.pseudo Me connecter
+          .account
+            .avatar(style="background-image:url(../../images/assets/account.svg)")
+            .pseudo Me connecter
       div(v-if="userPanel")
         h3 User Panel
       div
-        div.search
+        .search
           input.searchInput#searchAll(type="search", placeholder="Titre, Album ou Playlist", v-on:keyup="search($event.target.value)", v-model="searchValue")
         h3 Albums
         ul.playlist-list
           li(v-for="album in albums" v-on:click="reloadAlbum(album._id)")
-            div.cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
-            div.infos
-              div.label {{ album.label }}
-              div.datas {{ album.medias.length}} titres
+            .cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
+            .infos
+              .label {{ album.label }}
+              .datas {{ album.medias.length}} titres
           //-album-listcomp(label="ZANIMOMUSIC 2", thumb="", shortname="", medialength="", id="")
       //-p= JSON.stringify(albums)
   script.
@@ -53,6 +53,8 @@ block sidebar
                 player.cover = e[0].thumb;
                 player.description = e[0].description;
                 player.product = e[0];
+                
+                homeView.displayHome = false;
                 
                 albumList.params.loop = player.isLoop;
                 albumList.params.random = player.isRandom;

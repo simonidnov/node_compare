@@ -1,0 +1,23 @@
+block playlisthome
+  .page-main.homeView#homeView(v-if="displayHome")
+    h1 Accueil
+  script.
+    let homeView = new Vue(
+      { 
+        el: '#homeView',
+        data: {
+          displayHome: true
+        },
+        mounted () {
+          if(!{JSON.stringify(product)} !== null){
+            this.displayHome = false;
+          }
+        },
+        methods : {
+          sayHello: function(){
+            console.log("say hello");
+          }
+        }
+      }
+    )
+    

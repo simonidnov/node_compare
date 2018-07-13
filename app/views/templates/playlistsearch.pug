@@ -67,6 +67,8 @@ block playlistsearch
             player.description = album.description;
             player.product = album;
             
+            homeView.displayHome = false;
+            
             albumList.params.loop = player.isLoop;
             albumList.params.random = player.isRandom;
             albumList.params.index = 0;
@@ -82,6 +84,8 @@ block playlistsearch
             player.description = song.album.description;
             player.product = song.album;
             
+            homeView.displayHome = false;
+          
             albumList.params.loop = player.isLoop;
             albumList.params.random = player.isRandom;
             albumList.params.index = song.index;

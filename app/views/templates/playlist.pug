@@ -1,25 +1,25 @@
 block playlist
-  div.page-main()
-    div.playlist.headingwave
-      div.waves
-        div#waveform
-    div.playlist#player(v-if="hasProduct")
+  .page-main()
+    .playlist.headingwave
+      .waves
+        #waveform
+    .playlist#player()
       transition(name="showCover" v-on:leave="leaveCover" v-on:enter="enterCover")
-        div.sdisplayCover(v-if="isDisplayCover", v-on:click="isDisplayCover = !isDisplayCover")
+        .sdisplayCover(v-if="isDisplayCover", v-on:click="isDisplayCover = !isDisplayCover")
           img.picture#coverPicture(v-bind:src='cover', v-if="isDisplayCover")
-      div.player
-        div.navBar
-          div.loadError(v-if="hasError")
+      .player
+        .navBar
+          .loadError(v-if="hasError")
             span Erreur de chargement
           transition(name="showLoader")
-            div.loadProgress(v-if="isLoading")
+            .loadProgress(v-if="isLoading")
               div 
-                div.barLoad(v-bind:style="{'width':loadProgress+'%'}")
+                .barLoad(v-bind:style="{'width':loadProgress+'%'}")
                   span {{ loadProgress }} %
-          div.cover(v-bind:style="{ 'background-image': 'url('+cover+')' }", v-on:click="isDisplayCover = !isDisplayCover")
-            div.iconzoom
+          .cover(v-bind:style="{ 'background-image': 'url('+cover+')' }", v-on:click="isDisplayCover = !isDisplayCover")
+            .iconzoom
               include ../../public/images/player_assets/zoom.svg
-          div.player_options
+          .player_options
             button.btn(v-on:click="setLoop" v-if="!isLoop")
               include ../../public/images/player_assets/loop.svg
             button.btn.enabled(v-on:click="setLoop" v-else)
@@ -30,7 +30,7 @@ block playlist
               include ../../public/images/player_assets/random.svg
             button.btn(v-on:click="download")
               include ../../public/images/player_assets/download.svg
-          div.player_nav
+          .player_nav
             template(v-if="index > 0")
               button.btn(v-on:click="playPrev()")
                 include ../../public/images/player_assets/prev.svg
@@ -54,7 +54,7 @@ block playlist
             template(v-if="volume == 1")
               button.btn(v-on:click="setVolume(0)")
                 include ../../public/images/player_assets/volume.svg
-      div.scrollview
+      .scrollview
         h1.title 
           span.infos_icon(v-on:click="showInfos = !showInfos")
             include ../../public/images/player_assets/infos.svg
@@ -63,18 +63,18 @@ block playlist
         ul.mediasList
           li(v-for="(media, i) in medias" v-on:click="playAudio(i)" v-if="media[0].mimetype == 'audio/mp3' || media[0].mimetype == 'audio/wav'")
             template(v-if="index == i")
-              div.icon#playButton
+              .icon#playButton
                 template(v-if="isplaying")
                   include ../../public/images/player_assets/pause.svg
                 template(v-if="isplaying == false")
                   include ../../public/images/player_assets/play.svg
-              span.label {{ media[0].originalname }}
-              div.progressDuration#progressDuration
-              div.progress#progresslist
+              span.label {{ media[0].originalname }} - Artistes - Style musical
+              .progressDuration#progressDuration
+              .progress#progresslist
             template(v-if="index != i")
-              div.icon#pauseButton
+              .icon#pauseButton
                 include ../../public/images/player_assets/play.svg
-              span.label {{ media[0].originalname }}
+              span.label {{ media[0].originalname }} - Artistes - Style musical
     script(src="../public/javascripts/components/wavesurfer.min.js")
     script.
       var lopp = '#{params.loop}',
@@ -225,7 +225,6 @@ block playlist
             this.index = index;
             this.autoplay = true;
             this.wavesurfer.load("/"+this.medias[index][0].path);
-            
           },
           setLoop: function(){
             if(this.isLoop){
