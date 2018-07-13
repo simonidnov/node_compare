@@ -15,36 +15,57 @@ playlist.use(function(req, res, next){
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     //SET OUTPUT FORMAT
     //res.setHeader('Content-Type', 'application/json');
-    Auth_helper.validate_session(req, function(e){
-        if(e.status === 200){
-            next();
-        }else{
-            res.redirect(307, '/auth');
-        }
-    });
+    //Auth_helper.validate_session(req, function(e){
+    //    if(e.status === 200){
+    //        next();
+    //    }else{
+    //        res.redirect(307, '/auth');
+    //    }
+    //});
+    next();
 });
 playlist
-    .get(['/', '/:playlist_name'], function(req, res, next) {
-      console.log("req.params ==== ", req.query);
-      res.render('account/playlist', {
-          title: 'Account Playlist',
+    .get(['/', '/:product_id'], function(req, res, next) {
+      products_controller.get({extra_category:"LIVRECD"}, req, function(e){
+        req.products = e.datas;
+        next();
+      });
+    }, function(req, res, next){
+      if(typeof req.params.product_id !== "undefined"){
+        // GET PRODUCT TO BUILD ORIGINAL PLAYLIST
+        products_controller.get({product_id:req.params.product_id}, req, function(e){
+          console.log('GET PRODUCT e === ', e);
+          if(e.status === 200 && e.datas.length === 1){
+            req.product = e.datas[0];
+            next();
+          }else{
+            req.product = null;
+            next();
+          }
+        });
+      }else{
+        req.product = null;
+        next();
+      }
+    }, function(req, res, next){
+      res.render('audio_player', {
+          title: req.params.playlist_name,
           user : req.session.Auth,
           locale:language_helper.getlocale(req),
           lang:lang,
           page:'playlist',
           params : req.query,
+          fs: require('fs'),
+          product : req.product,
+          albums : req.products,
           js:[
-              '/public/javascripts/account/playlist.js',
-              "/public/javascripts/contact.min.js",
               "/node_modules/swiper/dist/js/swiper.min.js",
               "/public/javascripts/components/formular.min.js"
           ], css:[
-              '/public/stylesheets/account/account.css',
-              "/node_modules/swiper/dist/css/swiper.min.css",
               "/public/stylesheets/components/formular.min.css"
           ]
       });
-      res.end();
+      //res.end();
     });
 
 module.exports = playlist;

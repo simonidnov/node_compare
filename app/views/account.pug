@@ -1,8 +1,6 @@
 extends account_header
 
 block content
-    div.row#playlist(style= page === "playlist" ? "display:block" : "display:none")
-      include account/playlist.pug
     div.container.with_head
         div.diagonal
         div.dashboard#account(style= (page === "" || page === "account") ? "display:block" : "display:none")

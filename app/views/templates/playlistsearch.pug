@@ -1,0 +1,155 @@
+block playlistsearch
+  div#researchPanel
+    div.page-main.reseach(v-if="hasResearch")
+      div.scrollview
+        h2() Recherche ({{ searchValue }})
+        div.col.fifty
+          h3 Albums
+          ul.results.album
+            li(v-for="album in results.albums" v-on:click="openAlbum(album)")
+              div.cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
+              div.label {{ album.label }}
+              div.infos par : Artiste inconnu <br> {{ album.medias.length }} titres
+            li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun album correspondant à votre recherche
+        div.col.fifty
+          h3 Titres
+          ul.results.titres
+            li(v-for="media in results.titres" v-on:click="playSong(media)")
+              span {{ media[0].originalname }}
+            li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun titre correspondant à votre recherche
+        div.col
+          h3 Autres réponses
+  script.
+    let research = new Vue(
+      { 
+        el: '#researchPanel',
+        data: {
+          hasResearch: false,
+          titres: [],
+          searchValue : "",
+          albums: !{JSON.stringify(albums)},
+          results: {
+            albums : [],
+            titres : [],
+            articles : [],
+            applications : []
+          }
+        },
+        methods : {
+          search: function(value) {
+            this.searchValue = value;
+            var self = this;
+            self.results.albums = [];
+            self.results.titres = [];
+            this.albums.forEach(function(album, index){
+              if(JSON.stringify(album).toUpperCase().indexOf(value.toUpperCase()) !== -1){
+                self.results.albums.push(album);
+              }
+              self.searchTitres(album, value);
+            });
+          },
+          searchTitres : function(album, value){
+            var self = this;
+            album.medias.forEach(function(media, i){
+              if(JSON.stringify(media).toUpperCase().indexOf(value.toUpperCase()) !== -1){
+                media.album = album;
+                media.index = i;
+                self.results.titres.push(media);
+              }
+            });
+          },
+          openAlbum : function(album){
+            this.hasResearch = false;
+            
+            player.medias = album.medias;
+            player.title = album.label;
+            player.cover = album.thumb;
+            player.description = album.description;
+            player.product = album;
+            
+            albumList.params.loop = player.isLoop;
+            albumList.params.random = player.isRandom;
+            albumList.params.index = 0;
+            albumList.params.volume = player.volume;
+            history.pushState(self.params, null, '/playlist/'+album._id+"?"+Object.keys(albumList.params).map(key => key + '=' + albumList.params[key]).join('&'));
+          },
+          playSong : function(song){
+            this.hasResearch = false;
+            
+            player.medias = song.album.medias;
+            player.title = song.album.label;
+            player.cover = song.album.thumb;
+            player.description = song.album.description;
+            player.product = song.album;
+            
+            albumList.params.loop = player.isLoop;
+            albumList.params.random = player.isRandom;
+            albumList.params.index = song.index;
+            albumList.params.volume = player.volume;
+            
+            player.playAudio(song.index);
+            history.pushState(self.params, null, '/playlist/'+song.album._id+"?"+Object.keys(albumList.params).map(key => key + '=' + albumList.params[key]).join('&'));
+          }
+        }
+      }
+    )
+  style.
+    .reseach{
+      
+    }
+    .reseach h2{
+      font-weight:light;
+      padding-left:20px;
+    }
+    .reseach h3{
+      font-weight:light;
+      padding-left:20px;
+    }
+    .col{
+      display:inline-table;
+      padding-bottom:20px;
+    }
+    .col.fifty{
+      width:50%;
+    }
+    .results{
+      margin:0;
+      padding:0;
+      padding-left:20px;
+    }
+    .results.album{
+      display:inline-flex;
+    }
+    .results li{
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+    .results.album li{
+      margin-right:20px;
+    }
+    .results.album li .label{
+      font-size:14px;
+      line-height:18px;
+      padding-top:8px;
+      color:#777;
+      text-transform:capitalise;
+      cursor:pointer;
+    }
+    .results.album li .infos{
+      font-size:12px;
+      line-height:18px;
+      color:#999;
+      cursor:pointer;
+    }
+    .results li .cover{
+      width:256px;
+      height:256px;
+      border-radius:4px;
+      background-size:cover;
+      box-shadow:0 1px 6px rgba(25,25,34,.16);
+      cursor:pointer;
+    }
+    .results li .cover:hover{
+      box-shadow:0 10px 16px rgba(25,25,34,.16);
+    }

@@ -1,0 +1,81 @@
+block sidebar
+  div.page-sidebar(v-bind:class="(openSide)? 'opened' : ''")#sidepanel
+    div.open-sidebar(v-on:click="openSide = !openSide")
+      span
+      span
+      span
+    div.logo()
+      a(href="/")
+        include ../../public/images/assets/icon_brand.svg
+    div.scrollview
+      if(typeof user!== "undefined")
+        div.account(v-on:click="userPanel != userPanel")
+          div.avatar(style="background-image:url("+user.avatar+")")
+          div.pseudo= user.pseudo
+      else
+        a(href="/auth")
+          div.account
+            div.avatar(style="background-image:url(../../images/assets/account.svg)")
+            div.pseudo Me connecter
+      div(v-if="userPanel")
+        h3 User Panel
+      div
+        div.search
+          input.searchInput#searchAll(type="search", placeholder="Titre, Album ou Playlist", v-on:keyup="search($event.target.value)", v-model="searchValue")
+        h3 Albums
+        ul.playlist-list
+          li(v-for="album in albums" v-on:click="reloadAlbum(album._id)")
+            div.cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
+            div.infos
+              div.label {{ album.label }}
+              div.datas {{ album.medias.length}} titres
+          //-album-listcomp(label="ZANIMOMUSIC 2", thumb="", shortname="", medialength="", id="")
+      //-p= JSON.stringify(albums)
+  script.
+    let albumList = new Vue(
+      { 
+        el: '#sidepanel',
+        data: {
+          params: !{JSON.stringify(params)},
+          albums: !{JSON.stringify(albums)},
+          db    : !{JSON.stringify(albums)},
+          userPanel : false,
+          searchValue : "",
+          openSide : false,
+        },
+        methods : {
+          reloadAlbum: function(_id) {
+            var self = this;
+            index.sdk.api.get('/products', {product_id:_id}, function(e){
+              if(typeof player !== "undefined"){
+                player.medias = e[0].medias;
+                player.title = e[0].label;
+                player.cover = e[0].thumb;
+                player.description = e[0].description;
+                player.product = e[0];
+                
+                albumList.params.loop = player.isLoop;
+                albumList.params.random = player.isRandom;
+                albumList.params.index = player.index;
+                albumList.params.volume = player.volume;
+                history.pushState(self.params, null, '/playlist/'+_id+"?"+Object.keys(albumList.params).map(key => key + '=' + albumList.params[key]).join('&'));
+              }
+            }, function(e){
+              console.log('FAIL ', e);
+            });
+          },
+          search : function(value){
+            this.searchValue = value;
+            if(value === ""){
+              research.hasResearch = false;
+              this.albums = this.db;
+            }else{
+              console.log('search ', value);
+              research.hasResearch = false;
+              research.hasResearch = true;
+              research.search(value);
+            }
+          }
+        }
+      }
+    )

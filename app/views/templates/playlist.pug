@@ -1,0 +1,306 @@
+block playlist
+  div.page-main()
+    div.playlist.headingwave
+      div.waves
+        div#waveform
+    div.playlist#player(v-if="hasProduct")
+      transition(name="showCover" v-on:leave="leaveCover" v-on:enter="enterCover")
+        div.sdisplayCover(v-if="isDisplayCover", v-on:click="isDisplayCover = !isDisplayCover")
+          img.picture#coverPicture(v-bind:src='cover', v-if="isDisplayCover")
+      div.player
+        div.navBar
+          div.loadError(v-if="hasError")
+            span Erreur de chargement
+          transition(name="showLoader")
+            div.loadProgress(v-if="isLoading")
+              div 
+                div.barLoad(v-bind:style="{'width':loadProgress+'%'}")
+                  span {{ loadProgress }} %
+          div.cover(v-bind:style="{ 'background-image': 'url('+cover+')' }", v-on:click="isDisplayCover = !isDisplayCover")
+            div.iconzoom
+              include ../../public/images/player_assets/zoom.svg
+          div.player_options
+            button.btn(v-on:click="setLoop" v-if="!isLoop")
+              include ../../public/images/player_assets/loop.svg
+            button.btn.enabled(v-on:click="setLoop" v-else)
+              include ../../public/images/player_assets/loop.svg
+            button.btn(v-on:click="setRandom" v-if="!isRandom")
+              include ../../public/images/player_assets/random.svg
+            button.btn.enabled(v-on:click="setRandom" v-else)
+              include ../../public/images/player_assets/random.svg
+            button.btn(v-on:click="download")
+              include ../../public/images/player_assets/download.svg
+          div.player_nav
+            template(v-if="index > 0")
+              button.btn(v-on:click="playPrev()")
+                include ../../public/images/player_assets/prev.svg
+            template(v-if="index == 0")
+              button.btn.disabled()
+                include ../../public/images/player_assets/prev.svg
+            button.btn(v-on:click="playPause()")
+              template(v-if="isplaying")
+                include ../../public/images/player_assets/pause.svg
+              template(v-if="isplaying == false")
+                include ../../public/images/player_assets/play.svg
+            template(v-if="index < medias.length-1")
+              button.btn(v-on:click="playNext()")
+                include ../../public/images/player_assets/next.svg
+            template(v-if="index == medias.length-1")
+              button.btn.disabled
+                include ../../public/images/player_assets/next.svg
+            template(v-if="volume == 0")
+              button.btn(v-on:click="setVolume(1)")
+                include ../../public/images/player_assets/volumecut.svg
+            template(v-if="volume == 1")
+              button.btn(v-on:click="setVolume(0)")
+                include ../../public/images/player_assets/volume.svg
+      div.scrollview
+        h1.title 
+          span.infos_icon(v-on:click="showInfos = !showInfos")
+            include ../../public/images/player_assets/infos.svg
+          span {{ title }}
+        p.infos(v-if="showInfos") {{ description }}
+        ul.mediasList
+          li(v-for="(media, i) in medias" v-on:click="playAudio(i)" v-if="media[0].mimetype == 'audio/mp3' || media[0].mimetype == 'audio/wav'")
+            template(v-if="index == i")
+              div.icon#playButton
+                template(v-if="isplaying")
+                  include ../../public/images/player_assets/pause.svg
+                template(v-if="isplaying == false")
+                  include ../../public/images/player_assets/play.svg
+              span.label {{ media[0].originalname }}
+              div.progressDuration#progressDuration
+              div.progress#progresslist
+            template(v-if="index != i")
+              div.icon#pauseButton
+                include ../../public/images/player_assets/play.svg
+              span.label {{ media[0].originalname }}
+    script(src="../public/javascripts/components/wavesurfer.min.js")
+    script.
+      var lopp = '#{params.loop}',
+          product = !{JSON.stringify(product)};
+      var player = new Vue({
+        el: '#player',
+        data: {
+          hasProduct : false,
+          product : !{JSON.stringify(product)},
+          title : "",
+          description : "",
+          cover : "",
+          showInfos:false,
+          message: 'Hello Vue!',
+          medias: [],
+          index: ('#{params.index}' !== "")? parseInt('#{params.index}') : 0,
+          autoplay: ('#{params.autoplay}' !== "" && '#{params.autoplay}' === "true")? true : false,
+          percent: 0,
+          isRandom: ('#{params.random}' !== "" && '#{params.random}' === "true")? true : false,
+          isLoop: ('#{params.loop}' !== "" && '#{params.loop}' === "true")? true : false,
+          isplaying: false,
+          isDisplayCover: false,
+          show: false,
+          hasError : false,
+          volume : ('#{params.volume}' !== "")? parseInt('#{params.volume}') : 1,
+          displayDownload : false,
+          isLoading:false,
+          loadProgress:0
+        },
+        mounted () {
+          if(typeof this.product !== "undefined" && this.product !== null){
+            this.title = this.product.label;
+            this.description = this.product.description;
+            this.cover = this.product.thumb;
+            this.medias = this.product.medias;
+            this.hasProduct = true;
+          }
+          this.$nextTick(function() {
+            var self = this;
+            this.color1= (typeof '#{params.color1}' !== "undefined" && '#{params.color1}' !== "")? "#"+'#{params.color1}' : '#333';
+            this.color2= (typeof '#{params.color2}' !== "undefined" && '#{params.color2}' !== "")? "#"+'#{params.color2}' : '#222';
+            function shadeColor(hex, lum) {  // deprecated. See below.
+              hex = String(hex).replace(/[^0-9a-f]/gi, '');
+            	if (hex.length < 6) {
+            		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+            	}
+            	lum = lum || 0;
+            	var rgb = "#", c, i;
+            	for (i = 0; i < 3; i++) {
+            		c = parseInt(hex.substr(i*2,2), 16);
+            		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+            		rgb += ("00"+c).substr(c.length);
+            	}
+            	return rgb;
+            }
+            this.color1light = shadeColor(this.color1, .5);
+            this.color2light = shadeColor(this.color2, .5);
+            this.player_options = {
+              barGap:0, 
+              barWidth:4, 
+              cursorWidth:1, 
+              fillParent:true, 
+              autoCenter:true, 
+              height:256, 
+              scrollParent:true, 
+              barHeight:1, 
+              responsive:true, 
+              container: '#waveform', 
+              cursorColor: "#FFFFFF",
+              waveColor: this.color1light,
+              progressColor: this.color2light
+            };
+            this.wavesurfer = WaveSurfer.create(this.player_options);
+            if(this.medias.length > 0){
+              this.wavesurfer.load("/"+this.medias[this.index][0].path);
+            }
+            this.setVolume(this.volume);
+            this.wavesurfer.on('pause', function () {
+              self.isplaying = false;
+            });
+            this.wavesurfer.on('play', function () {
+              self.isplaying = true;
+            });
+            this.wavesurfer.on('audioprocess', function (e) {
+              self.percent = (e/self.wavesurfer.getDuration()*100).toFixed(2);
+              document.getElementById('progresslist').style.width = self.percent+'%';
+              document.getElementById('progressDuration').innerHTML = Math.round(e)+" / "+Math.round(self.wavesurfer.getDuration())+" sec";
+            });
+            this.wavesurfer.on('destroy', function () {
+            });
+            this.wavesurfer.on('error', function () {
+              self.hasError = true;
+            });
+            this.wavesurfer.on('finish', function () {
+              if(self.isLoop){
+                self.playAudio(self.index);
+              }else if(self.isRandom){
+                self.playAudio(Math.floor(Math.random()*self.medias.length-1));
+              }else if(self.index === self.medias.length-1){
+                self.playAudio(0);
+              }else{
+                self.playAudio(self.index+1);
+              }
+            });
+            this.wavesurfer.on('interaction', function (e) {
+              console.log('interaction ', e);
+            });
+            this.wavesurfer.on('loading', function (e) {
+              //console.log('loading ', e);
+              self.isLoading = true;
+              self.loadProgress = e;
+              document.getElementById('progressDuration').innerHTML = "chargement "+e+"%";
+              if(e === 100){
+                self.isLoading = false;
+                document.getElementById('progressDuration').innerHTML = "Prêt à jouer";
+              }
+            });
+            this.wavesurfer.on('mute', function (e) {
+              console.log('mute ', e);
+            });
+            this.wavesurfer.on('volume', function (e) {
+              console.log('volume ', e);
+            });
+            this.wavesurfer.on('zoom', function (e) {
+              console.log('zoom ', e);
+            });
+            this.wavesurfer.on('seek', function (e) {
+              console.log('seek ', e);
+            });
+            this.wavesurfer.on('waveform-ready', function (e) {
+              console.log('waveform-ready ', e);
+            });
+            this.wavesurfer.on('ready', function (e) {
+              self.hasError = false;
+              if(self.autoplay){
+                self.wavesurfer.playPause();
+              }
+              console.log('ready ', e);
+            });
+          })
+        },
+        methods : {
+          playAudio: function(index){
+            if(index === this.index){
+              this.playPause();
+              return false;
+            }
+            this.index = index;
+            this.autoplay = true;
+            this.wavesurfer.load("/"+this.medias[index][0].path);
+            
+          },
+          setLoop: function(){
+            if(this.isLoop){
+              this.isLoop = false;
+            }else{
+              this.isLoop = true;
+            }
+          },
+          setRandom: function() {
+            if(this.isRandom){
+              this.isRandom = false;
+            }else{
+              this.isRandom = true;
+            }
+          },
+          playPause: function() {
+            console.log('playpause');
+            this.wavesurfer.playPause();
+          },
+          playPrev: function() {
+            this.playAudio(this.index-1);
+          },
+          playNext: function() {
+            this.playAudio(this.index+1);
+          },
+          stop: function(){
+            this.wavesurfer.stop();
+          },
+          displayCover: function() {
+            this.isDisplayCover = true;
+          },
+          hideCover: function() {
+            this.isDisplayCover = false;
+          },
+          leaveCover : function(){
+            document.getElementById('coverPicture').classList.remove('showed');
+          },
+          enterCover : function(){
+            document.getElementById('coverPicture').classList.add('showed');
+          },
+          setVolume : function(volume){
+            this.volume = volume;
+            this.wavesurfer.setVolume(this.volume);
+          },
+          download : function(){
+            
+          }
+        }
+      });
+      
+    style.
+      .playlist .waves{
+        background-color:##{params.color1};
+      }
+      .playlist .waves wave:nth-child(2){
+        background-color:##{params.color2} !important;
+      }
+      .playlist .player{
+        background-color:##{params.color1};
+      }
+      .playlist .player_options .btn.enabled svg rect,
+      .playlist .player_options .btn.enabled svg path,
+      .playlist .player_options .btn.enabled svg polygon{
+        fill:##{params.color1};
+      }
+      .playlist .mediasList li .progress{
+        background-color:##{params.color1};
+      }
+      .downloadOptions .btn{
+        background-color:##{params.color2};
+      }
+      /*
+      .playlist .mediasList li .icon svg path{
+        fill:##{params.color1};
+      }
+      */
+    
+    
