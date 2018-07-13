@@ -6,7 +6,8 @@ var express = require('express'),
     uri_helper = require('../helpers/uri_helper'),
     userproducts_controller = require('../controllers/userproducts_controller'),
     products_controller = require('../controllers/products_controller'),
-    lang = require('../public/languages/auth_lang');
+    lang = require('../public/languages/auth_lang'),
+    request = require('request');
 
 playlist.use(function(req, res, next){
     //ACCEPT CORS
@@ -29,6 +30,13 @@ playlist
       products_controller.get({extra_category:"LIVRECD"}, req, function(e){
         req.products = e.datas;
         next();
+      });
+    }, function(req, res, next){
+      request("https://www.joyvox.fr/api/albums/album", function(err, resp, body) {
+        if(typeof body !== "undefined"){
+          req.joyvox_albums = JSON.parse(body);
+          next();
+        }
       });
     }, function(req, res, next) {
       if(typeof req.params.product_id !== "undefined"){
@@ -57,7 +65,8 @@ playlist
           fs: require('fs'),
           product : req.product,
           albums : req.products,
-          userproducts : req.userproducts,
+          userproducts : [],
+          joyvox_albums: req.joyvox_albums,
           js:[
               "/node_modules/swiper/dist/js/swiper.min.js",
               "/public/javascripts/components/formular.min.js"

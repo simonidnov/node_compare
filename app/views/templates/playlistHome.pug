@@ -1,13 +1,48 @@
 block playlisthome
   .page-main.homeView#homeView(v-if="displayHome")
-    h1 Accueil
+    div.scrollview
+      h1.tiret : Écouter
+      .hpList
+        .item(v-for="(playlist, index) in playlists" v-bind:style="{'background-image':'url(playlist.picture)'}" v-on:click="reloadAlbum(playlist._id)")
+          .container
+            .cover(v-bind:style="{ 'background-image': 'url('+playlist.thumb+')' }")
+            .label {{ playlist.label }}
+            //-.description {{ playlist.description }} 
+            //-.typology {{ playlist.extra_category }} 
+            .playbutton
+              span.icon 
+                include ../../public/images/player_assets/play.svg
+              span.label Écouter
+      .bannerMaChanson.hpList
+        h1 Ma chanson personnalisée
+        p Trouvez votre chanson personnalisée<br>pour réussir sa fête d'anniversaire !
+        a(href="http://machanson.joyvox.fr" target="_blank")
+          .playbutton
+            span.icon 
+              include ../../public/images/player_assets/play.svg
+            span.label Découvrir
+      h1.tiret : En savoir plus
+      .hpList
+        .item(v-for="(album, index) in joyvox_albums" v-bind:style="{'background-color':album.page_album_color}" v-on:click="openUrl(playlist._id)")
+          a(v-bind:href="'https://www.joyvox.fr/fr/album/'+ album.url" target="_blank")
+            .container
+              .cover(v-bind:style="{ 'background-image': 'url(https://www.joyvox.fr/'+album.cover+')' }")
+              .label(v-bind:style="{ 'color': '#FFF' }") {{ album.label }}
+              //-.description {{ playlist.description }} 
+              //-.typology {{ playlist.extra_category }} 
+              .playbutton
+                span.icon 
+                  include ../../public/images/player_assets/play.svg
+                span.label Découvrir
+    
   script.
     let homeView = new Vue(
       { 
         el: '#homeView',
         data: {
           displayHome : true,
-          playlists   : !{JSON.stringify(albums)}
+          playlists   : !{JSON.stringify(albums)},
+          joyvox_albums : !{JSON.stringify(joyvox_albums)}
         },
         mounted () {
           if(!{JSON.stringify(product)} !== null){
@@ -15,10 +50,181 @@ block playlisthome
           }
         },
         methods : {
-          sayHello: function(){
-            console.log("say hello");
+          reloadAlbum : function(_id){
+            var self = this;
+            index.sdk.api.get('/products', {product_id:_id}, function(e){
+              if(typeof player !== "undefined"){
+                player.medias = e[0].medias;
+                player.title = e[0].label;
+                player.cover = e[0].thumb;
+                player.description = e[0].description;
+                player.product = e[0];
+                
+                homeView.displayHome = false;
+                
+                albumList.params.loop = player.isLoop;
+                albumList.params.random = player.isRandom;
+                albumList.params.index = player.index;
+                albumList.params.volume = player.volume;
+                history.pushState(self.params, null, '/playlist/'+_id+"?"+Object.keys(albumList.params).map(key => key + '=' + albumList.params[key]).join('&'));
+              }
+            }, function(e){
+              console.log('FAIL ', e);
+            });
           }
         }
       }
     )
     
+  style.
+    h1.tiret{
+      position:relative;
+      margin-bottom:30px;
+    }
+    h1.tiret::after{
+      content:'';
+      height:3px;
+      width:45px;
+      background:#000;
+      position:absolute;
+      bottom:-5px;
+      left:20px;
+    }
+    .hpList{
+      display:inline-table;
+      width:100%;
+    }
+    .hpList .item{
+      width:380px;
+      max-width:94%;
+      height:250px;
+      margin-left:3%;
+      margin-bottom:20px;
+      background-size:cover;
+      background-color:#f5faff;
+      position:relative;
+      border-radius:10px;
+      box-shadow:0 1px 6px rgba(25,25,34,.16);
+      cursor:pointer;
+      padding:10px;
+      transition: all .4s ease-out;
+      float:left;
+      box-sizing:border-box;
+    }
+    .hpList .item:nth-child(2n+0) {
+      width:480px;
+    }
+    .hpList .item:hover{
+      box-shadow:0 10px 16px rgba(25,25,34,.16);
+    }
+    .hpList .item .container{
+      position:absolute;
+      bottom:10px;
+    }
+    .hpList .item .cover{
+      width:60px;
+      height:60px;
+      background-size:cover;
+      border-radius:100%;
+    }
+    .hpList .item .label{
+      font-size:34px;
+      font-weight:bold;
+      width:50%;
+      padding-bottom:10px;
+      padding-top:10px;
+    }
+    .hpList .item .description{
+      
+    }
+    .hpList .item .typology{
+      
+    }
+    .hpList .playbutton{
+      background-color:#222;
+      color:#FFF;
+      display:table;
+      padding:5px;
+      padding-left:10px;
+      padding-right:20px;
+      border-radius:10px;
+    }
+    .hpList .playbutton .icon{
+      width:20px;
+      height:20px;
+      float:left;
+    }
+    .hpList .playbutton .icon svg{
+      height:20px;
+      width:20px;
+    }
+    .hpList .playbutton .icon svg path{
+      fill:#FFF;
+    }
+    .hpList .playbutton .label{
+      font-size:14px;
+      line-height:20px;
+      padding-left:10px;
+      float:left;
+      padding-bottom:0px;
+      padding-top:0px;
+    }
+    .bannerMaChanson{
+      width:100%;
+      color:#FFF;
+      margin-top:70px;
+      margin-bottom:20px;
+      padding-top:30px;
+      padding-bottom:30px;
+      padding-left:30px;
+      position:relative;
+      background: linear-gradient(150deg,#53f 15%,#05d5ff 70%,#a6ffcb 94%);
+      background: #f44744;
+      background: -moz-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      background: -webkit-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      background: linear-gradient(135deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f44744',endColorstr='#ff6098',GradientType=1);
+    }
+    .bannerMaChanson h1{
+      color:#FFF;
+      font-size:40px;
+      padding-left:0;
+    }
+    .bannerMaChanson p{
+      color:#FFF;
+      font-size:23px;
+      padding-left:0px;
+      font-weight:light;
+    }
+    .bannerMaChanson:before, .bannerMaChanson:after{
+      content: '';
+      position: absolute;
+      overflow: hidden;
+      top: 0;
+      left: -10%;
+      width: 120%;
+      height: 170px;
+      z-index:-1;
+      transform: skewY(-2deg);
+      background-color: #2470c1;
+      transform-origin: 50% 0;
+      background: linear-gradient(150deg,#53f 15%,#05d5ff 70%,#a6ffcb 94%);
+      background: #f44744;
+      background: -moz-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      background: -webkit-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      background: linear-gradient(135deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f44744',endColorstr='#ff6098',GradientType=1);
+    }
+    .bannerMaChanson:after{
+      transform: skewY(2deg);
+      top: auto;
+      bottom:0;
+    }
+    @media screen and (max-width: 440px){
+      .hpList .item{
+        width:100%;
+      }
+      .hpList{
+        display:inline-block;
+      }
+    }
