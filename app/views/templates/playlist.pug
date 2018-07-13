@@ -1,5 +1,5 @@
 block playlist
-  .page-main()
+  .page-main#playlist()
     .playlist.headingwave
       .waves
         #waveform
@@ -54,7 +54,7 @@ block playlist
             template(v-if="volume == 1")
               button.btn(v-on:click="setVolume(0)")
                 include ../../public/images/player_assets/volume.svg
-      .scrollview
+      .scrollview(v-on:scroll="handleScroll")
         h1.title 
           span.infos_icon(v-on:click="showInfos = !showInfos")
             include ../../public/images/player_assets/infos.svg
@@ -271,6 +271,13 @@ block playlist
           },
           download : function(){
             
+          },
+          handleScroll : function(evt, el){
+            if(evt.path[0].scrollTop > 80){
+              document.getElementById('playlist').classList.add('sticky');
+            }else{
+              document.getElementById('playlist').classList.remove('sticky');
+            }
           }
         }
       });

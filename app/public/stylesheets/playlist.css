@@ -151,20 +151,7 @@ html, body{
   position: relative;
 }
 
-.headingwave{
-  position: absolute;
-  z-index: 9;
-}
-.headingwave:after{
-  content:"";
-  position: absolute;
-  bottom:0;
-  height:2px;
-  background-color: rgba(0,0,0,.1);
-  width: 100%;
-  left:0;
-  z-index: 9;
-}
+
 .playlist .player{
   position: absolute;
   width: 100%;
@@ -175,6 +162,7 @@ html, body{
   -webkit-box-shadow: 0px 4px 0px 0px rgba(0,0,0,0.15);
   -moz-box-shadow: 0px 4px 0px 0px rgba(0,0,0,0.15);
   box-shadow: 0px 4px 0px 0px rgba(0,0,0,0.15);
+  transition: all .4s ease-out;
 }
 .playlist .waves{
   width:100%;
@@ -299,6 +287,7 @@ html, body{
   background-position: center center;
   background-color:#FFF;
   cursor: pointer;
+  transition: all .4s ease-out;
   -webkit-box-shadow: -4px 4px 0px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: -4px 4px 0px 0px rgba(0,0,0,0.1);
   box-shadow: -4px 4px 0px 0px rgba(0,0,0,0.1);
@@ -418,6 +407,7 @@ html, body{
 .playlist .mediasList li .label {
   font-size: 14px;
   padding-top:8px;
+  padding-bottom:8px;
   color:#666;
 }
 .progressDuration{
@@ -577,6 +567,38 @@ html, body{
   width:200vh;
   background-color:rgba(0,0,0,.5);
 }
+
+.headingwave{
+  position: absolute;
+  z-index: 9;
+  height:130px;
+  transition: all .4s ease-out;
+  overflow: hidden;
+}
+.headingwave:after{
+  content:"";
+  position: absolute;
+  bottom:0;
+  height:2px;
+  background-color: rgba(0,0,0,.1);
+  width: 100%;
+  left:0;
+  z-index: 9;
+}
+
+
+.sticky{
+
+}
+.sticky .headingwave{
+  height:0px;
+}
+.sticky .playlist .player{
+  top:0px;
+}
+
+
+
 @media screen and (max-width: 770px){
   .page-sidebar{
     right: -220px;
@@ -606,10 +628,17 @@ html, body{
   }
 }
 
+
+
 @media screen and (max-width: 480px) {
+  .sticky .headingwave{
+    height:50px;
+  }
+  .sticky .playlist .player,
   .playlist .player{
     bottom:0;
     top:auto;
+    position: absolute;
   }
   .playlist .player_options,
   .playlist .cover {
@@ -619,12 +648,17 @@ html, body{
     margin-top:50px;
   }
   .playlist .cover{
-    margin-top:85px;
+    margin-top:55px;
     width: 80px;
     height: 80px;
   }
-  .playlist .player{
-    position: fixed;
+  .sticky .playlist .cover{
+    width:30px;
+    height:30px;
+  }
+  .sticky .playlist .cover .iconzoom{
+    width:80%;
+    height:80%;
   }
 
   .playlist .scrollview h1 {
