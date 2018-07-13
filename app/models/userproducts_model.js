@@ -36,6 +36,7 @@ module.exports = {
     attributes: userproducts_datas
 };
 module.exports.get = function(req, res, callback){
+    console.log('GET USER PRODUCTS ?');
     var query = {},
         self = this;
 
@@ -44,7 +45,7 @@ module.exports.get = function(req, res, callback){
     }else if(typeof req.query.user_id !== "undefined"){
         query = {user_id : datas.user_id};
     }else if(typeof req.query.options !== "undefined"){
-      query = {user_id:req.query.options.user_id}
+        query = {user_id:req.query.options.user_id}
     }
     if(typeof query.user_id === "undefined"){
       callback({status:401, datas:{message:"UNAUTHORISED_NEED_USER"}});

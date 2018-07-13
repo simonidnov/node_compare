@@ -30,11 +30,10 @@ playlist
         req.products = e.datas;
         next();
       });
-    }, function(req, res, next){
+    }, function(req, res, next) {
       if(typeof req.params.product_id !== "undefined"){
         // GET PRODUCT TO BUILD ORIGINAL PLAYLIST
         products_controller.get({product_id:req.params.product_id}, req, function(e){
-          console.log('GET PRODUCT e === ', e);
           if(e.status === 200 && e.datas.length === 1){
             req.product = e.datas[0];
             next();
@@ -58,6 +57,7 @@ playlist
           fs: require('fs'),
           product : req.product,
           albums : req.products,
+          userproducts : req.userproducts,
           js:[
               "/node_modules/swiper/dist/js/swiper.min.js",
               "/public/javascripts/components/formular.min.js"

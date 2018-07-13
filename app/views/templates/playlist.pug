@@ -55,7 +55,7 @@ block playlist
               button.btn(v-on:click="setVolume(0)")
                 include ../../public/images/player_assets/volume.svg
       .scrollview(v-on:scroll="handleScroll")
-        h1.title 
+        h1.title
           span.infos_icon(v-on:click="showInfos = !showInfos")
             include ../../public/images/player_assets/infos.svg
           span {{ title }}

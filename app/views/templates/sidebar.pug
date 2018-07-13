@@ -5,7 +5,7 @@ block sidebar
       span
       span
     .logo()
-      a(href="/")
+      a(href="/playlist")
         include ../../public/images/assets/icon_brand.svg
     .scrollview
       if(typeof user!== "undefined")
@@ -22,7 +22,14 @@ block sidebar
       div
         .search
           input.searchInput#searchAll(type="search", placeholder="Titre, Album ou Playlist", v-on:keyup="search($event.target.value)", v-model="searchValue")
-        h3 Albums
+        h3 Ma musique
+        ul.playlist-list
+          li(v-for="product in userproducts" v-on:click="reloadAlbum(product.product_id)")
+            .cover(v-bind:style="{'background-image':'url('+product.thumb+')'}")
+            .infos
+              .label {{ product.label }}
+              .datas {{ product.medias.length}} titres
+        h3 À découvrir
         ul.playlist-list
           li(v-for="album in albums" v-on:click="reloadAlbum(album._id)")
             .cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
