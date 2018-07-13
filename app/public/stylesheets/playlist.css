@@ -334,7 +334,8 @@ html, body{
   right:0;
   margin:auto;
   height:100%;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
 .playlist .scrollview h1 {
