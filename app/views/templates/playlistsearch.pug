@@ -4,7 +4,7 @@ block playlistsearch
       div.scrollview
         h2() Recherche ({{ searchValue }})
         div.col.fifty
-          h3 Albums
+          h3 Albums ({{results.albums.length}})
           ul.results.album
             li(v-for="album in results.albums" v-on:click="openAlbum(album)")
               div.cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
@@ -12,8 +12,8 @@ block playlistsearch
               div.infos par : Artiste inconnu <br> {{ album.medias.length }} titres
             li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun album correspondant à votre recherche
         div.col.fifty
-          h3 Titres
-          ul.results.titres
+          h3 Titres ({{results.titres.length}})
+          ul.results.titres 
             li(v-for="media in results.titres" v-on:click="playSong(media)")
               span.icon
                 include ../../public/images/player_assets/play.svg
@@ -125,6 +125,7 @@ block playlistsearch
     }
     .results.album{
       display:inline-flex;
+      width:100%;
     }
     .results li{
       margin:0;
@@ -133,6 +134,35 @@ block playlistsearch
     }
     .results.album li{
       margin-right:20px;
+      background: #FFF;
+      padding: 20px;
+      box-sizing: border-box;
+      border-radius:4px;
+      box-shadow:0 0px 0px rgba(25,25,34,.16);
+      transition: all .2s ease-out;
+    }
+    .results.album li:hover{
+      background: #f5faff;
+      box-shadow:0 10px 16px rgba(25,25,34,.16);
+    }
+    .results.titres li{
+      display:inline-flex;
+      padding-top:10px;
+      padding-bottom:10px;
+      border-bottom:1px solid #E3E3E3;
+      cursor:pointer;
+      width:100%;
+    }
+    .results.titres li:hover{
+      background:#f5faff;
+    }
+    .results.titres li span {
+      line-height:20px;
+    }
+    .results li .icon,
+    .results li .icon svg{
+      height:20px;
+      display:table;
     }
     .results.album li .label{
       font-size:14px;
@@ -149,13 +179,9 @@ block playlistsearch
       cursor:pointer;
     }
     .results li .cover{
-      width:256px;
-      height:256px;
+      width:235px;
+      height:235px;
       border-radius:4px;
       background-size:cover;
-      box-shadow:0 1px 6px rgba(25,25,34,.16);
       cursor:pointer;
-    }
-    .results li .cover:hover{
-      box-shadow:0 10px 16px rgba(25,25,34,.16);
-    }
+    }}

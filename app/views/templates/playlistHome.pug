@@ -1,6 +1,8 @@
 block playlisthome
   .page-main.homeView#homeView(v-if="displayHome")
     div.scrollview
+      .header
+        h1 Joyvox playlist.
       h1.tiret Écouter
       .hpList
         .item(v-for="(playlist, index) in playlists" v-bind:style="{'background-image':'url(playlist.picture)'}" v-on:click="reloadAlbum(playlist._id)")
@@ -93,6 +95,7 @@ block playlisthome
     .hpList{
       display:inline-table;
       width:100%;
+      position:relative;
     }
     .hpList .item{
       width:380px;
@@ -111,7 +114,7 @@ block playlisthome
       float:left;
       box-sizing:border-box;
     }
-    .hpList .item:nth-child(2n+0) {
+    .hpList .item:nth-child(2n+%2) {
       width:480px;
     }
     .hpList .item:hover{
@@ -162,17 +165,51 @@ block playlisthome
       fill:#FFF;
     }
     .hpList .playbutton .label{
-      font-size:14px;
-      line-height:20px;
-      padding-left:10px;
-      float:left;
-      padding-bottom:0px;
-      padding-top:0px;
+      font-size:14px !important;
+      line-height:20px !important;
+      padding-left:10px !important;
+      float:left !important;
+      padding-bottom:0px !important;
+      padding-top:0px !important;
+      width:auto !important;
+    }
+    .hpList:last-child{
+      overflow:hidden;
+    }
+    .hpList:last-child::after,
+    .hpList:last-child::before{
+      content:"";
+      height:50%;
+      width:100%;
+      bottom:0;
+      left:0;
+      transform-origin:0 100%;
+      transform: skewY(25deg);
+      position:absolute;
+      z-index:-2;
+      background: #f44744;
+      background: -moz-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      background: -webkit-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      background: linear-gradient(135deg,#f44744 0,#f5645f 28%,#ff6098 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f44744',endColorstr='#ff6098',GradientType=1);
+      -webkit-box-shadow: 300px 10px 493px -13px rgba(140,140,140,0.79);
+      -moz-box-shadow: 300px 10px 493px -13px rgba(140,140,140,0.79);
+      box-shadow: 300px 10px 493px -13px rgba(140,140,140,0.79);
+    }
+    .hpList:last-child::before{
+      z-index:-1;
+      background: #f44744;
+      background: -moz-linear-gradient(-45deg,#222 0,#111 28%,#333 100%);
+      background: -webkit-linear-gradient(-45deg,#222 0,#111 28%,#333 100%);
+      background: linear-gradient(135deg,#222 0,#111 28%,#333s 100%);
+      height:30%;
+      transform-origin:100% 100%;
+      transform: skewY(-25deg);
     }
     .bannerMaChanson{
       width:100%;
       color:#FFF;
-      margin-top:70px;
+      margin-top:10px;
       margin-bottom:20px;
       padding-top:30px;
       padding-bottom:30px;
@@ -200,25 +237,29 @@ block playlisthome
       content: '';
       position: absolute;
       overflow: hidden;
-      top: 0;
-      left: -10%;
+      top: -30px;
+      left: 0;
       width: 120%;
       height: 170px;
-      z-index:-1;
-      transform: skewY(-2deg);
+      z-index: -1;
+      transform: skewY(-3deg);
       background-color: #2470c1;
-      transform-origin: 50% 0;
+      transform-origin: 0% 0;
       background: linear-gradient(150deg,#53f 15%,#05d5ff 70%,#a6ffcb 94%);
       background: #f44744;
       background: -moz-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
       background: -webkit-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
       background: linear-gradient(135deg,#f44744 0,#f5645f 28%,#ff6098 100%);
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f44744',endColorstr='#ff6098',GradientType=1);
+      -webkit-box-shadow: 200px 10px 293px -13px rgba(140,140,140,0.79);
+      -moz-box-shadow: 200px 10px 293px -13px rgba(140,140,140,0.79);
+      box-shadow: 200px 10px 293px -13px rgba(140,140,140,0.79);
     }
     .bannerMaChanson:after{
-      transform: skewY(2deg);
+      transform: skewY(8deg);
       top: auto;
-      bottom:0;
+      bottom:-30px;
+      transform-origin: 50% 0;
     }
     @media screen and (max-width: 440px){
       .hpList .item{
@@ -226,5 +267,9 @@ block playlisthome
       }
       .hpList{
         display:inline-block;
+      }
+      .hpList .item .label{
+        width:65%;
+        font-size:30px;
       }
     }
