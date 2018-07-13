@@ -77,10 +77,16 @@ block sidebar
           search : function(value){
             this.searchValue = value;
             if(value === ""){
+              if(player.hasProduct){
+                homeView.displayHome = false;
+              }else{
+                homeView.displayHome = true;
+              }
               research.hasResearch = false;
               this.albums = this.db;
             }else{
               console.log('search ', value);
+              homeView.displayHome = false;
               research.hasResearch = false;
               research.hasResearch = true;
               research.search(value);

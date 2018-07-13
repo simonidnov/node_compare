@@ -1,7 +1,7 @@
 block playlisthome
   .page-main.homeView#homeView(v-if="displayHome")
     div.scrollview
-      h1.tiret : Écouter
+      h1.tiret Écouter
       .hpList
         .item(v-for="(playlist, index) in playlists" v-bind:style="{'background-image':'url(playlist.picture)'}" v-on:click="reloadAlbum(playlist._id)")
           .container
@@ -10,7 +10,7 @@ block playlisthome
             //-.description {{ playlist.description }} 
             //-.typology {{ playlist.extra_category }} 
             .playbutton
-              span.icon 
+              span.icon
                 include ../../public/images/player_assets/play.svg
               span.label Écouter
       .bannerMaChanson.hpList
@@ -21,13 +21,13 @@ block playlisthome
             span.icon 
               include ../../public/images/player_assets/play.svg
             span.label Découvrir
-      h1.tiret : En savoir plus
+      h1.tiret En savoir plus
       .hpList
-        .item(v-for="(album, index) in joyvox_albums" v-bind:style="{'background-color':album.page_album_color}" v-on:click="openUrl(playlist._id)")
+        .item(v-for="(album, index) in joyvox_albums" v-bind:style="{'background-color':album.page_album_col}" v-on:click="openUrl(playlist._id)")
           a(v-bind:href="'https://www.joyvox.fr/fr/album/'+ album.url" target="_blank")
             .container
               .cover(v-bind:style="{ 'background-image': 'url(https://www.joyvox.fr/'+album.cover+')' }")
-              .label(v-bind:style="{ 'color': '#FFF' }") {{ album.label }}
+              .label(v-bind:style="{ 'color': '#000' }") {{ album.label }}
               //-.description {{ playlist.description }} 
               //-.typology {{ playlist.extra_category }} 
               .playbutton

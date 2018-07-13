@@ -15,6 +15,8 @@ block playlistsearch
           h3 Titres
           ul.results.titres
             li(v-for="media in results.titres" v-on:click="playSong(media)")
+              span.icon
+                include ../../public/images/player_assets/play.svg
               span {{ media[0].originalname }}
             li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun titre correspondant à votre recherche
         div.col
