@@ -1,3 +1,41 @@
+importScripts('/public/javascripts/components/cache-polyfill.js');
+
+self.addEventListener('install', function(e) {
+ e.waitUntil(
+   caches.open('airhorner').then(function(cache) {
+     return cache.addAll([
+       '/',
+       '/playlist',
+       '/index.html',
+       '/index.html?homescreen=1',
+       '/public/stylesheets/style.min.css',
+       '/public/stylesheets/idkids-sdk/idkids-sdk.min.css',
+       '/public/stylesheets/playlist.min.css',
+       '/public/javascripts/index.min.js',
+       '/public/javascripts/index.min.js',
+       '/public/javascripts/components/vue.min.js',
+       '/node_modules/jquery/dist/jquery.min.js',
+       '/node_modules/underscore/underscore-min.js',
+       '/public/javascripts/idkids-sdk/idkids-sdk.min.js',
+       '/public/javascripts/contact.min.js',
+       '/public/javascripts/coupon_code.min.js',
+       '/public/javascripts/components/popeye.min.js',
+       '/public/javascripts/index.min.js'
+     ]);
+   })
+ );
+});
+
+self.addEventListener('fetch', function(event) {
+ console.log(event.request.url);
+
+ event.respondWith(
+   caches.match(event.request).then(function(response) {
+     return response || fetch(event.request);
+   })
+ );
+});
+
 /*
  Copyright 2015 Google Inc. All Rights Reserved.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +49,7 @@
  limitations under the License.
 */
 
-'use strict';
+/*'use strict';
 
 // Incrementing CACHE_VERSION will kick off the install event and force previously cached
 // resources to be cached again.
@@ -22,6 +60,7 @@ let CURRENT_CACHES = {
 const OFFLINE_URL = '/offline';
 
 function createCacheBustedRequest(url) {
+  console.log('createCacheBustedRequest ', url);
   let request = new Request(url, {cache: 'reload'});
   // See https://fetch.spec.whatwg.org/#concept-request-mode
   // This is not yet supported in Chrome as of M48, so we need to explicitly check to see
@@ -99,4 +138,4 @@ self.addEventListener('fetch', event => {
   // If there are any other fetch handlers registered, they will get a chance to call
   // event.respondWith(). If no fetch handlers call event.respondWith(), the request will be
   // handled by the browser as if there were no service worker involvement.
-});
+});*/

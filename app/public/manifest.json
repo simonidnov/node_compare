@@ -1,8 +1,8 @@
 {
   "lang": "fr",
-  "name": "JOYVOX - ACCOUNT",
+  "name": "JOYVOX - PWA",
   "short_name": "JOYVOX",
-  "description":"Gérez votre compte utilisateur des services JOYVOX",
+  "description":"JOYVOX",
   "icons": [{
     "src": "images/icons/icon-128x128.png",
       "sizes": "128x128",
@@ -24,7 +24,6 @@
       "sizes": "256x256",
       "type": "image/png"
     }],
-  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#f5645f",
   "theme_color": "#f5645f",
