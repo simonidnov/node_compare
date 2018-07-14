@@ -24,11 +24,13 @@ block sidebar
           input.searchInput#searchAll(type="search", placeholder="Titre, Album ou Playlist", v-on:keyup="search($event.target.value)", v-model="searchValue")
         h3 Ma musique
         ul.playlist-list
-          li(v-for="product in userproducts" v-on:click="reloadAlbum(product.product_id)")
-            .cover(v-bind:style="{'background-image':'url('+product.thumb+')'}")
+          li(v-for="product in userproducts" v-on:click="reloadAlbum(product.product_id)" v-if="product.meta_datas.extra_category === 'LIVRECD'")
+            .cover(v-bind:style="{'background-image':'url('+product.meta_datas.thumb+')'}")
             .infos
-              .label {{ product.label }}
-              .datas {{ product.medias.length}} titres
+              .label {{ product.meta_datas.label }}
+              .datas {{ product.meta_datas.medias.length}} titres
+        div(v-if="userproducts.length == 0")
+          span Vous n'avez pas de musique sur Joyvox
         h3 À découvrir
         ul.playlist-list
           li(v-for="album in albums" v-on:click="reloadAlbum(album._id)")
@@ -55,7 +57,7 @@ block sidebar
           reloadAlbum: function(_id) {
             var self = this;
             index.sdk.api.get('/products', {product_id:_id}, function(e){
-              if(typeof player !== "undefined"){
+              if(typeof player !== "undefined" && e.length > 0){
                 player.medias = e[0].medias;
                 player.title = e[0].label;
                 player.cover = e[0].thumb;
@@ -69,6 +71,18 @@ block sidebar
                 albumList.params.index = player.index;
                 albumList.params.volume = player.volume;
                 history.pushState(self.params, null, '/playlist/'+_id+"?"+Object.keys(albumList.params).map(key => key + '=' + albumList.params[key]).join('&'));
+              }else{
+                var pop = new popeye (
+                    $('#playlist'),
+                    {
+                      type:"modal",
+                      title:"Erreur",
+                      message:"La playlist que vous tentez d'écouter est introuvable, il est possible que les medias qui la compose aient été supprimés."
+                    },
+                    function(e){
+                    }
+                );
+                pop.init();
               }
             }, function(e){
               console.log('FAIL ', e);

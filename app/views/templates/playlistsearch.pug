@@ -3,22 +3,23 @@ block playlistsearch
     div.page-main.reseach(v-if="hasResearch")
       div.scrollview
         h2() Recherche ({{ searchValue }})
-        div.col.fifty
-          h3 Albums ({{results.albums.length}})
-          ul.results.album
-            li(v-for="album in results.albums" v-on:click="openAlbum(album)")
-              div.cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
-              div.label {{ album.label }}
-              div.infos par : Artiste inconnu <br> {{ album.medias.length }} titres
-            li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun album correspondant à votre recherche
-        div.col.fifty
-          h3 Titres ({{results.titres.length}})
-          ul.results.titres 
-            li(v-for="media in results.titres" v-on:click="playSong(media)")
-              span.icon
-                include ../../public/images/player_assets/play.svg
-              span {{ media[0].originalname }}
-            li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun titre correspondant à votre recherche
+        div.container
+          div.col.fifty
+            h3 Albums ({{results.albums.length}})
+            ul.results.album
+              li(v-for="album in results.albums" v-on:click="openAlbum(album)")
+                div.cover(v-bind:style="{'background-image':'url('+album.thumb+')'}")
+                div.label {{ album.label }}
+                div.infos par : Artiste inconnu <br> {{ album.medias.length }} titres
+              li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun album correspondant à votre recherche
+          div.col.fifty
+            h3 Titres ({{results.titres.length}})
+            ul.results.titres 
+              li(v-for="media in results.titres" v-on:click="playSong(media)")
+                span.icon
+                  include ../../public/images/player_assets/play.svg
+                span {{ media[0].originalname }}
+              li(v-if="results.albums.length === 0") Nous n'avons trouvé aucun titre correspondant à votre recherche
         div.col
           h3 Autres réponses
   script.

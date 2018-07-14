@@ -38,6 +38,16 @@ playlist
           next();
         }
       });
+    }, function(req, res, next){
+      userproducts_controller.get(req, res, function(e){
+        console.log(e);
+        if(e.status === 200){
+          req.userproducts = e.datas;
+        }else{
+          req.userproducts = [];
+        }
+        next();
+      });
     }, function(req, res, next) {
       if(typeof req.params.product_id !== "undefined"){
         // GET PRODUCT TO BUILD ORIGINAL PLAYLIST
@@ -65,7 +75,7 @@ playlist
           fs: require('fs'),
           product : req.product,
           albums : req.products,
-          userproducts : [],
+          userproducts : req.userproducts,
           joyvox_albums: req.joyvox_albums,
           js:[
               "/node_modules/swiper/dist/js/swiper.min.js",

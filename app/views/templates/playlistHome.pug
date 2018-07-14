@@ -1,6 +1,6 @@
 block playlisthome
   .page-main.homeView#homeView(v-if="displayHome")
-    div.scrollview
+    div.scrollview(v-on:scroll="handleScroll")
       .header
         h1 Joyvox playlist.
       h1.tiret Écouter
@@ -73,6 +73,12 @@ block playlisthome
             }, function(e){
               console.log('FAIL ', e);
             });
+          },
+          handleScroll : function(evt, el){
+            if(evt.target.scrollTop == (evt.target.scrollHeight-window.innerHeight)){
+              document.body.style.overflow = 'scroll';
+              document.getElementsByClassName('page-sidebar')[0].style.position = 'absolute';
+            }
           }
         }
       }
@@ -199,9 +205,9 @@ block playlisthome
     .hpList:last-child::before{
       z-index:-1;
       background: #f44744;
-      background: -moz-linear-gradient(-45deg,#222 0,#111 28%,#333 100%);
-      background: -webkit-linear-gradient(-45deg,#222 0,#111 28%,#333 100%);
-      background: linear-gradient(135deg,#222 0,#111 28%,#333s 100%);
+      background: -moz-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#FFF 100%);
+      background: -webkit-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#FFF 100%);
+      background: linear-gradient(135deg,#f5faff 0,#f5faff 28%,#FFF 100%);
       height:30%;
       transform-origin:100% 100%;
       transform: skewY(-25deg);

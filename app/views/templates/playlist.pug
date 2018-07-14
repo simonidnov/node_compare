@@ -20,39 +20,39 @@ block playlist
             .iconzoom
               include ../../public/images/player_assets/zoom.svg
           .player_options
-            button.btn(v-on:click="setLoop" v-if="!isLoop")
+            button.pbtn(v-on:click="setLoop" v-if="!isLoop")
               include ../../public/images/player_assets/loop.svg
-            button.btn.enabled(v-on:click="setLoop" v-else)
+            button.pbtn.enabled(v-on:click="setLoop" v-else)
               include ../../public/images/player_assets/loop.svg
-            button.btn(v-on:click="setRandom" v-if="!isRandom")
+            button.pbtn(v-on:click="setRandom" v-if="!isRandom")
               include ../../public/images/player_assets/random.svg
-            button.btn.enabled(v-on:click="setRandom" v-else)
+            button.pbtn.enabled(v-on:click="setRandom" v-else)
               include ../../public/images/player_assets/random.svg
-            button.btn(v-on:click="download")
+            button.pbtn(v-on:click="download")
               include ../../public/images/player_assets/download.svg
           .player_nav
             template(v-if="index > 0")
-              button.btn(v-on:click="playPrev()")
+              button.pbtn(v-on:click="playPrev()")
                 include ../../public/images/player_assets/prev.svg
             template(v-if="index == 0")
-              button.btn.disabled()
+              button.pbtn.disabled()
                 include ../../public/images/player_assets/prev.svg
-            button.btn(v-on:click="playPause()")
+            button.pbtn(v-on:click="playPause()")
               template(v-if="isplaying")
                 include ../../public/images/player_assets/pause.svg
               template(v-if="isplaying == false")
                 include ../../public/images/player_assets/play.svg
             template(v-if="index < medias.length-1")
-              button.btn(v-on:click="playNext()")
+              button.pbtn(v-on:click="playNext()")
                 include ../../public/images/player_assets/next.svg
             template(v-if="index == medias.length-1")
-              button.btn.disabled
+              button.pbtn.disabled
                 include ../../public/images/player_assets/next.svg
             template(v-if="volume == 0")
-              button.btn(v-on:click="setVolume(1)")
+              button.pbtn(v-on:click="setVolume(1)")
                 include ../../public/images/player_assets/volumecut.svg
             template(v-if="volume == 1")
-              button.btn(v-on:click="setVolume(0)")
+              button.pbtn(v-on:click="setVolume(0)")
                 include ../../public/images/player_assets/volume.svg
       .scrollview(v-on:scroll="handleScroll")
         h1.title
@@ -273,10 +273,14 @@ block playlist
             
           },
           handleScroll : function(evt, el){
-            if(evt.path[0].scrollTop > 80){
+            if(evt.target.scrollTop > 80){
               document.getElementById('playlist').classList.add('sticky');
             }else{
               document.getElementById('playlist').classList.remove('sticky');
+            }
+            if(evt.target.scrollTop == (evt.target.scrollHeight-window.innerHeight)){
+              document.body.style.overflow = 'scroll';
+              document.getElementsByClassName('page-sidebar')[0].style.position = 'absolute';
             }
           }
         }
@@ -292,15 +296,15 @@ block playlist
       .playlist .player{
         background-color:##{params.color1};
       }
-      .playlist .player_options .btn.enabled svg rect,
-      .playlist .player_options .btn.enabled svg path,
-      .playlist .player_options .btn.enabled svg polygon{
+      .playlist .player_options .pbtn.enabled svg rect,
+      .playlist .player_options .pbtn.enabled svg path,
+      .playlist .player_options .pbtn.enabled svg polygon{
         fill:##{params.color1};
       }
       .playlist .mediasList li .progress{
         background-color:##{params.color1};
       }
-      .downloadOptions .btn{
+      .downloadOptions .pbtn{
         background-color:##{params.color2};
       }
       /*

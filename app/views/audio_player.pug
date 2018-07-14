@@ -4,12 +4,15 @@ html
     meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
     meta(name='viewport' content ='width=device-width, initial-scale=1, user-scalable=no')
     link(href="https://fonts.googleapis.com/css?family=Roboto", rel="stylesheet")
+    link(rel='stylesheet', href='/public/stylesheets/style.min.css?v='+app.locals.version)
     link(rel='stylesheet', href='/public/stylesheets/idkids-sdk/idkids-sdk.min.css?v='+app.locals.version)
     link(rel='stylesheet', href='/stylesheets/playlist.min.css')
-    script(src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
+    //-script(src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
+    script(src="/public/javascripts/components/vue.min.js")
   body
-    include templates/sidebar.pug
-    include templates/playlistHome.pug
-    include templates/playlistsearch.pug
-    include templates/playlist.pug
+    .player_content
+      include templates/sidebar.pug
+      include templates/playlistHome.pug
+      include templates/playlistsearch.pug
+      include templates/playlist.pug
     include footer.pug
