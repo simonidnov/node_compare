@@ -41,7 +41,7 @@ block sidebar
           //-album-listcomp(label="ZANIMOMUSIC 2", thumb="", shortname="", medialength="", id="")
       //-p= JSON.stringify(albums)
   script.
-    let albumList = new Vue(
+    var albumList = new Vue(
       { 
         el: '#sidepanel',
         data: {
