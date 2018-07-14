@@ -20,42 +20,7 @@ html, body{
 .container{
   display: table;
 }
-.header{
-  position:relative;
-  padding-top:50px;
-  background: #f5faff;
-  display: block;
-  background: -moz-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: -webkit-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: linear-gradient(135deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#222',endColorstr='#111',GradientType=1);
-}
-.header:after{
-  content: '';
-  position: absolute;
-  overflow: hidden;
-  top: -30px;
-  left: 0;
-  width: 99vw;
-  height: 170px;
-  z-index: -1;
-  transform: skewY(5deg);
-  background-color: #2470c1;
-  transform-origin: 50% 100%;
-  background: #f5faff;
-  background: -moz-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: -webkit-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: linear-gradient(135deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: -moz-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: -webkit-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  background: linear-gradient(135deg,#f5faff 0,#f5faff 28%,#f5faff 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#222',endColorstr='#111',GradientType=1);
-}
-.header h1{
-  color:#222;
-  margin:0;
-  padding:20px;
-}
+
 .page-sidebar{
   position: fixed;
   left: 0;
@@ -664,6 +629,36 @@ html, body{
   height:80%;
 }
 
+
+.header{
+  position:relative;
+  padding-top:50px;
+  background: #222;
+  display: block;
+}
+.header:after,
+.header:before{
+  content: '';
+  position: absolute;
+  overflow: hidden;
+  top: -30px;
+  left: 0;
+  width: 99vw;
+  height: 170px;
+  z-index: -1;
+  transform: skewY(2deg);
+  background-color: #222;
+  transform-origin: 50% 100%;
+}
+.header h1{
+  color:#FFF;
+  margin:0;
+  padding:0px;
+  padding-left:20px;
+  font-weight: lighter;
+  font-size: 40px;
+}
+
 @media screen and (max-width: 770px){
   .page-sidebar{
     right: -220px;
@@ -696,6 +691,9 @@ html, body{
 
 
 @media screen and (max-width: 480px) {
+  .nomobile{
+    display: none;
+  }
   .sticky .headingwave{
     height:50px;
   }

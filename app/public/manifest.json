@@ -31,9 +31,9 @@
   "start_url": "/",
   "display": "fullscreen",
   "serviceworker": {
-    "src": "/public/javascripts/sw.min.js",
+    "src": "/public/javascripts/sw.js",
     "scope": "/",
-    "update_via_cache": "none"
+    "update_via_cache": "all"
   },
   "screenshots": [{
     "src": "/public/screenshots/in-joyvox-1x.jpg",

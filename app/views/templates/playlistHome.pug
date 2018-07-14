@@ -75,7 +75,7 @@ block playlisthome
             });
           },
           handleScroll : function(evt, el){
-            if(evt.target.scrollTop == (evt.target.scrollHeight-window.innerHeight)){
+            if(evt.target.scrollTop == (evt.target.scrollHeight-window.innerHeight) && sidebar !== "false"){
               document.body.style.overflow = 'scroll';
               document.getElementsByClassName('page-sidebar')[0].style.position = 'absolute';
             }
@@ -193,7 +193,7 @@ block playlisthome
       transform: skewY(25deg);
       position:absolute;
       z-index:-2;
-      background: #f44744;
+      background: #222;
       background: -moz-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
       background: -webkit-linear-gradient(-45deg,#f44744 0,#f5645f 28%,#ff6098 100%);
       background: linear-gradient(135deg,#f44744 0,#f5645f 28%,#ff6098 100%);
@@ -204,7 +204,7 @@ block playlisthome
     }
     .hpList:last-child::before{
       z-index:-1;
-      background: #f44744;
+      background: #222;
       background: -moz-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#FFF 100%);
       background: -webkit-linear-gradient(-45deg,#f5faff 0,#f5faff 28%,#FFF 100%);
       background: linear-gradient(135deg,#f5faff 0,#f5faff 28%,#FFF 100%);

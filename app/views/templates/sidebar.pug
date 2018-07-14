@@ -41,6 +41,7 @@ block sidebar
           //-album-listcomp(label="ZANIMOMUSIC 2", thumb="", shortname="", medialength="", id="")
       //-p= JSON.stringify(albums)
   script.
+    var userproducts = !{JSON.stringify(userproducts)};
     var albumList = new Vue(
       { 
         el: '#sidepanel',
@@ -99,7 +100,6 @@ block sidebar
               research.hasResearch = false;
               this.albums = this.db;
             }else{
-              console.log('search ', value);
               homeView.displayHome = false;
               research.hasResearch = false;
               research.hasResearch = true;
@@ -109,3 +109,11 @@ block sidebar
         }
       }
     )
+  if(params.sidebar === "false")
+    style.
+      .page-sidebar{
+        display:none;
+      }
+      .page-main{
+        margin-left:0;
+      }

@@ -28,8 +28,10 @@ block playlist
               include ../../public/images/player_assets/random.svg
             button.pbtn.enabled(v-on:click="setRandom" v-else)
               include ../../public/images/player_assets/random.svg
-            button.pbtn(v-on:click="download")
+            button.pbtn.nomobile(v-on:click="download")
               include ../../public/images/player_assets/download.svg
+            button.pbtn.nomobile(v-on:click="share")
+              include ../../public/images/player_assets/share.svg
           .player_nav
             template(v-if="index > 0")
               button.pbtn(v-on:click="playPrev()")
@@ -78,6 +80,7 @@ block playlist
     script(src="../public/javascripts/components/wavesurfer.min.js")
     script.
       var lopp = '#{params.loop}',
+          sidebar = '#{params.sidebar}',
           product = !{JSON.stringify(product)};
       var player = new Vue({
         el: '#player',
@@ -270,7 +273,51 @@ block playlist
             this.wavesurfer.setVolume(this.volume);
           },
           download : function(){
-            
+            if(_.where(userproducts, {product_id:this.product._id}).length > 0){
+              index.sdk.api.get('/products/download/'+product._id, {}, function(e) {
+                if(typeof e.zip_file !== "undefined"){
+                  index.sdk.downloadFile(e.zip_file, $('body'), function(e){
+                    if(e.status === "completed"){
+                      //TODO clean server side zip and folder
+                    }
+                  });
+                }
+              }, function(e){
+              }, function(e){
+              });
+            }else{
+              var pop = new popeye(
+                $('#playlist'), 
+                {
+                  type:"modal",
+                  title:"Téléchargement",
+                  message:"Vous n'avez pas les droits pour télécharger ce produit.<br>Si vous avez un code de téléchargement, rendez-vous sur la page de téléchargement.",
+                  buttons:[
+                    {
+                      "class":"btn-warning",
+                      "label":"Annuler",
+                      "value":0
+                    },
+                    {
+                      "class":"btn-success",
+                      "label":"J'ai un code",
+                      "value":1,
+                      "href":"https://auth.joyvox.fr/code-de-telechargement"
+                    }
+                  ]
+                },
+                function(e){
+                  console.log(e);
+                }
+              );
+              pop.init();
+            }
+          },
+          embed : function(){
+            alert('emebed');
+          },
+          share : function(){
+            alert('share');
           },
           handleScroll : function(evt, el){
             if(evt.target.scrollTop > 80){
@@ -278,7 +325,7 @@ block playlist
             }else{
               document.getElementById('playlist').classList.remove('sticky');
             }
-            if(evt.target.scrollTop == (evt.target.scrollHeight-window.innerHeight)){
+            if(evt.target.scrollTop == (evt.target.scrollHeight-window.innerHeight) && sidebar !== "false"){
               document.body.style.overflow = 'scroll';
               document.getElementsByClassName('page-sidebar')[0].style.position = 'absolute';
             }
