@@ -3,7 +3,7 @@ block playlisthome
     div.scrollview(v-on:scroll="handleScroll")
       .header
         h1 Joyvox playlist.
-      h1.tiret Écouter
+      h2.tiret Écouter
       .hpList
         .item(v-for="(playlist, index) in playlists" v-bind:style="{'background-image':'url(playlist.picture)'}" v-on:click="reloadAlbum(playlist._id)")
           .container
@@ -15,6 +15,10 @@ block playlisthome
               span.icon
                 include ../../public/images/player_assets/play.svg
               span.label Écouter
+      h2.tiret Télécharger
+      p Vous avez obtenu un code de téléchargement ?<br>entrez le ci-dessous :
+      div(style="width:400px;")
+        include ../components/coupon_code_form.pug
       .bannerMaChanson.hpList
         h1 Ma chanson personnalisée
         p Trouvez votre chanson personnalisée<br>pour réussir sa fête d'anniversaire !
@@ -23,7 +27,7 @@ block playlisthome
             span.icon 
               include ../../public/images/player_assets/play.svg
             span.label Découvrir
-      h1.tiret En savoir plus
+      h2.tiret En savoir plus
       .hpList
         .item(v-for="(album, index) in joyvox_albums" v-bind:style="{'background-color':album.page_album_col}" v-on:click="openUrl(playlist._id)")
           a(v-bind:href="'https://www.joyvox.fr/fr/album/'+ album.url" target="_blank")
@@ -85,11 +89,13 @@ block playlisthome
     )
     
   style.
-    h1.tiret{
+    h1.tiret,
+    h2.tiret{
       position:relative;
       margin-bottom:30px;
     }
-    h1.tiret::after{
+    h1.tiret::after,
+    h2.tiret::after{
       content:'';
       height:3px;
       width:45px;

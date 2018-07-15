@@ -113,7 +113,7 @@ var index = {
             contact.init();
             break;
           case 'code-de-telechargement':
-            coupon_code.init();
+            //coupon_code.init();
             break;
         }
         if(keys[1]==="contact"){

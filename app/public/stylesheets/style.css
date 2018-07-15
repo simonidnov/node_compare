@@ -783,6 +783,7 @@ p{
 .coupon_code_form{
   width:320px;
   max-width: 100%;
+  box-sizing: border-box;
   left:0;
   right:0;
   margin:auto;

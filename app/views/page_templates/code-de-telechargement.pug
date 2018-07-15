@@ -7,11 +7,7 @@ block content
     div.row
       div.col-md-8.centered(style="text-align:center;")
         p(style="text-align:center;") <b>Vous avez reçu un code de téléchargement avec un de nos produits,</b><br>livres CD, cartes d'anniversaire pour une chanson personnalisée ou par le biais d'une offre spéciale ?
-        div.coupon_code_form
-          form#coupon_code_form
-            input.form-control#coupon_code(type="text" placeholder="Entrez votre code ici")
-            button.btn_coupon_code#submit_code(disabled type="submit" data-formaction="submit" data-formid="coupon_code_form") &#10008;
-          div.coupon_datas
+        include ../components/coupon_code_form.pug
         if !user
           p Pour bénéficier de votre code de téléchargement, vous devez vous connecter ou créer un compte utilisateur.
           div(style="display:inline-flex")

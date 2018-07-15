@@ -159,7 +159,9 @@ html, body{
   overflow: hidden;
 }
 
-.page-main h1{
+.page-main h1,
+.page-main h2,
+.page-main p{
   padding-left:20px;
   padding-right:20px;
 }

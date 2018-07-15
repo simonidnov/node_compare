@@ -1,6 +1,6 @@
 "use strict";
 $(function(){
-    coupon_code.init();
+  coupon_code.init();
 });
 var coupon_code = {
   init:function(){
@@ -11,11 +11,12 @@ var coupon_code = {
     //}
   },
   create_coupon_form : function(){
-    $('#coupon_code').off('blur, change, keyup').on('blur, change, keyup', function(e){
+    $('.coupon_code_input').off('blur, change, keyup').on('blur, change, keyup', function(e){
         if($('#coupon_code').val().length >= 3){
           $('.btn_coupon_code').prop("disabled", false).html('&#10004;');
           coupon_code.checkIt();
         }else{
+          $('.coupon_datas').html('');
           $('.btn_coupon_code').prop("disabled", true).removeClass('error').html('&#10004;');
         }
     });
@@ -60,12 +61,11 @@ var coupon_code = {
     });
   },
   buyProductWithCoupon : function(product_id, coupon_code, coupon_id, amount){
-    /*
-    data[product_id]: 5adf1a638a9fb33cdcc5f61f
-    data[coupon_code]: 6A2A
-    data[coupon_id]: 5addcb1f5c7ef91734125f3d
-    data[amount]: 499
-    */
+    //data[product_id]: 5adf1a638a9fb33cdcc5f61f
+    //data[coupon_code]: 6A2A
+    //data[coupon_id]: 5addcb1f5c7ef91734125f3d
+    //data[amount]: 499
+
     index.sdk.api.post('/orders/buy_product_with_coupon_code',
       {
         product_id:product_id,

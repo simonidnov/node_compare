@@ -31,6 +31,7 @@ block sidebar
               .datas {{ product.meta_datas.medias.length}} titres
         div(v-if="userproducts.length == 0")
           span Vous n'avez pas de musique sur Joyvox
+        //-include ../components/coupon_code_form.pug
         h3 À découvrir
         ul.playlist-list
           li(v-for="album in albums" v-on:click="reloadAlbum(album._id)")
