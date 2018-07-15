@@ -164,6 +164,8 @@ html, body{
 .page-main p{
   padding-left:20px;
   padding-right:20px;
+  margin-top:30px;
+  font-size:30px;
 }
 .page-main p {
   font-size:23px;
