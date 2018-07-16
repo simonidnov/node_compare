@@ -60,7 +60,7 @@ block playlist
               include ../../public/images/player_assets/random.svg
             button.pbtn.nomobile(v-on:click="download")
               include ../../public/images/player_assets/download.svg
-            button.pbtn.nomobile(v-on:click="shareMode = !shareMode; getShareUrl();")
+            button.pbtn(v-on:click="shareMode = !shareMode; getShareUrl();")
               include ../../public/images/player_assets/share.svg
             
           .player_nav
