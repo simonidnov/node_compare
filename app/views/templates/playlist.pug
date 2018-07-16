@@ -14,11 +14,11 @@ block playlist
             .tab(v-on:click="sharerForm = true; getEmbedCode();" v-bind:class="{ selected : sharerForm}") Integrer
           .scrollview
             .shareButtons(v-if="!sharerForm")
-              a.share_button(v-bind:href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl")
+              a.share_button(v-bind:href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl" target="_blank")
                 include ../../public/images/player_assets/facebook.svg
-              a.share_button(v-bind:href="'https://www.twitter.com/share?hashtags=joyvox,musique,kids,'+product.label+'&url=' + shareUrl +'&text=Écoutez les playlists Joyvox !'")
+              a.share_button(v-bind:href="'https://www.twitter.com/share?hashtags=joyvox,musique,kids,'+product.label+'&url=' + shareUrl +'&text=Écoutez les playlists Joyvox !'" target="_blank")
                 include ../../public/images/player_assets/twitter.svg
-              a.share_button(v-bind:href="'mailto:?&subject=écoutez sur Joyvox&body=écoute#20ce%20morceau%20%3A%20' + shareUrl")
+              a.share_button(v-bind:href="'mailto:?&subject=écoutez sur Joyvox&body=écoute#20ce%20morceau%20%3A%20' + shareUrl" target="_blank")
                 include ../../public/images/player_assets/email.svg
             form.form(v-if="sharerForm")
               textarea(v-model="embedCode" placeholder="pour partager, copiez collez ce code") {{ embedCode }} 
@@ -355,7 +355,8 @@ block playlist
                       "class":"btn-success",
                       "label":"J'ai un code",
                       "value":1,
-                      "href":"https://auth.joyvox.fr/code-de-telechargement"
+                      "href":"https://auth.joyvox.fr/code-de-telechargement",
+                      "target":"_blank"
                     }
                   ]
                 },
