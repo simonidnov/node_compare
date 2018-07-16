@@ -207,6 +207,69 @@ product
             }
         });
     })
+    .get('/medias/', function(req, res, next){
+      UserProducts_controller.allreadyBuy(req.query.user_id, req.query.product_id, function(e){
+        if(e.status === 200) {
+          //next(); SEND FILE
+          console.log('SEND FILE');
+          res.sendFile(req.query.media_path, {root: path.join(__dirname, '../')}, function(err){
+            console.log('FILE IS SENDED ', err);
+          });
+        }else {
+          next();
+          //res.status(203).send({"message":"you don't have rights to download this product."});
+        }
+      });
+    }, function(req, res, next){
+      // return media short cut
+      var fs = require('fs'),
+          shortcut = 15,
+          path = req.query.media_path,
+          extension = req.query.media_path.split('.')[1];
+      if (fs.existsSync(req.query.media_path.replace('.'+extension, "_shortcut"+shortcut+".mp3"))) {
+          // Do something
+          console.log('SHORTCUT ALREADY EXIST');
+          req.query.media_path = "/"+req.query.media_path.replace('.'+extension, "_shortcut"+shortcut+".mp3");
+          console.log('SHORTCUT ALREADY EXIST ', req.query.media_path);
+          next();
+      }else{
+          console.log('CREATE SHORT CUT');
+          var ffmpeg = require('fluent-ffmpeg');
+          var track = "./"+req.query.media_path;//your path to source file
+          ffmpeg(track)
+          .duration(shortcut)
+          .toFormat('mp3')
+          .audioFilters([
+            {
+              filter: 'afade',
+              options: 't=out:st='+(shortcut-2)+':d=2'
+            }
+          ])
+          .on('error', function (err) {
+            console.log('ERROR SHORT CUT CREATION');
+            res.status("400").send(err);
+          })
+          .on('progress', function (progress) {
+            console.log('PROGRESS SHORT CUT');
+          })
+          .on('end', function () {
+            console.log('SHORT CUT CREATED');
+            req.query.media_path = "/"+req.query.media_path.replace('.'+extension, "_shortcut"+shortcut+".mp3");
+            /* TODO CREATE CHECKING EVENT FS EXIST ? */
+            setTimeout(function(){
+              console.log('SHORT CUT CREATED NEXT ', req.query.media_path);
+              next();
+            }, 500);
+          })
+          .save("./"+req.query.media_path.replace('.'+extension, "_shortcut"+shortcut+".mp3"));
+      }
+      //res.status(200).send({"message":"ALREADYBUY GREAT."});
+    }, function(req, res, next){
+      console.log('SEND FILE ? ', req.query.media_path)
+      res.sendFile(req.query.media_path, {root: path.join(__dirname, '../')}, function(err){
+          console.log('FILE IS SENDED ? ', err);
+      });
+    })
     .get('/medias/:filename', function(req, res, next){
         var path = "";
         if(req.params.filename.indexOf('-') !== -1){

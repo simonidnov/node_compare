@@ -8,6 +8,36 @@ block playlist
         .sdisplayCover(v-if="isDisplayCover", v-on:click="isDisplayCover = !isDisplayCover")
           img.picture#coverPicture(v-bind:src='cover', v-if="isDisplayCover")
       .player
+        div.share_view(v-if="shareMode")
+          .tabs
+            .tab(v-on:click="sharerForm = false; getShareUrl();" v-bind:class="{ selected : !sharerForm}") Partager
+            .tab(v-on:click="sharerForm = true; getEmbedCode();" v-bind:class="{ selected : sharerForm}") Integrer
+          .scrollview
+            .shareButtons(v-if="!sharerForm")
+              a.share_button(v-bind:href="'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl")
+                include ../../public/images/player_assets/facebook.svg
+              a.share_button(v-bind:href="'https://www.twitter.com/share?hashtags=joyvox,musique,kids,'+product.label+'&url=' + shareUrl +'&text=Écoutez les playlists Joyvox !'")
+                include ../../public/images/player_assets/twitter.svg
+              a.share_button(v-bind:href="'mailto:?&subject=écoutez sur Joyvox&body=écoute#20ce%20morceau%20%3A%20' + shareUrl")
+                include ../../public/images/player_assets/email.svg
+            form.form(v-if="sharerForm")
+              textarea(v-model="embedCode" placeholder="pour partager, copiez collez ce code") {{ embedCode }} 
+              div.form-group
+                input(type="checkbox" id="shareNav" v-model="shareNav" v-on:change="getEmbedCode()")
+                label(for="shareNav") Activer la navigation
+              div.form-group
+                input(type="checkbox" id="shareAutoPlay" v-model="shareAutoPlay" v-on:change="getEmbedCode()")
+                label(for="shareAutoPlay") Lecture automatique
+              div.form-group
+                input(type="checkbox" id="shareDisplayCover" v-model="shareDisplayCover" v-on:change="getEmbedCode()")
+                label(for="shareDisplayCover") Afficher la couverture
+              h4 Modifiez les couleurs de votre player
+              div.form-group
+                input(type="color" id="shareColor1" v-model="shareColor1" v-on:change="getEmbedCode()")
+                label(for="shareColor1") Couleur 1
+              div.form-group
+                input(type="color" id="shareColor2" v-model="shareColor2" v-on:change="getEmbedCode()")
+                label(for="shareColor2") Couleur 2
         .navBar
           .loadError(v-if="hasError")
             span Erreur de chargement
@@ -30,8 +60,9 @@ block playlist
               include ../../public/images/player_assets/random.svg
             button.pbtn.nomobile(v-on:click="download")
               include ../../public/images/player_assets/download.svg
-            button.pbtn.nomobile(v-on:click="share")
+            button.pbtn.nomobile(v-on:click="shareMode = !shareMode; getShareUrl();")
               include ../../public/images/player_assets/share.svg
+            
           .player_nav
             template(v-if="index > 0")
               button.pbtn(v-on:click="playPrev()")
@@ -77,6 +108,8 @@ block playlist
               .icon#pauseButton
                 include ../../public/images/player_assets/play.svg
               span.label {{ media[0].originalname }} - Artistes - Style musical
+    
+
     script(src="../public/javascripts/components/wavesurfer.min.js")
     script.
       var lopp = '#{params.loop}',
@@ -85,7 +118,18 @@ block playlist
       var player = new Vue({
         el: '#player',
         data: {
+          shareUrl : "HELLO",
+          sharerForm : false,
+          shareMode : false,
+          embedCode : "<iframe></iframe>",
+          shareNav : false,
+          shareAutoPlay : false,
+          shareDisplayCover : false,
+          shareColor1 : "#111",
+          shareColor2 : "#222",
+          checked:false,
           hasProduct : false,
+          hasRights : false,
           product : !{JSON.stringify(product)},
           title : "",
           description : "",
@@ -152,7 +196,7 @@ block playlist
             };
             this.wavesurfer = WaveSurfer.create(this.player_options);
             if(this.medias.length > 0){
-              this.wavesurfer.load("/"+this.medias[this.index][0].path);
+              this.wavesurfer.load("../products/medias/?media_path="+this.medias[this.index][0].path+'&product_id='+product._id+'&user_id=');
             }
             this.setVolume(this.volume);
             this.wavesurfer.on('pause', function () {
@@ -220,14 +264,23 @@ block playlist
           })
         },
         methods : {
-          playAudio: function(index){
-            if(index === this.index){
+          getShareUrl : function(){
+            this.shareUrl = window.location.origin+'/playlist/'+this.product._id+'?index='+this.index;
+            return this.shareUrl;
+          },
+          getEmbedCode : function(){
+            this.embedCode = '<iframe src="'+window.location.origin+'/playlist/'+this.product._id+'?index='+this.index+'&loop='+this.isLoop+'&random='+this.isRandom+'&color1='+this.shareColor1.replace('#', '')+'&color2='+this.shareColor2.replace('#', '')+'&sidebar='+this.shareNav+'&autoplay='+this.shareAutoPlay+'&cover='+this.shareDisplayCover+'" width="800" height="600" style="max-width:100%;"></iframe>';
+            return this.embedCode;
+          },
+          playAudio: function(id){
+            if(id === this.index){
               this.playPause();
               return false;
             }
-            this.index = index;
+            this.index = id;
             this.autoplay = true;
-            this.wavesurfer.load("/"+this.medias[index][0].path);
+            console.log('PLAYAUDIO product_id ::: ', this.product._id);
+            this.wavesurfer.load("../products/medias/?media_path="+this.medias[id][0].path+'&product_id='+this.product._id+'&user_id='+index.sdk.api.user._id);
           },
           setLoop: function(){
             if(this.isLoop){
@@ -274,7 +327,7 @@ block playlist
           },
           download : function(){
             if(_.where(userproducts, {product_id:this.product._id}).length > 0){
-              index.sdk.api.get('/products/download/'+product._id, {}, function(e) {
+              index.sdk.api.get('/products/download/'+this.product._id, {}, function(e) {
                 if(typeof e.zip_file !== "undefined"){
                   index.sdk.downloadFile(e.zip_file, $('body'), function(e){
                     if(e.status === "completed"){
@@ -317,7 +370,7 @@ block playlist
             alert('emebed');
           },
           share : function(){
-            alert('share');
+            this.shareMode = true;
           },
           handleScroll : function(evt, el){
             if(evt.target.scrollTop > 80){
@@ -329,11 +382,96 @@ block playlist
               document.body.style.overflow = 'scroll';
               document.getElementsByClassName('page-sidebar')[0].style.position = 'absolute';
             }
+          },
+          sharetab : function(event, id){
+            
           }
         }
       });
-      
     style.
+      .share_view{
+        position:absolute;
+        z-index:999;
+        top:-70px;
+        right:7px;
+        background:#FFF;
+        color:#222;
+        text-align:left;
+        border-radius:5px;
+        width:300px;
+        max-height:400px;
+        display:table;
+        -webkit-box-shadow: 0px 5px 60px -10px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 5px 60px -10px rgba(0,0,0,0.75);
+        box-shadow: 0px 5px 60px -10px rgba(0,0,0,0.75);
+      }
+      .share_view:before{
+        content:'';
+        width:30px;
+        height:30px;
+        background:#FFF;
+        position:absolute;
+        top:-5px;
+        transform:rotate(45deg);
+        right:10px;
+      }
+      .share_view .tabs{
+        display:inline-flex;
+        width:100%;
+        border-bottom:1px solid #E3E3E3;
+        margin-bottom:10px;
+      }
+      .share_view .tabs .tab{
+        font-size:17px;
+        padding:20px;
+        padding-bottom:10px;
+        cursor:pointer;
+        position:relative;
+      }  
+      .share_view .tabs .tab.selected:after{
+        content:'';
+        position:absolute;
+        height:2px;
+        width:80%;
+        background:#222;
+        left:0;
+        right:0;
+        margin:auto;
+        bottom:0px;
+      }
+      .share_view form{
+        padding:20px;
+        padding-top:0;
+      }
+      .share_view form textarea{
+        width:100%;
+        height:60px;
+      }
+      .share_view form .form-group{
+        padding-top:10px;
+      }
+      .share_view form input[type="color"]{
+        border:0;
+        width:48px;
+        height:48px;
+      }
+      
+      .share_view .shareButtons{
+        display:inline-flex;
+        margin-bottom:20px;
+      }
+      .share_view .shareButtons .share_button{
+        width:48px;
+        height:48px;
+        text-decoration:none;
+        margin:5px;
+        cursor:pointer;
+      }
+      .share_view .shareButtons .share_button:hover{
+        background:#F9F9F9;
+      }
+      
+      
       .playlist .waves{
         background-color:##{params.color1};
       }
@@ -359,5 +497,11 @@ block playlist
         fill:##{params.color1};
       }
       */
+    if(params.cover === "false")
+      style.
+        .playlist .cover{
+          display:none;
+        }
+
     
     
