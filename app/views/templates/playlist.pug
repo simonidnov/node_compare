@@ -284,7 +284,9 @@ block playlist
             if(typeof index.sdk.api.user._id !== "undefined"){
               user_id = index.sdk.api.user._id;
             }
+            console.log('PLAYAUDIO product_id ::: ', user_id);
             this.wavesurfer.load("../products/medias/?media_path="+this.medias[id][0].path+'&product_id='+this.product._id+'&user_id='+user_id);
+            console.log('PLAYAUDIO LOAD OK ??? ::: ', user_id);
           },
           setLoop: function(){
             if(this.isLoop){
