@@ -280,7 +280,11 @@ block playlist
             this.index = id;
             this.autoplay = true;
             console.log('PLAYAUDIO product_id ::: ', this.product._id);
-            this.wavesurfer.load("../products/medias/?media_path="+this.medias[id][0].path+'&product_id='+this.product._id+'&user_id='+index.sdk.api.user._id);
+            var user_id="";
+            if(typeof index.sdk.api.user._id !== "undefined"){
+              user_id = index.sdk.api.user._id;
+            }
+            this.wavesurfer.load("../products/medias/?media_path="+this.medias[id][0].path+'&product_id='+this.product._id+'&user_id='+user_id);
           },
           setLoop: function(){
             if(this.isLoop){
