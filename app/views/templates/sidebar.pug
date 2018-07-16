@@ -22,15 +22,13 @@ block sidebar
       div
         .search
           input.searchInput#searchAll(type="search", placeholder="Titre, Album ou Playlist", v-on:keyup="search($event.target.value)", v-model="searchValue")
-        h3 Ma musique
-        ul.playlist-list
+        h3(v-if="userproducts.length != 0") Ma musique
+        ul.playlist-list(v-if="userproducts.length != 0")
           li(v-for="product in userproducts" v-on:click="reloadAlbum(product.product_id)" v-if="product.meta_datas.extra_category === 'LIVRECD'")
             .cover(v-bind:style="{'background-image':'url('+product.meta_datas.thumb+')'}")
             .infos
               .label {{ product.meta_datas.label }}
               .datas {{ product.meta_datas.medias.length}} titres
-        div(v-if="userproducts.length == 0")
-          span Vous n'avez pas de musique sur Joyvox
         //-include ../components/coupon_code_form.pug
         h3 À découvrir
         ul.playlist-list
