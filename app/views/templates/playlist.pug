@@ -281,8 +281,10 @@ block playlist
             this.autoplay = true;
             console.log('PLAYAUDIO product_id ::: ', this.product._id);
             var user_id="";
-            if(typeof index.sdk.api.user._id !== "undefined"){
-              user_id = index.sdk.api.user._id;
+            if(typeof index.sdk.api.user !== "undefined" && index.sdk.api.user !== null){
+              if(typeof index.sdk.api.user._id !== "undefined"){
+                user_id = index.sdk.api.user._id;
+              }
             }
             console.log('PLAYAUDIO product_id ::: ', user_id);
             this.wavesurfer.load("../products/medias/?media_path="+this.medias[id][0].path+'&product_id='+this.product._id+'&user_id='+user_id);
