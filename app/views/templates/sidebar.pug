@@ -29,6 +29,11 @@ block sidebar
             .infos
               .label {{ product.meta_datas.label }}
               .datas {{ product.meta_datas.medias.length}} titres
+          li(v-for="chanson in chansonspersonnalisees" v-on:click="showChansons(chanson.product_id)" v-if="chanson.meta_datas.sub_category === 'CHANSONPERSONNALISEE'")
+            .cover(style="background-image:url()")
+            .infos
+              .label Chansons personnalisées
+              .datas {{ chanson.meta_datas.medias.length}} titres
         //-include ../components/coupon_code_form.pug
         h3 À découvrir
         ul.playlist-list
@@ -51,9 +56,48 @@ block sidebar
           userPanel : false,
           searchValue : "",
           openSide : false,
-          userproducts : !{JSON.stringify(userproducts)}
+          userproducts : !{JSON.stringify(userproducts)},
+          chansonspersonnalisees : []
+        },
+        mounted : function(){
+          /* PATCH POUR MA CHANSON PERSONNALISEE */
+          var self = this;
+          self.userproducts.forEach(function(product, i){
+            if(product.meta_datas.sub_category === "CHANSONPERSONNALISEE"){
+              if(self.chansonspersonnalisees.length === 0){
+                self.chansonspersonnalisees.push(product);
+              }else{
+                product.meta_datas.medias.forEach(function(media, m){
+                  console.log('media ', media);
+                  self.chansonspersonnalisees[0].meta_datas.medias.push(media)
+                });
+              }
+              //self.userproducts.splice(i, 1);
+              //delete self.userproducts[i];
+            }
+          });
+          setTimeout(function(){
+            self.userproducts.push(self.chansonspersonnalisees[0]);
+          },3000);
         },
         methods : {
+          showChansons : function(_id){
+            console.log('product ', _.where(this.userproducts, {product_id:_id}));
+            var prod = _.where(this.userproducts, {product_id:_id})[0];
+            player.medias = prod.meta_datas.medias;
+            player.title = "chansons personnalisées";
+            player.cover = prod.meta_datas.thumb;
+            player.description = prod.meta_datas.description;
+            player.product = prod.meta_datas;
+            
+            homeView.displayHome = false;
+            
+            albumList.params.loop = player.isLoop;
+            albumList.params.random = player.isRandom;
+            albumList.params.index = player.index;
+            albumList.params.volume = player.volume;
+            history.pushState(self.params, null, '/playlist/'+_id+"?"+Object.keys(albumList.params).map(key => key + '=' + albumList.params[key]).join('&'));
+          },
           reloadAlbum: function(_id) {
             var self = this;
             index.sdk.api.get('/products', {product_id:_id}, function(e){
