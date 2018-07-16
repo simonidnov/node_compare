@@ -68,7 +68,6 @@ block sidebar
                 self.chansonspersonnalisees.push(product);
               }else{
                 product.meta_datas.medias.forEach(function(media, m){
-                  console.log('media ', media);
                   self.chansonspersonnalisees[0].meta_datas.medias.push(media)
                 });
               }
@@ -82,7 +81,6 @@ block sidebar
         },
         methods : {
           showChansons : function(_id){
-            console.log('product ', _.where(this.userproducts, {product_id:_id}));
             var prod = _.where(this.userproducts, {product_id:_id})[0];
             player.medias = prod.meta_datas.medias;
             player.title = "chansons personnalisées";
@@ -129,7 +127,6 @@ block sidebar
                 pop.init();
               }
             }, function(e){
-              console.log('FAIL ', e);
             });
           },
           search : function(value){

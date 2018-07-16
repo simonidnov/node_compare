@@ -161,8 +161,7 @@ var idkids_jssdk = function(options, callback){
                 ];
               }
               e.response_display.type ="modal";
-              var pop = new
-               (
+              var pop = new popeye(
                   $('body'),
                   e.response_display,
                   function(e){
