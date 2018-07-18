@@ -85,6 +85,8 @@ redirect
               res.redirect(307, 'http://www.okaidi.fr/disneynature/');
               break;
           }
+        }else if(req.params.url === "zanimomusic-obaibi"){
+          res.redirect(307, 'http://www.okaidi.fr/livre-cd-zanimomusic-blanc-91511/');
         }else{
           res.redirect(307, 'http://www.okaidi.fr/partenariat-okaidi-surfrider/');
         }

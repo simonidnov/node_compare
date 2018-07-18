@@ -2,7 +2,7 @@ block playlistsearch
   div#researchPanel
     div.page-main.reseach(v-if="hasResearch")
       div.scrollview
-        h2() Recherche ({{ searchValue }})
+        h2 Recherche ({{ searchValue }})
         div.container
           div.col.fifty
             h3 Albums ({{results.albums.length}})
@@ -99,7 +99,7 @@ block playlistsearch
           }
         }
       }
-    )
+    );
   style.
     .reseach{
       

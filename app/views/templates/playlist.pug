@@ -158,7 +158,7 @@ block playlist
             this.cover = this.product.thumb;
             this.medias = this.product.medias;
             this.hasProduct = true;
-          }
+          };
           this.$nextTick(function() {
             var self = this;
             this.color1= (typeof '#{params.color1}' !== "undefined" && '#{params.color1}' !== "")? "#"+'#{params.color1}' : '#333';
