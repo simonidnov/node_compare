@@ -406,6 +406,11 @@ html, body{
   transition: all .2s ease-out;
   cursor: pointer;
   position: relative;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .playlist .mediasList li .progress {
   width:0%;
