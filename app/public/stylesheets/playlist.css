@@ -693,6 +693,11 @@ html, body{
     right:0;
     left:auto;
   }
+  .sticky .playlist .cover{
+    width:30px;
+    height:30px;
+    top:-100vh;
+  }
 }
 
 
