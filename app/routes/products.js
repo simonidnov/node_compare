@@ -103,14 +103,15 @@ product
         }
       });
     }, function(req, res, next) {
-      var fs = require('fs');
       // si le ZIP existe on continu
+      console.log('EST CE QUE LE ZIP EXISTE ?');
       if (fs.existsSync('/uploads/products/'+req.product_datas[0].label+'.zip')) {
           // Do something
+          console.log('LE ZIP EXISTE');
           res.status(200).send({status:200, message:"DOWNLOAD will be start in few seconds", zip_file:app.locals.settings.host+'/uploads/products/'+req.product_datas[0].label+'.zip', product_datas:req.product_datas});
-        
-      }else{
-        next();
+      }else {
+          console.log('LE ZIP N EXISTE PAS');
+          next();
       }
     }, function(req, res, next) {
       // DOWNLOAD
