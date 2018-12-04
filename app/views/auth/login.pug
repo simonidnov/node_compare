@@ -2,16 +2,14 @@ extends ../layout
 block content
     script.
         var uri_params   = (!{JSON.stringify(uri_params)});
-    script.
         var response     = (!{JSON.stringify(response)});
-    script.
         var translation  = (!{JSON.stringify(lang[locale].keys)});
+        var referer  = "#{referer}";
     if typeof current_app !== "undefined" && current_app !== "undefined" && current_app !== null && current_app !== ""
       script.
           var test  = "#{current_app}";
           var current_app  = (!{JSON.stringify(current_app)});
-    script.
-        var referer  = "#{referer}";
+        
     
     //-TODO FACEBOOK INTEGRATION
     //-script.
@@ -175,6 +173,8 @@ block content
                                     
                             button.btn.btn-success.btn-m.btn-disabled(type='submit', data-formaction='submit', data-formid="login_form")= lang[locale].keys.login_cta
                             a.hyperlink(href="/auth/lost" data-action="page_reload") Mot de passe perdu ?
+                            hr.separator
+                            a.hyperlink(href="/auth/lost" data-action="page_reload") Me connecter avec mon compte microsoft Azure
                         form#subscribe_form(method="post" action='/auth/subscribe/' style='display:"'+((form === "subscribe")? "block" : "none")+'"')
                             div.form-group.material_input.minlength
                                 input#pseudo.form-control(type='text', placeholder=lang[locale].keys.pseudo_holder, name='pseudo', required="required", value=datas.pseudo, minlength="3", data-errormessage=lang[locale].keys.pseudo_length)
@@ -230,6 +230,8 @@ block content
                                   input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type='submit', data-formaction='submit', data-formid="subscribe_form")= lang[locale].keys.subscribe_cta
+                            hr.separator
+                            a.hyperlink(href="/auth/lost" data-action="page_reload") Me connecter avec mon compte microsoft Azure
                         form#lost_form(method="post" action='/auth/lost_password/' style='display:"'+((form === "lost")? "block" : "none")+'"')
                             div.form-group
                               p Pour récuperer votre mot de passe, veuillez indiquer votre email ci-dessous.
@@ -251,6 +253,8 @@ block content
                                   input.phantom_input.form-control(name="referer" value=referer)
                                 
                             button.btn.btn-success.btn-m.btn-disabled(type="submit", data-action='receive_password')= lang[locale].keys.lost_password_cta
+                            hr.separator
+                            a.hyperlink(href="/auth/lost" data-action="page_reload") Me connecter avec mon compte microsoft Azure
                     if(response.status === "error" && typeof response.message !== "undefined")
                         div.error= lang[locale].keys[response.message]
             include footer.pug

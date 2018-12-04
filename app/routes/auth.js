@@ -12,7 +12,43 @@ var express = require('express'),
     device_uid = machineId.machineIdSync({original: true}),
     Fb = require('fb'),
     referer = null,
-    current_app = null;
+    current_app = null,
+    config = require('../config/config'),
+    passport = require('passport'),
+    OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
+
+    /*passport.use(new OIDCStrategy({
+        callbackURL: config.azure.returnURL,
+        realm: config.azure.realm,
+        clientID: config.azure.clientID,
+        clientSecret: config.azure.clientSecret,
+        oidcIssuer: config.azure.issuer,
+        identityMetadata: config.azure.identityMetadata,
+        skipUserProfile: config.azure.skipUserProfile,
+        responseType: config.azure.responseType,
+        responseMode: config.azure.responseMode
+    },
+    function(iss, sub, profile, accessToken, refreshToken, done) {
+        if (!profile.email) {
+          return done(new Error("No email found"), null);
+        }
+        // asynchronous verification, for effect...
+        process.nextTick(function () {
+        findByEmail(profile.email, function(err, user) {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            // "Auto-registration"
+            users.push(profile);
+            return done(null, profile);
+          }
+          return done(null, user);
+        });
+      });
+    }
+    ));
+    */
 
     auth.use(function(req, res, next){
         res.setHeader("Access-Control-Allow-Origin", "*");
