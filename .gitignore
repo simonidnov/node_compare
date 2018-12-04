@@ -13,3 +13,4 @@ npm-debug.log
 app/gource.mp4
 uploads/*
 uploads/
+app/.well-known/
