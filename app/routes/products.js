@@ -137,7 +137,8 @@ product
           function(err) {
             if(err) {
                 console.log('oh no!', err);
-                res.status(203).send({status:203, err:err, message:"Impossible de zipper les ressources"});
+                //res.status(203).send({status:203, err:err, message:"Impossible de zipper les ressources"});
+                next();
             } else {
                 console.log('ZIP CREATED SUCCESFUL');
                 next();
