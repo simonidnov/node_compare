@@ -103,6 +103,16 @@ product
         }
       });
     }, function(req, res, next) {
+      var fs = require('fs');
+      // si le ZIP existe on continu
+      if (fs.existsSync('/uploads/products/'+req.product_datas[0].label+'.zip')) {
+          // Do something
+          res.status(200).send({status:200, message:"DOWNLOAD will be start in few seconds", zip_file:app.locals.settings.host+'/uploads/products/'+req.product_datas[0].label+'.zip', product_datas:req.product_datas});
+        
+      }else{
+        next();
+      }
+    }, function(req, res, next) {
       // DOWNLOAD
       //CREATE TEMP PRODUCT FOLDER WITH ressources
       var dest = './uploads/products/'+req.product_datas[0].label;
@@ -137,8 +147,7 @@ product
           function(err) {
             if(err) {
                 console.log('oh no!', err);
-                //res.status(203).send({status:203, err:err, message:"Impossible de zipper les ressources"});
-                next();
+                res.status(203).send({status:203, err:err, message:"Impossible de zipper les ressources"});
             } else {
                 console.log('ZIP CREATED SUCCESFUL');
                 next();
