@@ -10,7 +10,7 @@ div.col.col-md-7
           li
             div.brand
               if product.meta_datas.thumb !== "" && typeof product.meta_datas.thumb !== "undefined"
-                img.app_icon(src=product.meta_datas.app_icon, width="102", height="102")
+                img.app_icon(src=product.meta_datas.thumb, width="102", height="102")
               else
                 img.app_icon(src=product.meta_datas.app_icon, width="102", height="102")
               div.label_product= product.meta_datas.label
