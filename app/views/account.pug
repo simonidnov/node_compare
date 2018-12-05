@@ -54,7 +54,10 @@ block content
                       each product in userproducts
                         tr
                           td 
-                            a(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id) #{product.meta_datas.label}
+                            if(product.meta_datas.sub_category === "CHANSONPERSONNALISEE")
+                                a(href="http://machanson.joyvox.fr/playlist/"+product.meta_datas._id) #{product.meta_datas.label}
+                            else
+                                a(href="/playlist/"+product.product_id) #{product.meta_datas.label}
                           td #{product.meta_datas.extra_category}
                           td #{product.meta_datas.price/100}€
               
